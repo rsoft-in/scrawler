@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
+      isAppLogged = sharedPreferences.getBool("is_logged");
       isTileView = sharedPreferences.getBool("is_tile");
       if (isTileView == null) {
         isTileView = false;

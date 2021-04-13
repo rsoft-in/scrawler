@@ -91,9 +91,13 @@ class _LabelsPageState extends State<LabelsPage> {
       appBar: AppBar(
         title: Text('Labels'),
         actions: [
-          FlatButton(
-            child: Text('DONE'),
-            onPressed: () => _assignLabel(),
+
+          Visibility(
+            visible: widget.noteid.isNotEmpty,
+            child: TextButton(
+              child: Text('DONE'),
+              onPressed: () => _assignLabel(),
+            ),
           ),
         ],
       ),
@@ -173,13 +177,13 @@ class _LabelsPageState extends State<LabelsPage> {
                                 snapshot.data.removeAt(index);
                               });
                             },
-                            child: CheckboxListTile(
+                            child: widget.noteid.isNotEmpty ? CheckboxListTile(
                               value: _selectedLabels.contains(label.labelName),
                               title: Text(label.labelName),
                               onChanged: (value) {
                                 _onLabelSelected(value, label.labelName);
                               },
-                            ),
+                            ) : ListTile(title: Text(label.labelName),),
                           );
                         },
                       );

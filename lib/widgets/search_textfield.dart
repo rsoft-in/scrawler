@@ -1,4 +1,5 @@
 import 'package:bnotes/helpers/my_flutter_app_icons.dart';
+import 'package:bnotes/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 
 class SearchTexfield extends StatefulWidget {
@@ -11,6 +12,7 @@ class SearchTexfield extends StatefulWidget {
   final TextEditingController searchController;
   final Function onSearch;
   final Function onClearSearch;
+
   @override
   State<StatefulWidget> createState() {
     return _SearchTextfieldState();
@@ -19,6 +21,7 @@ class SearchTexfield extends StatefulWidget {
 
 class _SearchTextfieldState extends State<SearchTexfield> {
   bool _showClearButton = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,7 +67,8 @@ class _SearchTextfieldState extends State<SearchTexfield> {
                 )),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context)
+                .push(MaterialPageRoute(builder: (context) => SettingsPage())),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Icon(MyFlutterApp.person),

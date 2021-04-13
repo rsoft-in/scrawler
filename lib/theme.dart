@@ -8,14 +8,15 @@ ThemeData theme() {
     primaryColor: kPrimaryColor,
     accentColor: kAccentColor,
     appBarTheme: AppBarTheme(
-      color: Colors.grey[100],
+      color: Colors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black),
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.black)),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    scaffoldBackgroundColor: Colors.grey[100],
+    scaffoldBackgroundColor: Colors.white,
+    dividerColor: Colors.black,
   );
 }
 
@@ -30,6 +31,7 @@ ThemeData themeDark() {
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.white)),
     ),
+    dividerColor: Colors.white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 }
