@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:bnotes/pages/settings_page.dart';
 import 'package:bnotes/widgets/search_textfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
-import 'package:bnotes/helpers/my_flutter_app_icons.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
@@ -315,22 +315,22 @@ class _HomePageState extends State<HomePage> {
           });
           _showEdit(context);
         },
-        child: Icon(MyFlutterApp.add),
+        child: Icon(CupertinoIcons.add),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         child: Row(
           children: <Widget>[
-            IconButton(
-              icon: Icon(MyFlutterApp.menu),
-              onPressed: () {
-                _showMenuModalSheet(context);
-              },
-            ),
+            // IconButton(
+            //   icon: Icon(MyFlutterApp.menu),
+            //   onPressed: () {
+            //     _showMenuModalSheet(context);
+            //   },
+            // ),
             Visibility(
               visible: isTileView,
               child: IconButton(
-                icon: Icon(MyFlutterApp.viewAgenda),
+                icon: Icon(CupertinoIcons.rectangle_grid_1x2),
                 onPressed: () {
                   setState(() {
                     sharedPreferences.setBool("is_tile", false);
@@ -342,7 +342,7 @@ class _HomePageState extends State<HomePage> {
             Visibility(
               visible: !isTileView,
               child: IconButton(
-                icon: Icon(MyFlutterApp.gridOn),
+                icon: Icon(CupertinoIcons.rectangle_grid_2x2),
                 onPressed: () {
                   setState(() {
                     sharedPreferences.setBool("is_tile", true);
@@ -409,7 +409,7 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(MyFlutterApp.edit),
+                          child: Icon(CupertinoIcons.pencil),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -430,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(MyFlutterApp.label),
+                          child: Icon(CupertinoIcons.tag),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -454,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(MyFlutterApp.delete),
+                          child: Icon(CupertinoIcons.trash),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -474,7 +474,7 @@ class _HomePageState extends State<HomePage> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Icon(MyFlutterApp.close),
+                          child: Icon(CupertinoIcons.clear),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -605,113 +605,113 @@ class _HomePageState extends State<HomePage> {
     return true;
   }
 
-  void _showMenuModalSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 150,
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  _showAppLock(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(MyFlutterApp.archive),
-                      Container(
-                        margin: EdgeInsets.only(right: 10.0),
-                      ),
-                      Text('Archived'),
-                    ],
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  _showBackupRestore(context);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 10.0, vertical: 15.0),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(MyFlutterApp.backup),
-                      Container(
-                        margin: EdgeInsets.only(right: 10.0),
-                      ),
-                      Text('Backup & Restore'),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // void _showMenuModalSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (context) {
+  //       return Container(
+  //         height: 150,
+  //         padding: EdgeInsets.all(10.0),
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: <Widget>[
+  //             InkWell(
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 _showAppLock(context);
+  //               },
+  //               child: Padding(
+  //                 padding: const EdgeInsets.symmetric(
+  //                     horizontal: 10.0, vertical: 15.0),
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     Icon(MyFlutterApp.archive),
+  //                     Container(
+  //                       margin: EdgeInsets.only(right: 10.0),
+  //                     ),
+  //                     Text('Archived'),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             InkWell(
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 _showBackupRestore(context);
+  //               },
+  //               child: Padding(
+  //                 padding: const EdgeInsets.symmetric(
+  //                     horizontal: 10.0, vertical: 15.0),
+  //                 child: Row(
+  //                   children: <Widget>[
+  //                     Icon(MyFlutterApp.backup),
+  //                     Container(
+  //                       margin: EdgeInsets.only(right: 10.0),
+  //                     ),
+  //                     Text('Backup & Restore'),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  void _showBackupRestore(BuildContext context) {
-    _getBackupPath();
-    Navigator.of(context).push(new MaterialPageRoute<Null>(
-      builder: (context) {
-        return new Scaffold(
-          appBar: AppBar(
-            title: Text('Backup & Restore'),
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text('Path: $backupPath'),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: OutlineButton.icon(
-                      onPressed: () {
-                        _makeBackup();
-                        Navigator.pop(context);
-                      },
-                      highlightedBorderColor: Theme.of(context).accentColor,
-                      highlightColor: Colors.white10,
-                      icon: Icon(MyFlutterApp.backup),
-                      label: Text('Backup'),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: OutlineButton.icon(
-                      onPressed: () {
-                        _restore();
-                        Navigator.pop(context);
-                      },
-                      highlightedBorderColor: Theme.of(context).accentColor,
-                      highlightColor: Colors.white10,
-                      icon: Icon(MyFlutterApp.restore),
-                      label: Text('Restore'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    ));
-  }
+  // void _showBackupRestore(BuildContext context) {
+  //   _getBackupPath();
+  //   Navigator.of(context).push(new MaterialPageRoute<Null>(
+  //     builder: (context) {
+  //       return new Scaffold(
+  //         appBar: AppBar(
+  //           title: Text('Backup & Restore'),
+  //         ),
+  //         body: SingleChildScrollView(
+  //           child: Container(
+  //             padding: EdgeInsets.all(20.0),
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.stretch,
+  //               children: <Widget>[
+  //                 Container(
+  //                   padding: EdgeInsets.all(20.0),
+  //                   child: Text('Path: $backupPath'),
+  //                 ),
+  //                 Container(
+  //                   padding: EdgeInsets.all(20.0),
+  //                   child: OutlineButton.icon(
+  //                     onPressed: () {
+  //                       _makeBackup();
+  //                       Navigator.pop(context);
+  //                     },
+  //                     highlightedBorderColor: Theme.of(context).accentColor,
+  //                     highlightColor: Colors.white10,
+  //                     icon: Icon(MyFlutterApp.backup),
+  //                     label: Text('Backup'),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                   padding: EdgeInsets.all(20.0),
+  //                   child: OutlineButton.icon(
+  //                     onPressed: () {
+  //                       _restore();
+  //                       Navigator.pop(context);
+  //                     },
+  //                     highlightedBorderColor: Theme.of(context).accentColor,
+  //                     highlightColor: Colors.white10,
+  //                     icon: Icon(MyFlutterApp.restore),
+  //                     label: Text('Restore'),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   ));
+  // }
 
   Future<void> _getBackupPath() async {
     final _path = await storage.localPath;

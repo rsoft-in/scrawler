@@ -1,5 +1,4 @@
-import 'package:bnotes/helpers/my_flutter_app_icons.dart';
-import 'package:bnotes/pages/settings_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchTexfield extends StatefulWidget {
@@ -46,7 +45,7 @@ class _SearchTextfieldState extends State<SearchTexfield> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Icon(
-            MyFlutterApp.search,
+            CupertinoIcons.search,
             color: Colors.grey,
           ),
           SizedBox(width: 8.0),
@@ -65,14 +64,14 @@ class _SearchTextfieldState extends State<SearchTexfield> {
                 onTap: () => widget.onClearSearch(),
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Icon(MyFlutterApp.clear),
+                  child: Icon(CupertinoIcons.clear),
                 )),
           ),
           InkWell(
             onTap: () => widget.settingsCallback(),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
-              child: Icon(MyFlutterApp.person),
+              child: Icon(CupertinoIcons.person),
             ),
           ),
         ],

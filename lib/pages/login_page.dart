@@ -1,4 +1,5 @@
 import 'package:bnotes/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'dart:convert';
@@ -6,6 +7,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -17,6 +19,10 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   SharedPreferences loginPreferences;
+
+  void _launchURL(String _url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   void initState() {
@@ -31,85 +37,107 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Nextcloud'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(30.0),
-        child: Card(
-          color: Colors.blue[100],
-          child: Container(
-            padding: EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50], // set border width
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(5.0)), // set rounded corner radius
-                  ),
-                  child: TextField(
-                    keyboardType: TextInputType.url,
-                    controller: _hostController,
-                    decoration: InputDecoration(
-                      hintText: 'Host',
-                      hintStyle: TextStyle(color: Colors.black),
-                      border: InputBorder.none,
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.all(5.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                child: TextField(
+                  keyboardType: TextInputType.url,
+                  controller: _hostController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      CupertinoIcons.globe,
                     ),
+                    labelText: 'Host',
+                    hintStyle: TextStyle(color: Colors.black),
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal)),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50], // set border width
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(5.0)), // set rounded corner radius
-                  ),
-                  child: TextField(
-                    controller: _usernameController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: 'Username',
-                      hintStyle: TextStyle(color: Colors.black),
-                      border: InputBorder.none,
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                child: TextField(
+                  controller: _usernameController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      CupertinoIcons.person,
                     ),
+                    labelText: 'Username',
+                    hintStyle: TextStyle(color: Colors.black),
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal)),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blue[50], // set border width
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(5.0)), // set rounded corner radius
-                  ),
-                  child: TextField(
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      hintStyle: TextStyle(color: Colors.black),
-                      border: InputBorder.none,
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+                child: TextField(
+                  obscureText: true,
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    prefixIcon: const Icon(
+                      CupertinoIcons.lock_circle,
                     ),
+                    labelText: 'Password',
+                    hintStyle: TextStyle(color: Colors.black),
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal)),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (_hostController.text.isNotEmpty &&
-                            _usernameController.text.isNotEmpty &&
-                            _passwordController.text.isNotEmpty) {
-                          getdata();
-                        }
-                      },
-                      child: Text('Login')),
-                )
-              ],
-            ),
+              ),
+              Container(
+                margin: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_hostController.text.isNotEmpty &&
+                          _usernameController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty) {
+                        getdata();
+                      }
+                    },
+                    child: Text('Sign-In')),
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Or, Register with Nextcloud Provider'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  elevation: 0,
+                ),
+                onPressed: () => _launchURL(
+                    'https://efss.qloud.my/index.php/apps/registration/'),
+                child: Image.network(
+                  'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
+                  width: 100,
+                ),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  elevation: 0,
+                ),
+                onPressed: () =>
+                    _launchURL('https://owncloud.com/get-started/'),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.network(
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
+                    scale: 14,
+                  ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -131,7 +159,6 @@ class _LoginPageState extends State<LoginPage> {
       print(user);
       print('hi');
       if (user != null) {
-
         loginPreferences.setString('nc_host', _hostController.text);
         loginPreferences.setString('nc_username', _usernameController.text);
         loginPreferences.setString('nc_password', _passwordController.text);
@@ -141,12 +168,11 @@ class _LoginPageState extends State<LoginPage> {
         loginPreferences.setBool('is_logged', true);
 
         Navigator.pop(context, true);
-      }
-      else{
+      } else {
         _showAlert();
       }
     } on RequestException catch (e, stacktrace) {
-      print('qs'+ e.statusCode.toString());
+      print('qs' + e.statusCode.toString());
       print(e.body);
       print(stacktrace);
       _showAlert();

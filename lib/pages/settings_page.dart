@@ -80,16 +80,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       notelabel: '',
                     ))),
           ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.deepPurple[100],
-              foregroundColor: Colors.deepPurple,
-              child: Icon(CupertinoIcons.lock_shield),
-            ),
-            title: Text('App Lock'),
-            subtitle: Text('Secure your notes'),
-            onTap: () {},
-          ),
+          // ListTile(
+          //   leading: CircleAvatar(
+          //     backgroundColor: Colors.deepPurple[100],
+          //     foregroundColor: Colors.deepPurple,
+          //     child: Icon(CupertinoIcons.lock_shield),
+          //   ),
+          //   title: Text('App Lock'),
+          //   subtitle: Text('Secure your notes'),
+          //   onTap: () {},
+          // ),
           ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.red[100],

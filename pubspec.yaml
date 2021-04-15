@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.0.1
   nextcloud: ^3.0.0
   file_picker: ^3.0.1
+  url_launcher: ^6.0.3
 
 flutter_icons:
   android: "launcher_icon"
@@ -38,8 +39,3 @@ flutter:
   assets:
     - images/bnotes.png
     - images/google.png
-
-  fonts:
-    - family:  outline_material_icons
-      fonts:
-        - asset: res/outline_material_icons.ttf

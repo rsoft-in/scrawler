@@ -1,5 +1,4 @@
-import 'package:bnotes/helpers/my_flutter_app_icons.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -154,7 +153,6 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         child: Container(
           padding: EdgeInsets.all(30.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Container(
                 child: Text(
@@ -186,36 +184,36 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               //   activeTrackColor: Colors.lightGreenAccent,
               //   activeColor: Colors.green,
               // ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: Text('Path: $backupPath'),
-              ),
-
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: OutlineButton.icon(
-                  onPressed: () {
-                    _makeBackup();
-                    Navigator.pop(context);
-                  },
-                  highlightedBorderColor: Theme.of(context).accentColor,
-                  highlightColor: Colors.white10,
-                  icon: Icon(MyFlutterApp.backup),
-                  label: Text('Backup'),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(20.0),
-                child: OutlineButton.icon(
-                  onPressed: () {
-                    _restore();
-                    Navigator.pop(context);
-                  },
-                  highlightedBorderColor: Theme.of(context).accentColor,
-                  highlightColor: Colors.white10,
-                  icon: Icon(MyFlutterApp.restore),
-                  label: Text('Restore'),
-                ),
+              // Container(
+              //   padding: EdgeInsets.all(20.0),
+              //   child: Text('Path: $backupPath'),
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        _makeBackup();
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(CupertinoIcons.cloud_upload),
+                      label: Text('Backup'),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(20.0),
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        _restore();
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(CupertinoIcons.cloud_download),
+                      label: Text('Restore'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

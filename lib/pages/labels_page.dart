@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:bnotes/helpers/database_helper.dart';
-import 'package:bnotes/helpers/my_flutter_app_icons.dart';
 import 'package:bnotes/models/labels_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -91,7 +91,6 @@ class _LabelsPageState extends State<LabelsPage> {
       appBar: AppBar(
         title: Text('Labels'),
         actions: [
-
           Visibility(
             visible: widget.noteid.isNotEmpty,
             child: TextButton(
@@ -120,7 +119,7 @@ class _LabelsPageState extends State<LabelsPage> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(MyFlutterApp.add),
+                    icon: Icon(CupertinoIcons.add),
                     color: Theme.of(context).accentColor,
                     onPressed: () => _saveLabel(),
                   ),
@@ -156,7 +155,7 @@ class _LabelsPageState extends State<LabelsPage> {
                                       color: Colors.red.shade300,
                                       alignment: Alignment.centerLeft,
                                       padding: EdgeInsets.only(left: 15.0),
-                                      child: Icon(MyFlutterApp.delete),
+                                      child: Icon(CupertinoIcons.trash),
                                     ),
                                   ),
                                   Expanded(
@@ -164,7 +163,7 @@ class _LabelsPageState extends State<LabelsPage> {
                                       color: Colors.red.shade300,
                                       alignment: Alignment.centerRight,
                                       padding: EdgeInsets.only(right: 15.0),
-                                      child: Icon(MyFlutterApp.delete),
+                                      child: Icon(CupertinoIcons.trash),
                                     ),
                                   ),
                                 ],
@@ -177,13 +176,18 @@ class _LabelsPageState extends State<LabelsPage> {
                                 snapshot.data.removeAt(index);
                               });
                             },
-                            child: widget.noteid.isNotEmpty ? CheckboxListTile(
-                              value: _selectedLabels.contains(label.labelName),
-                              title: Text(label.labelName),
-                              onChanged: (value) {
-                                _onLabelSelected(value, label.labelName);
-                              },
-                            ) : ListTile(title: Text(label.labelName),),
+                            child: widget.noteid.isNotEmpty
+                                ? CheckboxListTile(
+                                    value: _selectedLabels
+                                        .contains(label.labelName),
+                                    title: Text(label.labelName),
+                                    onChanged: (value) {
+                                      _onLabelSelected(value, label.labelName);
+                                    },
+                                  )
+                                : ListTile(
+                                    title: Text(label.labelName),
+                                  ),
                           );
                         },
                       );
