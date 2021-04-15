@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Storage {
@@ -22,9 +23,16 @@ class Storage {
 
   Future<String> readData() async {
     try {
-      final file = await localFile;
-      String body = await file.readAsString();
-      return body;
+      FilePickerResult result = await FilePicker.platform.pickFiles();
+
+      if (result != null) {
+        File file = File(result.files.single.path);
+        //final file = await localFile;
+        String body = await file.readAsString();
+        return body;
+      } else {
+        // User canceled the picker
+      }
     } catch (e) {
       return e.toString();
     }

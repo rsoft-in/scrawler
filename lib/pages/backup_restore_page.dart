@@ -1,4 +1,5 @@
 import 'package:bnotes/helpers/my_flutter_app_icons.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -91,26 +92,28 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   }
 
   Future _restore() async {
-    try {
-      final client = NextCloudClient.withCredentials(
-        Uri(host: sharedPreferences.getString('nc_host')),
-        sharedPreferences.getString('nc_username'),
-        sharedPreferences.getString('nc_password'),
-      );
+    if (isUploading) {
+      try {
+        final client = NextCloudClient.withCredentials(
+          Uri(host: sharedPreferences.getString('nc_host')),
+          sharedPreferences.getString('nc_username'),
+          sharedPreferences.getString('nc_password'),
+        );
 
-      final downloadedData =
-          await client.webDav.downloadStream('/bnotes.backup');
+        final downloadedData =
+            await client.webDav.downloadStream('/bnotes.backup');
 
-      final file = File(backupPath + '/bnotes.backup');
-      if (file.existsSync()) {
-        file.deleteSync();
+        final file = File(backupPath + '/bnotes.backup');
+        if (file.existsSync()) {
+          file.deleteSync();
+        }
+        final inputStream = file.openWrite();
+        await inputStream.addStream(downloadedData);
+      } on RequestException catch (e, stacktrace) {
+        print(e.statusCode);
+        print(e.body);
+        print(stacktrace);
       }
-      final inputStream = file.openWrite();
-      await inputStream.addStream(downloadedData);
-    } on RequestException catch (e, stacktrace) {
-      print(e.statusCode);
-      print(e.body);
-      print(stacktrace);
     }
     await storage.readData().then((value) {
       final parsed = json.decode(value).cast<Map<String, dynamic>>();
@@ -127,10 +130,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
             element.noteArchived,
             element.noteColor ?? 0));
       });
-      // ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-      //   content: Text('Backup restored!'),
-      //   duration: Duration(seconds: 5),
-      // ));
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+        content: Text('Backup restored!'),
+        duration: Duration(seconds: 5),
+      ));
     });
   }
 
