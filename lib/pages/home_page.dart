@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bnotes/pages/settings_page.dart';
 import 'package:bnotes/widgets/search_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -128,6 +129,11 @@ class _HomePageState extends State<HomePage> {
             searchController: _searchController,
             onSearch: _onSearch,
             onClearSearch: _onClearSearch,
+            settingsCallback: () async {
+              final result = await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+              loadNotes();
+            },
           ),
         ),
       ),

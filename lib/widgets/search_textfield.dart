@@ -8,10 +8,12 @@ class SearchTexfield extends StatefulWidget {
     this.searchController,
     this.onSearch,
     this.onClearSearch,
+    this.settingsCallback,
   }) : super(key: key);
   final TextEditingController searchController;
   final Function onSearch;
   final Function onClearSearch;
+  final Function settingsCallback;
 
   @override
   State<StatefulWidget> createState() {
@@ -67,8 +69,7 @@ class _SearchTextfieldState extends State<SearchTexfield> {
                 )),
           ),
           InkWell(
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => SettingsPage())),
+            onTap: () => widget.settingsCallback(),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Icon(MyFlutterApp.person),
