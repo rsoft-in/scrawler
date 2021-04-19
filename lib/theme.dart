@@ -14,6 +14,8 @@ ThemeData theme() {
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.black)),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.white,
     dividerColor: Colors.black,
@@ -31,6 +33,8 @@ ThemeData themeDark() {
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.white)),
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
     dividerColor: Colors.white,
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );

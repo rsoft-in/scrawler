@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'BNotes',
+      debugShowCheckedModeBanner: false,
       theme: theme(),
       darkTheme: themeDark(),
       home: HomePage(

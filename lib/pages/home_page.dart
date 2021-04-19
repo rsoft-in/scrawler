@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/settings_page.dart';
 import 'package:bnotes/widgets/search_textfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,6 +12,7 @@ import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -32,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   Storage storage = new Storage();
   String backupPath = "";
   bool isTileView = false;
+  ScrollController scrollController = new ScrollController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   StreamController<List<Notes>> _notesController;
@@ -504,14 +507,21 @@ class _HomePageState extends State<HomePage> {
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: NoteColor.getColor(_note.noteColor),
           ),
-          body: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.all(20.0),
-              child: SelectableText(
-                _note.noteText,
-                style: TextStyle(color: Colors.black),
+          body: Markdown(
+            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
+              textTheme: TextTheme(
+                bodyText1: TextStyle(color: Colors.black, fontSize: 14),
+                bodyText2: TextStyle(color: Colors.black, fontSize: 14),
+                headline1: TextStyle(color: Colors.black),
+                headline2: TextStyle(color: Colors.black),
+                headline3: TextStyle(color: Colors.black),
+                headline4: TextStyle(color: Colors.black),
+                headline5: TextStyle(color: Colors.black),
+                headline6: TextStyle(color: Colors.black),
               ),
-            ),
+            )),
+            data: _note.noteText,
+            controller: scrollController,
           ),
           bottomNavigationBar: BottomAppBar(
             color: NoteColor.getColor(_note.noteColor),
@@ -553,45 +563,91 @@ class _HomePageState extends State<HomePage> {
         return WillPopScope(
           onWillPop: _onBackPressed,
           child: new Scaffold(
-            appBar: AppBar(
-              title: Text('Edit'),
-              bottom: PreferredSize(
-                preferredSize: Size.fromHeight(40.0),
-                child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
-                  child: TextField(
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: _noteTitleController,
-                    decoration: InputDecoration(
-                      filled: false,
-                      hintText: 'Title',
+              appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                title: Text('Edit'),
+                bottom: PreferredSize(
+                  preferredSize: Size.fromHeight(65.0),
+                  // child: Container(
+                  //   padding:
+                  //       EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
+                  //   child: TextField(
+                  //     textCapitalization: TextCapitalization.sentences,
+                  //     controller: _noteTitleController,
+                  //     decoration: InputDecoration(
+                  //       filled: false,
+                  //       hintText: 'Title',
+                  //     ),
+                  //   ),
+                  // ),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
+                    child: TextField(
+                      controller: _noteTitleController,
+                      decoration: InputDecoration(
+                        prefixIcon: const Icon(
+                          CupertinoIcons.doc_text,
+                        ),
+                        labelText: 'Title',
+                        hintStyle: TextStyle(color: Colors.black),
+                        border: new OutlineInputBorder(
+                            borderSide: new BorderSide(color: Colors.white)),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.all(10.0),
-                      child: TextField(
-                        maxLines: 15,
-                        textCapitalization: TextCapitalization.sentences,
-                        controller: _noteTextController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Write something here...',
+              body: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: TextField(
+                          maxLines: 20,
+                          textCapitalization: TextCapitalization.sentences,
+                          controller: _noteTextController,
+                          decoration: InputDecoration.collapsed(
+                            hintText: 'Write something here...',
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+              bottomNavigationBar: BottomAppBar(
+                child: Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Icon(CupertinoIcons.checkmark_square),
+                        onPressed: () {},
+                        tooltip: 'Insert Checkbox',
+                      ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.photo_fill_on_rectangle_fill),
+                        onPressed: () {},
+                        tooltip: 'Insert Pictures',
+                      ),
+                      IconButton(
+                        icon: Icon(CupertinoIcons.list_bullet),
+                        onPressed: () {},
+                        tooltip: 'Insert List',
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         );
       },
     ));
