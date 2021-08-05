@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class ColorPalette extends StatelessWidget {
   final Function onTap;
   final Color color;
+  final bool isSelected;
 
-  const ColorPalette({Key key, this.onTap, @required this.color})
+  const ColorPalette({Key? key, required this.onTap, required this.color, required this.isSelected})
       : super(key: key);
 
   @override
@@ -18,8 +19,9 @@ class ColorPalette extends StatelessWidget {
             color: this.color,
             borderRadius: BorderRadius.circular(15.0),
             border: Border.all(color: Colors.black26)),
+            child: isSelected ? Icon(Icons.check) : Container(),
       ),
-      onTap: onTap,
+      onTap: () => onTap(),
     );
   }
 }

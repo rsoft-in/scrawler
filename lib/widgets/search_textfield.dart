@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class SearchTexfield extends StatefulWidget {
   SearchTexfield({
-    Key key,
-    this.searchController,
-    this.onSearch,
-    this.onClearSearch,
-    this.settingsCallback,
+    Key? key,
+    required this.searchController,
+    required this.onSearch,
+    required this.onClearSearch,
+    required this.settingsCallback,
   }) : super(key: key);
   final TextEditingController searchController;
   final Function onSearch;

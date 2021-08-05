@@ -7,7 +7,7 @@ class Storage {
     if (Platform.isAndroid) {
       final dir = await getExternalStorageDirectory();
       print(dir);
-      return dir.path;
+      return dir!.path;
     } else {
       final dir = await getApplicationDocumentsDirectory();
       print(dir);
@@ -23,15 +23,15 @@ class Storage {
 
   Future<String> readData() async {
     try {
-      FilePickerResult result = await FilePicker.platform.pickFiles();
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
 
       if (result != null) {
-        File file = File(result.files.single.path);
+        File file = File(result.files.single.path.toString());
         //final file = await localFile;
         String body = await file.readAsString();
         return body;
       } else {
-        // User canceled the picker
+        return '';
       }
     } catch (e) {
       return e.toString();

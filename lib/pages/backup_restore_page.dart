@@ -1,3 +1,4 @@
+import 'package:bnotes/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -19,7 +20,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   String backupPath = "";
   bool isUploading = false;
   final dbHelper = DatabaseHelper.instance;
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   bool isLogged = false;
 
   getPref() async {
@@ -63,8 +64,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         try {
           final client = NextCloudClient.withCredentials(
             Uri(host: sharedPreferences.getString('nc_host')),
-            sharedPreferences.getString('nc_username'),
-            sharedPreferences.getString('nc_password'),
+            sharedPreferences.getString('nc_username') ?? '',
+            sharedPreferences.getString('nc_password') ?? '',
           );
 
           await client.webDav.upload(
@@ -78,16 +79,16 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       }
     }
 
-    Future listFiles(NextCloudClient client) async {
-      final files = await client.webDav.ls('/');
-      for (final file in files) {
-        print(file.path);
-      }
-    }
+    // Future listFiles(NextCloudClient client) async {
+    //   final files = await client.webDav.ls('/');
+    //   for (final file in files) {
+    //     print(file.path);
+    //   }
+    // }
 
-    Future getdata() async {
-      sharedPreferences = await SharedPreferences.getInstance();
-    }
+    // Future getdata() async {
+    //   sharedPreferences = await SharedPreferences.getInstance();
+    // }
   }
 
   Future _restore() async {
@@ -95,45 +96,67 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       try {
         final client = NextCloudClient.withCredentials(
           Uri(host: sharedPreferences.getString('nc_host')),
-          sharedPreferences.getString('nc_username'),
-          sharedPreferences.getString('nc_password'),
+          sharedPreferences.getString('nc_username') ?? '',
+          sharedPreferences.getString('nc_password') ?? '',
         );
 
-        final downloadedData =
-            await client.webDav.downloadStream('/bnotes.backup');
-
-        final file = File(backupPath + '/bnotes.backup');
-        if (file.existsSync()) {
-          file.deleteSync();
-        }
-        final inputStream = file.openWrite();
-        await inputStream.addStream(downloadedData);
+        // final downloadedData =
+        //     await client.webDav.downloadStream('/bnotes.backup').then((value) { print(value);});
+        // ignore: unused_local_variable
+        final downloadedBytes =
+            client.webDav.download('/bnotes.backup').then((value) {
+          print(value);
+          String restoredString = new String.fromCharCodes(value);
+          final parsed =
+              json.decode(restoredString).cast<Map<String, dynamic>>();
+          List<Notes> notesList = [];
+          notesList =
+              parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+          dbHelper.deleteNotesAll();
+          notesList.forEach((element) {
+            dbHelper.insertNotes(new Notes(
+                element.noteId,
+                element.noteDate,
+                element.noteTitle,
+                element.noteText,
+                element.noteLabel,
+                element.noteArchived,
+                element.noteColor));
+          });
+          Navigator.pop(context, 'yes');
+        });
+        // final file = File(backupPath + '/bnotes.backup');
+        // if (file.existsSync()) {
+        //   file.deleteSync();
+        // }
+        // final inputStream = file.openWrite();
+        // await inputStream.addStream(downloadedData).then((value) {
+        //   inputStream.close();
+        // });
       } on RequestException catch (e, stacktrace) {
         print(e.statusCode);
         print(e.body);
         print(stacktrace);
       }
-    }
-    await storage.readData().then((value) {
-      final parsed = json.decode(value).cast<Map<String, dynamic>>();
-      List<Notes> notesList = [];
-      notesList = parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
-      dbHelper.deleteNotesAll();
-      notesList.forEach((element) {
-        dbHelper.insertNotes(new Notes(
-            element.noteId,
-            element.noteDate,
-            element.noteTitle,
-            element.noteText,
-            element.noteLabel,
-            element.noteArchived,
-            element.noteColor ?? 0));
+    } else {
+      await storage.readData().then((value) {
+        final parsed = json.decode(value).cast<Map<String, dynamic>>();
+        List<Notes> notesList = [];
+        notesList = parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+        dbHelper.deleteNotesAll();
+        notesList.forEach((element) {
+          dbHelper.insertNotes(new Notes(
+              element.noteId,
+              element.noteDate,
+              element.noteTitle,
+              element.noteText,
+              element.noteLabel,
+              element.noteArchived,
+              element.noteColor));
+        });
+        Navigator.pop(context, 'yes');
       });
-      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        content: Text('Backup restored!'),
-        duration: Duration(seconds: 5),
-      ));
-    });
+    }
   }
 
   @override
@@ -154,13 +177,25 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           padding: EdgeInsets.all(30.0),
           child: Column(
             children: <Widget>[
-              Container(
-                child: Text(
+              ListTile(
+                title: Text(
                   'Back up your notes onto your device/Nextcloud. You can restore the, when you reinstall BNotes',
-                  style: TextStyle(height: 1.5),
+                ),
+                trailing: IconButton(
+                    tooltip: '~/0/Android/data/com.rsoft.bnotes/files',
+                    onPressed: () {},
+                    icon: Icon(Icons.info_outline_rounded)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  padding: EdgeInsets.all(2.0),
+                  width: MediaQuery.of(context).size.width * .3,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.black26),
                 ),
               ),
-              Divider(),
               ListTile(
                 title: Text('Use Nextcloud'),
                 trailing: Switch(
@@ -189,30 +224,51 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               //   child: Text('Path: $backupPath'),
               // ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        _makeBackup();
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(CupertinoIcons.cloud_upload),
-                      label: Text('Backup'),
+                  // Container(
+                  //   padding: EdgeInsets.all(20.0),
+                  //   child: OutlinedButton.icon(
+                  //     onPressed: () {
+                  //       _makeBackup();
+                  //       Navigator.pop(context);
+                  //     },
+                  //     icon: Icon(CupertinoIcons.cloud_upload),
+                  //     label: Text('Backup'),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: kSecondaryColor.withOpacity(0.2),
+                        primary: kSecondaryColor,
+                      ),
+                      onPressed: () => _makeBackup(),
+                      child: Text('Backup'),
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: OutlinedButton.icon(
-                      onPressed: () {
-                        _restore();
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(CupertinoIcons.cloud_download),
-                      label: Text('Restore'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        backgroundColor: kPrimaryColor.withOpacity(0.2),
+                        primary: kPrimaryColor,
+                      ),
+                      onPressed: () => _restore(),
+                      child: Text('Restore'),
                     ),
                   ),
+                  // Container(
+                  //   padding: EdgeInsets.all(20.0),
+                  //   child: OutlinedButton.icon(
+                  //     onPressed: () {
+                  //       _restore();
+                  //     },
+                  //     icon: Icon(CupertinoIcons.cloud_download),
+                  //     label: Text('Restore'),
+                  //   ),
+                  // ),
                 ],
               ),
             ],

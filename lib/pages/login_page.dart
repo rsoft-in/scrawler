@@ -18,7 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _hostController = new TextEditingController();
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-  SharedPreferences loginPreferences;
+  late SharedPreferences loginPreferences;
+  bool isLoading = false;
 
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
@@ -33,7 +34,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         title: Text('Nextcloud'),
       ),
       body: SingleChildScrollView(
@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _hostController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
-                      CupertinoIcons.globe,
+                      Icons.web,
                     ),
                     labelText: 'Host',
                     hintStyle: TextStyle(color: Colors.black),
@@ -93,50 +93,75 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: ElevatedButton(
-                    onPressed: () {
-                      if (_hostController.text.isNotEmpty &&
-                          _usernameController.text.isNotEmpty &&
-                          _passwordController.text.isNotEmpty) {
-                        getdata();
-                      }
-                    },
-                    child: Text('Sign-In')),
+              Visibility(
+                visible: !isLoading,
+                child: Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor: kPrimaryColor.withOpacity(0.2),
+                          primary: kPrimaryColor),
+                      onPressed: () {
+                        if (_hostController.text.isNotEmpty &&
+                            _usernameController.text.isNotEmpty &&
+                            _passwordController.text.isNotEmpty) {
+                          getdata();
+                        }
+                      },
+                      child: Text('Sign-In')),
+                ),
+              ),
+              Visibility(
+                visible: isLoading,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    padding: EdgeInsets.all(10.0),
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                    color: kPrimaryColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(25),
+
+                  ) ,child: CircularProgressIndicator(color: kPrimaryColor,)),
+                ),
               ),
               Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Or, Register with Nextcloud Provider'),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  elevation: 0,
-                ),
-                onPressed: () => _launchURL(
-                    'https://efss.qloud.my/index.php/apps/registration/'),
-                child: Image.network(
-                  'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
-                  width: 100,
-                ),
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  elevation: 0,
-                ),
-                onPressed: () =>
-                    _launchURL('https://owncloud.com/get-started/'),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.network(
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
-                    scale: 14,
-                  ),
-                ),
-              )
+              // TextButton(
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.red,
+              //     elevation: 0,
+              //   ),
+              //   onPressed: () => _launchURL(
+              //       'https://efss.qloud.my/index.php/apps/registration/'),
+              //   child: Image.network(
+              //     'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
+              //     width: 100,
+              //   ),
+              // ),
+              TextButton(
+                  onPressed: () => _launchURL(
+                      'https://efss.qloud.my/index.php/apps/registration/'),
+                  child: Text('Qloud')),
+              // ElevatedButton(
+              //   style: ElevatedButton.styleFrom(
+              //     primary: Colors.white,
+              //     elevation: 0,
+              //   ),
+              //   onPressed: () =>
+              //       _launchURL('https://owncloud.com/get-started/'),
+              //   child: Padding(
+              //     padding: const EdgeInsets.all(8.0),
+              //     child: Image.network(
+              //       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
+              //       scale: 14,
+              //     ),
+              //   ),
+              // )
             ],
           ),
         ),
@@ -147,6 +172,9 @@ class _LoginPageState extends State<LoginPage> {
   Future getdata() async {
     loginPreferences = await SharedPreferences.getInstance();
     try {
+      setState(() {
+        isLoading = true;
+      });
       final client = NextCloudClient.withCredentials(
         Uri(host: _hostController.text),
         _usernameController.text,
@@ -158,6 +186,9 @@ class _LoginPageState extends State<LoginPage> {
       final user = await client.user.getUser();
       print(user);
       print('hi');
+      setState(() {
+        isLoading = false;
+      });
       if (user != null) {
         loginPreferences.setString('nc_host', _hostController.text);
         loginPreferences.setString('nc_username', _usernameController.text);
@@ -175,7 +206,10 @@ class _LoginPageState extends State<LoginPage> {
       print('qs' + e.statusCode.toString());
       print(e.body);
       print(stacktrace);
-      _showAlert();
+      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+        content: Text('Unable to login. Try again.'),
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/labels_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,7 @@ class LabelsPage extends StatefulWidget {
   final String noteid;
   final String notelabel;
 
-  const LabelsPage({Key key, this.noteid, this.notelabel}) : super(key: key);
+  const LabelsPage({Key? key,required this.noteid,required this.notelabel}) : super(key: key);
   @override
   _LabelsPageState createState() => _LabelsPageState();
 }
@@ -18,7 +19,7 @@ class LabelsPage extends StatefulWidget {
 class _LabelsPageState extends State<LabelsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final dbHelper = DatabaseHelper.instance;
-  StreamController<List<Labels>> _labelsController;
+  late StreamController<List<Labels>> _labelsController;
   TextEditingController _newLabelController = new TextEditingController();
   var uuid = Uuid();
   List _selectedLabels = [];
@@ -93,9 +94,16 @@ class _LabelsPageState extends State<LabelsPage> {
         actions: [
           Visibility(
             visible: widget.noteid.isNotEmpty,
-            child: TextButton(
-              child: Text('DONE'),
-              onPressed: () => _assignLabel(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                style: TextButton.styleFrom(
+                        backgroundColor: kSecondaryColor.withOpacity(0.2),
+                        primary: kSecondaryColor,
+                      ),
+                child: Text('Done'),
+                onPressed: () => _assignLabel(),
+              ),
             ),
           ),
         ],
@@ -119,8 +127,8 @@ class _LabelsPageState extends State<LabelsPage> {
                     ),
                   ),
                   IconButton(
-                    icon: Icon(CupertinoIcons.add),
-                    color: Theme.of(context).accentColor,
+                    icon: Icon(Icons.add),
+                    color: kPrimaryColor,
                     onPressed: () => _saveLabel(),
                   ),
                 ],
@@ -137,13 +145,13 @@ class _LabelsPageState extends State<LabelsPage> {
                       );
                     }
                     if (snapshot.hasError) {
-                      return Text(snapshot.error);
+                      return Text(snapshot.error.toString());
                     }
                     if (snapshot.hasData) {
                       return ListView.builder(
-                        itemCount: snapshot.data.length,
+                        itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          var label = snapshot.data[index];
+                          var label = snapshot.data![index];
                           return Dismissible(
                             background: Container(
                               child: Row(
@@ -173,7 +181,7 @@ class _LabelsPageState extends State<LabelsPage> {
                             onDismissed: (direction) {
                               setState(() {
                                 _deleteLabel(label.labelId);
-                                snapshot.data.removeAt(index);
+                                snapshot.data!.removeAt(index);
                               });
                             },
                             child: widget.noteid.isNotEmpty
@@ -182,7 +190,7 @@ class _LabelsPageState extends State<LabelsPage> {
                                         .contains(label.labelName),
                                     title: Text(label.labelName),
                                     onChanged: (value) {
-                                      _onLabelSelected(value, label.labelName);
+                                      _onLabelSelected(value!, label.labelName);
                                     },
                                   )
                                 : ListTile(

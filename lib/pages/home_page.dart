@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bnotes/constants.dart';
-import 'package:bnotes/pages/settings_page.dart';
-import 'package:bnotes/widgets/search_textfield.dart';
+import 'package:bnotes/pages/backup_restore_page.dart';
+import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key? key, required this.title}) : super(key: key);
   final String title;
 
   @override
@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   bool isAppLogged = false;
   String userFullname = "";
   String userId = "";
@@ -35,9 +35,11 @@ class _HomePageState extends State<HomePage> {
   String backupPath = "";
   bool isTileView = false;
   ScrollController scrollController = new ScrollController();
+  List<Notes> notesList = [];
+  bool isLoading = false;
+  bool hasData = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  StreamController<List<Notes>> _notesController;
   final dbHelper = DatabaseHelper.instance;
   var uuid = Uuid();
   TextEditingController _noteTitleController = new TextEditingController();
@@ -48,17 +50,24 @@ class _HomePageState extends State<HomePage> {
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      isAppLogged = sharedPreferences.getBool("is_logged");
-      isTileView = sharedPreferences.getBool("is_tile");
-      if (isTileView == null) {
-        isTileView = false;
-      }
+      isAppLogged = sharedPreferences.getBool("is_logged") ?? false;
+      isTileView = sharedPreferences.getBool("is_tile") ?? false;
     });
   }
 
   loadNotes() async {
-    final allRows = await dbHelper.getNotesAll(_searchController.text);
-    _notesController.add(allRows);
+    setState(() {
+      isLoading = true;
+    });
+
+    await dbHelper.getNotesAll(_searchController.text).then((value) {
+      setState(() {
+        print(value.length);
+        isLoading = false;
+        hasData = value.length > 0;
+        notesList = value;
+      });
+    });
   }
 
   void _saveNote() async {
@@ -86,6 +95,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _updateColor(String noteId, int noteColor) async {
+    print(noteColor);
     await dbHelper.updateNoteColor(noteId, noteColor).then((value) {
       loadNotes();
     });
@@ -100,7 +110,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getPref();
-    _notesController = new StreamController<List<Notes>>();
     loadNotes();
     super.initState();
   }
@@ -126,184 +135,198 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(10),
-          child: SearchTexfield(
-            searchController: _searchController,
-            onSearch: _onSearch,
-            onClearSearch: _onClearSearch,
-            settingsCallback: () async {
-              final result = await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
-              loadNotes();
-            },
-          ),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'images/bnotes-transparent.png',
+              height: 50,
+            ),
+            Container(
+                alignment: Alignment.center,
+                child: Text(
+                  kAppName,
+                  style: TextStyle(fontFamily: 'Raleway'),
+                )),
+          ],
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(3.0),
+        padding: kGlobalOuterPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Expanded(
-              child: StreamBuilder<List<Notes>>(
-                stream: _notesController.stream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Notes>> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+              child: isLoading
+                  ? Center(
                       child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error);
-                  }
-                  if (snapshot.hasData) {
-                    if (isTileView)
-                      return GridView.count(
-                        mainAxisSpacing: 3.0,
-                        crossAxisCount: 2,
-                        children: List.generate(snapshot.data.length, (index) {
-                          var note = snapshot.data[index];
-                          return InkWell(
-                            onTap: () {
-                              _showNoteReader(context, note);
-                            },
-                            onLongPress: () {
-                              _showOptionsSheet(context, note);
-                            },
-                            child: Card(
-                              color: NoteColor.getColor(note.noteColor ?? 0),
-                              elevation: 2,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
+                    )
+                  : (hasData
+                      ? (isTileView
+                          ? GridView.count(
+                              mainAxisSpacing: 3.0,
+                              crossAxisCount: 2,
+                              children:
+                                  List.generate(notesList.length, (index) {
+                                var note = notesList[index];
+                                return Card(
+                                  color: NoteColor.getColor(note.noteColor),
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    onTap: () {
+                                      _showNoteReader(context, note);
+                                    },
+                                    onLongPress: () {
+                                      _showOptionsSheet(context, note);
+                                    },
+                                    child: Container(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        note.noteTitle,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            fontSize: 20.0,
-                                            color: Colors.black),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          note.noteText,
-                                          maxLines: 6,
-                                          overflow: TextOverflow.ellipsis,
-                                          style:
-                                              TextStyle(color: Colors.black38),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              note.noteTitle,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  color: Colors.black),
+                                            ),
+                                          ),
                                           Expanded(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(
-                                            note.noteLabel,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 12.0),
-                                          )),
-                                          Text(
-                                            formatDateTime(note.noteDate),
-                                            style: TextStyle(
-                                                color: Colors.black45,
-                                                fontSize: 12.0),
+                                                note.noteText,
+                                                maxLines: 6,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: Colors.black38),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                    child: Text(
+                                                  note.noteLabel,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 12.0),
+                                                )),
+                                                Text(
+                                                  formatDateTime(note.noteDate),
+                                                  style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 12.0),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                      );
-                    else
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (context, index) {
-                          var note = snapshot.data[index];
-                          return InkWell(
-                            onTap: () => _showNoteReader(context, note),
-                            onLongPress: () => _showOptionsSheet(context, note),
-                            child: Container(
-                              margin: EdgeInsets.all(5.0),
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  color:
-                                      NoteColor.getColor(note.noteColor ?? 0),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 1.0,
-                                        offset: new Offset(1, 1)),
-                                  ]),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(
-                                      note.noteTitle,
-                                      style: TextStyle(
-                                          fontSize: 16.0, color: Colors.black),
+                                  ),
+                                );
+                              }),
+                            )
+                          : ListView.builder(
+                              itemCount: notesList.length,
+                              itemBuilder: (context, index) {
+                                var note = notesList[index];
+                                return Container(
+                                  margin: EdgeInsets.all(5.0),
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                      color: NoteColor.getColor(note.noteColor),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.black26,
+                                            blurRadius: 1.0,
+                                            offset: new Offset(1, 1)),
+                                      ]),
+                                  child: InkWell(
+                                    onTap: () => _showNoteReader(context, note),
+                                    onLongPress: () =>
+                                        _showOptionsSheet(context, note),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Text(
+                                            note.noteTitle,
+                                            style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.all(5.0),
+                                          child: Text(
+                                            note.noteText,
+                                            style: TextStyle(
+                                                color: Colors.black38),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Container(
+                                            alignment: Alignment.centerRight,
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    note.noteLabel,
+                                                    style: TextStyle(
+                                                        color: Colors.black38,
+                                                        fontSize: 12.0),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    formatDateTime(note.noteDate),
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                        color: Colors.black38,
+                                                      
+                                                        fontSize: 12.0),
+                                                  ),
+                                                ),
+                                              ],
+                                            )),
+                                      ],
                                     ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(
-                                      note.noteText,
-                                      style: TextStyle(color: Colors.black38),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerRight,
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(
-                                      formatDateTime(note.noteDate),
-                                      style: TextStyle(
-                                          color: Colors.black38,
-                                          fontSize: 12.0),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                  } else {
-                    return Center(
-                      child: Text('No notes yet!'),
-                    );
-                  }
-                },
-              ),
+                                );
+                              },
+                            ))
+                      : Center(
+                          child: Text('No notes'),
+                        )),
             ),
           ],
         ),
@@ -330,10 +353,14 @@ class _HomePageState extends State<HomePage> {
             //     _showMenuModalSheet(context);
             //   },
             // ),
+            IconButton(
+                onPressed: () => _showMenuOptions(),
+                icon: Icon(Icons.menu_rounded)),
+            // IconButton(onPressed: () {}, icon: Icon(Icons.search_rounded)),
             Visibility(
               visible: isTileView,
               child: IconButton(
-                icon: Icon(CupertinoIcons.rectangle_grid_1x2),
+                icon: Icon(Icons.view_agenda_outlined),
                 onPressed: () {
                   setState(() {
                     sharedPreferences.setBool("is_tile", false);
@@ -345,7 +372,7 @@ class _HomePageState extends State<HomePage> {
             Visibility(
               visible: !isTileView,
               child: IconButton(
-                icon: Icon(CupertinoIcons.rectangle_grid_2x2),
+                icon: Icon(Icons.grid_view_rounded),
                 onPressed: () {
                   setState(() {
                     sharedPreferences.setBool("is_tile", true);
@@ -360,128 +387,127 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showOptionsSheet(BuildContext context, Notes _note) {
+  void _showMenuOptions() {
     showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            padding: EdgeInsets.only(bottom: 20.0),
+      context: context,
+      backgroundColor: Colors.transparent,
+      isDismissible: true,
+      builder: (context) {
+        return Container(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
+              children: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      ColorPalette(
-                        color: Color(0xFFA8EAD5),
-                        onTap: () => _updateColor(_note.noteId, 0),
-                      ),
-                      ColorPalette(
-                        color: Colors.red.shade300,
-                        onTap: () => _updateColor(_note.noteId, 1),
-                      ),
-                      ColorPalette(
-                        color: Colors.pink.shade300,
-                        onTap: () => _updateColor(_note.noteId, 2),
-                      ),
-                      ColorPalette(
-                        color: Colors.yellow.shade300,
-                        onTap: () => _updateColor(_note.noteId, 3),
-                      ),
-                      ColorPalette(
-                        color: Colors.blue.shade300,
-                        onTap: () => _updateColor(_note.noteId, 4),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    setState(() {
-                      _noteTextController.text = _note.noteText;
-                      _noteTitleController.text = _note.noteTitle;
-                      currentEditingNoteId = _note.noteId;
-                    });
-                    _showEdit(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
+                  padding: kGlobalOuterPadding,
+                  child: Card(
+                    child: Column(
+                      children: [
+                        // Padding(
+                        //   padding: kGlobalOuterPadding,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.end,
+                        //     children: [
+                        //       IconButton(
+                        //         icon: Icon(CupertinoIcons.clear),
+                        //         tooltip: 'Close',
+                        //         onPressed: () => Navigator.pop(context),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.pencil),
+                          padding: kGlobalCardPadding,
+                          child: (isAppLogged
+                              ? InkWell(
+                                  onTap: () {},
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.blue[100],
+                                      foregroundColor: Colors.blue,
+                                      child: Icon(Icons.person),
+                                    ),
+                                    title: Text(sharedPreferences
+                                            .getString('nc_userdisplayname') ??
+                                        ''),
+                                    subtitle: Text(sharedPreferences
+                                            .getString('nc_useremail') ??
+                                        ''),
+                                  ),
+                                )
+                              : InkWell(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+                                    final result = await Navigator.of(context)
+                                        .push(CupertinoPageRoute(
+                                            builder: (context) => LoginPage()));
+                                    if (result == true)
+                                      setState(() {
+                                        isAppLogged = true;
+                                      });
+                                  },
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.blue[100],
+                                      foregroundColor: Colors.blue,
+                                      child: Icon(Icons.person),
+                                    ),
+                                    title: Text('Nextcloud Login'),
+                                    subtitle: Text('Sync Notes to cloud'),
+                                  ),
+                                )),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Edit'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                    _assignLabel(_note);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.tag),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Assign Labels'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    setState(() {
-                      currentEditingNoteId = _note.noteId;
-                    });
-                    _deleteNote();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.trash),
+                          padding: kGlobalCardPadding,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(15.0),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(CupertinoPageRoute(
+                                  builder: (context) => LabelsPage(
+                                        noteid: '',
+                                        notelabel: '',
+                                      )));
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.purple[100],
+                                foregroundColor: Colors.purple,
+                                child: Icon(Icons.label_outlined),
+                              ),
+                              title: Text('Labels'),
+                              subtitle: Text('Create labels'),
+                            ),
+                          ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.clear),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Cancel'),
+                          padding: kGlobalCardPadding,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(15.0),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              final res = await Navigator.of(context).push(
+                                  CupertinoPageRoute(
+                                      builder: (context) =>
+                                          BackupRestorePage()));
+                              if (res == "yes") {
+                                loadNotes();
+                              }
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.red[100],
+                                foregroundColor: Colors.red,
+                                child: Icon(Icons.backup_outlined),
+                              ),
+                              title: Text('Backup & Restore'),
+                              subtitle: Text('Bring back the dead'),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -489,12 +515,165 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showOptionsSheet(BuildContext context, Notes _note) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              return Container(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  child: Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                ColorPalette(
+                                  color: Color(0xFFA8EAD5),
+                                  onTap: () => _updateColor(_note.noteId, 0),
+                                  isSelected: _note.noteColor == 0,
+                                ),
+                                ColorPalette(
+                                  color: Colors.red.shade300,
+                                  onTap: () => _updateColor(_note.noteId, 1),
+                                  isSelected: _note.noteColor == 1,
+                                ),
+                                ColorPalette(
+                                  color: Colors.pink.shade300,
+                                  onTap: () => _updateColor(_note.noteId, 2),
+                                  isSelected: _note.noteColor == 2,
+                                ),
+                                ColorPalette(
+                                  color: Colors.yellow.shade300,
+                                  onTap: () => _updateColor(_note.noteId, 3),
+                                  isSelected: _note.noteColor == 3,
+                                ),
+                                ColorPalette(
+                                  color: Colors.blue.shade300,
+                                  onTap: () => _updateColor(_note.noteId, 4),
+                                  isSelected: _note.noteColor == 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                _noteTextController.text = _note.noteText;
+                                _noteTitleController.text = _note.noteTitle;
+                                currentEditingNoteId = _note.noteId;
+                              });
+                              _showEdit(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.edit_outlined),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Edit'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              _assignLabel(_note);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.new_label_outlined),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Assign Labels'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                currentEditingNoteId = _note.noteId;
+                              });
+                              _deleteNote();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.delete_outline_rounded),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Delete'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(Icons.clear),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Cancel'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
           );
         });
   }
 
   void _showNoteReader(BuildContext context, Notes _note) {
-    Navigator.of(context).push(new MaterialPageRoute<Null>(
+    Navigator.of(context).push(new CupertinoPageRoute<Null>(
       builder: (context) {
         return new Scaffold(
           backgroundColor: NoteColor.getColor(_note.noteColor),
@@ -503,7 +682,7 @@ class _HomePageState extends State<HomePage> {
               _note.noteTitle,
               style: TextStyle(color: Colors.black),
             ),
-            elevation: 0,
+            elevation: 1,
             iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: NoteColor.getColor(_note.noteColor),
           ),
@@ -549,105 +728,85 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _assignLabel(Notes note) async {
-    bool res = await Navigator.of(context).push(new MaterialPageRoute(
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
         builder: (BuildContext context) => new LabelsPage(
               noteid: note.noteId,
               notelabel: note.noteLabel,
             )));
-    if (res ?? false) loadNotes();
+    if (res) loadNotes();
   }
 
   void _showEdit(BuildContext context) {
-    Navigator.of(context).push(new MaterialPageRoute(
+    Navigator.of(context).push(new CupertinoPageRoute(
       builder: (context) {
         return WillPopScope(
           onWillPop: _onBackPressed,
           child: new Scaffold(
-              appBar: AppBar(
-                backgroundColor: Colors.transparent,
-                title: Text('Edit'),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(65.0),
-                  // child: Container(
-                  //   padding:
-                  //       EdgeInsets.symmetric(horizontal: 25.0, vertical: 5.0),
-                  //   child: TextField(
-                  //     textCapitalization: TextCapitalization.sentences,
-                  //     controller: _noteTitleController,
-                  //     decoration: InputDecoration(
-                  //       filled: false,
-                  //       hintText: 'Title',
-                  //     ),
-                  //   ),
-                  // ),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 5.0, vertical: 10.0),
-                    child: TextField(
-                      controller: _noteTitleController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(
-                          CupertinoIcons.doc_text,
+            appBar: AppBar(
+              title: Text('Edit'),
+            ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: kGlobalOuterPadding,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: kGlobalOuterPadding,
+                      child: Container(
+                        child: TextField(
+                          controller: _noteTitleController,
+                          decoration: InputDecoration(
+                              hintText: 'Title',
+                              hintStyle:
+                                  TextStyle(fontWeight: FontWeight.bold)),
                         ),
-                        labelText: 'Title',
-                        hintStyle: TextStyle(color: Colors.black),
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: Colors.white)),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              body: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: TextField(
-                          maxLines: 20,
-                          textCapitalization: TextCapitalization.sentences,
-                          controller: _noteTextController,
-                          decoration: InputDecoration.collapsed(
-                            hintText: 'Write something here...',
-                          ),
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: TextField(
+                        maxLines: 20,
+                        textCapitalization: TextCapitalization.sentences,
+                        controller: _noteTextController,
+                        decoration: InputDecoration.collapsed(
+                          hintText: 'Write something here...',
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              bottomNavigationBar: BottomAppBar(
-                child: Container(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: Icon(CupertinoIcons.checkmark_square),
-                        onPressed: () {},
-                        tooltip: 'Insert Checkbox',
-                      ),
-                      IconButton(
-                        icon: Icon(CupertinoIcons.photo_fill_on_rectangle_fill),
-                        onPressed: () {},
-                        tooltip: 'Insert Pictures',
-                      ),
-                      IconButton(
-                        icon: Icon(CupertinoIcons.list_bullet),
-                        onPressed: () {},
-                        tooltip: 'Insert List',
-                      ),
-                    ],
-                  ),
-                ),
-              )),
+            ),
+            // bottomNavigationBar: BottomAppBar(
+            //   child: Container(
+            //     padding: EdgeInsets.only(
+            //         bottom: MediaQuery.of(context).viewInsets.bottom),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         IconButton(
+            //           icon: Icon(CupertinoIcons.checkmark_square),
+            //           onPressed: () {},
+            //           tooltip: 'Insert Checkbox',
+            //         ),
+            //         IconButton(
+            //           icon: Icon(CupertinoIcons.photo_fill_on_rectangle_fill),
+            //           onPressed: () {},
+            //           tooltip: 'Insert Pictures',
+            //         ),
+            //         IconButton(
+            //           icon: Icon(CupertinoIcons.list_bullet),
+            //           onPressed: () {},
+            //           tooltip: 'Insert List',
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+          ),
         );
       },
     ));
@@ -718,7 +877,7 @@ class _HomePageState extends State<HomePage> {
 
   // void _showBackupRestore(BuildContext context) {
   //   _getBackupPath();
-  //   Navigator.of(context).push(new MaterialPageRoute<Null>(
+  //   Navigator.of(context).push(new CupertinoPageRoute<Null>(
   //     builder: (context) {
   //       return new Scaffold(
   //         appBar: AppBar(
@@ -769,62 +928,8 @@ class _HomePageState extends State<HomePage> {
   //   ));
   // }
 
-  Future<void> _getBackupPath() async {
-    final _path = await storage.localPath;
-    setState(() {
-      backupPath = _path;
-    });
-  }
-
-  Future _makeBackup() async {
-    var _notes = await dbHelper.getNotesAll('');
-    String out = "";
-    _notes.forEach((element) {
-      out += "{\"note_id\":\"${element.noteId}\", " +
-          "\"note_date\": \"${element.noteDate}\", " +
-          "\"note_title\": \"${element.noteTitle}\", " +
-          "\"note_text\": \"${element.noteText.replaceAll('\n', '\\n')}\", " +
-          "\"note_label\": \"${element.noteLabel}\", " +
-          "\"note_archived\": ${element.noteArchived}, " +
-          "\"note_color\": ${element.noteColor} },";
-    });
-    if (_notes.length > 0)
-      await storage
-          .writeData("[" + out.substring(0, out.length - 1) + "]")
-          .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-          content: Text('Backup done!'),
-          duration: Duration(seconds: 5),
-        ));
-      });
-  }
-
-  Future _restore() async {
-    await storage.readData().then((value) {
-      final parsed = json.decode(value).cast<Map<String, dynamic>>();
-      List<Notes> notesList = [];
-      notesList = parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
-      dbHelper.deleteNotesAll();
-      notesList.forEach((element) {
-        dbHelper.insertNotes(new Notes(
-            element.noteId,
-            element.noteDate,
-            element.noteTitle,
-            element.noteText,
-            element.noteLabel,
-            element.noteArchived,
-            element.noteColor ?? 0));
-      });
-      loadNotes();
-      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        content: Text('Backup restored!'),
-        duration: Duration(seconds: 5),
-      ));
-    });
-  }
-
   void _showAppLock(BuildContext context) {
-    Navigator.of(context).push(new MaterialPageRoute<Null>(builder: (context) {
+    Navigator.of(context).push(new CupertinoPageRoute<Null>(builder: (context) {
       return new Scaffold(
         appBar: AppBar(
           title: Text('Manage Pin'),

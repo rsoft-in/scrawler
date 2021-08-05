@@ -3,26 +3,26 @@ description: Note taking application
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.6+6
+version: 1.1.0+7
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  flutter_launcher_icons: ^0.9.0
+  flutter_launcher_icons: ^0.9.1
   intl: ^0.17.0
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.6
   sqflite: ^2.0.0+3
   uuid: ^3.0.4
-  path_provider: ^2.0.1
+  path_provider: ^2.0.2
   nextcloud: ^3.0.0
-  file_picker: ^3.0.1
-  url_launcher: ^6.0.3
-  flutter_markdown: ^0.6.1
+  file_picker: ^3.0.4
+  url_launcher: ^6.0.9
+  flutter_markdown: ^0.6.4
   adhara_markdown: ^0.2.0
 
 flutter_icons:
@@ -38,6 +38,13 @@ flutter:
 
   uses-material-design: true
 
+  fonts:
+    - family: Raleway
+      fonts:
+      - asset: res/Raleway-Regular.ttf
+      - asset: res/Raleway-Light.ttf
+
   assets:
     - images/bnotes.png
+    - images/bnotes-transparent.png
     - images/google.png

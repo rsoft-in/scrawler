@@ -12,7 +12,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  SharedPreferences sharedPreferences;
+  late SharedPreferences sharedPreferences;
   bool isLogged = false;
 
   getPref() async {
@@ -45,8 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Icon(CupertinoIcons.person),
                   ),
                   title:
-                      Text(sharedPreferences.getString('nc_userdisplayname')),
-                  subtitle: Text(sharedPreferences.getString('nc_useremail')),
+                      Text(sharedPreferences.getString('nc_userdisplayname')??''),
+                  subtitle: Text(sharedPreferences.getString('nc_useremail')??''),
                   onTap: () {},
                 )
               : ListTile(
