@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
+import 'package:bnotes/pages/note_reader_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -12,7 +13,9 @@ import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -46,6 +49,8 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _noteTextController = new TextEditingController();
   String currentEditingNoteId = "";
   TextEditingController _searchController = new TextEditingController();
+
+  int selectedPageColor = 1;
 
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -98,6 +103,9 @@ class _HomePageState extends State<HomePage> {
     print(noteColor);
     await dbHelper.updateNoteColor(noteId, noteColor).then((value) {
       loadNotes();
+      setState(() {
+        selectedPageColor = noteColor;
+      });
     });
   }
 
@@ -132,6 +140,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -164,14 +174,107 @@ class _HomePageState extends State<HomePage> {
                     )
                   : (hasData
                       ? (isTileView
-                          ? GridView.count(
-                              mainAxisSpacing: 3.0,
+                          // ? GridView.count(
+                          //     mainAxisSpacing: 3.0,
+                          //     crossAxisCount: 2,
+                          //     shrinkWrap: true,
+                          //     children:
+                          //         List.generate(notesList.length, (index) {
+                          //       var note = notesList[index];
+                          //       return Card(
+                          //         color: NoteColor.getColor(note.noteColor),
+                          //         elevation: 2,
+                          //         shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(10.0),
+                          //         ),
+                          //         child: InkWell(
+                          //           borderRadius: BorderRadius.circular(15.0),
+                          //           onTap: () {
+                          //             setState(() {
+                          //               selectedPageColor = note.noteColor;
+                          //             });
+                          //             _showNoteReader(context, note);
+                          //           },
+                          //           onLongPress: () {
+                          //             _showOptionsSheet(context, note);
+                          //           },
+                          //           child: Container(
+                          //             padding: const EdgeInsets.all(8.0),
+                          //             child: Column(
+                          //               crossAxisAlignment:
+                          //                   CrossAxisAlignment.start,
+                          //               children: [
+                          //                 Padding(
+                          //                   padding: const EdgeInsets.all(8.0),
+                          //                   child: Text(
+                          //                     note.noteTitle,
+                          //                     maxLines: 1,
+                          //                     overflow: TextOverflow.ellipsis,
+                          //                     style: TextStyle(
+                          //                         fontSize: 20.0,
+                          //                         color: Colors.black),
+                          //                   ),
+                          //                 ),
+                          //                 Expanded(
+                          //                   child: Padding(
+                          //                     padding:
+                          //                         const EdgeInsets.all(8.0),
+                          //                     child: Text(
+                          //                       note.noteText,
+                          //                       maxLines: 6,
+                          //                       overflow: TextOverflow.ellipsis,
+                          //                       style: TextStyle(
+                          //                           color: Colors.black38),
+                          //                     ),
+                          //                   ),
+                          //                 ),
+                          //                 Container(
+                          //                   padding: EdgeInsets.all(8.0),
+                          //                   child: Row(
+                          //                     mainAxisAlignment:
+                          //                         MainAxisAlignment
+                          //                             .spaceBetween,
+                          //                     children: [
+                          //                       Expanded(
+                          //                           child: Text(
+                          //                         note.noteLabel,
+                          //                         maxLines: 1,
+                          //                         overflow:
+                          //                             TextOverflow.ellipsis,
+                          //                         style: TextStyle(
+                          //                             color: Colors.black45,
+                          //                             fontSize: 12.0),
+                          //                       )),
+                          //                       Text(
+                          //                         formatDateTime(note.noteDate),
+                          //                         style: TextStyle(
+                          //                             color: Colors.black45,
+                          //                             fontSize: 12.0),
+                          //                       ),
+                          //                     ],
+                          //                   ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       );
+                          //     }),
+                          //   )
+                          ? StaggeredGridView.countBuilder(
                               crossAxisCount: 2,
-                              children:
-                                  List.generate(notesList.length, (index) {
+                              crossAxisSpacing: 8,
+                              mainAxisSpacing: 8,
+                              shrinkWrap: true,
+                              itemCount: notesList.length,
+                              staggeredTileBuilder: (index) {
+                                return StaggeredTile.count(
+                                    1, index.isEven ? 1.2 : 0.8);
+                              },
+                              itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 return Card(
-                                  color: NoteColor.getColor(note.noteColor),
+                                  color: NoteColor.getColor(note.noteColor, darkModeOn),
                                   elevation: 2,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
@@ -179,6 +282,9 @@ class _HomePageState extends State<HomePage> {
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(15.0),
                                     onTap: () {
+                                      setState(() {
+                                        selectedPageColor = note.noteColor;
+                                      });
                                       _showNoteReader(context, note);
                                     },
                                     onLongPress: () {
@@ -198,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                   fontSize: 20.0,
-                                                  color: Colors.black),
+                                                  color: darkModeOn && note.noteColor==0 ? Colors.white : Colors.black),
                                             ),
                                           ),
                                           Expanded(
@@ -210,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                                                 maxLines: 6,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                    color: Colors.black38),
+                                                    color:  darkModeOn && note.noteColor==0 ? Colors.white : Colors.black),
                                               ),
                                             ),
                                           ),
@@ -228,13 +334,13 @@ class _HomePageState extends State<HomePage> {
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      color: Colors.black45,
+                                                      color: darkModeOn && note.noteColor==0 ? Colors.white : Colors.black,
                                                       fontSize: 12.0),
                                                 )),
                                                 Text(
                                                   formatDateTime(note.noteDate),
                                                   style: TextStyle(
-                                                      color: Colors.black45,
+                                                      color: darkModeOn && note.noteColor==0 ? Colors.white : Colors.black,
                                                       fontSize: 12.0),
                                                 ),
                                               ],
@@ -245,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 );
-                              }),
+                              },
                             )
                           : ListView.builder(
                               itemCount: notesList.length,
@@ -255,7 +361,7 @@ class _HomePageState extends State<HomePage> {
                                   margin: EdgeInsets.all(5.0),
                                   padding: EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
-                                      color: NoteColor.getColor(note.noteColor),
+                                      color: NoteColor.getColor(note.noteColor, darkModeOn),
                                       borderRadius: BorderRadius.circular(10.0),
                                       boxShadow: [
                                         BoxShadow(
@@ -264,7 +370,12 @@ class _HomePageState extends State<HomePage> {
                                             offset: new Offset(1, 1)),
                                       ]),
                                   child: InkWell(
-                                    onTap: () => _showNoteReader(context, note),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedPageColor = note.noteColor;
+                                      });
+                                      _showNoteReader(context, note);
+                                    },
                                     onLongPress: () =>
                                         _showOptionsSheet(context, note),
                                     child: Column(
@@ -308,11 +419,11 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    formatDateTime(note.noteDate),
+                                                    formatDateTime(
+                                                        note.noteDate),
                                                     textAlign: TextAlign.end,
                                                     style: TextStyle(
                                                         color: Colors.black38,
-                                                      
                                                         fontSize: 12.0),
                                                   ),
                                                 ),
@@ -394,7 +505,7 @@ class _HomePageState extends State<HomePage> {
       isDismissible: true,
       builder: (context) {
         return Container(
-          alignment: Alignment.bottomCenter,
+          // alignment: Alignment.bottomCenter,
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -405,19 +516,6 @@ class _HomePageState extends State<HomePage> {
                   child: Card(
                     child: Column(
                       children: [
-                        // Padding(
-                        //   padding: kGlobalOuterPadding,
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.end,
-                        //     children: [
-                        //       IconButton(
-                        //         icon: Icon(CupertinoIcons.clear),
-                        //         tooltip: 'Close',
-                        //         onPressed: () => Navigator.pop(context),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         Padding(
                           padding: kGlobalCardPadding,
                           child: (isAppLogged
@@ -488,6 +586,29 @@ class _HomePageState extends State<HomePage> {
                           padding: kGlobalCardPadding,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(15.0),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.of(context).push(CupertinoPageRoute(
+                                  builder: (context) => LabelsPage(
+                                        noteid: '',
+                                        notelabel: '',
+                                      )));
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.red[100],
+                                foregroundColor: Colors.red,
+                                child: Icon(Icons.archive_outlined),
+                              ),
+                              title: Text('Archive'),
+                              subtitle: Text('See your archived notes'),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: kGlobalCardPadding,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(15.0),
                             onTap: () async {
                               Navigator.pop(context);
                               final res = await Navigator.of(context).push(
@@ -500,8 +621,8 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: ListTile(
                               leading: CircleAvatar(
-                                backgroundColor: Colors.red[100],
-                                foregroundColor: Colors.red,
+                                backgroundColor: Colors.teal[100],
+                                foregroundColor: Colors.teal,
                                 child: Icon(Icons.backup_outlined),
                               ),
                               title: Text('Backup & Restore'),
@@ -672,59 +793,193 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  void _showNoteReader(BuildContext context, Notes _note) {
-    Navigator.of(context).push(new CupertinoPageRoute<Null>(
-      builder: (context) {
-        return new Scaffold(
-          backgroundColor: NoteColor.getColor(_note.noteColor),
-          appBar: AppBar(
-            title: Text(
-              _note.noteTitle,
-              style: TextStyle(color: Colors.black),
-            ),
-            elevation: 1,
-            iconTheme: IconThemeData(color: Colors.black),
-            backgroundColor: NoteColor.getColor(_note.noteColor),
-          ),
-          body: Markdown(
-            styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
-              textTheme: TextTheme(
-                bodyText1: TextStyle(color: Colors.black, fontSize: 14),
-                bodyText2: TextStyle(color: Colors.black, fontSize: 14),
-                headline1: TextStyle(color: Colors.black),
-                headline2: TextStyle(color: Colors.black),
-                headline3: TextStyle(color: Colors.black),
-                headline4: TextStyle(color: Colors.black),
-                headline5: TextStyle(color: Colors.black),
-                headline6: TextStyle(color: Colors.black),
-              ),
-            )),
-            data: _note.noteText,
-            controller: scrollController,
-          ),
-          bottomNavigationBar: BottomAppBar(
-            color: NoteColor.getColor(_note.noteColor),
+  void _showColorPalette(BuildContext context, Notes _note) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (context) {
+          return Container(
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      _note.noteLabel.replaceAll(",", ", "),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: Colors.black),
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 100,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        ColorPalette(
+                          color: Color(0xFFA8EAD5),
+                          onTap: () {
+                            _updateColor(_note.noteId, 0);
+                            Navigator.pop(context);
+                          },
+                          isSelected: _note.noteColor == 0,
+                        ),
+                        ColorPalette(
+                          color: Colors.red.shade300,
+                          onTap: () {
+                            _updateColor(_note.noteId, 1);
+                            Navigator.pop(context);
+                          },
+                          isSelected: _note.noteColor == 1,
+                        ),
+                        ColorPalette(
+                          color: Colors.pink.shade300,
+                          onTap: () {
+                            _updateColor(_note.noteId, 2);
+                            Navigator.pop(context);
+                          },
+                          isSelected: _note.noteColor == 2,
+                        ),
+                        ColorPalette(
+                          color: Colors.yellow.shade300,
+                          onTap: () {
+                            _updateColor(_note.noteId, 3);
+                            Navigator.pop(context);
+                          },
+                          isSelected: _note.noteColor == 3,
+                        ),
+                        ColorPalette(
+                          color: Colors.blue.shade300,
+                          onTap: () {
+                            _updateColor(_note.noteId, 4);
+                            Navigator.pop(context);
+                          },
+                          isSelected: _note.noteColor == 4,
+                        ),
+                      ],
                     ),
                   ),
-                  Text(formatDateTime(_note.noteDate),
-                      style: TextStyle(color: Colors.black)),
-                ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        });
+  }
+
+  void _showNoteReader(BuildContext context, Notes _note) async {
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new NoteReaderPage(
+              note: _note,
+            )));
+    if (res) loadNotes();
+
+    // Navigator.of(context).push(new CupertinoPageRoute<Null>(
+    //   maintainState: false,
+    //   builder: (context) {
+    //     return Scaffold(
+    //       backgroundColor: NoteColor.getColor(selectedPageColor),
+    //       appBar: AppBar(
+    //         // title: Text(
+    //         //   _note.noteTitle,
+    //         //   style: TextStyle(color: Colors.black),
+    //         // ),
+    //         actions: [
+    //           IconButton(
+    //             onPressed: () {
+    //               // Navigator.of(context).pop();
+    //               setState(() {
+    //                 _noteTextController.text = _note.noteText;
+    //                 _noteTitleController.text = _note.noteTitle;
+    //                 currentEditingNoteId = _note.noteId;
+    //               });
+    //               _showEdit(context);
+    //             },
+    //             icon: Icon(Icons.edit_outlined),
+    //           ),
+    //           IconButton(
+    //             onPressed: () {
+    //               _showColorPalette(context, _note);
+    //             },
+    //             icon: Icon(Icons.palette_outlined),
+    //           ),
+    //           IconButton(
+    //             onPressed: () {
+    //               _assignLabel(_note);
+    //             },
+    //             icon: Icon(Icons.new_label_outlined),
+    //           ),
+    //           IconButton(
+    //             onPressed: () {},
+    //             icon: Icon(Icons.archive_outlined),
+    //           ),
+    //           IconButton(
+    //             onPressed: () {
+    //               Navigator.of(context).pop();
+    //               setState(() {
+    //                 currentEditingNoteId = _note.noteId;
+    //               });
+    //               _deleteNote();
+    //             },
+    //             icon: Icon(Icons.delete_outline_rounded),
+    //           ),
+    //         ],
+    //         elevation: 0,
+    //         iconTheme: IconThemeData(color: Colors.black),
+    //         backgroundColor: NoteColor.getColor(selectedPageColor),
+    //       ),
+    //       body: Column(
+    //         children: [
+    //           Container(
+    //             padding: kGlobalOuterPadding,
+    //             margin: EdgeInsets.only(left: 8),
+    //             alignment: Alignment.centerLeft,
+    //             child: Text(
+    //               _note.noteTitle,
+    //               style: TextStyle(
+    //                   color: Colors.black,
+    //                   fontSize: 22,
+    //                   fontWeight: FontWeight.w700),
+    //             ),
+    //           ),
+    //           // Divider(),
+    //           Expanded(
+    //             child: Markdown(
+    //               styleSheet:
+    //                   MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
+    //                 textTheme: TextTheme(
+    //                   bodyText1: TextStyle(color: Colors.black, fontSize: 14),
+    //                   bodyText2: TextStyle(color: Colors.black, fontSize: 14),
+    //                   headline1: TextStyle(color: Colors.black),
+    //                   headline2: TextStyle(color: Colors.black),
+    //                   headline3: TextStyle(color: Colors.black),
+    //                   headline4: TextStyle(color: Colors.black),
+    //                   headline5: TextStyle(color: Colors.black),
+    //                   headline6: TextStyle(color: Colors.black),
+    //                 ),
+    //               )),
+    //               data: _note.noteText,
+    //               controller: scrollController,
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //       bottomNavigationBar: BottomAppBar(
+    //         color: NoteColor.getColor(selectedPageColor),
+    //         child: Padding(
+    //           padding: const EdgeInsets.all(10.0),
+    //           child: Row(
+    //             children: [
+    //               Expanded(
+    //                 child: Text(
+    //                   _note.noteLabel.replaceAll(",", ", "),
+    //                   maxLines: 1,
+    //                   overflow: TextOverflow.ellipsis,
+    //                   style: TextStyle(color: Colors.black),
+    //                 ),
+    //               ),
+    //               Text(formatDateTime(_note.noteDate),
+    //                   style: TextStyle(color: Colors.black)),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // ));
   }
 
   void _assignLabel(Notes note) async {

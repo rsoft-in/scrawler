@@ -40,14 +40,39 @@ class DatabaseHelper {
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: 'note_date DESC',
-        where: filter.isNotEmpty
-            ? 'note_title LIKE \'%' +
-                filter +
-                '%\' OR note_text LIKE \'%' +
-                filter +
-                '%\''
-            : '(1=1)');
+        where: 'note_archived = 0' +
+            (filter.isNotEmpty
+                ? ' AND (note_title LIKE \'%' +
+                    filter +
+                    '%\' OR note_text LIKE \'%' +
+                    filter +
+                    '%\')'
+                : ''));
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
+
+  Future<List<Notes>> getNotesArchived(String filter) async {
+    Database? db = await instance.database;
+    var parsed = await db!.query('notes',
+        orderBy: 'note_date DESC',
+        where: 'note_archived = 1' +
+            (filter.isNotEmpty
+                ? ' AND (note_title LIKE \'%' +
+                    filter +
+                    '%\' OR note_text LIKE \'%' +
+                    filter +
+                    '%\')'
+                : ''));
+    return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
+
+  Future<bool> archiveNote(String noteId) async {
+    Database? db = await instance.database;
+    Map<String, dynamic> map = {'note_id': noteId, 'note_archived': 1};
+    String _id = map['note_id'];
+    final rowsAffected =
+        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+    return (rowsAffected == 1);
   }
 
   Future<bool> insertNotes(Notes note) async {
@@ -121,8 +146,8 @@ class DatabaseHelper {
       'label_name': label.labelName
     };
     String _id = map['label_id'];
-    final rowsAffected =
-        await db!.update('labels', map, where: 'label_id = ?', whereArgs: [_id]);
+    final rowsAffected = await db!
+        .update('labels', map, where: 'label_id = ?', whereArgs: [_id]);
     return (rowsAffected == 1);
   }
 

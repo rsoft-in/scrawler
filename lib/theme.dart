@@ -58,6 +58,7 @@ ThemeData themeDark() {
     bottomAppBarColor: Color(0xff1c1c1c),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     cardTheme: CardTheme(
+      color: Color(0xff1c1c1c),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),

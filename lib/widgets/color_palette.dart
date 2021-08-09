@@ -13,8 +13,8 @@ class ColorPalette extends StatelessWidget {
     return GestureDetector(
       child: new Container(
         margin: EdgeInsets.all(8.0),
-        width: 30,
-        height: 30,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
             color: this.color,
             borderRadius: BorderRadius.circular(15.0),

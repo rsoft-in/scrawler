@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _hostController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
-                      Icons.web,
+                      Icons.language_rounded,
                     ),
                     labelText: 'Host',
                     hintStyle: TextStyle(color: Colors.black),
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
-                      CupertinoIcons.person,
+                      Icons.person,
                     ),
                     labelText: 'Username',
                     hintStyle: TextStyle(color: Colors.black),
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordController,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(
-                      CupertinoIcons.lock_circle,
+                      Icons.password_rounded,
                     ),
                     labelText: 'Password',
                     hintStyle: TextStyle(color: Colors.black),
@@ -126,7 +126,16 @@ class _LoginPageState extends State<LoginPage> {
                   ) ,child: CircularProgressIndicator(color: kPrimaryColor,)),
                 ),
               ),
-              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Container(
+                  padding: EdgeInsets.all(2.0),
+                  width: MediaQuery.of(context).size.width * .3,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25.0),
+                      color: Colors.black26),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Or, Register with Nextcloud Provider'),
