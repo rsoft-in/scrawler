@@ -1,4 +1,6 @@
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/pages/backup_restore_page.dart';
+import 'package:bnotes/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nextcloud/nextcloud.dart';
@@ -32,6 +34,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text('Nextcloud'),
@@ -43,55 +47,34 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                margin: EdgeInsets.all(5.0),
-                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                child: TextField(
-                  keyboardType: TextInputType.url,
+              Padding(
+                padding: kGlobalOuterPadding,
+                child: CustomTextField(
+                  obscureText: false,
                   controller: _hostController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.language_rounded,
-                    ),
-                    labelText: 'Host',
-                    hintStyle: TextStyle(color: Colors.black),
-                    border: new OutlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.teal)),
-                  ),
+                  hint: 'Host',
+                  icon: Icon(Icons.language),
+                  inputType: TextInputType.url,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(5.0),
-                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                child: TextField(
+              Padding(
+                padding: kGlobalOuterPadding,
+                child: CustomTextField(
+                  obscureText: false,
                   controller: _usernameController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.person,
-                    ),
-                    labelText: 'Username',
-                    hintStyle: TextStyle(color: Colors.black),
-                    border: new OutlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.teal)),
-                  ),
+                  hint: 'Username',
+                  icon: Icon(Icons.person_outline),
+                  inputType: TextInputType.emailAddress,
                 ),
               ),
-              Container(
-                margin: EdgeInsets.all(5.0),
-                padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
-                child: TextField(
+              Padding(
+                padding: kGlobalOuterPadding,
+                child: CustomTextField(
                   obscureText: true,
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(
-                      Icons.password_rounded,
-                    ),
-                    labelText: 'Password',
-                    hintStyle: TextStyle(color: Colors.black),
-                    border: new OutlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.teal)),
-                  ),
+                  hint: 'Password',
+                  icon: Icon(Icons.password),
+                  inputType: TextInputType.emailAddress,
                 ),
               ),
               Visibility(
@@ -117,14 +100,16 @@ class _LoginPageState extends State<LoginPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    padding: EdgeInsets.all(10.0),
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                    color: kPrimaryColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(25),
-
-                  ) ,child: CircularProgressIndicator(color: kPrimaryColor,)),
+                      padding: EdgeInsets.all(10.0),
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      child: CircularProgressIndicator(
+                        color: kPrimaryColor,
+                      )),
                 ),
               ),
               Padding(
@@ -179,6 +164,80 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  void _restoreNote() async {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (context) {
+          return Container(
+            child: Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 150,
+                child: Card(
+                  child: Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: kGlobalCardPadding,
+                          child: Text(
+                            'Restore',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        Padding(
+                          padding: kGlobalCardPadding,
+                          child: Text(
+                              'Do you want to restore your previous notes?'),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: kGlobalCardPadding,
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('No'),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: kGlobalCardPadding,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      primary: kPrimaryColor,
+                                      backgroundColor:
+                                          kPrimaryColor.withOpacity(0.2)),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).push(
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                BackupRestorePage()));
+                                  },
+                                  child: Text('Yes'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   Future getdata() async {
     loginPreferences = await SharedPreferences.getInstance();
     try {
@@ -208,7 +267,7 @@ class _LoginPageState extends State<LoginPage> {
         loginPreferences.setString('nc_useremail', user.email);
         loginPreferences.setBool('is_logged', true);
 
-        Navigator.pop(context, true);
+        _restoreNote();
       } else {
         _showAlert();
       }

@@ -11,6 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class BackupRestorePage extends StatefulWidget {
+  BackupRestorePage({Key? key, })
+      : super(key: BackupRestorePage.staticGlobalKey);
+
+   static final GlobalKey<_BackupRestorePageState> staticGlobalKey =
+      new GlobalKey<_BackupRestorePageState>();
+
   @override
   _BackupRestorePageState createState() => _BackupRestorePageState();
 }
@@ -124,6 +130,19 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                 element.noteColor));
           });
           Navigator.pop(context, 'yes');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Restored'),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0, // Inner padding for SnackBar content.
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ));
         });
         // final file = File(backupPath + '/bnotes.backup');
         // if (file.existsSync()) {
@@ -155,6 +174,19 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               element.noteColor));
         });
         Navigator.pop(context, 'yes');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text('Restored'),
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8.0, // Inner padding for SnackBar content.
+            ),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ));
       });
     }
   }
