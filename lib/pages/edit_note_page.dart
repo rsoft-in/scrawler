@@ -55,6 +55,8 @@ class _EditNotePageState extends State<EditNotePage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: new Scaffold(
@@ -69,25 +71,35 @@ class _EditNotePageState extends State<EditNotePage> {
                 Padding(
                   padding: kGlobalOuterPadding,
                   child: Container(
+                    padding: EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: darkModeOn ? kSecondaryDark : Colors.grey.withOpacity(0.1),
+                    ),
                     child: TextField(
                       controller: _noteTitleController,
-                      decoration: InputDecoration(
+                      decoration: InputDecoration.collapsed(
                           hintText: 'Title',
                           hintStyle: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: TextField(
-                    maxLines: 20,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: _noteTextController,
-                    decoration: InputDecoration.collapsed(
-                      hintText: 'Write something here...',
+                Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Container(
+                    padding: EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: darkModeOn ? kSecondaryDark : Colors.grey.withOpacity(0.1),
+                    ),
+                    height: MediaQuery.of(context).size.height * .7,
+                    child: TextField(
+                      maxLines: 20,
+                      textCapitalization: TextCapitalization.sentences,
+                      controller: _noteTextController,
+                      decoration: InputDecoration.collapsed(
+                        hintText: 'Write something here...',
+                      ),
                     ),
                   ),
                 ),
@@ -104,6 +116,8 @@ class _EditNotePageState extends State<EditNotePage> {
         _noteTextController.text.isEmpty)) {
       _saveNote();
       Navigator.pop(context, note);
+    } else {
+      Navigator.pop(context, false);
     }
     return false;
   }

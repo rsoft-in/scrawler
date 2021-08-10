@@ -1,3 +1,4 @@
+import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,12 +14,12 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   late SharedPreferences sharedPreferences;
-  bool isLogged = false;
+  bool isAppLogged = false;
 
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      isLogged = sharedPreferences.getBool('is_logged') ?? false;
+      isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
     });
   }
 
@@ -32,77 +33,134 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Accounts & Settings'),
-      ),
-      body: ListView(
-        children: [
-          (isLogged
-              ? ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blue[100],
-                    foregroundColor: Colors.blue,
-                    child: Icon(CupertinoIcons.person),
-                  ),
-                  title:
-                      Text(sharedPreferences.getString('nc_userdisplayname')??''),
-                  subtitle: Text(sharedPreferences.getString('nc_useremail')??''),
-                  onTap: () {},
-                )
-              : ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.blue[100],
-                    foregroundColor: Colors.blue,
-                    child: Icon(CupertinoIcons.person),
-                  ),
-                  title: Text('Nextcloud Login'),
-                  subtitle: Text('Sync Notes to cloud'),
-                  onTap: () async {
-                    final result = await Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginPage()));
-                    if (result == true)
-                      setState(() {
-                        isLogged = true;
-                      });
-                  },
-                )),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.amber[100],
-              foregroundColor: Colors.amber,
-              child: Icon(CupertinoIcons.tag),
-            ),
-            title: Text('Labels'),
-            subtitle: Text('Create labels'),
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => LabelsPage(
-                      noteid: '',
-                      notelabel: '',
-                    ))),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: kGlobalOuterPadding,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: (isAppLogged
+                          ? InkWell(
+                              onTap: () {},
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.blue[100],
+                                  foregroundColor: Colors.blue,
+                                  child: Icon(Icons.person),
+                                ),
+                                title: Text(sharedPreferences
+                                        .getString('nc_userdisplayname') ??
+                                    ''),
+                                subtitle: Text(
+                                    sharedPreferences.getString('nc_useremail') ??
+                                        ''),
+                              ),
+                            )
+                          : InkWell(
+                              borderRadius: BorderRadius.circular(15.0),
+                              onTap: () async {
+                                final result = await Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                        builder: (context) => LoginPage()));
+                                if (result == true)
+                                  setState(() {
+                                    isAppLogged = true;
+                                  });
+                              },
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.blue[100],
+                                  foregroundColor: Colors.blue,
+                                  child: Icon(Icons.person),
+                                ),
+                                title: Text('Nextcloud Login'),
+                                subtitle: Text('Sync Notes to cloud'),
+                              ),
+                            )),
+                    ),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => LabelsPage(
+                                    noteid: '',
+                                    notelabel: '',
+                                  )));
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.purple[100],
+                            foregroundColor: Colors.purple,
+                            child: Icon(Icons.label_outlined),
+                          ),
+                          title: Text('Labels'),
+                          subtitle: Text('Create labels'),
+                        ),
+                      ),
+                    ),
+                    // Archive
+                    // Padding(
+                    //   padding: kGlobalCardPadding,
+                    //   child: InkWell(
+                    //     borderRadius: BorderRadius.circular(15.0),
+                    //     onTap: () {
+                    //       Navigator.pop(context);
+                    //       Navigator.of(context).push(CupertinoPageRoute(
+                    //           builder: (context) => LabelsPage(
+                    //                 noteid: '',
+                    //                 notelabel: '',
+                    //               )));
+                    //     },
+                    //     child: ListTile(
+                    //       leading: CircleAvatar(
+                    //         backgroundColor: Colors.red[100],
+                    //         foregroundColor: Colors.red,
+                    //         child: Icon(Icons.archive_outlined),
+                    //       ),
+                    //       title: Text('Archive'),
+                    //       subtitle: Text('See your archived notes'),
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () async {
+                          final res = await Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                  builder: (context) => BackupRestorePage()));
+                          if (res == "yes") {
+                            // loadNotes();
+                          }
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.teal[100],
+                            foregroundColor: Colors.teal,
+                            child: Icon(Icons.backup_outlined),
+                          ),
+                          title: Text('Backup & Restore'),
+                          subtitle: Text('Bring back the dead'),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          // ListTile(
-          //   leading: CircleAvatar(
-          //     backgroundColor: Colors.deepPurple[100],
-          //     foregroundColor: Colors.deepPurple,
-          //     child: Icon(CupertinoIcons.lock_shield),
-          //   ),
-          //   title: Text('App Lock'),
-          //   subtitle: Text('Secure your notes'),
-          //   onTap: () {},
-          // ),
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.red[100],
-              foregroundColor: Colors.red,
-              child: Icon(CupertinoIcons.cloud_upload),
-            ),
-            title: Text('Backup & Restore'),
-            subtitle: Text('Bring back the dead'),
-            onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => BackupRestorePage())),
-          ),
-          
-        ],
+        ),
       ),
     );
   }

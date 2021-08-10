@@ -163,7 +163,7 @@ class _LabelsPageState extends State<LabelsPage> {
                                       color: Colors.red.shade300,
                                       alignment: Alignment.centerLeft,
                                       padding: EdgeInsets.only(left: 15.0),
-                                      child: Icon(CupertinoIcons.trash),
+                                      child: Icon(Icons.delete_outline_rounded),
                                     ),
                                   ),
                                   Expanded(
@@ -171,7 +171,7 @@ class _LabelsPageState extends State<LabelsPage> {
                                       color: Colors.red.shade300,
                                       alignment: Alignment.centerRight,
                                       padding: EdgeInsets.only(right: 15.0),
-                                      child: Icon(CupertinoIcons.trash),
+                                      child: Icon(Icons.delete_outline_rounded),
                                     ),
                                   ),
                                 ],

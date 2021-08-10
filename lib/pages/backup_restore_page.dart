@@ -173,6 +173,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         title: Text('Backup & Restore'),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
           padding: EdgeInsets.all(30.0),
           child: Column(

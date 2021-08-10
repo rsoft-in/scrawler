@@ -4,6 +4,7 @@ import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
+import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,12 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
     });
   }
 
+  void _archiveNote(int archive) async {
+    await dbHelper.archiveNote(currentEditingNoteId, archive).then((value) {
+      _onBackPressed();
+    });
+  }
+
   @override
   void initState() {
     selectedPageColor = widget.note.noteColor;
@@ -62,7 +69,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(context, true),
             icon: Icon(Icons.arrow_back),
             color:
                 darkModeOn && note.noteColor == 0 ? Colors.white : Colors.black,
@@ -88,19 +95,45 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ),
             IconButton(
               onPressed: () {
-                // _assignLabel(note);
+                _assignLabel(note);
               },
               color: darkModeOn && note.noteColor == 0
                   ? Colors.white
                   : Colors.black,
               icon: Icon(Icons.new_label_outlined),
             ),
-            IconButton(
-              onPressed: () {},
-              color: darkModeOn && note.noteColor == 0
-                  ? Colors.white
-                  : Colors.black,
-              icon: Icon(Icons.archive_outlined),
+            // Archive
+            Visibility(
+              visible: note.noteArchived==0,
+              child: IconButton(
+                tooltip: 'Archive',
+                onPressed: () {
+                  setState(() {
+                    currentEditingNoteId = note.noteId;
+                  });
+                  _archiveNote(1);
+                },
+                color: darkModeOn && note.noteColor == 0
+                    ? Colors.white
+                    : Colors.black,
+                icon: Icon(Icons.archive_outlined),
+              ),
+            ),
+            Visibility(
+              visible: note.noteArchived==1,
+              child: IconButton(
+                tooltip: 'Unarchive',
+                onPressed: () {
+                  setState(() {
+                    currentEditingNoteId = note.noteId;
+                  });
+                  _archiveNote(0);
+                },
+                color: darkModeOn && note.noteColor == 0
+                    ? Colors.white
+                    : Colors.black,
+                icon: Icon(Icons.archive_rounded),
+              ),
             ),
             IconButton(
               onPressed: () {
@@ -117,56 +150,61 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
           ],
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                padding: kGlobalOuterPadding,
-                margin: EdgeInsets.only(left: 8),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  note.noteTitle,
-                  style: TextStyle(
-                      color: darkModeOn && note.noteColor == 0
-                          ? Colors.white
-                          : Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700),
+          child: Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10.0,
                 ),
-              ),
-              Container(
-                padding: kGlobalOuterPadding,
-                margin: EdgeInsets.only(left: 8),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  note.noteText,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                      color: darkModeOn && note.noteColor == 0
-                          ? Colors.white
-                          : Colors.black),
+                Container(
+                  padding: kGlobalOuterPadding,
+                  margin: EdgeInsets.only(left: 8),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    note.noteTitle,
+                    style: TextStyle(
+                        color: darkModeOn && note.noteColor == 0
+                            ? Colors.white
+                            : Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700),
+                  ),
                 ),
-              ),
-              // Divider(),
-              // Expanded(
-              //   child: Markdown(
-              //     styleSheet:
-              //         MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
-              //       textTheme: TextTheme(
-              //         bodyText1: TextStyle(color: Colors.black, fontSize: 14),
-              //         bodyText2: TextStyle(color: Colors.black, fontSize: 14),
-              //         headline1: TextStyle(color: Colors.black),
-              //         headline2: TextStyle(color: Colors.black),
-              //         headline3: TextStyle(color: Colors.black),
-              //         headline4: TextStyle(color: Colors.black),
-              //         headline5: TextStyle(color: Colors.black),
-              //         headline6: TextStyle(color: Colors.black),
-              //       ),
-              //     )),
-              //     data: note.noteText,
-              //     controller: scrollController,
-              //   ),
-              // ),
-            ],
+                Container(
+                  padding: kGlobalOuterPadding,
+                  margin: EdgeInsets.only(left: 8),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    note.noteText,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: darkModeOn && note.noteColor == 0
+                            ? Colors.white
+                            : Colors.black),
+                  ),
+                ),
+                // Divider(),
+                // Expanded(
+                //   child: Markdown(
+                //     styleSheet:
+                //         MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
+                //       textTheme: TextTheme(
+                //         bodyText1: TextStyle(color: Colors.black, fontSize: 14),
+                //         bodyText2: TextStyle(color: Colors.black, fontSize: 14),
+                //         headline1: TextStyle(color: Colors.black),
+                //         headline2: TextStyle(color: Colors.black),
+                //         headline3: TextStyle(color: Colors.black),
+                //         headline4: TextStyle(color: Colors.black),
+                //         headline5: TextStyle(color: Colors.black),
+                //         headline6: TextStyle(color: Colors.black),
+                //       ),
+                //     )),
+                //     data: note.noteText,
+                //     controller: scrollController,
+                //   ),
+                // ),
+              ],
+            ),
           ),
         ),
         bottomNavigationBar: BottomAppBar(
@@ -355,6 +393,15 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ),
           );
         });
+  }
+
+  void _assignLabel(Notes note) async {
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new LabelsPage(
+              noteid: note.noteId,
+              notelabel: note.noteLabel,
+            )));
+    // if (res) loadNotes();
   }
 
   Future<bool> _onBackPressed() async {

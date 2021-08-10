@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
         title: Text('Nextcloud'),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
           padding: EdgeInsets.all(20.0),
           child: Column(

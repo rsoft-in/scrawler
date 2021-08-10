@@ -1,3 +1,4 @@
+import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -5,7 +6,7 @@ class NoteColor {
   static Color getColor(int code, bool isDark) {
     switch (code) {
       case 0:
-        return isDark ? Color(0xff1c1c1c) : Colors.white;
+        return isDark ? kSecondaryDark : Colors.white;
       case 1:
         return Color(0xFFA8EAD5);
       case 2:

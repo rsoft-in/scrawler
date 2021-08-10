@@ -66,12 +66,13 @@ class DatabaseHelper {
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
-  Future<bool> archiveNote(String noteId) async {
+  Future<bool> archiveNote(String noteId, int archive) async {
     Database? db = await instance.database;
-    Map<String, dynamic> map = {'note_id': noteId, 'note_archived': 1};
+    Map<String, dynamic> map = {'note_id': noteId, 'note_archived': archive};
     String _id = map['note_id'];
     final rowsAffected =
         await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+        
     return (rowsAffected == 1);
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'constants.dart';
 
 ThemeData theme() {
-
   return ThemeData(
     primarySwatch: Colors.red,
     primaryColor: kPrimaryColor,
@@ -13,6 +12,9 @@ ThemeData theme() {
       color: Colors.white,
       elevation: 1,
       iconTheme: IconThemeData(color: Colors.black),
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.black)),
     ),
@@ -41,6 +43,9 @@ ThemeData theme() {
 }
 
 ThemeData themeDark() {
+  SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.red,
+  );
   return ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.red,
@@ -49,16 +54,21 @@ ThemeData themeDark() {
       color: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
+      brightness: Brightness.dark,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        
+      ),
       textTheme:
           TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.white)),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
     dividerColor: Colors.white,
-    bottomAppBarColor: Color(0xff1c1c1c),
+    bottomAppBarColor: kSecondaryDark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     cardTheme: CardTheme(
-      color: Color(0xff1c1c1c),
+      color: kSecondaryDark,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
