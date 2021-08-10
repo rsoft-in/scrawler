@@ -1,4 +1,5 @@
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -59,9 +61,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 title: Text(sharedPreferences
                                         .getString('nc_userdisplayname') ??
                                     ''),
-                                subtitle: Text(
-                                    sharedPreferences.getString('nc_useremail') ??
-                                        ''),
+                                subtitle: Text(sharedPreferences
+                                        .getString('nc_useremail') ??
+                                    ''),
                               ),
                             )
                           : InkWell(
@@ -152,6 +154,25 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           title: Text('Backup & Restore'),
                           subtitle: Text('Bring back the dead'),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () async {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => AboutPage()));
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.grey[100],
+                            foregroundColor: Colors.grey,
+                            child: Icon(Icons.info_outline_rounded),
+                          ),
+                          title: Text('About'),
+                          subtitle: Text('Know the Team'),
                         ),
                       ),
                     ),
