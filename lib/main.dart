@@ -1,6 +1,5 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/app.dart';
-import 'package:bnotes/pages/home_page.dart';
 import 'package:bnotes/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

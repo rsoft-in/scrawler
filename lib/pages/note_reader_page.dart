@@ -8,7 +8,6 @@ import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 
 class NoteReaderPage extends StatefulWidget {
   final Notes note;
@@ -23,8 +22,6 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   final dbHelper = DatabaseHelper.instance;
   ScrollController scrollController = new ScrollController();
   String currentEditingNoteId = "";
-  TextEditingController _noteTitleController = new TextEditingController();
-  TextEditingController _noteTextController = new TextEditingController();
 
   int selectedPageColor = 0;
 

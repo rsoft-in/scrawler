@@ -4,9 +4,6 @@ import 'package:bnotes/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nextcloud/nextcloud.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -249,15 +246,12 @@ class _LoginPageState extends State<LoginPage> {
         _usernameController.text,
         _passwordController.text,
       );
-      print(client);
-      // await listFiles(client).then((value) {});
 
       final user = await client.user.getUser();
-      print(user);
-      print('hi');
       setState(() {
         isLoading = false;
       });
+      // ignore: unnecessary_null_comparison
       if (user != null) {
         loginPreferences.setString('nc_host', _hostController.text);
         loginPreferences.setString('nc_username', _usernameController.text);

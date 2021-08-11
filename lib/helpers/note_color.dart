@@ -1,6 +1,5 @@
 import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class NoteColor {
   static Color getColor(int code, bool isDark) {

@@ -1,14 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
-import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
-import 'package:bnotes/pages/login_page.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
-import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -18,7 +12,6 @@ import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   bool hasData = false;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final dbHelper = DatabaseHelper.instance;
   var uuid = Uuid();
   TextEditingController _noteTitleController = new TextEditingController();
@@ -84,29 +76,29 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _saveNote() async {
-    if (currentEditingNoteId.isEmpty) {
-      await dbHelper
-          .insertNotes(new Notes(uuid.v1(), DateTime.now().toString(),
-              _noteTitleController.text, _noteTextController.text, '', 0, 0))
-          .then((value) {
-        loadNotes();
-      });
-    } else {
-      await dbHelper
-          .updateNotes(new Notes(
-              currentEditingNoteId,
-              DateTime.now().toString(),
-              _noteTitleController.text,
-              _noteTextController.text,
-              '',
-              0,
-              0))
-          .then((value) {
-        loadNotes();
-      });
-    }
-  }
+  // void _saveNote() async {
+  //   if (currentEditingNoteId.isEmpty) {
+  //     await dbHelper
+  //         .insertNotes(new Notes(uuid.v1(), DateTime.now().toString(),
+  //             _noteTitleController.text, _noteTextController.text, '', 0, 0))
+  //         .then((value) {
+  //       loadNotes();
+  //     });
+  //   } else {
+  //     await dbHelper
+  //         .updateNotes(new Notes(
+  //             currentEditingNoteId,
+  //             DateTime.now().toString(),
+  //             _noteTitleController.text,
+  //             _noteTextController.text,
+  //             '',
+  //             0,
+  //             0))
+  //         .then((value) {
+  //       loadNotes();
+  //     });
+  //   }
+  // }
 
   void toggleView(ViewType viewType) {
     setState(() {
@@ -142,17 +134,6 @@ class _HomePageState extends State<HomePage> {
     getPref();
     loadNotes();
     super.initState();
-  }
-
-  void _onSearch() {
-    loadNotes();
-  }
-
-  void _onClearSearch() {
-    setState(() {
-      _searchController.text = "";
-      loadNotes();
-    });
   }
 
   @override
@@ -408,151 +389,6 @@ class _HomePageState extends State<HomePage> {
         },
         child: Icon(CupertinoIcons.add),
       ),
-    );
-  }
-
-  void _showMenuOptions() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isDismissible: true,
-      builder: (context) {
-        return Container(
-          // alignment: Alignment.bottomCenter,
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: kGlobalOuterPadding,
-                  child: Card(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: (isAppLogged
-                              ? InkWell(
-                                  onTap: () {},
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.blue[100],
-                                      foregroundColor: Colors.blue,
-                                      child: Icon(Icons.person),
-                                    ),
-                                    title: Text(sharedPreferences
-                                            .getString('nc_userdisplayname') ??
-                                        ''),
-                                    subtitle: Text(sharedPreferences
-                                            .getString('nc_useremail') ??
-                                        ''),
-                                  ),
-                                )
-                              : InkWell(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  onTap: () async {
-                                    Navigator.pop(context);
-                                    final result = await Navigator.of(context)
-                                        .push(CupertinoPageRoute(
-                                            builder: (context) => LoginPage()));
-                                    if (result == true)
-                                      setState(() {
-                                        isAppLogged = true;
-                                      });
-                                  },
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.blue[100],
-                                      foregroundColor: Colors.blue,
-                                      child: Icon(Icons.person),
-                                    ),
-                                    title: Text('Nextcloud Login'),
-                                    subtitle: Text('Sync Notes to cloud'),
-                                  ),
-                                )),
-                        ),
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(15.0),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.of(context).push(CupertinoPageRoute(
-                                  builder: (context) => LabelsPage(
-                                        noteid: '',
-                                        notelabel: '',
-                                      )));
-                            },
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.purple[100],
-                                foregroundColor: Colors.purple,
-                                child: Icon(Icons.label_outlined),
-                              ),
-                              title: Text('Labels'),
-                              subtitle: Text('Create labels'),
-                            ),
-                          ),
-                        ),
-                        // Archive
-                        // Padding(
-                        //   padding: kGlobalCardPadding,
-                        //   child: InkWell(
-                        //     borderRadius: BorderRadius.circular(15.0),
-                        //     onTap: () {
-                        //       Navigator.pop(context);
-                        //       Navigator.of(context).push(CupertinoPageRoute(
-                        //           builder: (context) => LabelsPage(
-                        //                 noteid: '',
-                        //                 notelabel: '',
-                        //               )));
-                        //     },
-                        //     child: ListTile(
-                        //       leading: CircleAvatar(
-                        //         backgroundColor: Colors.red[100],
-                        //         foregroundColor: Colors.red,
-                        //         child: Icon(Icons.archive_outlined),
-                        //       ),
-                        //       title: Text('Archive'),
-                        //       subtitle: Text('See your archived notes'),
-                        //     ),
-                        //   ),
-                        // ),
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(15.0),
-                            onTap: () async {
-                              Navigator.pop(context);
-                              final res = await Navigator.of(context).push(
-                                  CupertinoPageRoute(
-                                      builder: (context) =>
-                                          BackupRestorePage()));
-                              if (res == "yes") {
-                                loadNotes();
-                              }
-                            },
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.teal[100],
-                                foregroundColor: Colors.teal,
-                                child: Icon(Icons.backup_outlined),
-                              ),
-                              title: Text('Backup & Restore'),
-                              subtitle: Text('Bring back the dead'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 
@@ -922,155 +758,13 @@ class _HomePageState extends State<HomePage> {
     if (res is Notes) loadNotes();
   }
 
-  Future<bool> _onBackPressed() async {
-    if (!(_noteTitleController.text.isEmpty ||
-        _noteTextController.text.isEmpty)) {
-      _saveNote();
-    }
-    return true;
-  }
-
-  // void _showMenuModalSheet(BuildContext context) {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     builder: (context) {
-  //       return Container(
-  //         height: 150,
-  //         padding: EdgeInsets.all(10.0),
-  //         child: Column(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: <Widget>[
-  //             InkWell(
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 _showAppLock(context);
-  //               },
-  //               child: Padding(
-  //                 padding: const EdgeInsets.symmetric(
-  //                     horizontal: 10.0, vertical: 15.0),
-  //                 child: Row(
-  //                   children: <Widget>[
-  //                     Icon(MyFlutterApp.archive),
-  //                     Container(
-  //                       margin: EdgeInsets.only(right: 10.0),
-  //                     ),
-  //                     Text('Archived'),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //             InkWell(
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 _showBackupRestore(context);
-  //               },
-  //               child: Padding(
-  //                 padding: const EdgeInsets.symmetric(
-  //                     horizontal: 10.0, vertical: 15.0),
-  //                 child: Row(
-  //                   children: <Widget>[
-  //                     Icon(MyFlutterApp.backup),
-  //                     Container(
-  //                       margin: EdgeInsets.only(right: 10.0),
-  //                     ),
-  //                     Text('Backup & Restore'),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
+  // Future<bool> _onBackPressed() async {
+  //   if (!(_noteTitleController.text.isEmpty ||
+  //       _noteTextController.text.isEmpty)) {
+  //     _saveNote();
+  //   }
+  //   return true;
   // }
-
-  // void _showBackupRestore(BuildContext context) {
-  //   _getBackupPath();
-  //   Navigator.of(context).push(new CupertinoPageRoute<Null>(
-  //     builder: (context) {
-  //       return new Scaffold(
-  //         appBar: AppBar(
-  //           title: Text('Backup & Restore'),
-  //         ),
-  //         body: SingleChildScrollView(
-  //           child: Container(
-  //             padding: EdgeInsets.all(20.0),
-  //             child: Column(
-  //               crossAxisAlignment: CrossAxisAlignment.stretch,
-  //               children: <Widget>[
-  //                 Container(
-  //                   padding: EdgeInsets.all(20.0),
-  //                   child: Text('Path: $backupPath'),
-  //                 ),
-  //                 Container(
-  //                   padding: EdgeInsets.all(20.0),
-  //                   child: OutlineButton.icon(
-  //                     onPressed: () {
-  //                       _makeBackup();
-  //                       Navigator.pop(context);
-  //                     },
-  //                     highlightedBorderColor: Theme.of(context).accentColor,
-  //                     highlightColor: Colors.white10,
-  //                     icon: Icon(MyFlutterApp.backup),
-  //                     label: Text('Backup'),
-  //                   ),
-  //                 ),
-  //                 Container(
-  //                   padding: EdgeInsets.all(20.0),
-  //                   child: OutlineButton.icon(
-  //                     onPressed: () {
-  //                       _restore();
-  //                       Navigator.pop(context);
-  //                     },
-  //                     highlightedBorderColor: Theme.of(context).accentColor,
-  //                     highlightColor: Colors.white10,
-  //                     icon: Icon(MyFlutterApp.restore),
-  //                     label: Text('Restore'),
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   ));
-  // }
-
-  void _showAppLock(BuildContext context) {
-    Navigator.of(context).push(new CupertinoPageRoute<Null>(builder: (context) {
-      return new Scaffold(
-        appBar: AppBar(
-          title: Text('Manage Pin'),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Old Pin',
-                  ),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'New Pin',
-                  ),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    labelText: 'Confirm Pin',
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }));
-  }
 
   String getDateString() {
     var formatter = new DateFormat('yyyy-MM-dd HH:mm:ss');

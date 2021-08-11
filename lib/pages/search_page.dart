@@ -1,10 +1,8 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
-import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
-import 'package:bnotes/widgets/search_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

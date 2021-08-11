@@ -45,16 +45,6 @@ class _ArchivePageState extends State<ArchivePage> {
     });
   }
 
-  void _updateColor(String noteId, int noteColor) async {
-    print(noteColor);
-    await dbHelper.updateNoteColor(noteId, noteColor).then((value) {
-      loadArchiveNotes();
-      setState(() {
-        selectedPageColor = noteColor;
-      });
-    });
-  }
-
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
@@ -310,7 +300,6 @@ class _ArchivePageState extends State<ArchivePage> {
         ),
       ),
     );
-    return Container();
   }
 
   String getDateString() {

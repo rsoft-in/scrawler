@@ -18,7 +18,6 @@ class ScrawlApp extends StatefulWidget {
 }
 
 class _ScrawlAppState extends State<ScrawlApp> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   late SharedPreferences sharedPreferences;
   bool isTileView = false;
   ViewType viewType = ViewType.Tile;
