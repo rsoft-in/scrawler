@@ -65,6 +65,13 @@ class DatabaseHelper {
                 : ''));
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
+  
+  Future<List<Notes>> getNotesAllForBackup() async {
+    Database? db = await instance.database;
+    var parsed = await db!.query('notes',
+        orderBy: 'note_date DESC',);
+    return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
 
   Future<bool> archiveNote(String noteId, int archive) async {
     Database? db = await instance.database;

@@ -28,6 +28,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
 
   int selectedPageColor = 0;
 
+
   void _updateColor(String noteId, int noteColor) async {
     print(noteColor);
     await dbHelper.updateNoteColor(noteId, noteColor).then((value) {
@@ -72,14 +73,14 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             onPressed: () => Navigator.pop(context, true),
             icon: Icon(Icons.arrow_back),
             color:
-                darkModeOn && note.noteColor == 0 ? Colors.white : Colors.black,
+                darkModeOn && selectedPageColor == 0 ? Colors.white : Colors.black,
           ),
           actions: [
             IconButton(
               onPressed: () {
                 _showEdit(context, note);
               },
-              color: darkModeOn && note.noteColor == 0
+              color: darkModeOn && selectedPageColor == 0
                   ? Colors.white
                   : Colors.black,
               icon: Icon(Icons.edit_outlined),
@@ -88,7 +89,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
               onPressed: () {
                 _showColorPalette(context, note);
               },
-              color: darkModeOn && note.noteColor == 0
+              color: darkModeOn && selectedPageColor == 0
                   ? Colors.white
                   : Colors.black,
               icon: Icon(Icons.palette_outlined),
@@ -97,7 +98,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
               onPressed: () {
                 _assignLabel(note);
               },
-              color: darkModeOn && note.noteColor == 0
+              color: darkModeOn && selectedPageColor == 0
                   ? Colors.white
                   : Colors.black,
               icon: Icon(Icons.new_label_outlined),
@@ -113,7 +114,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   });
                   _archiveNote(1);
                 },
-                color: darkModeOn && note.noteColor == 0
+                color: darkModeOn && selectedPageColor == 0
                     ? Colors.white
                     : Colors.black,
                 icon: Icon(Icons.archive_outlined),
@@ -129,7 +130,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   });
                   _archiveNote(0);
                 },
-                color: darkModeOn && note.noteColor == 0
+                color: darkModeOn && selectedPageColor == 0
                     ? Colors.white
                     : Colors.black,
                 icon: Icon(Icons.archive_rounded),
@@ -142,7 +143,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 });
                 _confirmDelete();
               },
-              color: darkModeOn && note.noteColor == 0
+              color: darkModeOn && selectedPageColor == 0
                   ? Colors.white
                   : Colors.black,
               icon: Icon(Icons.delete_outline_rounded),
@@ -163,7 +164,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   child: Text(
                     note.noteTitle,
                     style: TextStyle(
-                        color: darkModeOn && note.noteColor == 0
+                        color: darkModeOn && selectedPageColor == 0
                             ? Colors.white
                             : Colors.black,
                         fontSize: 22,
@@ -178,7 +179,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                     note.noteText,
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                        color: darkModeOn && note.noteColor == 0
+                        color: darkModeOn && selectedPageColor == 0
                             ? Colors.white
                             : Colors.black),
                   ),
@@ -219,7 +220,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: darkModeOn && note.noteColor == 0
+                      color: darkModeOn && selectedPageColor == 0
                           ? Colors.white
                           : Colors.black,
                     ),
@@ -227,7 +228,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
                 Text(Utility.formatDateTime(note.noteDate),
                     style: TextStyle(
-                      color: darkModeOn && note.noteColor == 0
+                      color: darkModeOn && selectedPageColor == 0
                           ? Colors.white
                           : Colors.black,
                     )),
@@ -274,7 +275,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 0);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 0,
+                          isSelected: selectedPageColor == 0,
                         ),
                         ColorPalette(
                           color: Color(0xFFA8EAD5),
@@ -282,7 +283,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 1);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 1,
+                          isSelected: selectedPageColor == 1,
                         ),
                         ColorPalette(
                           color: Colors.red.shade300,
@@ -290,7 +291,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 2);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 2,
+                          isSelected: selectedPageColor == 2,
                         ),
                         ColorPalette(
                           color: Colors.pink.shade300,
@@ -298,7 +299,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 3);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 3,
+                          isSelected: selectedPageColor == 3,
                         ),
                         ColorPalette(
                           color: Colors.yellow.shade300,
@@ -306,7 +307,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 4);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 4,
+                          isSelected: selectedPageColor == 4,
                         ),
                         ColorPalette(
                           color: Colors.blue.shade300,
@@ -314,7 +315,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             _updateColor(_note.noteId, 5);
                             Navigator.pop(context);
                           },
-                          isSelected: _note.noteColor == 5,
+                          isSelected: selectedPageColor == 5,
                         ),
                       ],
                     ),

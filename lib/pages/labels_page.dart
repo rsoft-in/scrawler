@@ -87,128 +87,135 @@ class _LabelsPageState extends State<LabelsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Labels'),
-        actions: [
-          Visibility(
-            visible: widget.noteid.isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                style: TextButton.styleFrom(
-                        backgroundColor: kSecondaryColor.withOpacity(0.2),
-                        primary: kSecondaryColor,
-                      ),
-                child: Text('Done'),
-                onPressed: () => _assignLabel(),
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Labels'),
+          actions: [
+            Visibility(
+              visible: widget.noteid.isNotEmpty,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                          backgroundColor: kSecondaryColor.withOpacity(0.2),
+                          primary: kSecondaryColor,
+                        ),
+                  child: Text('Done'),
+                  onPressed: () => _assignLabel(),
+                ),
               ),
-            ),
-          ),
-        ],
-      ),
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _newLabelController,
-                      textCapitalization: TextCapitalization.sentences,
-                      decoration: InputDecoration.collapsed(
-                          hintText: 'Add a new Label'),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    color: kPrimaryColor,
-                    onPressed: () => _saveLabel(),
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder<List<Labels>>(
-                  stream: _labelsController.stream,
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<Labels>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return Text(snapshot.error.toString());
-                    }
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          var label = snapshot.data![index];
-                          return Dismissible(
-                            background: Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      color: Colors.red.shade300,
-                                      alignment: Alignment.centerLeft,
-                                      padding: EdgeInsets.only(left: 15.0),
-                                      child: Icon(Icons.delete_outline_rounded),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      color: Colors.red.shade300,
-                                      alignment: Alignment.centerRight,
-                                      padding: EdgeInsets.only(right: 15.0),
-                                      child: Icon(Icons.delete_outline_rounded),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            key: Key(label.labelId),
-                            onDismissed: (direction) {
-                              setState(() {
-                                _deleteLabel(label.labelId);
-                                snapshot.data!.removeAt(index);
-                              });
-                            },
-                            child: widget.noteid.isNotEmpty
-                                ? CheckboxListTile(
-                                    value: _selectedLabels
-                                        .contains(label.labelName),
-                                    title: Text(label.labelName),
-                                    onChanged: (value) {
-                                      _onLabelSelected(value!, label.labelName);
-                                    },
-                                  )
-                                : ListTile(
-                                    title: Text(label.labelName),
-                                  ),
-                          );
-                        },
-                      );
-                    } else {
-                      return Center(
-                        child: Text('No notes yet!'),
-                      );
-                    }
-                  }),
             ),
           ],
         ),
+        body: Container(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _newLabelController,
+                        textCapitalization: TextCapitalization.sentences,
+                        decoration: InputDecoration.collapsed(
+                            hintText: 'Add a new Label'),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add),
+                      color: kPrimaryColor,
+                      onPressed: () => _saveLabel(),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<List<Labels>>(
+                    stream: _labelsController.stream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Labels>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return Text(snapshot.error.toString());
+                      }
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            var label = snapshot.data![index];
+                            return Dismissible(
+                              background: Container(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        color: Colors.red.shade300,
+                                        alignment: Alignment.centerLeft,
+                                        padding: EdgeInsets.only(left: 15.0),
+                                        child: Icon(Icons.delete_outline_rounded),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        color: Colors.red.shade300,
+                                        alignment: Alignment.centerRight,
+                                        padding: EdgeInsets.only(right: 15.0),
+                                        child: Icon(Icons.delete_outline_rounded),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              key: Key(label.labelId),
+                              onDismissed: (direction) {
+                                setState(() {
+                                  _deleteLabel(label.labelId);
+                                  snapshot.data!.removeAt(index);
+                                });
+                              },
+                              child: widget.noteid.isNotEmpty
+                                  ? CheckboxListTile(
+                                      value: _selectedLabels
+                                          .contains(label.labelName),
+                                      title: Text(label.labelName),
+                                      onChanged: (value) {
+                                        _onLabelSelected(value!, label.labelName);
+                                      },
+                                    )
+                                  : ListTile(
+                                      title: Text(label.labelName),
+                                    ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text('No notes yet!'),
+                        );
+                      }
+                    }),
+              ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+  Future<bool> _onBackPressed() async {
+    Navigator.pop(context, null);
+    return true;
   }
 }

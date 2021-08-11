@@ -42,8 +42,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
 
   void navigationTapped(int page) {
     _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.ease);
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   @override
@@ -53,98 +52,110 @@ class _ScrawlAppState extends State<ScrawlApp> {
     _pageController = new PageController();
   }
 
+  bool onWillPop() {
+    if (_pageController.page!.round() == _pageController.initialPage)
+      return true;
+    else {
+      _pageController.jumpToPage(
+        _pageController.initialPage
+      );
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'images/bnotes-transparent.png',
-              height: 50,
+    return WillPopScope(
+      onWillPop: () => Future.sync(onWillPop),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'images/bnotes-transparent.png',
+                height: 50,
+              ),
+              Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    kAppName,
+                    style: TextStyle(fontFamily: 'Raleway'),
+                  )),
+            ],
+          ),
+          actions: [
+            Visibility(
+              visible: viewType == ViewType.Tile && _page == 0,
+              child: IconButton(
+                icon: Icon(Icons.grid_view_outlined),
+                onPressed: () {
+                  setState(() {
+                    viewType = ViewType.Grid;
+                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
+                  });
+                },
+              ),
             ),
-            Container(
-                alignment: Alignment.center,
-                child: Text(
-                  kAppName,
-                  style: TextStyle(fontFamily: 'Raleway'),
-                )),
+            Visibility(
+              visible: viewType == ViewType.Grid && _page == 0,
+              child: IconButton(
+                icon: Icon(Icons.view_agenda_outlined),
+                onPressed: () {
+                  setState(() {
+                    viewType = ViewType.Tile;
+                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
+                  });
+                },
+              ),
+            ),
           ],
         ),
-        actions: [
-          Visibility(
-            visible: viewType == ViewType.Tile && _page == 0,
-            child: IconButton(
-              icon: Icon(Icons.grid_view_outlined),
-              onPressed: () {
-                setState(() {
-                  viewType = ViewType.Grid;
-                  HomePage.staticGlobalKey.currentState!.toggleView(viewType);
-                });
-              },
+        body: PageView(
+          physics: NeverScrollableScrollPhysics(),
+          pageSnapping: false,
+          children: [
+            new HomePage(title: kAppName),
+            new ArchivePage(),
+            new SearchPage(),
+            new SettingsPage(),
+          ],
+          onPageChanged: onPageChanged,
+          controller: _pageController,
+        ),
+        bottomNavigationBar: BottomBar(
+          backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
+          textStyle: TextStyle(fontWeight: FontWeight.w400),
+          onTap: navigationTapped,
+          selectedIndex: _page,
+          items: <BottomBarItem>[
+            BottomBarItem(
+              icon: Icon(Icons.notes_rounded),
+              title: Text('Notes'),
+              activeColor: Colors.teal,
             ),
-          ),
-          Visibility(
-            visible: viewType == ViewType.Grid && _page == 0,
-            child: IconButton(
-              icon: Icon(Icons.view_agenda_outlined),
-              onPressed: () {
-                setState(() {
-                  viewType = ViewType.Tile;
-                  HomePage.staticGlobalKey.currentState!.toggleView(viewType);
-                });
-              },
+            BottomBarItem(
+              icon: Icon(Icons.archive_outlined),
+              title: Text('Archive'),
+              activeColor: Colors.orange,
+              darkActiveColor: Colors.orange.shade400, // Optional
             ),
-          ),
-        ],
+            BottomBarItem(
+              icon: Icon(Icons.search_rounded),
+              title: Text('Search'),
+              activeColor: Colors.blue,
+              darkActiveColor: Colors.blue.shade400, // Optional
+            ),
+            BottomBarItem(
+              icon: Icon(Icons.menu_rounded),
+              title: Text('Settings'),
+              activeColor: kSecondaryColor,
+            ),
+          ],
+        ),
       ),
-      body: PageView(
-        physics: NeverScrollableScrollPhysics(),
-        pageSnapping: false,
-        children: [
-          new HomePage(title: kAppName),
-          new ArchivePage(),
-          new SearchPage(),
-          new SettingsPage(),
-        ],
-        onPageChanged: onPageChanged,
-        controller: _pageController,
-      ),
-      bottomNavigationBar: BottomBar(
-        backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
-        textStyle: TextStyle(fontWeight: FontWeight.w400),
-        onTap: navigationTapped,
-        selectedIndex: _page,
-        items: <BottomBarItem>[
-          BottomBarItem(
-            icon: Icon(Icons.notes_rounded),
-            title: Text('Notes'),
-            activeColor: Colors.teal,
-          ),
-          BottomBarItem(
-            icon: Icon(Icons.archive_outlined),
-            title: Text('Archive'),
-            activeColor: Colors.red,
-            darkActiveColor: Colors.red.shade400, // Optional
-          ),
-          BottomBarItem(
-            icon: Icon(Icons.search_rounded),
-            title: Text('Search'),
-            activeColor: Colors.red,
-            darkActiveColor: Colors.red.shade400, // Optional
-          ),
-          BottomBarItem(
-            icon: Icon(Icons.menu_rounded),
-            title: Text('Settings'),
-            activeColor: Colors.red,
-            darkActiveColor: Colors.red.shade400, // Optional
-          ),
-        ],
-      ),
-
     );
   }
 }

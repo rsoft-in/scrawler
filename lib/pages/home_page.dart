@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
@@ -241,7 +242,7 @@ class _HomePageState extends State<HomePage> {
                                                 style: TextStyle(
                                                     color: darkModeOn &&
                                                             note.noteColor == 0
-                                                        ? Colors.white
+                                                        ? Colors.white60
                                                         : Colors.black38),
                                               ),
                                             ),
@@ -263,17 +264,17 @@ class _HomePageState extends State<HomePage> {
                                                       color: darkModeOn &&
                                                               note.noteColor ==
                                                                   0
-                                                          ? Colors.white
+                                                          ? Colors.white38
                                                           : Colors.black38,
                                                       fontSize: 12.0),
                                                 )),
                                                 Text(
-                                                  formatDateTime(note.noteDate),
+                                                  Utility.formatDateTime(note.noteDate),
                                                   style: TextStyle(
                                                       color: darkModeOn &&
                                                               note.noteColor ==
                                                                   0
-                                                          ? Colors.white
+                                                          ? Colors.white38
                                                           : Colors.black38,
                                                       fontSize: 12.0),
                                                 ),
@@ -342,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                                             style: TextStyle(
                                               color: darkModeOn &&
                                                       note.noteColor == 0
-                                                  ? Colors.white
+                                                  ? Colors.white60
                                                   : Colors.black38,
                                             ),
                                             maxLines: 1,
@@ -361,21 +362,21 @@ class _HomePageState extends State<HomePage> {
                                                         color: darkModeOn &&
                                                                 note.noteColor ==
                                                                     0
-                                                            ? Colors.white
+                                                            ? Colors.white38
                                                             : Colors.black38,
                                                         fontSize: 12.0),
                                                   ),
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    formatDateTime(
+                                                    Utility.formatDateTime(
                                                         note.noteDate),
                                                     textAlign: TextAlign.end,
                                                     style: TextStyle(
                                                         color: darkModeOn &&
                                                                 note.noteColor ==
                                                                     0
-                                                            ? Colors.white
+                                                            ? Colors.white38
                                                             : Colors.black38,
                                                         fontSize: 12.0),
                                                   ),
@@ -905,12 +906,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _assignLabel(Notes note) async {
-    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+    final res = await Navigator.of(context).push(new CupertinoPageRoute(
         builder: (BuildContext context) => new LabelsPage(
               noteid: note.noteId,
               notelabel: note.noteLabel,
             )));
-    if (res) loadNotes();
+    if (res is Notes) loadNotes();
   }
 
   void _showEdit(BuildContext context, Notes _note) async {
@@ -1075,15 +1076,5 @@ class _HomePageState extends State<HomePage> {
     var formatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
     DateTime dt = DateTime.now();
     return formatter.format(dt);
-  }
-
-  String formatDateTime(String dateTime) {
-    var formatter = new DateFormat('MMM dd, yyyy');
-    var formatter2 = new DateFormat('hh:mm a');
-    DateTime dt = DateTime.parse(dateTime);
-    if (dt.day == DateTime.now().day)
-      return formatter2.format(dt);
-    else
-      return formatter.format(dt);
   }
 }

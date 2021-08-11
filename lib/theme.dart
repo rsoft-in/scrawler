@@ -50,6 +50,7 @@ ThemeData themeDark() {
     brightness: Brightness.dark,
     primarySwatch: Colors.red,
     accentColor: kAccentColor,
+    backgroundColor: kSecondaryDark,
     appBarTheme: AppBarTheme(
       color: Colors.transparent,
       elevation: 0,

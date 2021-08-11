@@ -11,10 +11,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
 class BackupRestorePage extends StatefulWidget {
-  BackupRestorePage({Key? key, })
-      : super(key: BackupRestorePage.staticGlobalKey);
+  BackupRestorePage({
+    Key? key,
+  }) : super(key: BackupRestorePage.staticGlobalKey);
 
-   static final GlobalKey<_BackupRestorePageState> staticGlobalKey =
+  static final GlobalKey<_BackupRestorePageState> staticGlobalKey =
       new GlobalKey<_BackupRestorePageState>();
 
   @override
@@ -46,7 +47,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   }
 
   Future _makeBackup() async {
-    var _notes = await dbHelper.getNotesAll('');
+    var _notes = await dbHelper.getNotesAllForBackup();
     String out = "";
     _notes.forEach((element) {
       out += "{\"note_id\":\"${element.noteId}\", " +
@@ -61,9 +62,18 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       await storage
           .writeData("[" + out.substring(0, out.length - 1) + "]")
           .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-          content: Text('Backup done!'),
-          duration: Duration(seconds: 5),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('Backup done'),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0, // Inner padding for SnackBar content.
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ));
       });
       if (isUploading) {
@@ -175,18 +185,18 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         });
         Navigator.pop(context, 'yes');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text('Restored'),
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0, // Inner padding for SnackBar content.
-            ),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-          ));
+          content: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('Restored'),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0, // Inner padding for SnackBar content.
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ));
       });
     }
   }

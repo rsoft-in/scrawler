@@ -1,6 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
@@ -82,7 +83,7 @@ class _ArchivePageState extends State<ArchivePage> {
           children: <Widget>[
             Container(
               padding: kGlobalOuterPadding,
-              child: Text('Archive', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
+              child: Text('Archive', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
             ),
             Expanded(
               child: isLoading
@@ -154,7 +155,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                                 style: TextStyle(
                                                     color: darkModeOn &&
                                                             note.noteColor == 0
-                                                        ? Colors.white
+                                                        ? Colors.white60
                                                         : Colors.black38),
                                               ),
                                             ),
@@ -176,17 +177,17 @@ class _ArchivePageState extends State<ArchivePage> {
                                                       color: darkModeOn &&
                                                               note.noteColor ==
                                                                   0
-                                                          ? Colors.white
+                                                          ? Colors.white38
                                                           : Colors.black38,
                                                       fontSize: 12.0),
                                                 )),
                                                 Text(
-                                                  formatDateTime(note.noteDate),
+                                                  Utility.formatDateTime(note.noteDate),
                                                   style: TextStyle(
                                                       color: darkModeOn &&
                                                               note.noteColor ==
                                                                   0
-                                                          ? Colors.white
+                                                          ? Colors.white38
                                                           : Colors.black38,
                                                       fontSize: 12.0),
                                                 ),
@@ -255,7 +256,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                             style: TextStyle(
                                               color: darkModeOn &&
                                                       note.noteColor == 0
-                                                  ? Colors.white
+                                                  ? Colors.white60
                                                   : Colors.black38,
                                             ),
                                             maxLines: 1,
@@ -274,21 +275,21 @@ class _ArchivePageState extends State<ArchivePage> {
                                                         color: darkModeOn &&
                                                                 note.noteColor ==
                                                                     0
-                                                            ? Colors.white
+                                                            ? Colors.white38
                                                             : Colors.black38,
                                                         fontSize: 12.0),
                                                   ),
                                                 ),
                                                 Expanded(
                                                   child: Text(
-                                                    formatDateTime(
+                                                    Utility.formatDateTime(
                                                         note.noteDate),
                                                     textAlign: TextAlign.end,
                                                     style: TextStyle(
                                                         color: darkModeOn &&
                                                                 note.noteColor ==
                                                                     0
-                                                            ? Colors.white
+                                                            ? Colors.white38
                                                             : Colors.black38,
                                                         fontSize: 12.0),
                                                   ),
@@ -318,15 +319,6 @@ class _ArchivePageState extends State<ArchivePage> {
     return formatter.format(dt);
   }
 
-  String formatDateTime(String dateTime) {
-    var formatter = new DateFormat('MMM dd, yyyy');
-    var formatter2 = new DateFormat('hh:mm a');
-    DateTime dt = DateTime.parse(dateTime);
-    if (dt.day == DateTime.now().day)
-      return formatter2.format(dt);
-    else
-      return formatter.format(dt);
-  }
   // void _showOptionsSheet(BuildContext context, Notes _note) {
   //   showModalBottomSheet(
   //       context: context,

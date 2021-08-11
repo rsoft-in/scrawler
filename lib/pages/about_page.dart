@@ -1,5 +1,6 @@
 import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class _AboutPageState extends State<AboutPage> {
           child: Padding(
             padding: kGlobalOuterPadding,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: kGlobalOuterPadding,
@@ -37,18 +39,71 @@ class _AboutPageState extends State<AboutPage> {
                           alignment: Alignment.center,
                           child: Text(
                             kAppName,
-                            style: TextStyle(fontFamily: 'Raleway', fontSize: 24.0),
+                            style: TextStyle(
+                                fontFamily: 'Raleway', fontSize: 24.0),
                           )),
                     ],
                   ),
                 ),
-                ListTile(
-                  title: Text('Nandan Menon (nahnah)'),
-                  subtitle: Text('Lead Dev & app design'),
+                Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      'Contributors',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
                 ),
-                ListTile(
-                  title: Text('Rajesh Menon (suranjum)'),
-                  subtitle: Text('Lead Dev'),
+                InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: (){},
+                  child: ListTile(
+                    title: Text('Nandan Menon (nahnah)'),
+                    subtitle: Text('Lead Dev & app design'),
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: (){},
+                  child: ListTile(
+                    title: Text('Rajesh Menon (suranjum)'),
+                    subtitle: Text('Lead Dev'),
+                  ),
+                ),
+                Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(
+                      'Links',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: () async {
+                    if (await canLaunch('https://t.me/srawlapp')) {
+                      await launch(
+                        'https://t.me/srawlapp',
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    } else {
+                      throw 'Could not launch';
+                    }
+                  },
+                  child: ListTile(
+                    title: Text('Telegram Channel'),
+                    subtitle: Text('Know latest news about scrawl'),
+                  ),
                 ),
               ],
             ),
