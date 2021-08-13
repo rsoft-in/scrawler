@@ -1,5 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
@@ -101,8 +103,26 @@ class _AboutPageState extends State<AboutPage> {
                     }
                   },
                   child: ListTile(
+                    leading: Icon(LineIcons.telegram),
                     title: Text('Telegram Channel'),
-                    subtitle: Text('Know latest news about scrawl'),
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: () async {
+                    if (await canLaunch('https://github.com/rsoft-in/scrawl/issues/new')) {
+                      await launch(
+                        'https://github.com/rsoft-in/scrawl/issues/new',
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    } else {
+                      throw 'Could not launch';
+                    }
+                  },
+                  child: ListTile(
+                    leading: Icon(LineIcons.bug),
+                    title: Text('Report Bug'),
                   ),
                 ),
               ],
