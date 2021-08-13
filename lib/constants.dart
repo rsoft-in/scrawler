@@ -11,4 +11,6 @@ const kGlobalCardPadding = EdgeInsets.all(5.0);
 const kGlobalTextPadding =
     EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0);
 
+const kBaseUrl = 'http://192.168.0.2/scrawl/services/';
+
 const kAppName = 'scrawl';

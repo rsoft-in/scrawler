@@ -44,3 +44,4 @@ app.*.map.json
 
 key.properties
 google-services.json
+scrawl_api_key.json

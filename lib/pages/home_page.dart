@@ -16,6 +16,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title})
@@ -43,6 +44,11 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = false;
   bool hasData = false;
 
+  bool isAndroid = UniversalPlatform.isAndroid;
+  bool isIOS = UniversalPlatform.isIOS;
+  bool isWeb = UniversalPlatform.isWeb;
+  bool isDesktop = UniversalPlatform.isDesktop;
+
   final dbHelper = DatabaseHelper.instance;
   var uuid = Uuid();
   TextEditingController _noteTitleController = new TextEditingController();
@@ -66,14 +72,16 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    await dbHelper.getNotesAll(_searchController.text).then((value) {
-      setState(() {
-        print(value.length);
-        isLoading = false;
-        hasData = value.length > 0;
-        notesList = value;
+    if (isAndroid) {
+      await dbHelper.getNotesAll(_searchController.text).then((value) {
+        setState(() {
+          print(value.length);
+          isLoading = false;
+          hasData = value.length > 0;
+          notesList = value;
+        });
       });
-    });
+    }
   }
 
   // void _saveNote() async {
@@ -250,7 +258,8 @@ class _HomePageState extends State<HomePage> {
                                                       fontSize: 12.0),
                                                 )),
                                                 Text(
-                                                  Utility.formatDateTime(note.noteDate),
+                                                  Utility.formatDateTime(
+                                                      note.noteDate),
                                                   style: TextStyle(
                                                       color: darkModeOn &&
                                                               note.noteColor ==
@@ -371,7 +380,10 @@ class _HomePageState extends State<HomePage> {
                               },
                             ))
                       : Center(
-                          child: Text('No notes', style: TextStyle(fontWeight: FontWeight.w700),),
+                          child: Text(
+                            'No notes',
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                         )),
             ),
           ],

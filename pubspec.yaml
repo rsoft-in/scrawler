@@ -27,6 +27,9 @@ dependencies:
   flutter_staggered_grid_view: ^0.4.0
   bottom_bar: ^1.2.4
   animations: ^2.0.0
+  universal_platform: ^1.0.0+1
+  adaptive_breakpoints: ^0.0.4
+  bitsdojo_window: ^0.1.1+1
 
 flutter_icons:
   android: "launcher_icon"

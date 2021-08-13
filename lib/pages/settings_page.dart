@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/api_provider.dart';
 import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
@@ -21,6 +24,16 @@ class _SettingsPageState extends State<SettingsPage> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
+    });
+  }
+
+  checkUser() async {
+    Map<String, String> post = {
+      'postdata':
+          jsonEncode({'email': 'nandanrmenon@gmail.com', 'name': 'Nandan'})
+    };
+    ApiProvider.fetchClients(post).then((res) async {
+      print(res);
     });
   }
 
@@ -176,6 +189,9 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
+                    // ElevatedButton(onPressed: () {
+                    //   checkUser();
+                    // }, child: Text('API'))
                   ],
                 ),
               ),
