@@ -5,9 +5,7 @@ import 'constants.dart';
 
 ThemeData theme() {
   return ThemeData(
-    primarySwatch: Colors.red,
     primaryColor: kPrimaryColor,
-    accentColor: kAccentColor,
     appBarTheme: AppBarTheme(
       color: Colors.white,
       elevation: 1,
@@ -15,8 +13,7 @@ ThemeData theme() {
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ),
-      textTheme:
-          TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.black)),
+      titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.black),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
@@ -38,6 +35,8 @@ ThemeData theme() {
         ),
       ),
     ),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+        .copyWith(secondary: kAccentColor),
     // inputDecorationTheme: inputDecorationTheme(),
   );
 }
@@ -48,20 +47,15 @@ ThemeData themeDark() {
   );
   return ThemeData(
     brightness: Brightness.dark,
-    primarySwatch: Colors.red,
-    accentColor: kAccentColor,
     backgroundColor: kSecondaryDark,
     appBarTheme: AppBarTheme(
       color: Colors.transparent,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
-      brightness: Brightness.dark,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
-        
       ),
-      textTheme:
-          TextTheme(headline6: TextStyle(fontSize: 20.0, color: Colors.white)),
+      titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.white),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
         backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
@@ -85,6 +79,8 @@ ThemeData themeDark() {
       ),
     ),
     scaffoldBackgroundColor: Color(0xFF121212),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+        .copyWith(secondary: kAccentColor, brightness: Brightness.dark),
     // inputDecorationTheme: inputDecorationTheme(),
   );
 }
