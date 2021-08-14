@@ -154,18 +154,21 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Container(
-                  padding: kGlobalOuterPadding,
-                  margin: EdgeInsets.only(left: 8),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    note.noteTitle,
-                    style: TextStyle(
-                        color: darkModeOn && selectedPageColor == 0
-                            ? Colors.white
-                            : Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700),
+                Visibility(
+                  visible: note.noteTitle.isNotEmpty,
+                  child: Container(
+                    padding: kGlobalOuterPadding,
+                    margin: EdgeInsets.only(left: 8),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      note.noteTitle,
+                      style: TextStyle(
+                          color: darkModeOn && selectedPageColor == 0
+                              ? Colors.white
+                              : Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
                 Container(

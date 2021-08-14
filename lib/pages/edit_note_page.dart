@@ -74,7 +74,9 @@ class _EditNotePageState extends State<EditNotePage> {
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: darkModeOn ? kSecondaryDark : Colors.grey.withOpacity(0.1),
+                      color: darkModeOn
+                          ? kSecondaryDark
+                          : Colors.grey.withOpacity(0.1),
                     ),
                     child: TextField(
                       controller: _noteTitleController,
@@ -90,7 +92,9 @@ class _EditNotePageState extends State<EditNotePage> {
                     padding: EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
-                      color: darkModeOn ? kSecondaryDark : Colors.grey.withOpacity(0.1),
+                      color: darkModeOn
+                          ? kSecondaryDark
+                          : Colors.grey.withOpacity(0.1),
                     ),
                     height: MediaQuery.of(context).size.height * .7,
                     child: TextField(
@@ -112,8 +116,7 @@ class _EditNotePageState extends State<EditNotePage> {
   }
 
   Future<bool> _onBackPressed() async {
-    if (!(_noteTitleController.text.isEmpty ||
-        _noteTextController.text.isEmpty)) {
+    if (_noteTextController.text.isNotEmpty) {
       _saveNote();
       Navigator.pop(context, note);
     } else {

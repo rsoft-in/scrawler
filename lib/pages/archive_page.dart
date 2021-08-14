@@ -120,18 +120,21 @@ class _ArchivePageState extends State<ArchivePage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              note.noteTitle,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  fontSize: 20.0,
-                                                  color: darkModeOn &&
-                                                          note.noteColor == 0
-                                                      ? Colors.white
-                                                      : Colors.black),
+                                          Visibility(
+                                            visible: note.noteTitle.isNotEmpty,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                note.noteTitle,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    color: darkModeOn &&
+                                                            note.noteColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              ),
                                             ),
                                           ),
                                           Expanded(
@@ -226,16 +229,19 @@ class _ArchivePageState extends State<ArchivePage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Padding(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: Text(
-                                            note.noteTitle,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              color: darkModeOn &&
-                                                      note.noteColor == 0
-                                                  ? Colors.white
-                                                  : Colors.black,
+                                        Visibility(
+                                          visible: note.noteTitle.isNotEmpty,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Text(
+                                              note.noteTitle,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: darkModeOn &&
+                                                        note.noteColor == 0
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              ),
                                             ),
                                           ),
                                         ),

@@ -103,13 +103,16 @@ class _SearchPageState extends State<SearchPage> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            notesList[index].noteTitle,
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: darkModeOn ? Colors.white : Colors.black,
+                        Visibility(
+                          visible: notesList[index].noteTitle.isNotEmpty,
+                          child: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(
+                              notesList[index].noteTitle,
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                color: darkModeOn ? Colors.white : Colors.black,
+                              ),
                             ),
                           ),
                         ),
