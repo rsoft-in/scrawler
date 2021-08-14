@@ -19,6 +19,8 @@ class _SearchPageState extends State<SearchPage> {
   final dbHelper = DatabaseHelper.instance;
   TextEditingController _searchController = new TextEditingController();
 
+  bool _showClearButton = false;
+
   loadNotes(searchText) async {
     if (searchText.toString().isEmpty)
       notesList.clear();
@@ -34,6 +36,11 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     // loadNotes();
+    _searchController.addListener(() {
+      setState(() {
+        _showClearButton = _searchController.text.length > 0;
+      });
+    });
     super.initState();
   }
 
@@ -53,8 +60,9 @@ class _SearchPageState extends State<SearchPage> {
                 padding: EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
-                  color:
-                      darkModeOn ? kSecondaryDark : Colors.grey.withOpacity(0.1),
+                  color: darkModeOn
+                      ? kSecondaryDark
+                      : Colors.grey.withOpacity(0.1),
                 ),
                 child: Row(
                   children: [
@@ -71,6 +79,17 @@ class _SearchPageState extends State<SearchPage> {
                         autofocus: false,
                         onChanged: (value) => loadNotes(value),
                       ),
+                    ),
+                    Visibility(
+                      visible: _showClearButton,
+                      child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _searchController.clear();
+                            });
+                            notesList.clear();
+                          },
+                          child: Icon(Icons.clear)),
                     ),
                   ],
                 ),
@@ -121,7 +140,8 @@ class _SearchPageState extends State<SearchPage> {
                           child: Text(
                             notesList[index].noteText,
                             style: TextStyle(
-                              color: darkModeOn ? Colors.white60 : Colors.black38,
+                              color:
+                                  darkModeOn ? Colors.white60 : Colors.black38,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
