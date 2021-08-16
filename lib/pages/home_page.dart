@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       body: Container(
-        padding: kGlobalOuterPadding,
+        padding: EdgeInsets.only(left: 10, right: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                           ? StaggeredGridView.countBuilder(
                               crossAxisCount: 2,
                               crossAxisSpacing: 8,
-                              mainAxisSpacing: 8,
+                              mainAxisSpacing: 0,
                               // shrinkWrap: true,
                               physics: BouncingScrollPhysics(
                                   parent: AlwaysScrollableScrollPhysics()),
@@ -182,99 +182,102 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 // print(note.noteArchived);
-                                return Card(
-                                  color: NoteColor.getColor(
-                                      note.noteColor, darkModeOn),
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    onTap: () {
-                                      setState(() {
-                                        selectedPageColor = note.noteColor;
-                                      });
-                                      _showNoteReader(context, note);
-                                    },
-                                    onLongPress: () {
-                                      _showOptionsSheet(context, note);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Visibility(
-                                            visible: note.noteTitle.isNotEmpty,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                note.noteTitle,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 20.0,
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white
-                                                        : Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                note.noteText,
-                                                maxLines: 6,
-                                                overflow: TextOverflow.fade,
-                                                style: TextStyle(
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white60
-                                                        : Colors.black38),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                    child: Text(
-                                                  note.noteLabel,
+                                return Container(
+                                  margin: EdgeInsets.symmetric(vertical: 4),
+                                  child: Card(
+                                    color: NoteColor.getColor(
+                                        note.noteColor, darkModeOn),
+                                    elevation: 2,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      onTap: () {
+                                        setState(() {
+                                          selectedPageColor = note.noteColor;
+                                        });
+                                        _showNoteReader(context, note);
+                                      },
+                                      onLongPress: () {
+                                        _showOptionsSheet(context, note);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Visibility(
+                                              visible: note.noteTitle.isNotEmpty,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  note.noteTitle,
                                                   maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
+                                                      fontSize: 20.0,
                                                       color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
-                                                          ? Colors.white38
-                                                          : Colors.black38,
-                                                      fontSize: 12.0),
-                                                )),
-                                                Text(
-                                                  Utility.formatDateTime(
-                                                      note.noteDate),
-                                                  style: TextStyle(
-                                                      color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
-                                                          ? Colors.white38
-                                                          : Colors.black38,
-                                                      fontSize: 12.0),
+                                                              note.noteColor == 0
+                                                          ? Colors.white
+                                                          : Colors.black),
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  note.noteText,
+                                                  maxLines: 6,
+                                                  overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: darkModeOn &&
+                                                              note.noteColor == 0
+                                                          ? Colors.white60
+                                                          : Colors.black38),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                      child: Text(
+                                                    note.noteLabel,
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: darkModeOn &&
+                                                                note.noteColor ==
+                                                                    0
+                                                            ? Colors.white38
+                                                            : Colors.black38,
+                                                        fontSize: 12.0),
+                                                  )),
+                                                  Text(
+                                                    Utility.formatDateTime(
+                                                        note.noteDate),
+                                                    style: TextStyle(
+                                                        color: darkModeOn &&
+                                                                note.noteColor ==
+                                                                    0
+                                                            ? Colors.white38
+                                                            : Colors.black38,
+                                                        fontSize: 12.0),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -288,7 +291,7 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 return Container(
-                                  margin: EdgeInsets.all(5.0),
+                                  margin: EdgeInsets.only(left: 5, right: 5, top: 10),
                                   padding: EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
                                       color: NoteColor.getColor(
