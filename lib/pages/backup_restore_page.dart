@@ -63,13 +63,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           .writeData("[" + out.substring(0, out.length - 1) + "]")
           .then((value) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text('Backup done'),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8.0, // Inner padding for SnackBar content.
-          ),
+          content: Text('Backup done'),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -141,13 +135,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           });
           Navigator.pop(context, 'yes');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text('Restored'),
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 8.0, // Inner padding for SnackBar content.
-            ),
+            content: Text('Restored'),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -185,13 +173,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         });
         Navigator.pop(context, 'yes');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text('Restored'),
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8.0, // Inner padding for SnackBar content.
-          ),
+          content: Text('Restored'),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
