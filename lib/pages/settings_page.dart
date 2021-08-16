@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/api_provider.dart';
 import 'package:bnotes/pages/about_page.dart';
+import 'package:bnotes/pages/account_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,11 +21,17 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late SharedPreferences sharedPreferences;
   bool isAppLogged = false;
+  late String username;
+  late String useremail;
+  Uint8List? avatarData;
 
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
+      username = sharedPreferences.getString('nc_userdisplayname') ?? '';
+      useremail = sharedPreferences.getString('nc_useremail') ?? '';
+      avatarData = base64Decode(sharedPreferences.getString('nc_avatar') ?? '');
     });
   }
 
@@ -63,20 +71,34 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: kGlobalCardPadding,
                       child: (isAppLogged
                           ? InkWell(
-                              onTap: () {},
+                              onTap: () async {
+                                final res = await Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                        builder: (context) => AccountPage()));
+                                if (res is String) {
+                                  getPref();
+                                }
+                              },
                               borderRadius: BorderRadius.circular(15.0),
                               child: ListTile(
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.blue[100],
                                   foregroundColor: Colors.blue,
-                                  child: Icon(Icons.person),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: avatarData != null
+                            ? Image(
+                                image: MemoryImage(avatarData!),
+                                width: 100,
+                              )
+                            : Image(
+                                image: AssetImage('images/bnotes.png'),
+                                width: 100,
+                              ),
+                      ),
                                 ),
-                                title: Text(sharedPreferences
-                                        .getString('nc_userdisplayname') ??
-                                    ''),
-                                subtitle: Text(sharedPreferences
-                                        .getString('nc_useremail') ??
-                                    ''),
+                                title: Text(username),
+                                subtitle: Text(useremail),
                               ),
                             )
                           : InkWell(
@@ -88,6 +110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 if (result == true)
                                   setState(() {
                                     isAppLogged = true;
+                                    getPref();
                                   });
                               },
                               child: ListTile(

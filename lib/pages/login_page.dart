@@ -198,7 +198,10 @@ class _LoginPageState extends State<LoginPage> {
                               child: Padding(
                                 padding: kGlobalCardPadding,
                                 child: TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
+                                  onPressed: () {
+                                    Navigator.pop(context, 'yes');  // Confirmation Dialog Pop
+                                    Navigator.pop(context, true);  // Login Page Pop
+                                  },
                                   child: Text('No'),
                                 ),
                               ),
@@ -212,8 +215,10 @@ class _LoginPageState extends State<LoginPage> {
                                       backgroundColor:
                                           kPrimaryColor.withOpacity(0.2)),
                                   onPressed: () {
-                                    Navigator.pop(context, true);
-                                    Navigator.pop(context, true);
+                                    Navigator.pop(context,
+                                        true); // Confirmation Dialog Pop
+                                    Navigator.pop(
+                                        context, true); // Login Page Pop
                                     Navigator.of(context).push(
                                         CupertinoPageRoute(
                                             builder: (context) =>
@@ -248,9 +253,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       final user = await client.user.getUser();
-      setState(() {
-        isLoading = false;
-      });
+      
       // ignore: unnecessary_null_comparison
       if (user != null) {
         loginPreferences.setString('nc_host', _hostController.text);
@@ -259,11 +262,23 @@ class _LoginPageState extends State<LoginPage> {
 
         loginPreferences.setString('nc_userdisplayname', user.displayName);
         loginPreferences.setString('nc_useremail', user.email);
-        loginPreferences.setBool('is_logged', true);
+        
 
+        final userData = await client.avatar.getAvatar(
+            loginPreferences.getString('nc_username').toString(), 150);
+        loginPreferences.setString('nc_avatar', userData);
+        loginPreferences.setBool('is_logged', true);
+        setState(() {
+        isLoading = false;
+      });
         _restoreNote();
+        
       } else {
+        setState(() {
+        isLoading = false;
+      });
         _showAlert();
+        
       }
     } on RequestException catch (e, stacktrace) {
       print('qs' + e.statusCode.toString());

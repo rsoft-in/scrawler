@@ -7,6 +7,7 @@ import 'package:bnotes/pages/settings_page.dart';
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -23,6 +24,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
   late SharedPreferences sharedPreferences;
   bool isTileView = false;
   ViewType viewType = ViewType.Tile;
+  bool isAppLogged = false;
 
   bool isAndroid = UniversalPlatform.isAndroid;
   bool isIOS = UniversalPlatform.isIOS;
@@ -41,9 +43,36 @@ class _ScrawlAppState extends State<ScrawlApp> {
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
+      isAppLogged = sharedPreferences.getBool("is_logged") ?? false;
       bool isTile = sharedPreferences.getBool("is_tile") ?? false;
       viewType = isTile ? ViewType.Tile : ViewType.Grid;
     });
+  }
+
+  Future getdata() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (isAppLogged) {
+      try {
+        final client = NextCloudClient.withCredentials(
+          Uri(host: sharedPreferences.getString('nc_host')),
+          sharedPreferences.getString('nc_username') ?? '',
+          sharedPreferences.getString('nc_password') ?? '',
+        );
+        final userData = await client.avatar.getAvatar(
+            sharedPreferences.getString('nc_username').toString(), 150);
+        sharedPreferences.setString('nc_avatar', userData);
+
+        // ignore: unnecessary_null_comparison
+      } on RequestException catch (e, stacktrace) {
+        print('qs' + e.statusCode.toString());
+        print(e.body);
+        print(stacktrace);
+        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+          content: Text('Unable to login. Try again.'),
+          duration: Duration(seconds: 2),
+        ));
+      }
+    }
   }
 
   void navigationTapped(int page) {
@@ -55,6 +84,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
   void initState() {
     super.initState();
     getPref();
+    getdata();
     _pageController = new PageController();
   }
 
@@ -168,7 +198,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
       return Scaffold(
         body: WindowBorder(
           color: Colors.black,
-                width: 1,
+          width: 1,
           child: Row(
             children: [
               // SizedBox(

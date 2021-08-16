@@ -14,6 +14,7 @@ import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
+import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -84,6 +85,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  
+
   // void _saveNote() async {
   //   if (currentEditingNoteId.isEmpty) {
   //     await dbHelper
@@ -141,6 +144,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     getPref();
     loadNotes();
+
     super.initState();
   }
 
@@ -209,17 +213,21 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Visibility(
-                                              visible: note.noteTitle.isNotEmpty,
+                                              visible:
+                                                  note.noteTitle.isNotEmpty,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(8.0),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   note.noteTitle,
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       color: darkModeOn &&
-                                                              note.noteColor == 0
+                                                              note.noteColor ==
+                                                                  0
                                                           ? Colors.white
                                                           : Colors.black),
                                                 ),
@@ -235,7 +243,8 @@ class _HomePageState extends State<HomePage> {
                                                   overflow: TextOverflow.fade,
                                                   style: TextStyle(
                                                       color: darkModeOn &&
-                                                              note.noteColor == 0
+                                                              note.noteColor ==
+                                                                  0
                                                           ? Colors.white60
                                                           : Colors.black38),
                                                 ),
@@ -291,7 +300,8 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 return Container(
-                                  margin: EdgeInsets.only(left: 5, right: 5, top: 10),
+                                  margin: EdgeInsets.only(
+                                      left: 5, right: 5, top: 10),
                                   padding: EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
                                       color: NoteColor.getColor(
