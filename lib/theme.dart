@@ -86,7 +86,9 @@ ThemeData themeDark() {
       ),
     ),
     scaffoldBackgroundColor: Color(0xFF121212),
-
+    navigationRailTheme: NavigationRailThemeData(
+      unselectedIconTheme: IconThemeData(color: Colors.white)
+    ),
     snackBarTheme: SnackBarThemeData(
       contentTextStyle: TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,

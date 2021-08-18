@@ -197,7 +197,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
     } else {
       return Scaffold(
         body: WindowBorder(
-          color: Colors.black,
+          color: Colors.transparent,
           width: 1,
           child: Row(
             children: [
@@ -215,41 +215,45 @@ class _ScrawlAppState extends State<ScrawlApp> {
               //     ),
               //   ),
               // ),
-              Column(
-                children: [
-                  Container(
-                    padding: kGlobalOuterPadding,
-                    child: Image.asset(
-                      'images/bnotes-transparent.png',
-                      height: 50,
+              Container(
+                color: darkModeOn ? kSecondaryDark : Colors.grey[100],
+                child: Column(
+                  children: [
+                    Container(
+                      padding: kGlobalOuterPadding,
+                      child: Image.asset(
+                        'images/bnotes-transparent.png',
+                        height: 50,
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: NavigationRail(
-                      labelType: NavigationRailLabelType.selected,
-                      destinations: <NavigationRailDestination>[
-                        NavigationRailDestination(
-                          icon: Icon(Icons.notes_rounded),
-                          label: Text('Notes'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.archive_outlined),
-                          label: Text('Archive'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.search_rounded),
-                          label: Text('Search'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.settings_outlined),
-                          label: Text('Settings'),
-                        ),
-                      ],
-                      selectedIndex: _page,
-                      onDestinationSelected: navigationTapped,
+                    Expanded(
+                      child: NavigationRail(
+                        backgroundColor: Colors.transparent,
+                        labelType: NavigationRailLabelType.selected,
+                        destinations: <NavigationRailDestination>[
+                          NavigationRailDestination(
+                            icon: Icon(Icons.notes_rounded),
+                            label: Text('Notes'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.archive_outlined),
+                            label: Text('Archive'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.search_rounded),
+                            label: Text('Search'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Icon(Icons.settings_outlined),
+                            label: Text('Settings'),
+                          ),
+                        ],
+                        selectedIndex: _page,
+                        onDestinationSelected: navigationTapped,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Expanded(
                 child: Column(
@@ -291,20 +295,21 @@ class _ScrawlAppState extends State<ScrawlApp> {
   }
 }
 
-final buttonColors = WindowButtonColors(
-    iconNormal: Colors.black45,
-    mouseOver: Colors.black12,
-    mouseDown: Colors.black12,
-    iconMouseOver: Colors.black,
-    iconMouseDown: Color(0xFFFFD500));
-
-final closeButtonColors = WindowButtonColors(
-    mouseOver: Colors.black12,
-    mouseDown: Colors.black12,
-    iconNormal: Colors.black45,
-    iconMouseOver: Colors.black);
-
 class WindowButtons extends StatelessWidget {
+  final buttonColors = WindowButtonColors(
+      iconNormal: kPrimaryColor,
+      mouseOver: Colors.black12,
+      mouseDown: Colors.black12,
+      iconMouseOver: kPrimaryColor,
+      iconMouseDown: kPrimaryColor);
+
+  final closeButtonColors = WindowButtonColors(
+      mouseOver: Colors.black12,
+      mouseDown: Colors.black12,
+      iconNormal: kPrimaryColor,
+      iconMouseOver: Colors.red,
+      iconMouseDown: Colors.red);
+
   @override
   Widget build(BuildContext context) {
     return Row(

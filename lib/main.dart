@@ -10,7 +10,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isDesktop) {
     doWhenWindowReady(() {
-      final initialSize = Size(800, 600);
+      final initialSize = Size(900, 700);
       appWindow.minSize = initialSize;
       appWindow.size = initialSize;
       appWindow.alignment = Alignment.center;
