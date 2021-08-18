@@ -35,6 +35,13 @@ ThemeData theme() {
         ),
       ),
     ),
+    snackBarTheme: SnackBarThemeData(
+      contentTextStyle: TextStyle(color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
         .copyWith(secondary: kAccentColor),
     // inputDecorationTheme: inputDecorationTheme(),
@@ -79,6 +86,14 @@ ThemeData themeDark() {
       ),
     ),
     scaffoldBackgroundColor: Color(0xFF121212),
+
+    snackBarTheme: SnackBarThemeData(
+      contentTextStyle: TextStyle(color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
         .copyWith(secondary: kAccentColor, brightness: Brightness.dark),
     // inputDecorationTheme: inputDecorationTheme(),
