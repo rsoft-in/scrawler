@@ -162,35 +162,38 @@ class _ScrawlAppState extends State<ScrawlApp> {
             onPageChanged: onPageChanged,
             controller: _pageController,
           ),
-          bottomNavigationBar: BottomBar(
-            backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
-            textStyle: TextStyle(fontWeight: FontWeight.w400),
-            onTap: navigationTapped,
-            selectedIndex: _page,
-            items: <BottomBarItem>[
-              BottomBarItem(
-                icon: Icon(Icons.notes_rounded),
-                title: Text('Notes'),
-                activeColor: Colors.teal,
-              ),
-              BottomBarItem(
-                icon: Icon(Icons.archive_outlined),
-                title: Text('Archive'),
-                activeColor: Colors.orange,
-                darkActiveColor: Colors.orange.shade400, // Optional
-              ),
-              BottomBarItem(
-                icon: Icon(Icons.search_rounded),
-                title: Text('Search'),
-                activeColor: Colors.blue,
-                darkActiveColor: Colors.blue.shade400, // Optional
-              ),
-              BottomBarItem(
-                icon: Icon(Icons.menu_rounded),
-                title: Text('Settings'),
-                activeColor: kSecondaryColor,
-              ),
-            ],
+          bottomNavigationBar: Container(
+            margin: isIOS ? EdgeInsets.only(bottom: 20) : EdgeInsets.only(bottom: 0),
+            child: BottomBar(
+              backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
+              textStyle: TextStyle(fontWeight: FontWeight.w400),
+              onTap: navigationTapped,
+              selectedIndex: _page,
+              items: <BottomBarItem>[
+                BottomBarItem(
+                  icon: Icon(Icons.notes_rounded),
+                  title: Text('Notes'),
+                  activeColor: Colors.teal,
+                ),
+                BottomBarItem(
+                  icon: Icon(Icons.archive_outlined),
+                  title: Text('Archive'),
+                  activeColor: Colors.orange,
+                  darkActiveColor: Colors.orange.shade400, // Optional
+                ),
+                BottomBarItem(
+                  icon: Icon(Icons.search_rounded),
+                  title: Text('Search'),
+                  activeColor: Colors.blue,
+                  darkActiveColor: Colors.blue.shade400, // Optional
+                ),
+                BottomBarItem(
+                  icon: Icon(Icons.menu_rounded),
+                  title: Text('Settings'),
+                  activeColor: kSecondaryColor,
+                ),
+              ],
+            ),
           ),
         ),
       );

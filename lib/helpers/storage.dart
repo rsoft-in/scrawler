@@ -4,7 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 class Storage {
   Future<String> get localPath async {
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       final dir = await getExternalStorageDirectory();
       print(dir);
       return dir!.path;

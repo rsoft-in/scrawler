@@ -35,7 +35,7 @@ dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "images/bnotes.png"
+  image_path: "images/bnotes-transparent.png"
 
 dev_dependencies:
   flutter_test:

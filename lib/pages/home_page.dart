@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
       isLoading = true;
     });
 
-    if (isAndroid) {
+    if (isAndroid || isIOS) {
       await dbHelper.getNotesAll(_searchController.text).then((value) {
         setState(() {
           print(value.length);
