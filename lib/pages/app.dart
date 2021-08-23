@@ -27,6 +27,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
   bool isTileView = false;
   ViewType viewType = ViewType.Tile;
   bool isAppLogged = false;
+  String appPin = "";
 
   bool isAndroid = UniversalPlatform.isAndroid;
   bool isIOS = UniversalPlatform.isIOS;
@@ -46,7 +47,9 @@ class _ScrawlAppState extends State<ScrawlApp> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       isAppLogged = sharedPreferences.getBool("is_logged") ?? false;
+      appPin = sharedPreferences.getString("app_pin") ?? '';
       bool isTile = sharedPreferences.getBool("is_tile") ?? false;
+      print(appPin);
       viewType = isTile ? ViewType.Tile : ViewType.Grid;
     });
   }
@@ -90,10 +93,11 @@ class _ScrawlAppState extends State<ScrawlApp> {
     _pageController = new PageController();
   }
 
-  bool onWillPop() {
-    if (_pageController.page!.round() == _pageController.initialPage)
+  Future<bool> onWillPop()async {
+    if (_pageController.page!.round() == _pageController.initialPage) {
+      sharedPreferences.setBool("is_app_unlocked", false);
       return true;
-    else {
+    } else {
       _pageController.jumpToPage(_pageController.initialPage);
       return false;
     }
@@ -107,50 +111,56 @@ class _ScrawlAppState extends State<ScrawlApp> {
       return WillPopScope(
         onWillPop: () => Future.sync(onWillPop),
         child: Scaffold(
-          appBar: AppBar(
-            title: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'images/bnotes-transparent.png',
-                  height: 50,
+          appBar: PreferredSize(
+            preferredSize: Size(MediaQuery.of(context).size.width, 56),
+            child: Visibility(
+              visible: !(_page == 3),
+              child: AppBar(
+                title: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'images/bnotes-transparent.png',
+                      height: 50,
+                    ),
+                    Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          kAppName,
+                          style: TextStyle(fontFamily: 'Raleway'),
+                        )),
+                  ],
                 ),
-                Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      kAppName,
-                      style: TextStyle(fontFamily: 'Raleway'),
-                    )),
-              ],
+                actions: [
+                  Visibility(
+                    visible: viewType == ViewType.Tile && _page == 0,
+                    child: IconButton(
+                      icon: Icon(Icons.grid_view_outlined),
+                      onPressed: () {
+                        setState(() {
+                          viewType = ViewType.Grid;
+                          HomePage.staticGlobalKey.currentState!
+                              .toggleView(viewType);
+                        });
+                      },
+                    ),
+                  ),
+                  Visibility(
+                    visible: viewType == ViewType.Grid && _page == 0,
+                    child: IconButton(
+                      icon: Icon(Icons.view_agenda_outlined),
+                      onPressed: () {
+                        setState(() {
+                          viewType = ViewType.Tile;
+                          HomePage.staticGlobalKey.currentState!
+                              .toggleView(viewType);
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            actions: [
-              Visibility(
-                visible: viewType == ViewType.Tile && _page == 0,
-                child: IconButton(
-                  icon: Icon(Icons.grid_view_outlined),
-                  onPressed: () {
-                    setState(() {
-                      viewType = ViewType.Grid;
-                      HomePage.staticGlobalKey.currentState!
-                          .toggleView(viewType);
-                    });
-                  },
-                ),
-              ),
-              Visibility(
-                visible: viewType == ViewType.Grid && _page == 0,
-                child: IconButton(
-                  icon: Icon(Icons.view_agenda_outlined),
-                  onPressed: () {
-                    setState(() {
-                      viewType = ViewType.Tile;
-                      HomePage.staticGlobalKey.currentState!
-                          .toggleView(viewType);
-                    });
-                  },
-                ),
-              ),
-            ],
           ),
           body: PageView(
             physics: NeverScrollableScrollPhysics(),

@@ -3,8 +3,10 @@ import 'dart:typed_data';
 
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/api_provider.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/account_page.dart';
+import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,6 +61,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
+        margin: EdgeInsets.only(top: 56),
         child: SingleChildScrollView(
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -87,17 +90,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                   backgroundColor: Colors.blue[100],
                                   foregroundColor: Colors.blue,
                                   child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: avatarData != null
-                            ? Image(
-                                image: MemoryImage(avatarData!),
-                                width: 100,
-                              )
-                            : Image(
-                                image: AssetImage('images/bnotes.png'),
-                                width: 100,
-                              ),
-                      ),
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: avatarData != null
+                                        ? Image(
+                                            image: MemoryImage(avatarData!),
+                                            width: 100,
+                                          )
+                                        : Image(
+                                            image:
+                                                AssetImage('images/bnotes.png'),
+                                            width: 100,
+                                          ),
+                                  ),
                                 ),
                                 title: Text(username),
                                 subtitle: Text(useremail),
@@ -192,6 +196,25 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                           title: Text('Backup & Restore'),
                           subtitle: Text('Bring back the dead'),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => AppLockPage(appLockState: AppLockState.SET,)));
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.red[100],
+                            foregroundColor: Colors.red,
+                            child: Icon(LineIcons.lock),
+                          ),
+                          title: Text('App Lock'),
+                          subtitle: Text('Secure your notes'),
                         ),
                       ),
                     ),

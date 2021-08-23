@@ -28,3 +28,5 @@ class Utility {
     return item;
   }
 }
+
+enum AppLockState { SET, CONFIRM }
