@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class NoteReaderPage extends StatefulWidget {
   final Notes note;
@@ -77,7 +78,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
           backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
           leading: IconButton(
             onPressed: () => Navigator.pop(context, true),
-            icon: Icon(Icons.arrow_back),
+            icon: UniversalPlatform.isIOS ? Icon(CupertinoIcons.back) : Icon(Icons.arrow_back),
             color: darkModeOn && selectedPageColor == 0
                 ? Colors.white
                 : Colors.black,
@@ -304,7 +305,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         ColorPalette(
-                          color: darkModeOn ? Colors.transparent : Colors.white,
+                          color: NoteColor.getColor(0, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 0);
                             Navigator.pop(context);
@@ -312,7 +313,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           isSelected: selectedPageColor == 0,
                         ),
                         ColorPalette(
-                          color: Color(0xFFA8EAD5),
+                          color: NoteColor.getColor(1, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 1);
                             Navigator.pop(context);
@@ -320,7 +321,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           isSelected: selectedPageColor == 1,
                         ),
                         ColorPalette(
-                          color: Colors.red.shade300,
+                          color: NoteColor.getColor(2, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 2);
                             Navigator.pop(context);
@@ -328,7 +329,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           isSelected: selectedPageColor == 2,
                         ),
                         ColorPalette(
-                          color: Colors.pink.shade300,
+                          color: NoteColor.getColor(3, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 3);
                             Navigator.pop(context);
@@ -336,7 +337,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           isSelected: selectedPageColor == 3,
                         ),
                         ColorPalette(
-                          color: Colors.yellow.shade300,
+                          color: NoteColor.getColor(4, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 4);
                             Navigator.pop(context);
@@ -344,7 +345,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           isSelected: selectedPageColor == 4,
                         ),
                         ColorPalette(
-                          color: Colors.blue.shade300,
+                          color: NoteColor.getColor(5, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 5);
                             Navigator.pop(context);

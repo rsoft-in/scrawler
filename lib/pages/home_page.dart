@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(
-                                    1, index.isEven ? 1.2 : 1.0);
+                                    1, index.isOdd ? 0.8 : 1.0);
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                                                               note.noteColor ==
                                                                   0
                                                           ? Colors.white60
-                                                          : Colors.black38),
+                                                          : Colors.black54),
                                                 ),
                                               ),
                                             ),
@@ -638,7 +638,7 @@ class _HomePageState extends State<HomePage> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         ColorPalette(
-                          color: darkModeOn ? Colors.transparent : Colors.white,
+                          color: NoteColor.getColor(0, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 0);
                             Navigator.pop(context);
@@ -646,7 +646,7 @@ class _HomePageState extends State<HomePage> {
                           isSelected: _note.noteColor == 0,
                         ),
                         ColorPalette(
-                          color: Color(0xFFA8EAD5),
+                          color: NoteColor.getColor(1, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 1);
                             Navigator.pop(context);
@@ -654,7 +654,7 @@ class _HomePageState extends State<HomePage> {
                           isSelected: _note.noteColor == 1,
                         ),
                         ColorPalette(
-                          color: Colors.red.shade300,
+                          color: NoteColor.getColor(2, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 2);
                             Navigator.pop(context);
@@ -662,7 +662,7 @@ class _HomePageState extends State<HomePage> {
                           isSelected: _note.noteColor == 2,
                         ),
                         ColorPalette(
-                          color: Colors.pink.shade300,
+                          color: NoteColor.getColor(3, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 3);
                             Navigator.pop(context);
@@ -670,7 +670,7 @@ class _HomePageState extends State<HomePage> {
                           isSelected: _note.noteColor == 3,
                         ),
                         ColorPalette(
-                          color: Colors.yellow.shade300,
+                          color: NoteColor.getColor(4, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 4);
                             Navigator.pop(context);
@@ -678,7 +678,7 @@ class _HomePageState extends State<HomePage> {
                           isSelected: _note.noteColor == 4,
                         ),
                         ColorPalette(
-                          color: Colors.blue.shade300,
+                          color: NoteColor.getColor(5, darkModeOn),
                           onTap: () {
                             _updateColor(_note.noteId, 5);
                             Navigator.pop(context);
@@ -696,24 +696,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showNoteReader(BuildContext context, Notes _note) async {
-    // bool res = await Navigator.of(context).push(new CupertinoPageRoute(
-    //     builder: (BuildContext context) => new NoteReaderPage(
-    //           note: _note,
-    //         )));
-    bool res = await Navigator.of(context).push(new PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){
-      return NoteReaderPage(note: _note,);
-    },transitionsBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child) {
-      return Align(
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-      );
-    },));
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new NoteReaderPage(
+              note: _note,
+            )));
+    // bool res = await Navigator.of(context).push(new PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){
+    //   return NoteReaderPage(note: _note,);
+    // },transitionsBuilder: (
+    //     BuildContext context,
+    //     Animation<double> animation,
+    //     Animation<double> secondaryAnimation,
+    //     Widget child) {
+    //   return Align(
+    //     child: FadeTransition(
+    //       opacity: animation,
+    //       child: child,
+    //     ),
+    //   );
+    // },));
     if (res) loadNotes();
   }
 

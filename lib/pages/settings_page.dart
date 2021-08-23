@@ -9,6 +9,8 @@ import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'labels_page.dart';
@@ -117,7 +119,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.blue[100],
                                   foregroundColor: Colors.blue,
-                                  child: Icon(Icons.person),
+                                  child: Icon(LineIcons.user),
                                 ),
                                 title: Text('Nextcloud Login'),
                                 subtitle: Text('Sync Notes to cloud'),
@@ -139,7 +141,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.purple[100],
                             foregroundColor: Colors.purple,
-                            child: Icon(Icons.label_outlined),
+                            child: Icon(LineIcons.tag),
                           ),
                           title: Text('Labels'),
                           subtitle: Text('Create labels'),
@@ -186,7 +188,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.teal[100],
                             foregroundColor: Colors.teal,
-                            child: Icon(Icons.backup_outlined),
+                            child: Icon(LineIcons.archiveFile),
                           ),
                           title: Text('Backup & Restore'),
                           subtitle: Text('Bring back the dead'),

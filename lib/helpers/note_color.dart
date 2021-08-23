@@ -7,15 +7,15 @@ class NoteColor {
       case 0:
         return isDark ? kSecondaryDark : Colors.white;
       case 1:
-        return Color(0xFFA8EAD5);
+        return Color(0xFFFCECDD);
       case 2:
-        return Colors.red.shade200;
+        return Color(0xffE4FBFF);
       case 3:
-        return Colors.pink.shade200;
+        return Color(0xffB6C9F0);
       case 4:
-        return Colors.yellow.shade200;
+        return Color(0xffFFE8E8);
       case 5:
-        return Colors.blue.shade200;
+        return Color(0xffE1CCEC);
       default:
         return Colors.transparent;
     }
@@ -24,15 +24,15 @@ class NoteColor {
   static int getCode(Color color) {
     if (color == Colors.transparent)
       return 0;
-    else if (color == Color(0xFFA8EAD5))
+    else if (color == Color(0xFFFCECDD))
       return 1;
-    else if (color == Colors.red.shade200)
+    else if (color == Color(0xffE4FBFF))
       return 2;
-    else if (color == Colors.pink.shade200)
+    else if (color == Color(0xffB6C9F0))
       return 3;
-    else if (color == Colors.yellow.shade200)
+    else if (color == Color(0xffFFE8E8))
       return 4;
-    else if (color == Colors.blue.shade200)
+    else if (color == Color(0xffE1CCEC))
       return 5;
     else
       return 0;

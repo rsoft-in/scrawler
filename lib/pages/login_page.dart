@@ -3,6 +3,8 @@ import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,20 +49,18 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: kGlobalOuterPadding,
                 child: CustomTextField(
-                  obscureText: false,
                   controller: _hostController,
                   hint: 'Host',
-                  icon: Icon(Icons.language),
+                  icon: Icon(LineIcons.globe),
                   inputType: TextInputType.url,
                 ),
               ),
               Padding(
                 padding: kGlobalOuterPadding,
                 child: CustomTextField(
-                  obscureText: false,
                   controller: _usernameController,
                   hint: 'Username',
-                  icon: Icon(Icons.person_outline),
+                  icon: Icon(LineIcons.user),
                   inputType: TextInputType.emailAddress,
                 ),
               ),
@@ -68,9 +68,10 @@ class _LoginPageState extends State<LoginPage> {
                 padding: kGlobalOuterPadding,
                 child: CustomTextField(
                   obscureText: true,
+                  isPassword: true,
                   controller: _passwordController,
                   hint: 'Password',
-                  icon: Icon(Icons.password),
+                  icon: Icon(LineIcons.key),
                   inputType: TextInputType.emailAddress,
                 ),
               ),

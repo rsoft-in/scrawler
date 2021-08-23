@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -61,24 +63,23 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           "\"note_color\": ${element.noteColor} },";
     });
     if (_notes.length > 0) {
-      if(UniversalPlatform.isAndroid)
-      {
+      if (UniversalPlatform.isAndroid) {
         await storage
-          .writeData("[" + out.substring(0, out.length - 1) + "]")
-          .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Backup done'),
-        ));
-      });
+            .writeData("[" + out.substring(0, out.length - 1) + "]")
+            .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Backup done'),
+          ));
+        });
       }
-      if(UniversalPlatform.isIOS){
+      if (UniversalPlatform.isIOS) {
         await storage
-          .writeiOSData("[" + out.substring(0, out.length - 1) + "]")
-          .then((value) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Backup done'),
-        ));
-      });
+            .writeiOSData("[" + out.substring(0, out.length - 1) + "]")
+            .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Backup done'),
+          ));
+        });
       }
       if (isUploading) {
         try {
@@ -146,7 +147,6 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           Navigator.pop(context, 'yes');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Restored'),
-            
           ));
         });
         // final file = File(backupPath + '/bnotes.backup');
@@ -226,15 +226,25 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               ),
               ListTile(
                 title: Text('Use Nextcloud'),
-                trailing: Switch(
-                  value: isUploading,
-                  onChanged: (value) {
-                    setState(() {
-                      isUploading = value;
-                      print(isUploading);
-                    });
-                  },
-                ),
+                trailing: UniversalPlatform.isIOS
+                    ? CupertinoSwitch(
+                        value: isUploading,
+                        onChanged: (value) {
+                          setState(() {
+                            isUploading = value;
+                            print(isUploading);
+                          });
+                        },
+                      )
+                    : Switch(
+                        value: isUploading,
+                        onChanged: (value) {
+                          setState(() {
+                            isUploading = value;
+                            print(isUploading);
+                          });
+                        },
+                      ),
               ),
               // Switch(
               //   value: isUploading,
@@ -271,7 +281,14 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         primary: kSecondaryColor,
                       ),
                       onPressed: () => _makeBackup(),
-                      child: Text('Backup'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(LineIcons.upload),
+                          SizedBox(width: 10,),
+                          Text('Backup')
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -284,7 +301,14 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         primary: kPrimaryColor,
                       ),
                       onPressed: () => _restore(),
-                      child: Text('Restore'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(LineIcons.download),
+                          SizedBox(width: 10,),
+                          Text('Restore'),
+                        ],
+                      ),
                     ),
                   ),
                   // Container(
