@@ -1,16 +1,21 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class Storage {
   Future<String> get localPath async {
-    if (Platform.isAndroid || Platform.isIOS) {
+    if (Platform.isAndroid) {
       final dir = await getExternalStorageDirectory();
       print(dir);
       return dir!.path;
-    } else {
+    } 
+    
+    else {
       final dir = await getApplicationDocumentsDirectory();
       print(dir);
+      print('is');
       return dir.path;
     }
   }
@@ -18,7 +23,7 @@ class Storage {
   Future<File> get localFile async {
     final path = await localPath;
     print(path);
-    return File('$path/bnotes.backup');
+    return File('$path/scrawl/bnotes.backup');
   }
 
   Future<String> readData() async {
@@ -40,6 +45,16 @@ class Storage {
 
   Future<File> writeData(String data) async {
     final file = await localFile;
-    return file.writeAsString("$data");
+    
+    
+  
+      return file.writeAsString("$data");
+    
+  }
+  Future<void> writeiOSData(String data) async{final file = await localFile;
+if (UniversalPlatform.isIOS){
+      await Share.shareFiles(['$file']);
+      return null;
+    }
   }
 }

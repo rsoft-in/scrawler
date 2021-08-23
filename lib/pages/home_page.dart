@@ -696,10 +696,24 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showNoteReader(BuildContext context, Notes _note) async {
-    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
-        builder: (BuildContext context) => new NoteReaderPage(
-              note: _note,
-            )));
+    // bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+    //     builder: (BuildContext context) => new NoteReaderPage(
+    //           note: _note,
+    //         )));
+    bool res = await Navigator.of(context).push(new PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){
+      return NoteReaderPage(note: _note,);
+    },transitionsBuilder: (
+        BuildContext context,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+        Widget child) {
+      return Align(
+        child: FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      );
+    },));
     if (res) loadNotes();
   }
 

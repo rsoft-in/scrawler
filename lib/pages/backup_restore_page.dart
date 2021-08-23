@@ -10,6 +10,8 @@ import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
 
+import 'package:universal_platform/universal_platform.dart';
+
 class BackupRestorePage extends StatefulWidget {
   BackupRestorePage({
     Key? key,
@@ -59,13 +61,25 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           "\"note_color\": ${element.noteColor} },";
     });
     if (_notes.length > 0) {
-      await storage
+      if(UniversalPlatform.isAndroid)
+      {
+        await storage
           .writeData("[" + out.substring(0, out.length - 1) + "]")
           .then((value) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Backup done'),
         ));
       });
+      }
+      if(UniversalPlatform.isIOS){
+        await storage
+          .writeiOSData("[" + out.substring(0, out.length - 1) + "]")
+          .then((value) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Backup done'),
+        ));
+      });
+      }
       if (isUploading) {
         try {
           final client = NextCloudClient.withCredentials(
