@@ -85,8 +85,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  
-
   // void _saveNote() async {
   //   if (currentEditingNoteId.isEmpty) {
   //     await dbHelper
@@ -238,7 +236,8 @@ class _HomePageState extends State<HomePage> {
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
-                                                  note.noteText,
+                                                  Utility.stripTags(
+                                                      note.noteText),
                                                   maxLines: 6,
                                                   overflow: TextOverflow.fade,
                                                   style: TextStyle(
@@ -348,7 +347,7 @@ class _HomePageState extends State<HomePage> {
                                         Padding(
                                           padding: EdgeInsets.all(5.0),
                                           child: Text(
-                                            note.noteText,
+                                            Utility.stripTags(note.noteText),
                                             style: TextStyle(
                                               color: darkModeOn &&
                                                       note.noteColor == 0
@@ -444,7 +443,8 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.of(context).pop();
                               setState(() {
-                                _noteTextController.text = _note.noteText;
+                                _noteTextController.text =
+                                    Utility.stripTags(_note.noteText);
                                 _noteTitleController.text = _note.noteTitle;
                                 currentEditingNoteId = _note.noteId;
                               });

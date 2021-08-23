@@ -7,9 +7,11 @@ import 'package:bnotes/pages/settings_page.dart';
 import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 enum ViewType { Tile, Grid }
 
@@ -162,37 +164,73 @@ class _ScrawlAppState extends State<ScrawlApp> {
             onPageChanged: onPageChanged,
             controller: _pageController,
           ),
-          bottomNavigationBar: Container(
-            margin: isIOS ? EdgeInsets.only(bottom: 20) : EdgeInsets.only(bottom: 0),
-            child: BottomBar(
-              backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
-              textStyle: TextStyle(fontWeight: FontWeight.w400),
-              onTap: navigationTapped,
-              selectedIndex: _page,
-              items: <BottomBarItem>[
-                BottomBarItem(
-                  icon: Icon(Icons.notes_rounded),
-                  title: Text('Notes'),
-                  activeColor: Colors.teal,
-                ),
-                BottomBarItem(
-                  icon: Icon(Icons.archive_outlined),
-                  title: Text('Archive'),
-                  activeColor: Colors.orange,
-                  darkActiveColor: Colors.orange.shade400, // Optional
-                ),
-                BottomBarItem(
-                  icon: Icon(Icons.search_rounded),
-                  title: Text('Search'),
-                  activeColor: Colors.blue,
-                  darkActiveColor: Colors.blue.shade400, // Optional
-                ),
-                BottomBarItem(
-                  icon: Icon(Icons.menu_rounded),
-                  title: Text('Settings'),
-                  activeColor: kSecondaryColor,
-                ),
-              ],
+          // bottomNavigationBar: Container(
+          //   margin: isIOS ? EdgeInsets.only(bottom: 20) : EdgeInsets.only(bottom: 0),
+          //   child: BottomBar(
+          //     backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
+          //     textStyle: TextStyle(fontWeight: FontWeight.w400),
+          //     onTap: navigationTapped,
+          //     selectedIndex: _page,
+          //     items: <BottomBarItem>[
+          //       BottomBarItem(
+          //         icon: Icon(Icons.notes_rounded),
+          //         title: Text('Notes'),
+          //         activeColor: Colors.teal,
+          //       ),
+          //       BottomBarItem(
+          //         icon: Icon(Icons.archive_outlined),
+          //         title: Text('Archive'),
+          //         activeColor: Colors.orange,
+          //         darkActiveColor: Colors.orange.shade400, // Optional
+          //       ),
+          //       BottomBarItem(
+          //         icon: Icon(Icons.search_rounded),
+          //         title: Text('Search'),
+          //         activeColor: Colors.blue,
+          //         darkActiveColor: Colors.blue.shade400, // Optional
+          //       ),
+          //       BottomBarItem(
+          //         icon: Icon(Icons.menu_rounded),
+          //         title: Text('Settings'),
+          //         activeColor: kSecondaryColor,
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          bottomNavigationBar: BottomAppBar(
+            color: darkModeOn ? kSecondaryDark : Colors.white,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+              child: GNav(
+                selectedIndex: _page,
+                onTabChange: navigationTapped,
+                gap: 8,
+                activeColor: darkModeOn ? Colors.white : Colors.black,
+                iconSize: 24,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                duration: Duration(milliseconds: 400),
+                tabBackgroundColor: Colors.grey.withOpacity(0.1),
+                color: darkModeOn ? Colors.grey : Colors.grey,
+                tabs: [
+                  GButton(
+                    icon: LineIcons.stickyNote,
+                    text: 'Notes',
+                  ),
+                  GButton(
+                    icon: LineIcons.archive,
+                    text: 'Archive',
+                  ),
+                  GButton(
+                    icon: LineIcons.search,
+                    text: 'Search',
+                  ),
+                  GButton(
+                    icon: LineIcons.bars,
+                    text: 'Settings',
+                  )
+                ],
+              ),
             ),
           ),
         ),
