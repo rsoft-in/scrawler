@@ -23,7 +23,7 @@ dependencies:
   file_picker: ^4.0.0
   url_launcher: ^6.0.9
   flutter_markdown: ^0.6.4
-  adhara_markdown: ^0.2.0
+  flutter_widget_from_html: ^0.6.2
   flutter_staggered_grid_view: ^0.4.0
   bottom_bar: ^1.2.4
   animations: ^2.0.0
@@ -31,6 +31,7 @@ dependencies:
   adaptive_breakpoints: ^0.0.4
   bitsdojo_window: ^0.1.1+1
   line_icons: ^2.0.1
+  google_nav_bar: ^5.0.5
 
 flutter_icons:
   android: "launcher_icon"

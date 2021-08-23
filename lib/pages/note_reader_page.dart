@@ -8,6 +8,8 @@ import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class NoteReaderPage extends StatefulWidget {
   final Notes note;
@@ -22,9 +24,9 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   final dbHelper = DatabaseHelper.instance;
   ScrollController scrollController = new ScrollController();
   String currentEditingNoteId = "";
+  List<String> _checkList = [];
 
   int selectedPageColor = 0;
-
 
   void _updateColor(String noteId, int noteColor) async {
     print(noteColor);
@@ -47,10 +49,17 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
     });
   }
 
+  void _noteToList() {
+    if (note.noteText.contains('[CHECKBOX]')) {
+      _checkList = note.noteText.replaceAll('[CHECKBOX]\n', '').split('\n');
+    }
+  }
+
   @override
   void initState() {
     selectedPageColor = widget.note.noteColor;
     note = widget.note;
+    _noteToList();
     super.initState();
   }
 
@@ -69,8 +78,9 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
           leading: IconButton(
             onPressed: () => Navigator.pop(context, true),
             icon: Icon(Icons.arrow_back),
-            color:
-                darkModeOn && selectedPageColor == 0 ? Colors.white : Colors.black,
+            color: darkModeOn && selectedPageColor == 0
+                ? Colors.white
+                : Colors.black,
           ),
           actions: [
             IconButton(
@@ -102,7 +112,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ),
             // Archive
             Visibility(
-              visible: note.noteArchived==0,
+              visible: note.noteArchived == 0,
               child: IconButton(
                 tooltip: 'Archive',
                 onPressed: () {
@@ -118,7 +128,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
               ),
             ),
             Visibility(
-              visible: note.noteArchived==1,
+              visible: note.noteArchived == 1,
               child: IconButton(
                 tooltip: 'Unarchive',
                 onPressed: () {
@@ -147,67 +157,90 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 10.0,
-                ),
-                Visibility(
-                  visible: note.noteTitle.isNotEmpty,
-                  child: Container(
-                    padding: kGlobalOuterPadding,
-                    margin: EdgeInsets.only(left: 8),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      note.noteTitle,
-                      style: TextStyle(
-                          color: darkModeOn && selectedPageColor == 0
-                              ? Colors.white
-                              : Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700),
-                    ),
+        body: note.noteText.contains('[CHECKBOX]')
+            ? Column(
+                children: [
+                  Expanded(
+                      child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Visibility(
+                            visible: note.noteTitle.isNotEmpty && index == 0,
+                            child: Container(
+                              padding: kGlobalOuterPadding,
+                              margin: EdgeInsets.only(left: 8, top: 10),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                note.noteTitle,
+                                style: TextStyle(
+                                    color: darkModeOn && selectedPageColor == 0
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Utility.isCheckedListItem(
+                                    _checkList[index])
+                                ? Icon(Icons.check_box_outlined)
+                                : Icon(Icons.check_box_outline_blank_outlined),
+                            title: Text(Utility.stripTags(_checkList[index])),
+                          ),
+                        ],
+                      );
+                    },
+                    itemCount: _checkList.length,
+                  )),
+                ],
+              )
+            : SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Visibility(
+                        visible: note.noteTitle.isNotEmpty,
+                        child: Container(
+                          padding: kGlobalOuterPadding,
+                          margin: EdgeInsets.only(left: 8),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            note.noteTitle,
+                            style: TextStyle(
+                                color: darkModeOn && selectedPageColor == 0
+                                    ? Colors.white
+                                    : Colors.black,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: !note.noteText.contains('[CHECKBOX]'),
+                        child: Container(
+                          padding: kGlobalOuterPadding,
+                          margin: EdgeInsets.only(left: 8),
+                          alignment: Alignment.centerLeft,
+                          child: HtmlWidget(
+                            note.noteText.replaceAll('\n', '<br>'),
+                            // textAlign: TextAlign.start,
+                            textStyle: TextStyle(
+                                color: darkModeOn && selectedPageColor == 0
+                                    ? Colors.white
+                                    : Colors.black),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Container(
-                  padding: kGlobalOuterPadding,
-                  margin: EdgeInsets.only(left: 8),
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    note.noteText,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: darkModeOn && selectedPageColor == 0
-                            ? Colors.white
-                            : Colors.black),
-                  ),
-                ),
-                // Divider(),
-                // Expanded(
-                //   child: Markdown(
-                //     styleSheet:
-                //         MarkdownStyleSheet.fromTheme(Theme.of(context).copyWith(
-                //       textTheme: TextTheme(
-                //         bodyText1: TextStyle(color: Colors.black, fontSize: 14),
-                //         bodyText2: TextStyle(color: Colors.black, fontSize: 14),
-                //         headline1: TextStyle(color: Colors.black),
-                //         headline2: TextStyle(color: Colors.black),
-                //         headline3: TextStyle(color: Colors.black),
-                //         headline4: TextStyle(color: Colors.black),
-                //         headline5: TextStyle(color: Colors.black),
-                //         headline6: TextStyle(color: Colors.black),
-                //       ),
-                //     )),
-                //     data: note.noteText,
-                //     controller: scrollController,
-                //   ),
-                // ),
-              ],
-            ),
-          ),
-        ),
+              ),
         bottomNavigationBar: BottomAppBar(
           color: NoteColor.getColor(selectedPageColor, darkModeOn),
           child: Padding(
@@ -247,6 +280,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             )));
     setState(() {
       note = res;
+      _noteToList();
     });
   }
 

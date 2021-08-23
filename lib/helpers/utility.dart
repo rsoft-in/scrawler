@@ -10,4 +10,21 @@ class Utility {
     else
       return formatter.format(dt);
   }
+
+  static String markDownToHtml(String markDown) {
+    var html = markDown;
+    html = html.replaceAll('\n', '<br>');
+    return html;
+  }
+
+  static bool isCheckedListItem(String listItem) {
+    return listItem.contains("~");
+  }
+
+  static String stripTags(String listItem) {
+    String item = listItem;
+    item = item.replaceAll('~', '');
+    item = item.replaceAll('[CHECKBOX]\n', '');
+    return item;
+  }
 }
