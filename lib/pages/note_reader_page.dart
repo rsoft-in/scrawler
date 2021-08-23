@@ -8,7 +8,6 @@ import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -78,7 +77,9 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
           backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
           leading: IconButton(
             onPressed: () => Navigator.pop(context, true),
-            icon: UniversalPlatform.isIOS ? Icon(CupertinoIcons.back) : Icon(Icons.arrow_back),
+            icon: UniversalPlatform.isIOS
+                ? Icon(CupertinoIcons.back)
+                : Icon(Icons.arrow_back),
             color: darkModeOn && selectedPageColor == 0
                 ? Colors.white
                 : Colors.black,

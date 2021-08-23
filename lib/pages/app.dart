@@ -4,7 +4,6 @@ import 'package:bnotes/pages/archive_page.dart';
 import 'package:bnotes/pages/home_page.dart';
 import 'package:bnotes/pages/search_page.dart';
 import 'package:bnotes/pages/settings_page.dart';
-import 'package:bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
@@ -93,7 +92,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
     _pageController = new PageController();
   }
 
-  Future<bool> onWillPop()async {
+  Future<bool> onWillPop() async {
     if (_pageController.page!.round() == _pageController.initialPage) {
       sharedPreferences.setBool("is_app_unlocked", false);
       return true;

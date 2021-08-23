@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -285,7 +284,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(LineIcons.upload),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text('Backup')
                         ],
                       ),
@@ -305,7 +306,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(LineIcons.download),
-                          SizedBox(width: 10,),
+                          SizedBox(
+                            width: 10,
+                          ),
                           Text('Restore'),
                         ],
                       ),

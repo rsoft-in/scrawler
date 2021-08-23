@@ -35,7 +35,7 @@ dependencies:
   google_nav_bar: ^5.0.5
 
 flutter_icons:
-  android: "launcher_icon"
+  # android: "launcher_icon"
   ios: true
   image_path: "images/bnotes-transparent.png"
 

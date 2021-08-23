@@ -3,7 +3,6 @@ import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 
@@ -33,8 +32,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text('Nextcloud'),
@@ -200,8 +197,10 @@ class _LoginPageState extends State<LoginPage> {
                                 padding: kGlobalCardPadding,
                                 child: TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context, 'yes');  // Confirmation Dialog Pop
-                                    Navigator.pop(context, true);  // Login Page Pop
+                                    Navigator.pop(context,
+                                        'yes'); // Confirmation Dialog Pop
+                                    Navigator.pop(
+                                        context, true); // Login Page Pop
                                   },
                                   child: Text('No'),
                                 ),
@@ -254,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       final user = await client.user.getUser();
-      
+
       // ignore: unnecessary_null_comparison
       if (user != null) {
         loginPreferences.setString('nc_host', _hostController.text);
@@ -263,23 +262,20 @@ class _LoginPageState extends State<LoginPage> {
 
         loginPreferences.setString('nc_userdisplayname', user.displayName);
         loginPreferences.setString('nc_useremail', user.email);
-        
 
         final userData = await client.avatar.getAvatar(
             loginPreferences.getString('nc_username').toString(), 150);
         loginPreferences.setString('nc_avatar', userData);
         loginPreferences.setBool('is_logged', true);
         setState(() {
-        isLoading = false;
-      });
+          isLoading = false;
+        });
         _restoreNote();
-        
       } else {
         setState(() {
-        isLoading = false;
-      });
+          isLoading = false;
+        });
         _showAlert();
-        
       }
     } on RequestException catch (e, stacktrace) {
       print('qs' + e.statusCode.toString());

@@ -54,7 +54,9 @@ class _StartPageState extends State<StartPage> {
     setState(() {
       isAppUnlocked = prefs.getBool("is_app_unlocked") ?? false;
       isPinRequired = prefs.getBool("is_pin_required") ?? false;
-      if (!isAppUnlocked && isPinRequired) {
+      print(isAppUnlocked);
+      print(isPinRequired);
+      if (isPinRequired) {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
               builder: (BuildContext context) =>

@@ -43,7 +43,6 @@ class _EditNotePageState extends State<EditNotePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       note = widget.note;

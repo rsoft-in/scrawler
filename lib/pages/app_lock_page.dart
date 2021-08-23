@@ -48,6 +48,7 @@ class _AppLockPageState extends State<AppLockPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: kAccentColor,
       // appBar: AppBar(),
       body: Center(
         child: Column(
@@ -55,7 +56,10 @@ class _AppLockPageState extends State<AppLockPage> {
           children: [
             Padding(
               padding: kGlobalOuterPadding,
-              child: Text(helperText),
+              child: Text(
+                helperText,
+                style: TextStyle(fontSize: 18),
+              ),
             ),
             Padding(
               padding: kGlobalOuterPadding,
@@ -163,8 +167,8 @@ class _AppLockPageState extends State<AppLockPage> {
               children: [
                 Visibility(
                   visible: widget.appLockState == AppLockState.SET,
-                  child: PinButton(
-                      onTap: () => Navigator.pop(context),
+                  child: FunctionButton(
+                      onTap: () => Navigator.pop(context, 'no'),
                       child: Icon(Icons.arrow_back)),
                 ),
                 Visibility(
@@ -180,7 +184,7 @@ class _AppLockPageState extends State<AppLockPage> {
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
-                PinButton(
+                FunctionButton(
                     onTap: () => deleteDigit(),
                     child: Icon(LineIcons.backspace)),
               ],
@@ -230,9 +234,10 @@ class _AppLockPageState extends State<AppLockPage> {
             prefs.setBool("is_app_unlocked", true);
             prefs.setBool("is_pin_required", true);
             prefs.setString("app_pin", pinNumber);
+            print('dingdong');
+            Navigator.pop(context, true);
             ScaffoldMessenger.of(context)
                 .showSnackBar(new SnackBar(content: Text(LOCK_SET)));
-            Navigator.pop(context);
           } else {
             pinNumber = '';
             pinNumberConfirmed = '';
@@ -265,15 +270,19 @@ class PinDots extends StatefulWidget {
 class _PinDotsState extends State<PinDots> {
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Container(
-      width: 20,
-      height: 20,
+      width: 10,
+      height: 10,
       margin: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: widget.isFilled ? kSecondaryColor : Colors.transparent,
+        borderRadius: BorderRadius.circular(5.0),
+        color: widget.isFilled
+            ? (darkModeOn ? Colors.white : Colors.black)
+            : Colors.transparent,
         border: Border.all(
-          color: kSecondaryColor,
+          color: (darkModeOn ? Colors.white : Colors.black),
         ),
       ),
     );
@@ -293,6 +302,8 @@ class PinButton extends StatefulWidget {
 class _PinButtonState extends State<PinButton> {
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Container(
       margin: EdgeInsets.all(10),
       child: InkWell(
@@ -303,8 +314,46 @@ class _PinButtonState extends State<PinButton> {
           height: 80,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: kPrimaryColor.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(15)),
+            color: darkModeOn
+                ? kPrimaryColor.withOpacity(0.2)
+                : kPrimaryColor.withOpacity(.2),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}
+
+class FunctionButton extends StatefulWidget {
+  final Widget child;
+  final Function onTap;
+  const FunctionButton({Key? key, required this.child, required this.onTap})
+      : super(key: key);
+
+  @override
+  _FunctionButtonState createState() => _FunctionButtonState();
+}
+
+class _FunctionButtonState extends State<FunctionButton> {
+  @override
+  Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
+    return Container(
+      margin: EdgeInsets.all(10),
+      child: InkWell(
+        onTap: () => widget.onTap(),
+        borderRadius: BorderRadius.circular(40),
+        child: Container(
+          width: 80,
+          height: 80,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: kPrimaryColor.withOpacity(.5),
+            borderRadius: BorderRadius.circular(40),
+          ),
           child: widget.child,
         ),
       ),

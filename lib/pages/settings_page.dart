@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bnotes/constants.dart';
-import 'package:bnotes/helpers/api_provider.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/account_page.dart';
@@ -11,7 +10,6 @@ import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +23,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   late SharedPreferences sharedPreferences;
   bool isAppLogged = false;
+  bool isAppUnlocked = false;
+  bool isPinRequired = false;
   late String username;
   late String useremail;
   Uint8List? avatarData;
@@ -32,6 +32,8 @@ class _SettingsPageState extends State<SettingsPage> {
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
+      isAppUnlocked = sharedPreferences.getBool("is_app_unlocked") ?? false;
+      isPinRequired = sharedPreferences.getBool("is_pin_required") ?? false;
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
       username = sharedPreferences.getString('nc_userdisplayname') ?? '';
       useremail = sharedPreferences.getString('nc_useremail') ?? '';
@@ -39,19 +41,8 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
-  checkUser() async {
-    Map<String, String> post = {
-      'postdata':
-          jsonEncode({'email': 'nandanrmenon@gmail.com', 'name': 'Nandan'})
-    };
-    ApiProvider.fetchClients(post).then((res) async {
-      print(res);
-    });
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getPref();
   }
@@ -204,8 +195,11 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (context) => AppLockPage(appLockState: AppLockState.SET,)));
+                          if (isPinRequired) {
+                            showAppLockMenu();
+                          } else {
+                            callAppLock();
+                          }
                         },
                         child: ListTile(
                           leading: CircleAvatar(
@@ -237,9 +231,6 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
-                    // ElevatedButton(onPressed: () {
-                    //   checkUser();
-                    // }, child: Text('API'))
                   ],
                 ),
               ),
@@ -248,5 +239,69 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  void showAppLockMenu() {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (context) {
+          return Container(
+            child: Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 140,
+                child: Card(
+                  child: Padding(
+                    padding: kGlobalOuterPadding,
+                    child: ListView(
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            callAppLock();
+                          },
+                          child: ListTile(
+                            title: Text('Reset Passcode'),
+                          ),
+                        ),
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            unSetAppLock();
+                            Navigator.pop(context);
+                          },
+                          child: ListTile(
+                            title: Text('Remove App lock'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void callAppLock() async {
+    final res = await Navigator.of(context).push(CupertinoPageRoute(
+        builder: (context) => AppLockPage(
+              appLockState: AppLockState.SET,
+            )));
+    if (res == true) getPref();
+  }
+
+  void unSetAppLock() async {
+    setState(() {
+      sharedPreferences.setBool("is_pin_required", false);
+      sharedPreferences.setBool("is_app_unlocked", true);
+      sharedPreferences.setString("app_pin", '');
+      isAppUnlocked = true;
+      isPinRequired = false;
+    });
   }
 }

@@ -1,6 +1,5 @@
 import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -62,7 +61,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(15.0),
-                  onTap: (){},
+                  onTap: () {},
                   child: ListTile(
                     title: Text('Nandan Menon (nahnah)'),
                     subtitle: Text('Lead Dev & app design'),
@@ -70,7 +69,7 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(15.0),
-                  onTap: (){},
+                  onTap: () {},
                   child: ListTile(
                     title: Text('Rajesh Menon (suranjum)'),
                     subtitle: Text('Lead Dev'),
@@ -110,7 +109,8 @@ class _AboutPageState extends State<AboutPage> {
                 InkWell(
                   borderRadius: BorderRadius.circular(15.0),
                   onTap: () async {
-                    if (await canLaunch('https://github.com/rsoft-in/scrawl/issues/new')) {
+                    if (await canLaunch(
+                        'https://github.com/rsoft-in/scrawl/issues/new')) {
                       await launch(
                         'https://github.com/rsoft-in/scrawl/issues/new',
                         forceSafariVC: false,

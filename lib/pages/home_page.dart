@@ -14,7 +14,6 @@ import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
-import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
