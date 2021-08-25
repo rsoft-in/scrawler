@@ -16,7 +16,9 @@ ThemeData theme() {
       titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.black),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
+      backgroundColor: kPrimaryColor,
+      foregroundColor: Colors.white,
+    ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.white,
     dividerColor: Colors.black,
@@ -87,8 +89,7 @@ ThemeData themeDark() {
     ),
     scaffoldBackgroundColor: Color(0xFF121212),
     navigationRailTheme: NavigationRailThemeData(
-      unselectedIconTheme: IconThemeData(color: Colors.white)
-    ),
+        unselectedIconTheme: IconThemeData(color: Colors.white)),
     snackBarTheme: SnackBarThemeData(
       contentTextStyle: TextStyle(color: Colors.white),
       behavior: SnackBarBehavior.floating,

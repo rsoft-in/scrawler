@@ -14,6 +14,7 @@ import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -397,11 +398,17 @@ class _HomePageState extends State<HomePage> {
                               },
                             ))
                       : Center(
-                          child: Text(
-                            'No notes',
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                        )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(LineIcons.stickyNote, size: 120,color: darkModeOn? kAccentColor: kPrimaryColor),
+                            Text(
+                              'No notes',
+                              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
+                            ),
+                          ],
+                        ),
+                      )),
             ),
           ],
         ),

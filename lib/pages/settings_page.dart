@@ -52,13 +52,15 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        margin: EdgeInsets.only(top: 56),
         child: SingleChildScrollView(
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              SizedBox(
+                height: 56,
+              ),
               Padding(
                 padding: kGlobalOuterPadding,
                 child: Column(
@@ -66,36 +68,90 @@ class _SettingsPageState extends State<SettingsPage> {
                     Padding(
                       padding: kGlobalCardPadding,
                       child: (isAppLogged
-                          ? InkWell(
-                              onTap: () async {
-                                final res = await Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                        builder: (context) => AccountPage()));
-                                if (res is String) {
-                                  getPref();
-                                }
-                              },
-                              borderRadius: BorderRadius.circular(15.0),
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  backgroundColor: Colors.blue[100],
-                                  foregroundColor: Colors.blue,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: avatarData != null
-                                        ? Image(
-                                            image: MemoryImage(avatarData!),
-                                            width: 100,
-                                          )
-                                        : Image(
-                                            image:
-                                                AssetImage('images/bnotes.png'),
-                                            width: 100,
-                                          ),
-                                  ),
+                          // ? InkWell(
+                          //     onTap: () async {
+                          //       final res = await Navigator.of(context).push(
+                          //           CupertinoPageRoute(
+                          //               builder: (context) => AccountPage()));
+                          //       if (res is String) {
+                          //         getPref();
+                          //       }
+                          //     },
+                          //     borderRadius: BorderRadius.circular(15.0),
+                          //     child: ListTile(
+                          //       leading: CircleAvatar(
+                          //         backgroundColor: Colors.blue[100],
+                          //         foregroundColor: Colors.blue,
+                          //         child: ClipRRect(
+                          //           borderRadius: BorderRadius.circular(100),
+                          //           child: avatarData != null
+                          //               ? Image(
+                          //                   image: MemoryImage(avatarData!),
+                          //                   width: 100,
+                          //                 )
+                          //               : Image(
+                          //                   image:
+                          //                       AssetImage('images/bnotes.png'),
+                          //                   width: 100,
+                          //                 ),
+                          //         ),
+                          //       ),
+                          //       title: Text(username),
+                          //       subtitle: Text(useremail),
+                          //     ),
+                          //   )
+                          ? Card(
+                              child: Container(
+                                padding: kGlobalCardPadding * 3,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: avatarData != null
+                                              ? Image(
+                                                  image:
+                                                      MemoryImage(avatarData!),
+                                                  width: 80,
+                                                )
+                                              : Image(
+                                                  image: AssetImage(
+                                                      'images/bnotes.png'),
+                                                  width: 100,
+                                                ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(username,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w700)),
+                                        Text(useremail,
+                                            style: TextStyle(fontSize: 14)),
+                                      ],
+                                    ),
+                                    Container(
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                            primary: Colors.red,
+                                            backgroundColor:
+                                                Colors.red.withOpacity(0.2)),
+                                        child: Text('Sign Out'),
+                                        onPressed: () {
+                                          _confirmLogOut();
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                title: Text(username),
-                                subtitle: Text(useremail),
                               ),
                             )
                           : InkWell(
@@ -277,6 +333,76 @@ class _SettingsPageState extends State<SettingsPage> {
                             title: Text('Remove App lock'),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _confirmLogOut() async {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        isDismissible: true,
+        builder: (context) {
+          return Container(
+            child: Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 150,
+                child: Card(
+                  child: Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: kGlobalCardPadding,
+                          child: Text(
+                            'Confirm',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        Padding(
+                          padding: kGlobalCardPadding,
+                          child: Text('Are you sure you want to log out?'),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: kGlobalCardPadding,
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: Text('No'),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: kGlobalCardPadding,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                      primary: Colors.red,
+                                      backgroundColor:
+                                          Colors.red.withOpacity(0.2)),
+                                  onPressed: () {
+                                    sharedPreferences.clear();
+                                    getPref();
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: Text('Yes'),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),

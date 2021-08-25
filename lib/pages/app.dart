@@ -113,7 +113,8 @@ class _ScrawlAppState extends State<ScrawlApp> {
           appBar: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).size.width, 56),
             child: Visibility(
-              visible: !(_page == 3),
+              // visible: !(_page == 3) &&!(_page ==2),
+              visible: _page ==0 ,
               child: AppBar(
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,

@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ArchivePage extends StatefulWidget {
@@ -71,9 +72,17 @@ class _ArchivePageState extends State<ArchivePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Container(
+            SizedBox(
+              height: 56,
+            ),
+            Padding(
               padding: kGlobalOuterPadding,
-              child: Text('Archive', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),),
+              child: Container(
+                child: Text(
+                  'Archive',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
+                ),
+              ),
             ),
             Expanded(
               child: isLoading
@@ -92,7 +101,7 @@ class _ArchivePageState extends State<ArchivePage> {
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(
-                                    1, index.isEven ? 1.2 : 1.0);
+                                    1, index.isOdd ? 0.8 : 1.0);
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
@@ -123,7 +132,8 @@ class _ArchivePageState extends State<ArchivePage> {
                                           Visibility(
                                             visible: note.noteTitle.isNotEmpty,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(
                                                 note.noteTitle,
                                                 maxLines: 1,
@@ -175,7 +185,8 @@ class _ArchivePageState extends State<ArchivePage> {
                                                       fontSize: 12.0),
                                                 )),
                                                 Text(
-                                                  Utility.formatDateTime(note.noteDate),
+                                                  Utility.formatDateTime(
+                                                      note.noteDate),
                                                   style: TextStyle(
                                                       color: darkModeOn &&
                                                               note.noteColor ==
@@ -299,7 +310,21 @@ class _ArchivePageState extends State<ArchivePage> {
                               },
                             ))
                       : Center(
-                          child: Text('No archived notes', style: TextStyle(fontWeight: FontWeight.w700),),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(LineIcons.archive,
+                                  size: 120,
+                                  color: darkModeOn
+                                      ? kAccentColor
+                                      : kPrimaryColor),
+                              Text(
+                                'No archived notes',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 22),
+                              ),
+                            ],
+                          ),
                         )),
             ),
           ],

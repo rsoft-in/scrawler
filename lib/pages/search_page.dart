@@ -53,7 +53,20 @@ class _SearchPageState extends State<SearchPage> {
         padding: kGlobalOuterPadding,
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 56,
+            ),
+            Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                child: Text(
+                  'Search',
+                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Container(
@@ -66,7 +79,9 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.search_rounded),
+                    Icon(
+                      Icons.search_rounded,
+                    ),
                     SizedBox(
                       width: 10,
                     ),
@@ -74,7 +89,7 @@ class _SearchPageState extends State<SearchPage> {
                       child: TextField(
                         controller: _searchController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Search',
+                          hintText: 'Type to start searching',
                         ),
                         autofocus: false,
                         onChanged: (value) => loadNotes(value),

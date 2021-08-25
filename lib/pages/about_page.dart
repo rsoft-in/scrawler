@@ -13,6 +13,8 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         title: Text('About'),
@@ -102,7 +104,11 @@ class _AboutPageState extends State<AboutPage> {
                     }
                   },
                   child: ListTile(
-                    leading: Icon(LineIcons.telegram),
+                    leading: CircleAvatar(
+                      backgroundColor: darkModeOn? Colors.black54: Colors.grey[100],
+                      foregroundColor:darkModeOn? Colors.white: Colors.grey,
+                      child: Icon(LineIcons.telegram),
+                    ),
                     title: Text('Telegram Channel'),
                   ),
                 ),
@@ -121,7 +127,11 @@ class _AboutPageState extends State<AboutPage> {
                     }
                   },
                   child: ListTile(
-                    leading: Icon(LineIcons.bug),
+                    leading: CircleAvatar(
+                      backgroundColor: darkModeOn? Colors.black54: Colors.grey[100],
+                      foregroundColor:darkModeOn? Colors.white: Colors.grey,
+                      child: Icon(LineIcons.bug),
+                    ),
                     title: Text('Report Bug'),
                   ),
                 ),
