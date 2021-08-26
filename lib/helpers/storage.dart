@@ -23,7 +23,7 @@ class Storage {
   Future<File> get localFile async {
     final path = await localPath;
     print(path);
-    return File('$path/scrawl/bnotes.backup');
+    return File('$path/bnotes.backup');
   }
 
   Future<String> readData() async {
