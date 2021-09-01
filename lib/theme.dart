@@ -8,7 +8,7 @@ ThemeData theme() {
     primaryColor: kPrimaryColor,
     appBarTheme: AppBarTheme(
       color: Colors.white,
-      elevation: 1,
+      elevation: 0,
       iconTheme: IconThemeData(color: Colors.black),
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -58,7 +58,7 @@ ThemeData themeDark() {
     brightness: Brightness.dark,
     backgroundColor: kSecondaryDark,
     appBarTheme: AppBarTheme(
-      color: Colors.transparent,
+      color: Color(0xFF121212),
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
       systemOverlayStyle: SystemUiOverlayStyle(

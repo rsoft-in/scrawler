@@ -51,7 +51,6 @@ class _AppLockPageState extends State<AppLockPage> {
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: kAccentColor,
-      // appBar: AppBar(),
       body: Column(
         children: [
           SizedBox(
@@ -61,15 +60,18 @@ class _AppLockPageState extends State<AppLockPage> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: darkModeOn ? kSecondaryDark : Colors.white,
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(15),
+                topRight: Radius.circular(15),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black38,
-                  blurRadius: 25.0, 
-                  spreadRadius: 5.0, 
+                  blurRadius: 25.0,
+                  spreadRadius: 5.0,
                   offset: Offset(
-                    15.0, 
-                    15.0, 
+                    15.0,
+                    15.0,
                   ),
                 )
               ],
@@ -343,9 +345,6 @@ class _PinButtonState extends State<PinButton> {
           height: 80,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            // color: darkModeOn
-            //     ? kPrimaryColor.withOpacity(0.2)
-            //     : kPrimaryColor.withOpacity(.2),
             borderRadius: BorderRadius.circular(40),
           ),
           child: widget.child,
@@ -381,7 +380,6 @@ class _FunctionButtonState extends State<FunctionButton> {
           height: 80,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            // color: kPrimaryColor.withOpacity(.5),
             borderRadius: BorderRadius.circular(40),
           ),
           child: widget.child,

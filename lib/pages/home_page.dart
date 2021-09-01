@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
   Storage storage = new Storage();
   String backupPath = "";
   late ViewType _viewType;
+  ViewType viewType = ViewType.Tile;
   ScrollController scrollController = new ScrollController();
   List<Notes> notesList = [];
   bool isLoading = false;
@@ -65,6 +66,7 @@ class _HomePageState extends State<HomePage> {
       isAppLogged = sharedPreferences.getBool("is_logged") ?? false;
       bool isTile = sharedPreferences.getBool("is_tile") ?? false;
       _viewType = isTile ? ViewType.Tile : ViewType.Grid;
+      viewType = isTile ? ViewType.Tile : ViewType.Grid;
     });
   }
 
@@ -84,31 +86,6 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
-
-  // void _saveNote() async {
-  //   if (currentEditingNoteId.isEmpty) {
-  //     await dbHelper
-  //         .insertNotes(new Notes(uuid.v1(), DateTime.now().toString(),
-  //             _noteTitleController.text, _noteTextController.text, '', 0, 0))
-  //         .then((value) {
-  //       loadNotes();
-  //     });
-  //   } else {
-  //     await dbHelper
-  //         .updateNotes(new Notes(
-  //             currentEditingNoteId,
-  //             DateTime.now().toString(),
-  //             _noteTitleController.text,
-  //             _noteTextController.text,
-  //             '',
-  //             0,
-  //             0))
-  //         .then((value) {
-  //       loadNotes();
-  //     });
-  //   }
-  // }
-
   void toggleView(ViewType viewType) {
     setState(() {
       _viewType = viewType;
@@ -157,7 +134,7 @@ class _HomePageState extends State<HomePage> {
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: kGlobalOuterPadding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -173,7 +150,6 @@ class _HomePageState extends State<HomePage> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 0,
-                              // shrinkWrap: true,
                               physics: BouncingScrollPhysics(
                                   parent: AlwaysScrollableScrollPhysics()),
                               itemCount: notesList.length,
@@ -183,7 +159,6 @@ class _HomePageState extends State<HomePage> {
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
-                                // print(note.noteArchived);
                                 return Container(
                                   margin: EdgeInsets.symmetric(vertical: 4),
                                   child: Card(
@@ -211,21 +186,18 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Visibility(
-                                              visible:
-                                                  note.noteTitle.isNotEmpty,
+                                              visible: note.noteTitle.isNotEmpty,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   note.noteTitle,
                                                   maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                  overflow: TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
+                                                              note.noteColor == 0
                                                           ? Colors.white
                                                           : Colors.black),
                                                 ),
@@ -242,8 +214,7 @@ class _HomePageState extends State<HomePage> {
                                                   overflow: TextOverflow.fade,
                                                   style: TextStyle(
                                                       color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
+                                                              note.noteColor == 0
                                                           ? Colors.white60
                                                           : Colors.black54),
                                                 ),
@@ -299,8 +270,8 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 return Container(
-                                  margin: EdgeInsets.only(
-                                      left: 5, right: 5, top: 10),
+                                  margin:
+                                      EdgeInsets.only(left: 5, right: 5, top: 10),
                                   padding: EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
                                       color: NoteColor.getColor(
@@ -322,8 +293,7 @@ class _HomePageState extends State<HomePage> {
                                     onLongPress: () =>
                                         _showOptionsSheet(context, note),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -398,17 +368,21 @@ class _HomePageState extends State<HomePage> {
                               },
                             ))
                       : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(LineIcons.stickyNote, size: 120,color: darkModeOn? kAccentColor: kPrimaryColor),
-                            Text(
-                              'No notes',
-                              style: TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
-                            ),
-                          ],
-                        ),
-                      )),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(LineIcons.stickyNote,
+                                  size: 120,
+                                  color:
+                                      darkModeOn ? kAccentColor : kPrimaryColor),
+                              Text(
+                                'No notes',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w300, fontSize: 22),
+                              ),
+                            ],
+                          ),
+                        )),
             ),
           ],
         ),
@@ -475,7 +449,6 @@ class _HomePageState extends State<HomePage> {
                           InkWell(
                             onTap: () {
                               Navigator.pop(context);
-                              // _assignLabel(_note);
                               _showColorPalette(context, _note);
                             },
                             child: Padding(
@@ -706,20 +679,6 @@ class _HomePageState extends State<HomePage> {
         builder: (BuildContext context) => new NoteReaderPage(
               note: _note,
             )));
-    // bool res = await Navigator.of(context).push(new PageRouteBuilder(pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation){
-    //   return NoteReaderPage(note: _note,);
-    // },transitionsBuilder: (
-    //     BuildContext context,
-    //     Animation<double> animation,
-    //     Animation<double> secondaryAnimation,
-    //     Widget child) {
-    //   return Align(
-    //     child: FadeTransition(
-    //       opacity: animation,
-    //       child: child,
-    //     ),
-    //   );
-    // },));
     if (res) loadNotes();
   }
 

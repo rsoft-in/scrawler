@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/archive_page.dart';
@@ -11,6 +12,7 @@ import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:yaru_icons/widgets/yaru_icons.dart';
 
 enum ViewType { Tile, Grid }
 
@@ -113,8 +115,8 @@ class _ScrawlAppState extends State<ScrawlApp> {
           appBar: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).size.width, 56),
             child: Visibility(
-              // visible: !(_page == 3) &&!(_page ==2),
-              visible: _page ==0 ,
+              // visible: !(_page == 3) && !(_page == 2)&& !(_page == 1)&& !(_page == 0),
+              // visible: !(_page == 3),
               child: AppBar(
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,39 +176,6 @@ class _ScrawlAppState extends State<ScrawlApp> {
             onPageChanged: onPageChanged,
             controller: _pageController,
           ),
-          // bottomNavigationBar: Container(
-          //   margin: isIOS ? EdgeInsets.only(bottom: 20) : EdgeInsets.only(bottom: 0),
-          //   child: BottomBar(
-          //     backgroundColor: darkModeOn ? kSecondaryDark : Colors.transparent,
-          //     textStyle: TextStyle(fontWeight: FontWeight.w400),
-          //     onTap: navigationTapped,
-          //     selectedIndex: _page,
-          //     items: <BottomBarItem>[
-          //       BottomBarItem(
-          //         icon: Icon(Icons.notes_rounded),
-          //         title: Text('Notes'),
-          //         activeColor: Colors.teal,
-          //       ),
-          //       BottomBarItem(
-          //         icon: Icon(Icons.archive_outlined),
-          //         title: Text('Archive'),
-          //         activeColor: Colors.orange,
-          //         darkActiveColor: Colors.orange.shade400, // Optional
-          //       ),
-          //       BottomBarItem(
-          //         icon: Icon(Icons.search_rounded),
-          //         title: Text('Search'),
-          //         activeColor: Colors.blue,
-          //         darkActiveColor: Colors.blue.shade400, // Optional
-          //       ),
-          //       BottomBarItem(
-          //         icon: Icon(Icons.menu_rounded),
-          //         title: Text('Settings'),
-          //         activeColor: kSecondaryColor,
-          //       ),
-          //     ],
-          //   ),
-          // ),
           bottomNavigationBar: BottomAppBar(
             color: darkModeOn ? kSecondaryDark : Colors.white,
             child: Container(
@@ -247,6 +216,33 @@ class _ScrawlAppState extends State<ScrawlApp> {
       );
     } else {
       return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size(100, 40),
+          child: MoveWindow(
+            child: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    appWindow.minimize();
+                  },
+                  icon: Icon(YaruIcons.window_minimize),
+                ),
+                IconButton(
+                  onPressed: () {
+                    appWindow.maximize();
+                  },
+                  icon: Icon(YaruIcons.window_maximize),
+                ),
+                IconButton(
+                  onPressed: () {
+                    appWindow.close();
+                  },
+                  icon: Icon(YaruIcons.window_close),
+                ),
+              ],
+            ),
+          ),
+        ),
         body: WindowBorder(
           color: Colors.transparent,
           width: 1,
@@ -279,7 +275,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                     ),
                     Expanded(
                       child: NavigationRail(
-                        backgroundColor: Colors.transparent,
+                        backgroundColor:  darkModeOn ? kSecondaryDark : Colors.grey[100],
                         labelType: NavigationRailLabelType.selected,
                         destinations: <NavigationRailDestination>[
                           NavigationRailDestination(
@@ -309,17 +305,6 @@ class _ScrawlAppState extends State<ScrawlApp> {
               Expanded(
                 child: Column(
                   children: [
-                    Container(
-                      color: Colors.black12,
-                      child: Container(
-                          child: Column(children: [
-                        WindowTitleBarBox(
-                            child: Row(children: [
-                          Expanded(child: MoveWindow()),
-                          WindowButtons()
-                        ])),
-                      ])),
-                    ),
                     Expanded(
                       child: PageView(
                         physics: NeverScrollableScrollPhysics(),

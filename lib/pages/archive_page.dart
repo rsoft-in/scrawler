@@ -72,18 +72,18 @@ class _ArchivePageState extends State<ArchivePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            SizedBox(
-              height: 56,
-            ),
-            Padding(
-              padding: kGlobalOuterPadding,
-              child: Container(
-                child: Text(
-                  'Archive',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 56,
+            // ),
+            // Padding(
+            //   padding: kGlobalOuterPadding,
+            //   child: Container(
+            //     child: Text(
+            //       'Archive',
+            //       style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
+            //     ),
+            //   ),
+            // ),
             Expanded(
               child: isLoading
                   ? Center(

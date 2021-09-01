@@ -58,9 +58,9 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                height: 56,
-              ),
+              // SizedBox(
+              //   height: 56,
+              // ),
               Padding(
                 padding: kGlobalOuterPadding,
                 child: Column(

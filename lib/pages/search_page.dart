@@ -55,18 +55,18 @@ class _SearchPageState extends State<SearchPage> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 56,
-            ),
-            Padding(
-              padding: kGlobalOuterPadding,
-              child: Container(
-                child: Text(
-                  'Search',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 56,
+            // ),
+            // Padding(
+            //   padding: kGlobalOuterPadding,
+            //   child: Container(
+            //     child: Text(
+            //       'Search',
+            //       style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Container(

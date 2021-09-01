@@ -33,6 +33,7 @@ dependencies:
   line_icons: ^2.0.1
   share: ^2.0.4
   google_nav_bar: ^5.0.5
+  yaru_icons: ^0.0.3
 
 flutter_icons:
   # android: "launcher_icon"
