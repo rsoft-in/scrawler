@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
 import 'package:bnotes/pages/labels_page.dart';
@@ -25,6 +28,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   ScrollController scrollController = new ScrollController();
   String currentEditingNoteId = "";
   List<String> _checkList = [];
+  List<NoteListItem> _noteList = [];
 
   int selectedPageColor = 0;
 
@@ -50,8 +54,12 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   }
 
   void _noteToList() {
-    if (note.noteText.contains('[CHECKBOX]')) {
+    if (note.noteText.contains('{')) {
       _checkList = note.noteText.replaceAll('[CHECKBOX]\n', '').split('\n');
+      final parsed = json.decode(note.noteText).cast<Map<String, dynamic>>();
+      _noteList = parsed
+          .map<NoteListItem>((json) => NoteListItem.fromJson(json))
+          .toList();
     }
   }
 
@@ -159,7 +167,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ),
           ],
         ),
-        body: note.noteText.contains('[CHECKBOX]')
+        body: note.noteText.contains('{')
             ? Column(
                 children: [
                   Expanded(
@@ -185,17 +193,23 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                               ),
                             ),
                           ),
-                          ListTile(
-                            leading: Utility.isCheckedListItem(
-                                    _checkList[index])
-                                ? Icon(Icons.check_box_outlined)
-                                : Icon(Icons.check_box_outline_blank_outlined),
-                            title: Text(Utility.stripTags(_checkList[index])),
+                          CheckboxListTile(
+                            value: _noteList[index].checked == 'true',
+                            title: Text(_noteList[index].value),
+                            controlAffinity: ListTileControlAffinity.leading,
+                            onChanged: (checked) {
+                              setState(() {
+                                if (_noteList[index].checked == 'true')
+                                  _noteList[index].checked = 'false';
+                                else
+                                  _noteList[index].checked = 'true';
+                              });
+                            },
                           ),
                         ],
                       );
                     },
-                    itemCount: _checkList.length,
+                    itemCount: _noteList.length,
                   )),
                 ],
               )
@@ -224,7 +238,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                         ),
                       ),
                       Visibility(
-                        visible: !note.noteText.contains('[CHECKBOX]'),
+                        visible: !note.noteText.contains('('),
                         child: Container(
                           padding: kGlobalOuterPadding,
                           margin: EdgeInsets.only(left: 8),

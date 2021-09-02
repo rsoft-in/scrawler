@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
+import 'package:bnotes/widgets/note_listview_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -86,6 +90,7 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
   void toggleView(ViewType viewType) {
     setState(() {
       _viewType = viewType;
@@ -155,10 +160,24 @@ class _HomePageState extends State<HomePage> {
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(
-                                    1, index.isOdd ? 0.8 : 1.0);
+                                    1,
+                                    notesList[index].noteText.length > 200
+                                        ? 1
+                                        : (notesList[index].noteText.length /
+                                            70));
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
+                                List<NoteListItem> _noteList = [];
+                                if (note.noteText.contains('{')) {
+                                  final parsed = json
+                                      .decode(note.noteText)
+                                      .cast<Map<String, dynamic>>();
+                                  _noteList = parsed
+                                      .map<NoteListItem>(
+                                          (json) => NoteListItem.fromJson(json))
+                                      .toList();
+                                }
                                 return Container(
                                   margin: EdgeInsets.symmetric(vertical: 4),
                                   child: Card(
@@ -186,18 +205,21 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Visibility(
-                                              visible: note.noteTitle.isNotEmpty,
+                                              visible:
+                                                  note.noteTitle.isNotEmpty,
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
                                                 child: Text(
                                                   note.noteTitle,
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 20.0,
                                                       color: darkModeOn &&
-                                                              note.noteColor == 0
+                                                              note.noteColor ==
+                                                                  0
                                                           ? Colors.white
                                                           : Colors.black),
                                                 ),
@@ -207,17 +229,25 @@ class _HomePageState extends State<HomePage> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  Utility.stripTags(
-                                                      note.noteText),
-                                                  maxLines: 6,
-                                                  overflow: TextOverflow.fade,
-                                                  style: TextStyle(
-                                                      color: darkModeOn &&
-                                                              note.noteColor == 0
-                                                          ? Colors.white60
-                                                          : Colors.black54),
-                                                ),
+                                                child: note.noteText
+                                                        .contains('{')
+                                                    ? NotesListViewExt(
+                                                        noteListItems:
+                                                            _noteList)
+                                                    : Text(
+                                                        Utility.stripTags(
+                                                            note.noteText),
+                                                        maxLines: 6,
+                                                        overflow:
+                                                            TextOverflow.fade,
+                                                        style: TextStyle(
+                                                            color: darkModeOn &&
+                                                                    note.noteColor ==
+                                                                        0
+                                                                ? Colors.white60
+                                                                : Colors
+                                                                    .black54),
+                                                      ),
                                               ),
                                             ),
                                             Container(
@@ -269,9 +299,19 @@ class _HomePageState extends State<HomePage> {
                                   parent: AlwaysScrollableScrollPhysics()),
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
+                                List<NoteListItem> _noteList = [];
+                                if (note.noteText.contains('{')) {
+                                  final parsed = json
+                                      .decode(note.noteText)
+                                      .cast<Map<String, dynamic>>();
+                                  _noteList = parsed
+                                      .map<NoteListItem>(
+                                          (json) => NoteListItem.fromJson(json))
+                                      .toList();
+                                }
                                 return Container(
-                                  margin:
-                                      EdgeInsets.only(left: 5, right: 5, top: 10),
+                                  margin: EdgeInsets.only(
+                                      left: 5, right: 5, top: 10),
                                   padding: EdgeInsets.all(8.0),
                                   decoration: BoxDecoration(
                                       color: NoteColor.getColor(
@@ -293,7 +333,8 @@ class _HomePageState extends State<HomePage> {
                                     onLongPress: () =>
                                         _showOptionsSheet(context, note),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -316,17 +357,25 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.all(5.0),
-                                          child: Text(
-                                            Utility.stripTags(note.noteText),
-                                            style: TextStyle(
-                                              color: darkModeOn &&
-                                                      note.noteColor == 0
-                                                  ? Colors.white60
-                                                  : Colors.black38,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                          child: note.noteText.contains('{')
+                                              ? Container(
+                                                  height: 50,
+                                                  child: NotesListViewExt(
+                                                      noteListItems: _noteList),
+                                                )
+                                              : Text(
+                                                  Utility.stripTags(
+                                                      note.noteText),
+                                                  style: TextStyle(
+                                                    color: darkModeOn &&
+                                                            note.noteColor == 0
+                                                        ? Colors.white60
+                                                        : Colors.black38,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                         ),
                                         Container(
                                             alignment: Alignment.centerRight,
@@ -373,8 +422,9 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Icon(LineIcons.stickyNote,
                                   size: 120,
-                                  color:
-                                      darkModeOn ? kAccentColor : kPrimaryColor),
+                                  color: darkModeOn
+                                      ? kAccentColor
+                                      : kPrimaryColor),
                               Text(
                                 'No notes',
                                 style: TextStyle(

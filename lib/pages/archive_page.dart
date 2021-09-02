@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
+import 'package:bnotes/widgets/note_listview_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -101,10 +105,24 @@ class _ArchivePageState extends State<ArchivePage> {
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(
-                                    1, index.isOdd ? 0.8 : 1.0);
+                                    1,
+                                    notesList[index].noteText.length > 200
+                                        ? 1
+                                        : (notesList[index].noteText.length /
+                                            70));
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
+                                List<NoteListItem> _noteList = [];
+                                if (note.noteText.contains('{')) {
+                                  final parsed = json
+                                      .decode(note.noteText)
+                                      .cast<Map<String, dynamic>>();
+                                  _noteList = parsed
+                                      .map<NoteListItem>(
+                                          (json) => NoteListItem.fromJson(json))
+                                      .toList();
+                                }
                                 return Card(
                                   color: NoteColor.getColor(
                                       note.noteColor, darkModeOn),
@@ -151,16 +169,21 @@ class _ArchivePageState extends State<ArchivePage> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                note.noteText,
-                                                maxLines: 6,
-                                                overflow: TextOverflow.fade,
-                                                style: TextStyle(
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white60
-                                                        : Colors.black38),
-                                              ),
+                                              child: note.noteText.contains('{')
+                                                  ? NotesListViewExt(
+                                                      noteListItems: _noteList)
+                                                  : Text(
+                                                      note.noteText,
+                                                      maxLines: 6,
+                                                      overflow:
+                                                          TextOverflow.fade,
+                                                      style: TextStyle(
+                                                          color: darkModeOn &&
+                                                                  note.noteColor ==
+                                                                      0
+                                                              ? Colors.white60
+                                                              : Colors.black38),
+                                                    ),
                                             ),
                                           ),
                                           Container(
@@ -211,6 +234,16 @@ class _ArchivePageState extends State<ArchivePage> {
                                   parent: AlwaysScrollableScrollPhysics()),
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
+                                List<NoteListItem> _noteList = [];
+                                if (note.noteText.contains('{')) {
+                                  final parsed = json
+                                      .decode(note.noteText)
+                                      .cast<Map<String, dynamic>>();
+                                  _noteList = parsed
+                                      .map<NoteListItem>(
+                                          (json) => NoteListItem.fromJson(json))
+                                      .toList();
+                                }
                                 return Container(
                                   margin: EdgeInsets.all(5.0),
                                   padding: EdgeInsets.all(8.0),
@@ -258,17 +291,24 @@ class _ArchivePageState extends State<ArchivePage> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.all(5.0),
-                                          child: Text(
-                                            note.noteText,
-                                            style: TextStyle(
-                                              color: darkModeOn &&
-                                                      note.noteColor == 0
-                                                  ? Colors.white60
-                                                  : Colors.black38,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
+                                          child: note.noteText.contains('{')
+                                              ? Container(
+                                                  height: 50,
+                                                  child: NotesListViewExt(
+                                                      noteListItems: _noteList),
+                                                )
+                                              : Text(
+                                                  note.noteText,
+                                                  style: TextStyle(
+                                                    color: darkModeOn &&
+                                                            note.noteColor == 0
+                                                        ? Colors.white60
+                                                        : Colors.black38,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
                                         ),
                                         Container(
                                             alignment: Alignment.centerRight,
