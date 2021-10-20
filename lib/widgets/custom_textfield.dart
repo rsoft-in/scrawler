@@ -36,7 +36,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -66,12 +65,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
           Visibility(
             visible: widget.isPassword ?? false,
             child: InkWell(
-              onTap: (){
+              borderRadius: BorderRadius.circular(15.0),
+              onTap: () {
                 setState(() {
                   showPassword = !showPassword;
                 });
               },
-              child: showPassword ? Icon(LineIcons.eye) :Icon(LineIcons.eyeSlash) ,
+              child:
+                  showPassword ? Icon(LineIcons.eye) : Icon(LineIcons.eyeSlash),
             ),
           ),
         ],

@@ -160,7 +160,8 @@ class _ArchivePageState extends State<ArchivePage> {
                                           ),
                                           Expanded(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Text(
                                                 note.noteText,
                                                 maxLines: 6,
@@ -358,7 +359,7 @@ class _ArchivePageState extends State<ArchivePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(LineIcons.archive,
+                              Icon(Icons.archive,
                                   size: 120,
                                   color: darkModeOn
                                       ? kAccentColor

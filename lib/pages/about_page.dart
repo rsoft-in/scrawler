@@ -63,7 +63,17 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(15.0),
-                  onTap: () {},
+                  onTap: () async {
+                    if (await canLaunch('https://github.com/Nandanrmenon')) {
+                      await launch(
+                        'https://github.com/Nandanrmenon',
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    } else {
+                      throw 'Could not launch';
+                    }
+                  },
                   child: ListTile(
                     title: Text('Nandan Menon (nahnah)'),
                     subtitle: Text('Lead Dev & app design'),
@@ -71,7 +81,17 @@ class _AboutPageState extends State<AboutPage> {
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(15.0),
-                  onTap: () {},
+                  onTap: () async {
+                    if (await canLaunch('https://github.com/suranjum')) {
+                      await launch(
+                        'https://github.com/suranjum',
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    } else {
+                      throw 'Could not launch';
+                    }
+                  },
                   child: ListTile(
                     title: Text('Rajesh Menon (suranjum)'),
                     subtitle: Text('Lead Dev'),
@@ -105,8 +125,9 @@ class _AboutPageState extends State<AboutPage> {
                   },
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: darkModeOn? Colors.black54: Colors.grey[100],
-                      foregroundColor:darkModeOn? Colors.white: Colors.grey,
+                      backgroundColor:
+                          darkModeOn ? Colors.black54 : Colors.grey[100],
+                      foregroundColor: darkModeOn ? Colors.white : Colors.grey,
                       child: Icon(LineIcons.telegram),
                     ),
                     title: Text('Telegram Channel'),
@@ -128,8 +149,9 @@ class _AboutPageState extends State<AboutPage> {
                   },
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: darkModeOn? Colors.black54: Colors.grey[100],
-                      foregroundColor:darkModeOn? Colors.white: Colors.grey,
+                      backgroundColor:
+                          darkModeOn ? Colors.black54 : Colors.grey[100],
+                      foregroundColor: darkModeOn ? Colors.white : Colors.grey,
                       child: Icon(LineIcons.bug),
                     ),
                     title: Text('Report Bug'),

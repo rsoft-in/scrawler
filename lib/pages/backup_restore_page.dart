@@ -299,7 +299,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(LineIcons.upload),
+                          Icon(Icons.upload_outlined),
                           SizedBox(
                             width: 10,
                           ),
@@ -321,7 +321,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(LineIcons.download),
+                          Icon(Icons.download_outlined),
                           SizedBox(
                             width: 10,
                           ),

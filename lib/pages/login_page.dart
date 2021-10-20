@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomTextField(
                   controller: _hostController,
                   hint: 'Host',
-                  icon: Icon(LineIcons.globe),
+                  icon: Icon(Icons.http),
                   inputType: TextInputType.url,
                 ),
               ),
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: CustomTextField(
                   controller: _usernameController,
                   hint: 'Username',
-                  icon: Icon(LineIcons.user),
+                  icon: Icon(Icons.person_outline),
                   inputType: TextInputType.emailAddress,
                 ),
               ),
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                   isPassword: true,
                   controller: _passwordController,
                   hint: 'Password',
-                  icon: Icon(LineIcons.key),
+                  icon: Icon(Icons.password),
                   inputType: TextInputType.emailAddress,
                 ),
               ),

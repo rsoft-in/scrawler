@@ -74,38 +74,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     Padding(
                       padding: kGlobalCardPadding,
                       child: (isAppLogged
-                          // ? InkWell(
-                          //     onTap: () async {
-                          //       final res = await Navigator.of(context).push(
-                          //           CupertinoPageRoute(
-                          //               builder: (context) => AccountPage()));
-                          //       if (res is String) {
-                          //         getPref();
-                          //       }
-                          //     },
-                          //     borderRadius: BorderRadius.circular(15.0),
-                          //     child: ListTile(
-                          //       leading: CircleAvatar(
-                          //         backgroundColor: Colors.blue[100],
-                          //         foregroundColor: Colors.blue,
-                          //         child: ClipRRect(
-                          //           borderRadius: BorderRadius.circular(100),
-                          //           child: avatarData != null
-                          //               ? Image(
-                          //                   image: MemoryImage(avatarData!),
-                          //                   width: 100,
-                          //                 )
-                          //               : Image(
-                          //                   image:
-                          //                       AssetImage('images/bnotes.png'),
-                          //                   width: 100,
-                          //                 ),
-                          //         ),
-                          //       ),
-                          //       title: Text(username),
-                          //       subtitle: Text(useremail),
-                          //     ),
-                          //   )
                           ? Card(
                               child: Container(
                                 padding: kGlobalCardPadding * 3,
@@ -176,7 +144,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 leading: CircleAvatar(
                                   backgroundColor: Colors.blue[100],
                                   foregroundColor: Colors.blue,
-                                  child: Icon(LineIcons.user),
+                                  child: Icon(Icons.person_outline),
                                 ),
                                 title: Text('Nextcloud Login'),
                                 subtitle: Text('Sync Notes to cloud'),
