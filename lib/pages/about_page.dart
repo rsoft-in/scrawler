@@ -1,6 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutPage extends StatefulWidget {
@@ -11,6 +12,41 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
+  String appName = '';
+  String packageName = '';
+  String version = '';
+  String buildNumber = '';
+
+  @override
+  void initState() {
+    getAppInfo();
+    _initPackageInfo();
+    super.initState();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
+
+  getAppInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+  }
+
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+    buildSignature: 'Unknown',
+  );
+
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
@@ -46,6 +82,14 @@ class _AboutPageState extends State<AboutPage> {
                                 fontFamily: 'Raleway', fontSize: 24.0),
                           )),
                     ],
+                  ),
+                ),
+                InkWell(
+                  borderRadius: BorderRadius.circular(15.0),
+                  onTap: () {},
+                  child: ListTile(
+                    title: Text('App Version'),
+                    subtitle: Text(_packageInfo.version),
                   ),
                 ),
                 Padding(
