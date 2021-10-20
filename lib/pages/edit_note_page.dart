@@ -151,28 +151,28 @@ class _EditNotePageState extends State<EditNotePage> {
               ),
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
-            child: Container(
-              // padding: EdgeInsets.all(value),
-              margin: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isCheckList = !isCheckList;
-                      });
-                    },
-                    icon: Icon(isCheckList
-                        ? Icons.text_format
-                        : Icons.check_box_outlined),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // bottomNavigationBar: BottomAppBar(
+          //   child: Container(
+          //     // padding: EdgeInsets.all(value),
+          //     margin: EdgeInsets.only(
+          //         bottom: MediaQuery.of(context).viewInsets.bottom),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.end,
+          //       children: [
+          //         IconButton(
+          //           onPressed: () {
+          //             setState(() {
+          //               isCheckList = !isCheckList;
+          //             });
+          //           },
+          //           icon: Icon(isCheckList
+          //               ? Icons.text_format
+          //               : Icons.check_box_outlined),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
         );
       }),
     );
