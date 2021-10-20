@@ -38,6 +38,13 @@ class _ScrawlAppState extends State<ScrawlApp> {
   late PageController _pageController;
   int _page = 0;
 
+  final _pageList = <Widget>[
+    new HomePage(title: kAppName),
+    new ArchivePage(),
+    new SearchPage(),
+    new SettingsPage(),
+  ];
+
   void onPageChanged(int page) {
     setState(() {
       this._page = page;
