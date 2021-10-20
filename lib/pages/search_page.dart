@@ -5,6 +5,7 @@ import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class _SearchPageState extends State<SearchPage> {
   int selectedPageColor = 1;
   final dbHelper = DatabaseHelper.instance;
   TextEditingController _searchController = new TextEditingController();
+
+  final FocusNode searchFocusNode = FocusNode();
 
   bool _showClearButton = false;
 
@@ -55,18 +58,6 @@ class _SearchPageState extends State<SearchPage> {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SizedBox(
-            //   height: 56,
-            // ),
-            // Padding(
-            //   padding: kGlobalOuterPadding,
-            //   child: Container(
-            //     child: Text(
-            //       'Search',
-            //       style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
-            //     ),
-            //   ),
-            // ),
             Padding(
               padding: const EdgeInsets.all(6.0),
               child: Container(
@@ -89,9 +80,9 @@ class _SearchPageState extends State<SearchPage> {
                       child: TextField(
                         controller: _searchController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Type to start searching',
+                          hintText: 'Search',
                         ),
-                        autofocus: false,
+                        focusNode: searchFocusNode,
                         onChanged: (value) => loadNotes(value),
                       ),
                     ),
@@ -110,94 +101,121 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-            Expanded(
-                child: ListView.builder(
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.all(5.0),
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: darkModeOn ? kSecondaryDark : Colors.white,
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 1.0,
-                            offset: new Offset(1, 1)),
-                      ]),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedPageColor = notesList[index].noteColor;
-                      });
-                      _showNoteReader(context, notesList[index]);
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Visibility(
-                          visible: notesList[index].noteTitle.isNotEmpty,
-                          child: Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Text(
-                              notesList[index].noteTitle,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: darkModeOn ? Colors.white : Colors.black,
+            Visibility(
+              visible: _searchController.text.isEmpty,
+              child: Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(LineIcons.search,
+                          size: 120,
+                          color: darkModeOn ? kAccentColor : kPrimaryColor),
+                      Text(
+                        'Type to start searching',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: _searchController.text.isNotEmpty,
+              child: Expanded(
+                  child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.all(5.0),
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: darkModeOn ? kSecondaryDark : Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 1.0,
+                              offset: new Offset(1, 1)),
+                        ]),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedPageColor = notesList[index].noteColor;
+                        });
+                        _showNoteReader(context, notesList[index]);
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Visibility(
+                            visible: notesList[index].noteTitle.isNotEmpty,
+                            child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                notesList[index].noteTitle,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color:
+                                      darkModeOn ? Colors.white : Colors.black,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text(
-                            notesList[index].noteText,
-                            style: TextStyle(
-                              color:
-                                  darkModeOn ? Colors.white60 : Colors.black38,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Container(
-                            alignment: Alignment.centerRight,
+                          Padding(
                             padding: EdgeInsets.all(5.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    notesList[index].noteLabel,
-                                    style: TextStyle(
-                                        color: darkModeOn
-                                            ? Colors.white38
-                                            : Colors.black38,
-                                        fontSize: 12.0),
+                            child: Text(
+                              notesList[index].noteText,
+                              style: TextStyle(
+                                color: darkModeOn
+                                    ? Colors.white60
+                                    : Colors.black38,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                              alignment: Alignment.centerRight,
+                              padding: EdgeInsets.all(5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      notesList[index].noteLabel,
+                                      style: TextStyle(
+                                          color: darkModeOn
+                                              ? Colors.white38
+                                              : Colors.black38,
+                                          fontSize: 12.0),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    Utility.formatDateTime(
-                                        notesList[index].noteDate),
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                        color: darkModeOn
-                                            ? Colors.white38
-                                            : Colors.black38,
-                                        fontSize: 12.0),
+                                  Expanded(
+                                    child: Text(
+                                      Utility.formatDateTime(
+                                          notesList[index].noteDate),
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                          color: darkModeOn
+                                              ? Colors.white38
+                                              : Colors.black38,
+                                          fontSize: 12.0),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )),
-                      ],
+                                ],
+                              )),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              itemCount: notesList.length,
-            ))
+                  );
+                },
+                itemCount: notesList.length,
+              )),
+            )
           ],
         ),
       ),

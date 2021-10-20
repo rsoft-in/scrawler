@@ -108,6 +108,15 @@ class _ScrawlAppState extends State<ScrawlApp> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
+        systemNavigationBarIconBrightness:
+            darkModeOn ? Brightness.light : Brightness.dark,
+        systemNavigationBarColor:
+            darkModeOn ? kSecondaryDark : Colors.transparent,
+      ),
+    );
     if (isAndroid || isIOS) {
       return WillPopScope(
         onWillPop: () => Future.sync(onWillPop),
@@ -115,11 +124,10 @@ class _ScrawlAppState extends State<ScrawlApp> {
           appBar: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).size.width, 56),
             child: Visibility(
-              // visible: !(_page == 3) && !(_page == 2)&& !(_page == 1)&& !(_page == 0),
-              // visible: !(_page == 3),
               child: AppBar(
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Image.asset(
                       'images/bnotes-transparent.png',
@@ -191,22 +199,27 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 duration: Duration(milliseconds: 400),
                 tabBackgroundColor: Colors.grey.withOpacity(0.1),
                 color: darkModeOn ? Colors.grey : Colors.grey,
+                tabBorderRadius: 15.0,
                 tabs: [
                   GButton(
-                    icon: LineIcons.stickyNote,
+                    // icon: LineIcons.stickyNoteAlt,
+                    icon: Icons.notes,
                     text: 'Notes',
                   ),
                   GButton(
-                    icon: LineIcons.archive,
+                    // icon: LineIcons.archive,
+                    icon: Icons.archive_outlined,
                     text: 'Archive',
                   ),
                   GButton(
-                    icon: LineIcons.search,
+                    // icon: LineIcons.search,
+                    icon: Icons.search_outlined,
                     text: 'Search',
                   ),
                   GButton(
-                    icon: LineIcons.bars,
-                    text: 'Settings',
+                    // icon: LineIcons.bars,
+                    icon: Icons.menu_rounded,
+                    text: 'More',
                   )
                 ],
               ),
@@ -216,33 +229,33 @@ class _ScrawlAppState extends State<ScrawlApp> {
       );
     } else {
       return Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size(100, 40),
-          child: MoveWindow(
-            child: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    appWindow.minimize();
-                  },
-                  icon: Icon(YaruIcons.window_minimize),
-                ),
-                IconButton(
-                  onPressed: () {
-                    appWindow.maximize();
-                  },
-                  icon: Icon(YaruIcons.window_maximize),
-                ),
-                IconButton(
-                  onPressed: () {
-                    appWindow.close();
-                  },
-                  icon: Icon(YaruIcons.window_close),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // appBar: PreferredSize(
+        //   preferredSize: Size(100, 40),
+        //   child: MoveWindow(
+        //     child: AppBar(
+        //       actions: [
+        //         IconButton(
+        //           onPressed: () {
+        //             appWindow.minimize();
+        //           },
+        //           icon: Icon(YaruIcons.window_minimize),
+        //         ),
+        //         IconButton(
+        //           onPressed: () {
+        //             appWindow.maximize();
+        //           },
+        //           icon: Icon(YaruIcons.window_maximize),
+        //         ),
+        //         IconButton(
+        //           onPressed: () {
+        //             appWindow.close();
+        //           },
+        //           icon: Icon(YaruIcons.window_close),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         body: WindowBorder(
           color: Colors.transparent,
           width: 1,
@@ -275,7 +288,8 @@ class _ScrawlAppState extends State<ScrawlApp> {
                     ),
                     Expanded(
                       child: NavigationRail(
-                        backgroundColor:  darkModeOn ? kSecondaryDark : Colors.grey[100],
+                        backgroundColor:
+                            darkModeOn ? kSecondaryDark : Colors.grey[100],
                         labelType: NavigationRailLabelType.selected,
                         destinations: <NavigationRailDestination>[
                           NavigationRailDestination(
@@ -296,7 +310,12 @@ class _ScrawlAppState extends State<ScrawlApp> {
                           ),
                         ],
                         selectedIndex: _page,
-                        onDestinationSelected: navigationTapped,
+                        // onDestinationSelected: navigationTapped,
+                        onDestinationSelected: (selectedIndex) {
+                          setState(() {
+                            _page = selectedIndex;
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -306,18 +325,18 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 child: Column(
                   children: [
                     Expanded(
-                      child: PageView(
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        pageSnapping: false,
-                        children: [
-                          new HomePage(title: kAppName),
-                          new ArchivePage(),
-                          new SearchPage(),
-                          new SettingsPage(),
-                        ],
-                        onPageChanged: onPageChanged,
-                        controller: _pageController,
+                      child: PageTransitionSwitcher(
+                        transitionBuilder:
+                            (child, animation, secondaryAnimation) {
+                          return FadeThroughTransition(
+                            animation: animation,
+                            secondaryAnimation: secondaryAnimation,
+                            child: child,
+                            fillColor:
+                                darkModeOn ? kScaffoldDark : Colors.white,
+                          );
+                        },
+                        child: _pageList[_page],
                       ),
                     ),
                   ],

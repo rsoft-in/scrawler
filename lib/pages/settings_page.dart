@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import 'labels_page.dart';
 
@@ -28,6 +29,11 @@ class _SettingsPageState extends State<SettingsPage> {
   late String username;
   late String useremail;
   Uint8List? avatarData;
+
+  bool isAndroid = UniversalPlatform.isAndroid;
+  bool isIOS = UniversalPlatform.isIOS;
+  bool isWeb = UniversalPlatform.isWeb;
+  bool isDesktop = UniversalPlatform.isDesktop;
 
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -192,54 +198,51 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.purple[100],
                             foregroundColor: Colors.purple,
-                            child: Icon(LineIcons.tag),
+                            child: Icon(Icons.label_outline),
                           ),
                           title: Text('Labels'),
                           subtitle: Text('Create labels'),
                         ),
                       ),
                     ),
-                    // Archive
-                    // Padding(
-                    //   padding: kGlobalCardPadding,
-                    //   child: InkWell(
-                    //     borderRadius: BorderRadius.circular(15.0),
-                    //     onTap: () {
-                    //       Navigator.pop(context);
-                    //       Navigator.of(context).push(CupertinoPageRoute(
-                    //           builder: (context) => LabelsPage(
-                    //                 noteid: '',
-                    //                 notelabel: '',
-                    //               )));
-                    //     },
-                    //     child: ListTile(
-                    //       leading: CircleAvatar(
-                    //         backgroundColor: Colors.red[100],
-                    //         foregroundColor: Colors.red,
-                    //         child: Icon(Icons.archive_outlined),
-                    //       ),
-                    //       title: Text('Archive'),
-                    //       subtitle: Text('See your archived notes'),
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: kGlobalCardPadding,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () async {
-                          final res = await Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                  builder: (context) => BackupRestorePage()));
-                          if (res == "yes") {
-                            // loadNotes();
+                          if (isAndroid) {
+                            final res = await Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                    builder: (context) => BackupRestorePage()));
+                            if (res == "yes") {
+                              // loadNotes();
+                            }
+                          }
+                          if (isDesktop) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: EdgeInsets.all(
+                                        MediaQuery.of(context).size.width * .1),
+                                    child: Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(8.0),
+                                        child: BackupRestorePage(),
+                                      ),
+                                    ),
+                                  );
+                                });
                           }
                         },
                         child: ListTile(
                           leading: CircleAvatar(
                             backgroundColor: Colors.teal[100],
                             foregroundColor: Colors.teal,
-                            child: Icon(LineIcons.archiveFile),
+                            child: Icon(Icons.archive_outlined),
                           ),
                           title: Text('Backup & Restore'),
                           subtitle: Text('Bring back the dead'),
@@ -261,7 +264,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           leading: CircleAvatar(
                             backgroundColor: Colors.red[100],
                             foregroundColor: Colors.red,
-                            child: Icon(LineIcons.lock),
+                            child: Icon(Icons.lock_outline),
                           ),
                           title: Text('App Lock'),
                           subtitle: Text('Secure your notes'),
@@ -273,8 +276,29 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () async {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (context) => AboutPage()));
+                          if (isAndroid || isIOS) {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => AboutPage()));
+                          }
+                          if (isDesktop) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Padding(
+                                    padding: EdgeInsets.all(
+                                        MediaQuery.of(context).size.width * .1),
+                                    child: Dialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Container(
+                                        margin: const EdgeInsets.all(8.0),
+                                        child: AboutPage(),
+                                      ),
+                                    ),
+                                  );
+                                });
+                          }
                         },
                         child: ListTile(
                           leading: CircleAvatar(

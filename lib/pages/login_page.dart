@@ -253,6 +253,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       final user = await client.user.getUser();
+      print(user);
 
       // ignore: unnecessary_null_comparison
       if (user != null) {

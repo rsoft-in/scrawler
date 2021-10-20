@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class NotesListViewExt extends StatefulWidget {
   final List<NoteListItem> noteListItems;
+  final int noteColor;
 
-  const NotesListViewExt({Key? key, required this.noteListItems})
+  const NotesListViewExt(
+      {Key? key, required this.noteListItems, required this.noteColor})
       : super(key: key);
 
   @override
@@ -14,6 +16,8 @@ class NotesListViewExt extends StatefulWidget {
 class _NotesListViewExtState extends State<NotesListViewExt> {
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         itemCount: widget.noteListItems.length,
@@ -22,9 +26,27 @@ class _NotesListViewExtState extends State<NotesListViewExt> {
             child: Row(
               children: [
                 widget.noteListItems[pos].checked == 'true'
-                    ? Icon(Icons.check_box)
-                    : Icon(Icons.check_box_outline_blank),
-                Expanded(child: Text(widget.noteListItems[pos].value)),
+                    ? Icon(
+                        Icons.check_box,
+                        color: darkModeOn && widget.noteColor == 0
+                            ? Colors.white
+                            : Colors.black,
+                      )
+                    : Icon(
+                        Icons.check_box_outline_blank,
+                        color: darkModeOn && widget.noteColor == 0
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                Expanded(
+                    child: Text(
+                  widget.noteListItems[pos].value,
+                  style: TextStyle(
+                    color: darkModeOn && widget.noteColor == 0
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                )),
               ],
             ),
           );

@@ -6,21 +6,30 @@ import 'constants.dart';
 ThemeData theme() {
   return ThemeData(
     primaryColor: kPrimaryColor,
+    primarySwatch: Colors.teal,
     appBarTheme: AppBarTheme(
       color: Colors.white,
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.black),
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
       titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.black),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: kAccentColor,
+      elevation: 0,
+      focusElevation: 0,
+      hoverElevation: 0,
+      highlightElevation: 0,
+      splashColor: kPrimaryColor,
       foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        ),
+      ),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,
     scaffoldBackgroundColor: Colors.white,
+    backgroundColor: Colors.white,
     dividerColor: Colors.black,
     cardTheme: CardTheme(
       shape: RoundedRectangleBorder(
@@ -44,30 +53,39 @@ ThemeData theme() {
         borderRadius: BorderRadius.circular(10.0),
       ),
     ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal)
         .copyWith(secondary: kAccentColor),
-    // inputDecorationTheme: inputDecorationTheme(),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(Colors.black),
+      checkColor: MaterialStateProperty.all(Colors.white),
+    ),
   );
 }
 
 ThemeData themeDark() {
-  SystemUiOverlayStyle(
-    systemNavigationBarColor: Colors.red,
-  );
   return ThemeData(
-    brightness: Brightness.dark,
-    backgroundColor: kSecondaryDark,
+    backgroundColor: Color(0xFF121212),
+    primarySwatch: Colors.teal,
     appBarTheme: AppBarTheme(
       color: Color(0xFF121212),
       elevation: 0,
       iconTheme: IconThemeData(color: Colors.white),
-      systemOverlayStyle: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
       titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.white),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: kPrimaryColor, foregroundColor: Colors.white),
+      backgroundColor: kPrimaryColor,
+      elevation: 0,
+      focusElevation: 0,
+      hoverElevation: 0,
+      highlightElevation: 0,
+      foregroundColor: kSecondaryDark,
+      splashColor: kAccentColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        ),
+      ),
+    ),
     dividerColor: Colors.white,
     bottomAppBarColor: kSecondaryDark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -87,6 +105,10 @@ ThemeData themeDark() {
         ),
       ),
     ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(Colors.white),
+      checkColor: MaterialStateProperty.all(Colors.black),
+    ),
     scaffoldBackgroundColor: Color(0xFF121212),
     navigationRailTheme: NavigationRailThemeData(
         unselectedIconTheme: IconThemeData(color: Colors.white)),
@@ -97,9 +119,10 @@ ThemeData themeDark() {
         borderRadius: BorderRadius.circular(10.0),
       ),
     ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.red)
-        .copyWith(secondary: kAccentColor, brightness: Brightness.dark),
-    // inputDecorationTheme: inputDecorationTheme(),
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal).copyWith(
+      secondary: kPrimaryColor,
+      brightness: Brightness.dark,
+    ),
   );
 }
 

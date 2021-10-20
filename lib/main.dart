@@ -6,6 +6,7 @@ import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,10 +37,16 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
-      if (isLogged = sharedPreferences.getBool('is_logged') ?? false)
+      if (isLogged = (sharedPreferences.getBool('is_logged') ?? false) &&
+          (sharedPreferences.getBool('nextcloud_backup') ?? false))
         isUploading = true;
     });
     print(isLogged);
+  }
+
+  setPref() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    setState(() {});
   }
 
   Future<void> _getBackupPath() async {
@@ -134,6 +141,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
           dbHelper.deleteNotesAll();
           notesList.forEach((element) {
+            // Test back resoration from old version backup to check if note_list field gives error
             dbHelper.insertNotes(new Notes(
                 element.noteId,
                 element.noteDate,
@@ -141,7 +149,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                 element.noteText,
                 element.noteLabel,
                 element.noteArchived,
-                element.noteColor));
+                element.noteColor,
+                element.noteList));
           });
           Navigator.pop(context, 'yes');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -175,7 +184,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               element.noteText,
               element.noteLabel,
               element.noteArchived,
-              element.noteColor));
+              element.noteColor,
+              element.noteList));
         });
         Navigator.pop(context, 'yes');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -201,20 +211,24 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
+          height: MediaQuery.of(context).size.height,
           padding: EdgeInsets.all(30.0),
           child: Column(
             children: <Widget>[
-              ListTile(
-                title: Text(
-                  'Back up your notes onto your device/Nextcloud. You can restore the, when you reinstall BNotes',
+              Padding(
+                padding: kGlobalOuterPadding,
+                child: Text(
+                  'Back up your notes onto your device/Nextcloud. You can restore the backup when you reinstall scrawl.',
+                  style: TextStyle(fontSize: 16),
+                  textAlign: TextAlign.justify,
                 ),
-                trailing: IconButton(
-                    tooltip: '~/0/Android/data/com.rsoft.bnotes/files',
-                    onPressed: () {},
-                    icon: Icon(Icons.info_outline_rounded)),
+              ),
+              ListTile(
+                title: Text('Back path'),
+                subtitle: Text('~/0/Android/data/com.rsoft.bnotes/files'),
               ),
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: kGlobalOuterPadding,
                 child: Container(
                   padding: EdgeInsets.all(2.0),
                   width: MediaQuery.of(context).size.width * .3,
@@ -240,6 +254,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         onChanged: (value) {
                           setState(() {
                             isUploading = value;
+                            sharedPreferences.setBool(
+                                'nextcloud_backup', isUploading);
                             print(isUploading);
                           });
                         },
@@ -314,16 +330,6 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                       ),
                     ),
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.all(20.0),
-                  //   child: OutlinedButton.icon(
-                  //     onPressed: () {
-                  //       _restore();
-                  //     },
-                  //     icon: Icon(CupertinoIcons.cloud_download),
-                  //     label: Text('Restore'),
-                  //   ),
-                  // ),
                 ],
               ),
             ],

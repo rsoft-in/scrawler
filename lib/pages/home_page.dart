@@ -139,7 +139,7 @@ class _HomePageState extends State<HomePage> {
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
       body: Container(
-        padding: kGlobalOuterPadding,
+        padding: EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -160,23 +160,23 @@ class _HomePageState extends State<HomePage> {
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(
-                                    1,
-                                    notesList[index].noteText.length > 200
-                                        ? 1
-                                        : (notesList[index].noteText.length /
-                                            70));
+                                    1, index.isOdd ? 0.9 : 1.02);
                               },
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 List<NoteListItem> _noteList = [];
-                                if (note.noteText.contains('{')) {
-                                  final parsed = json
-                                      .decode(note.noteText)
-                                      .cast<Map<String, dynamic>>();
-                                  _noteList = parsed
-                                      .map<NoteListItem>(
-                                          (json) => NoteListItem.fromJson(json))
-                                      .toList();
+                                if (note.noteList.contains('{')) {
+                                  try {
+                                    final parsed = json
+                                        .decode(note.noteText)
+                                        .cast<Map<String, dynamic>>();
+                                    _noteList = parsed
+                                        .map<NoteListItem>((json) =>
+                                            NoteListItem.fromJson(json))
+                                        .toList();
+                                  } on Exception catch (e) {
+                                    // TODO
+                                  }
                                 }
                                 return Container(
                                   margin: EdgeInsets.symmetric(vertical: 4),
@@ -229,25 +229,31 @@ class _HomePageState extends State<HomePage> {
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
-                                                child: note.noteText
-                                                        .contains('{')
-                                                    ? NotesListViewExt(
-                                                        noteListItems:
-                                                            _noteList)
-                                                    : Text(
-                                                        Utility.stripTags(
-                                                            note.noteText),
-                                                        maxLines: 6,
-                                                        overflow:
-                                                            TextOverflow.fade,
-                                                        style: TextStyle(
-                                                            color: darkModeOn &&
-                                                                    note.noteColor ==
-                                                                        0
-                                                                ? Colors.white60
-                                                                : Colors
-                                                                    .black54),
-                                                      ),
+                                                child: Text(
+                                                  note.noteText,
+                                                  maxLines: 6,
+                                                  overflow: TextOverflow.fade,
+                                                  style: TextStyle(
+                                                      color: darkModeOn &&
+                                                              note.noteColor ==
+                                                                  0
+                                                          ? Colors.white60
+                                                          : Colors.black38),
+                                                ),
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible:
+                                                  note.noteList.contains('{'),
+                                              child: Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: NotesListViewExt(
+                                                      noteListItems: _noteList,
+                                                      noteColor:
+                                                          note.noteColor),
+                                                ),
                                               ),
                                             ),
                                             Container(
@@ -300,7 +306,7 @@ class _HomePageState extends State<HomePage> {
                               itemBuilder: (context, index) {
                                 var note = notesList[index];
                                 List<NoteListItem> _noteList = [];
-                                if (note.noteText.contains('{')) {
+                                if (note.noteList.contains('{')) {
                                   final parsed = json
                                       .decode(note.noteText)
                                       .cast<Map<String, dynamic>>();
@@ -356,26 +362,30 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.all(5.0),
-                                          child: note.noteText.contains('{')
-                                              ? Container(
-                                                  height: 50,
-                                                  child: NotesListViewExt(
-                                                      noteListItems: _noteList),
-                                                )
-                                              : Text(
-                                                  Utility.stripTags(
-                                                      note.noteText),
-                                                  style: TextStyle(
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white60
-                                                        : Colors.black38,
-                                                  ),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            note.noteText,
+                                            style: TextStyle(
+                                              color: darkModeOn &&
+                                                      note.noteColor == 0
+                                                  ? Colors.white60
+                                                  : Colors.black38,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: note.noteList.contains('{'),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Container(
+                                              height: 50,
+                                              child: NotesListViewExt(
+                                                  noteListItems: _noteList,
+                                                  noteColor: note.noteColor),
+                                            ),
+                                          ),
                                         ),
                                         Container(
                                             alignment: Alignment.centerRight,
@@ -438,16 +448,15 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        elevation: 1,
         onPressed: () {
           setState(() {
             _noteTextController.text = '';
             _noteTitleController.text = '';
             currentEditingNoteId = "";
           });
-          _showEdit(context, new Notes('', '', '', '', '', 0, 0));
+          _showEdit(context, new Notes('', '', '', '', '', 0, 0, ''));
         },
-        child: Icon(CupertinoIcons.add),
+        child: Icon(Icons.add),
       ),
     );
   }

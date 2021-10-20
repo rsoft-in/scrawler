@@ -19,7 +19,7 @@ dependencies:
   sqflite: ^2.0.0+3
   uuid: ^3.0.4
   path_provider: ^2.0.2
-  nextcloud: ^3.0.0
+  nextcloud: ^3.0.1
   file_picker: ^4.0.0
   url_launcher: ^6.0.9
   flutter_markdown: ^0.6.4
@@ -34,6 +34,7 @@ dependencies:
   share: ^2.0.4
   google_nav_bar: ^5.0.5
   yaru_icons: ^0.0.3
+  flutter_switch: ^0.3.2
 
 flutter_icons:
   # android: "launcher_icon"

@@ -6,9 +6,10 @@ class Notes {
   final String noteLabel;
   final int noteArchived;
   final int noteColor;
+  final String noteList;
 
   Notes(this.noteId, this.noteDate, this.noteTitle, this.noteText,
-      this.noteLabel, this.noteArchived, this.noteColor);
+      this.noteLabel, this.noteArchived, this.noteColor, this.noteList);
 
   Notes.fromJson(Map<String, dynamic> json)
       : noteId = json['note_id'],
@@ -17,7 +18,8 @@ class Notes {
         noteText = json['note_text'],
         noteLabel = json['note_label'],
         noteArchived = json['note_archived'],
-        noteColor = json['note_color'];
+        noteColor = json['note_color'],
+        noteList = json['note_list']??'';
 
   Map<String, dynamic> toJson() => {
         'note_id': noteId,
@@ -26,6 +28,7 @@ class Notes {
         'note_text': noteText,
         'note_label': noteLabel,
         'note_archived': noteArchived,
-        'note_color': noteColor
+        'note_color': noteColor,
+        'note_list': noteList
       };
 }

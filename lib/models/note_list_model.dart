@@ -7,4 +7,9 @@ class NoteListItem {
   NoteListItem.fromJson(Map<String, dynamic> json)
       : value = json['value'],
         checked = json['checked'];
+
+  Map<String, dynamic> toJson() => {
+    'value': value,
+    'checked': checked
+  };
 }

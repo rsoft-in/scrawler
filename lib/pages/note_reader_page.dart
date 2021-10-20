@@ -81,7 +81,6 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
         backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
         appBar: AppBar(
           elevation: 1,
-          iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
           leading: IconButton(
             onPressed: () => Navigator.pop(context, true),
@@ -193,18 +192,61 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                               ),
                             ),
                           ),
-                          CheckboxListTile(
-                            value: _noteList[index].checked == 'true',
-                            title: Text(_noteList[index].value),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            onChanged: (checked) {
-                              setState(() {
-                                if (_noteList[index].checked == 'true')
-                                  _noteList[index].checked = 'false';
-                                else
-                                  _noteList[index].checked = 'true';
-                              });
-                            },
+                          // CheckboxListTile(
+                          //   value: _noteList[index].checked == 'true',
+                          //   activeColor: darkModeOn && selectedPageColor == 0
+                          //       ? Colors.white
+                          //       : Colors.black,
+                          //   checkColor: darkModeOn && selectedPageColor == 0
+                          //       ? Colors.black
+                          //       : Colors.white,
+
+                          //   title: Text(_noteList[index].value),
+                          //   controlAffinity: ListTileControlAffinity.leading,
+                          //   onChanged: (checked) {
+                          //     setState(() {
+                          //       if (_noteList[index].checked == 'true')
+                          //         _noteList[index].checked = 'false';
+                          //       else
+                          //         _noteList[index].checked = 'true';
+
+                          //       _saveNote();
+                          //     });
+                          //   },
+                          // ),
+                          ListTile(
+                            leading: Checkbox(
+                                value: _noteList[index].checked == 'true',
+                                onChanged: (checked) {
+                                  setState(() {
+                                    if (_noteList[index].checked == 'true')
+                                      _noteList[index].checked = 'false';
+                                    else
+                                      _noteList[index].checked = 'true';
+
+                                    _saveNote();
+                                  });
+                                },
+                                checkColor: darkModeOn && selectedPageColor == 0
+                                    ? Colors.black
+                                    : Colors.white,
+                                activeColor:
+                                    darkModeOn && selectedPageColor == 0
+                                        ? Colors.white
+                                        : Colors.black,
+                                fillColor: MaterialStateProperty.all(
+                                  darkModeOn && selectedPageColor == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                            title: Text(
+                              _noteList[index].value,
+                              style: TextStyle(
+                                color: darkModeOn && selectedPageColor == 0
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                         ],
                       );
@@ -258,7 +300,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
               ),
         bottomNavigationBar: BottomAppBar(
-          color: NoteColor.getColor(selectedPageColor, darkModeOn),
+          // color: NoteColor.getColor(selectedPageColor, darkModeOn),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -277,7 +319,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
                 Text(Utility.formatDateTime(note.noteDate),
                     style: TextStyle(
-                      color: darkModeOn && selectedPageColor == 0
+                      color: darkModeOn
                           ? Colors.white
                           : Colors.black,
                     )),
@@ -287,6 +329,14 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
         ),
       ),
     );
+  }
+
+  void _saveNote() async {
+    var _noteJson = jsonEncode(_noteList.map((e) => e.toJson()).toList());
+    Notes _note = new Notes(note.noteId, note.noteDate, note.noteTitle,
+        _noteJson, note.noteLabel, note.noteArchived, note.noteColor, note.noteList);
+    await dbHelper.updateNotes(_note).then((value) {});
+    print(_noteJson);
   }
 
   void _showEdit(BuildContext context, Notes _note) async {
