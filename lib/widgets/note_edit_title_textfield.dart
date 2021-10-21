@@ -21,8 +21,13 @@ class NoteEditTextField extends StatelessWidget {
       controller: this.controller,
       focusNode: this.focusNode,
       textCapitalization: TextCapitalization.sentences,
-      keyboardType: this.isContentField ?? false ? TextInputType.multiline: TextInputType.text ,
-      onSubmitted: this.isContentField ?? false ?  null :(value) => this.onSubmitFocusNode?.requestFocus(),
+      keyboardType: this.isContentField ?? false
+          ? TextInputType.multiline
+          : TextInputType.text,
+      onSubmitted: this.isContentField ?? false
+          ? null
+          : (value) => this.onSubmitFocusNode?.requestFocus(),
+      maxLines: null,
       decoration: InputDecoration.collapsed(
           hintText: this.hint ?? 'Hint',
           hintStyle: TextStyle(

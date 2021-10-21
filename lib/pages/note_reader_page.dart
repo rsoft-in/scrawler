@@ -300,7 +300,6 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
               ),
         bottomNavigationBar: BottomAppBar(
-          // color: NoteColor.getColor(selectedPageColor, darkModeOn),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -319,9 +318,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
                 Text(Utility.formatDateTime(note.noteDate),
                     style: TextStyle(
-                      color: darkModeOn
-                          ? Colors.white
-                          : Colors.black,
+                      color: darkModeOn ? Colors.white : Colors.black,
                     )),
               ],
             ),
@@ -333,8 +330,15 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
 
   void _saveNote() async {
     var _noteJson = jsonEncode(_noteList.map((e) => e.toJson()).toList());
-    Notes _note = new Notes(note.noteId, note.noteDate, note.noteTitle,
-        _noteJson, note.noteLabel, note.noteArchived, note.noteColor, note.noteList);
+    Notes _note = new Notes(
+        note.noteId,
+        note.noteDate,
+        note.noteTitle,
+        _noteJson,
+        note.noteLabel,
+        note.noteArchived,
+        note.noteColor,
+        note.noteList);
     await dbHelper.updateNotes(_note).then((value) {});
     print(_noteJson);
   }
