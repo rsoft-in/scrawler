@@ -268,6 +268,7 @@ class _LoginPageState extends State<LoginPage> {
             loginPreferences.getString('nc_username').toString(), 150);
         loginPreferences.setString('nc_avatar', userData);
         loginPreferences.setBool('is_logged', true);
+        loginPreferences.setBool('nextcloud_backup', true);
         setState(() {
           isLoading = false;
         });
