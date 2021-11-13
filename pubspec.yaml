@@ -45,6 +45,7 @@ dependencies:
   universal_platform: ^1.0.0+1
   
   yaru_icons: ^0.0.6
+  flutter_switch: ^0.3.2
 
 flutter_icons:
   # android: "launcher_icon"
