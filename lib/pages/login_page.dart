@@ -34,125 +34,146 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nextcloud'),
+        title: Text('Login'),
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: CustomTextField(
+      extendBodyBehindAppBar: true,
+      body: Padding(
+        padding: kGlobalOuterPadding,
+        child: SingleChildScrollView(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 80,
+                ),
+                Image.network(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/2560px-Nextcloud_Logo.svg.png',
+                  width: 200,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
                   controller: _hostController,
-                  hint: 'Host',
-                  icon: Icon(Icons.http),
-                  inputType: TextInputType.url,
+                  keyboardType: TextInputType.url,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.http),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: CustomTextField(
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
                   controller: _usernameController,
-                  hint: 'Username',
-                  icon: Icon(Icons.person_outline),
-                  inputType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.url,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.person_outline),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: CustomTextField(
-                  obscureText: true,
-                  isPassword: true,
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
                   controller: _passwordController,
-                  hint: 'Password',
-                  icon: Icon(Icons.password),
-                  inputType: TextInputType.emailAddress,
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.password),
+                  ),
                 ),
-              ),
-              Visibility(
-                visible: !isLoading,
-                child: Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: kPrimaryColor.withOpacity(0.2),
-                          primary: kPrimaryColor),
-                      onPressed: () {
-                        if (_hostController.text.isNotEmpty &&
-                            _usernameController.text.isNotEmpty &&
-                            _passwordController.text.isNotEmpty) {
-                          getdata();
-                        }
-                      },
-                      child: Text('Sign-In')),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Visibility(
-                visible: isLoading,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                // Padding(
+                //   padding: kGlobalOuterPadding,
+                //   child: CustomTextField(
+                //     controller: _usernameController,
+                //     hint: 'Username',
+                //     icon: Icon(Icons.person_outline),
+                //     inputType: TextInputType.emailAddress,
+                //   ),
+                // ),
+                // Padding(
+                //   padding: kGlobalOuterPadding,
+                //   child: CustomTextField(
+                //     obscureText: true,
+                //     isPassword: true,
+                //     controller: _passwordController,
+                //     hint: 'Password',
+                //     icon: Icon(Icons.password),
+                //     inputType: TextInputType.emailAddress,
+                //   ),
+                // ),
+                Visibility(
+                  visible: !isLoading,
                   child: Container(
-                      padding: EdgeInsets.all(10.0),
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: CircularProgressIndicator(
-                        color: kPrimaryColor,
-                      )),
+                    margin: EdgeInsets.all(10.0),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (_hostController.text.isNotEmpty &&
+                              _usernameController.text.isNotEmpty &&
+                              _passwordController.text.isNotEmpty) {
+                            getdata();
+                          }
+                        },
+                        child: Text('Sign-In')),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                  padding: EdgeInsets.all(2.0),
-                  width: MediaQuery.of(context).size.width * .3,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.black26),
+                Visibility(
+                  visible: isLoading,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        padding: EdgeInsets.all(8),
+                        child: CircularProgressIndicator()),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Or, Register with Nextcloud Provider'),
-              ),
-              // TextButton(
-              //   style: ElevatedButton.styleFrom(
-              //     primary: Colors.red,
-              //     elevation: 0,
-              //   ),
-              //   onPressed: () => _launchURL(
-              //       'https://efss.qloud.my/index.php/apps/registration/'),
-              //   child: Image.network(
-              //     'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
-              //     width: 100,
-              //   ),
-              // ),
-              TextButton(
-                  onPressed: () => _launchURL(
-                      'https://efss.qloud.my/index.php/apps/registration/'),
-                  child: Text('Qloud')),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     primary: Colors.white,
-              //     elevation: 0,
-              //   ),
-              //   onPressed: () =>
-              //       _launchURL('https://owncloud.com/get-started/'),
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: Image.network(
-              //       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
-              //       scale: 14,
-              //     ),
-              //   ),
-              // )
-            ],
+                Divider(
+                  thickness: 2,
+                ),
+                ListTile(
+                  title: Text('Register'),
+                  subtitle: Text('on Nextcloud Provider'),
+                  trailing: OutlinedButton(
+                    child: Text('Qloud'),
+                    onPressed: () => _launchURL(
+                        'https://efss.qloud.my/index.php/apps/registration/'),
+                  ),
+                ),
+                // TextButton(
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.red,
+                //     elevation: 0,
+                //   ),
+                //   onPressed: () => _launchURL(
+                //       'https://efss.qloud.my/index.php/apps/registration/'),
+                //   child: Image.network(
+                //     'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
+                //     width: 100,
+                //   ),
+                // ),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.white,
+                //     elevation: 0,
+                //   ),
+                //   onPressed: () =>
+                //       _launchURL('https://owncloud.com/get-started/'),
+                //   child: Padding(
+                //     padding: const EdgeInsets.all(8.0),
+                //     child: Image.network(
+                //       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
+                //       scale: 14,
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
           ),
         ),
       ),
@@ -162,7 +183,6 @@ class _LoginPageState extends State<LoginPage> {
   void _restoreNote() async {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -195,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
+                                child: OutlinedButton(
                                   onPressed: () {
                                     Navigator.pop(context,
                                         'yes'); // Confirmation Dialog Pop
@@ -209,11 +229,7 @@ class _LoginPageState extends State<LoginPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      primary: kPrimaryColor,
-                                      backgroundColor:
-                                          kPrimaryColor.withOpacity(0.2)),
+                                child: ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context,
                                         true); // Confirmation Dialog Pop
@@ -287,6 +303,9 @@ class _LoginPageState extends State<LoginPage> {
         content: Text('Unable to login. Try again.'),
         duration: Duration(seconds: 2),
       ));
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -302,7 +321,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('ssd'),
+          title: Text('Error'),
         );
       },
     );

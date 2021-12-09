@@ -207,6 +207,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       appBar: AppBar(
         title: Text('Backup & Restore'),
       ),
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
@@ -214,6 +215,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           padding: EdgeInsets.all(30.0),
           child: Column(
             children: <Widget>[
+              SizedBox(
+                height: 80,
+              ),
               Padding(
                 padding: kGlobalOuterPadding,
                 child: Text(
@@ -260,40 +264,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                         },
                       ),
               ),
-              // Switch(
-              //   value: isUploading,
-              //   onChanged: (value){
-              //     setState(() {
-              //       isUploading=value;
-              //       print(isUploading);
-              //     });
-              //   },
-              //   activeTrackColor: Colors.lightGreenAccent,
-              //   activeColor: Colors.green,
-              // ),
-              // Container(
-              //   padding: EdgeInsets.all(20.0),
-              //   child: Text('Path: $backupPath'),
-              // ),
               Row(
                 children: [
-                  // Container(
-                  //   padding: EdgeInsets.all(20.0),
-                  //   child: OutlinedButton.icon(
-                  //     onPressed: () {
-                  //       _makeBackup();
-                  //       Navigator.pop(context);
-                  //     },
-                  //     icon: Icon(CupertinoIcons.cloud_upload),
-                  //     label: Text('Backup'),
-                  //   ),
-                  // ),
                   Expanded(
                     child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: kSecondaryColor.withOpacity(0.2),
-                        primary: kSecondaryColor,
-                      ),
                       onPressed: () => _makeBackup(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -311,11 +285,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                     width: 10,
                   ),
                   Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                        backgroundColor: kPrimaryColor.withOpacity(0.2),
-                        primary: kPrimaryColor,
-                      ),
+                    child: OutlinedButton(
                       onPressed: () => _restore(),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

@@ -359,7 +359,6 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
     bool darkModeOn = brightness == Brightness.dark;
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -434,7 +433,6 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   void _confirmDelete() async {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -466,7 +464,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
+                                child: OutlinedButton(
                                   onPressed: () => Navigator.of(context).pop(),
                                   child: Text('No'),
                                 ),
@@ -475,11 +473,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.red,
-                                      backgroundColor:
-                                          Colors.red.withOpacity(0.2)),
+                                child: ElevatedButton(
                                   onPressed: () {
                                     _deleteNote();
                                     Navigator.pop(context, true);

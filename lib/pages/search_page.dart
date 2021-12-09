@@ -51,81 +51,61 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-    return Scaffold(
-      body: Padding(
+    return Container(
+      child: Padding(
         padding: kGlobalOuterPadding,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 80,
+            ),
             Padding(
               padding: const EdgeInsets.all(6.0),
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: darkModeOn
-                      ? kSecondaryDark
-                      : Colors.grey.withOpacity(0.1),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search_rounded,
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration.collapsed(
-                          hintText: 'Search',
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      focusNode: searchFocusNode,
+                      onChanged: (value) => loadNotes(value),
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.search_rounded,
                         ),
-                        focusNode: searchFocusNode,
-                        onChanged: (value) => loadNotes(value),
                       ),
                     ),
-                    Visibility(
-                      visible: _showClearButton,
-                      child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              _searchController.clear();
-                            });
-                            notesList.clear();
-                          },
-                          child: Icon(Icons.clear)),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: _searchController.text.isEmpty,
-              child: Expanded(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(LineIcons.search,
-                          size: 120,
-                          color: darkModeOn ? kAccentColor : kPrimaryColor),
-                      Text(
-                        'Type to start searching',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 22),
-                      ),
-                    ],
                   ),
-                ),
+                  // SizedBox(
+                  //   width: 10,
+                  // ),
+                  Visibility(
+                    visible: _showClearButton,
+                    // child: InkWell(
+                    //   onTap: () {
+                    //     setState(() {
+                    //       _searchController.clear();
+                    //     });
+                    //     notesList.clear();
+                    //   },
+                    //   child: Icon(Icons.clear),
+                    // ),
+                    child: IconButton(
+                      icon: Icon(Icons.clear),
+                      onPressed: () {
+                        setState(() {
+                          _searchController.clear();
+                        });
+                        notesList.clear();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Visibility(
-              visible: _searchController.text.isNotEmpty,
-              child: Expanded(
+            if (_searchController.text.isNotEmpty)
+              Expanded(
                   child: ListView.builder(
                 itemBuilder: (context, index) {
                   return Container(
@@ -215,7 +195,27 @@ class _SearchPageState extends State<SearchPage> {
                 },
                 itemCount: notesList.length,
               )),
-            )
+            if (_searchController.text.isEmpty)
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.search,
+                        size: 120,
+                      ),
+                      Text(
+                        'Type to start searching',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300, fontSize: 22),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),

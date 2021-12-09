@@ -359,11 +359,10 @@ class _ArchivePageState extends State<ArchivePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.archive,
-                                  size: 120,
-                                  color: darkModeOn
-                                      ? kAccentColor
-                                      : kPrimaryColor),
+                              Icon(
+                                Icons.archive_outlined,
+                                size: 120,
+                              ),
                               Text(
                                 'No archived notes',
                                 style: TextStyle(

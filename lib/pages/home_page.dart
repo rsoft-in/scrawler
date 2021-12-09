@@ -430,11 +430,10 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(LineIcons.stickyNote,
-                                  size: 120,
-                                  color: darkModeOn
-                                      ? kAccentColor
-                                      : kPrimaryColor),
+                              Icon(
+                                Icons.note_alt_outlined,
+                                size: 120,
+                              ),
                               Text(
                                 'No notes',
                                 style: TextStyle(
@@ -464,13 +463,11 @@ class _HomePageState extends State<HomePage> {
   void _showOptionsSheet(BuildContext context, Notes _note) {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return StatefulBuilder(
             builder: (BuildContext context, StateSetter setModalState) {
               return Container(
-                alignment: Alignment.bottomCenter,
                 child: Container(
                   child: Padding(
                     padding: kGlobalOuterPadding,
@@ -661,7 +658,6 @@ class _HomePageState extends State<HomePage> {
     bool darkModeOn = brightness == Brightness.dark;
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -744,7 +740,6 @@ class _HomePageState extends State<HomePage> {
   void _confirmDelete() async {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -776,7 +771,7 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
+                                child: OutlinedButton(
                                   onPressed: () => Navigator.of(context).pop(),
                                   child: Text('No'),
                                 ),
@@ -785,11 +780,7 @@ class _HomePageState extends State<HomePage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.red,
-                                      backgroundColor:
-                                          Colors.red.withOpacity(0.2)),
+                                child: ElevatedButton(
                                   onPressed: () {
                                     _deleteNote();
                                     Navigator.pop(context, true);

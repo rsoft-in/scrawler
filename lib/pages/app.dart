@@ -121,13 +121,14 @@ class _ScrawlAppState extends State<ScrawlApp> {
         systemNavigationBarIconBrightness:
             darkModeOn ? Brightness.light : Brightness.dark,
         systemNavigationBarColor:
-            darkModeOn ? kSecondaryDark : Colors.transparent,
+            darkModeOn ? Colors.transparent : Colors.transparent,
       ),
     );
     if (isAndroid || isIOS) {
       return WillPopScope(
         onWillPop: () => Future.sync(onWillPop),
         child: Scaffold(
+          extendBodyBehindAppBar: true,
           appBar: PreferredSize(
             preferredSize: Size(MediaQuery.of(context).size.width, 56),
             child: Visibility(
@@ -191,46 +192,70 @@ class _ScrawlAppState extends State<ScrawlApp> {
             onPageChanged: onPageChanged,
             controller: _pageController,
           ),
-          bottomNavigationBar: BottomAppBar(
-            color: darkModeOn ? kSecondaryDark : Colors.white,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-              child: GNav(
-                selectedIndex: _page,
-                onTabChange: navigationTapped,
-                gap: 8,
-                activeColor: darkModeOn ? Colors.white : Colors.black,
-                iconSize: 24,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                duration: Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey.withOpacity(0.1),
-                color: darkModeOn ? Colors.grey : Colors.grey,
-                tabBorderRadius: 15.0,
-                tabs: [
-                  GButton(
-                    // icon: LineIcons.stickyNoteAlt,
-                    icon: Icons.notes,
-                    text: 'Notes',
-                  ),
-                  GButton(
-                    // icon: LineIcons.archive,
-                    icon: Icons.archive_outlined,
-                    text: 'Archive',
-                  ),
-                  GButton(
-                    // icon: LineIcons.search,
-                    icon: Icons.search_outlined,
-                    text: 'Search',
-                  ),
-                  GButton(
-                    // icon: LineIcons.bars,
-                    icon: Icons.menu_rounded,
-                    text: 'More',
-                  )
-                ],
+          // bottomNavigationBar: BottomAppBar(
+          //   // color: darkModeOn ? kSecondaryDark : Colors.white,
+          //   color: FlexN,
+          //   child: Container(
+          //     padding:
+          //         const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+          //     child: GNav(
+          //       selectedIndex: _page,
+          //       onTabChange: navigationTapped,
+          //       gap: 8,
+          //       activeColor: darkModeOn ? Colors.white : Colors.black,
+          //       iconSize: 24,
+          //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          //       duration: Duration(milliseconds: 400),
+          //       tabBackgroundColor: Colors.grey.withOpacity(0.1),
+          //       // color: darkModeOn ? Colors.grey : Colors.grey,
+          //       tabBorderRadius: 15.0,
+          //       tabs: [
+          //         GButton(
+          //           // icon: LineIcons.stickyNoteAlt,
+          //           icon: Icons.notes,
+          //           text: 'Notes',
+          //         ),
+          //         GButton(
+          //           // icon: LineIcons.archive,
+          //           icon: Icons.archive_outlined,
+          //           text: 'Archive',
+          //         ),
+          //         GButton(
+          //           // icon: LineIcons.search,
+          //           icon: Icons.search_outlined,
+          //           text: 'Search',
+          //         ),
+          //         GButton(
+          //           // icon: LineIcons.bars,
+          //           icon: Icons.menu_rounded,
+          //           text: 'More',
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          bottomNavigationBar: BottomNavigationBar(
+            // showUnselectedLabels: true,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notes_outlined),
+                label: 'Notes',
               ),
-            ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.archive),
+                label: 'Archive',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.menu),
+                label: 'Archive',
+              ),
+            ],
+            currentIndex: _page,
+            onTap: navigationTapped,
           ),
         ),
       );

@@ -107,28 +107,75 @@ class _EditNotePageState extends State<EditNotePage> {
               padding: kGlobalOuterPadding,
               child: ListView(
                 children: [
+                  // Padding(
+                  //   padding: kGlobalOuterPadding,
+                  //   child: Container(
+                  //     child: NoteEditTextField(
+                  //       controller: _noteTitleController,
+                  //       hint: 'Title',
+                  //       focusNode: titleFocusNode,
+                  //       onSubmitFocusNode: contentFocusNode,
+                  //     ),
+                  //   ),
+                  // ),
+                  TextField(
+                    controller: _noteTitleController,
+                    focusNode: titleFocusNode,
+                    onSubmitted: (value) {
+                      contentFocusNode.requestFocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Title',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // TextField(
+                  //   controller: _noteTextController,
+                  //   focusNode: contentFocusNode,
+                  //   maxLines: null,
+                  //   onSubmitted: (value) {
+                  //     contentFocusNode.requestFocus();
+                  //   },
+                  //   decoration: InputDecoration(
+                  //     hintText: 'sad',
+                  //     border: OutlineInputBorder(
+                  //         borderSide:
+                  //             BorderSide(width: 10, color: Colors.white)),
+                  //   ),
+                  // ),
                   Padding(
-                    padding: kGlobalOuterPadding,
-                    child: Container(
-                      child: NoteEditTextField(
-                        controller: _noteTitleController,
-                        hint: 'Title',
-                        focusNode: titleFocusNode,
-                        onSubmitFocusNode: contentFocusNode,
+                    padding: const EdgeInsets.all(12.0),
+                    child: TextField(
+                      controller: _noteTextController,
+                      focusNode: contentFocusNode,
+                      maxLines: null,
+                      onSubmitted: (value) {
+                        contentFocusNode.requestFocus();
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'sad',
+                        isCollapsed: true,
+                        fillColor: Colors.transparent,
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: kGlobalOuterPadding,
-                    child: Container(
-                      child: NoteEditTextField(
-                        controller: _noteTextController,
-                        hint: 'Content',
-                        focusNode: contentFocusNode,
-                        isContentField: true,
-                      ),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: kGlobalOuterPadding,
+                  //   child: Container(
+                  //     child: NoteEditTextField(
+                  //       controller: _noteTextController,
+                  //       hint: 'Content',
+                  //       focusNode: contentFocusNode,
+                  //       isContentField: true,
+                  //     ),
+                  //   ),
+                  // ),
                   if (isCheckList)
                     ...List.generate(
                         _noteListItems.length, generatenoteListItems),

@@ -4,6 +4,7 @@ import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/theme.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,14 +26,60 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode themeMode = ThemeMode.system;
   @override
   Widget build(BuildContext context) {
+    const FlexScheme usedScheme = FlexScheme.rosewood;
+
     return MaterialApp(
       title: kAppName,
       debugShowCheckedModeBanner: false,
-      theme: theme(),
-      darkTheme: themeDark(),
+      // theme: theme(),
+      // darkTheme: themeDark(),
+      theme: FlexThemeData.light(
+        scheme: usedScheme,
+        surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+        // We set the blend level strength to 20.
+        blendLevel: 40,
+        // appBarElevation: 0.5,
+        appBarOpacity: 0.5,
+        appBarStyle: FlexAppBarStyle.surface,
+        useSubThemes: true,
+        subThemesData: FlexSubThemesData(
+            elevatedButtonRadius: 25.0,
+            textButtonRadius: 25.0,
+            outlinedButtonRadius: 25.0,
+            cardRadius: 10.0,
+            bottomNavigationBarOpacity: 0.5),
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      ),
+      // The Mandy red, dark theme.
+      darkTheme: FlexThemeData.dark(
+        scheme: usedScheme,
+        surfaceMode: FlexSurfaceMode.highScaffoldLowSurfaces,
+        // You don't have to use same blend level or mode in light
+        // and dark mode, here we use a lower value in dark mode, that
+        // goes better together with the highScaffoldLowSurfaces mode.
+        blendLevel: 25,
+        appBarOpacity: 0.5,
+        appBarStyle: FlexAppBarStyle.primary,
+        useSubThemes: true,
+        subThemesData: FlexSubThemesData(
+          elevatedButtonRadius: 25.0,
+          textButtonRadius: 25.0,
+          outlinedButtonRadius: 25.0,
+          cardRadius: 10.0,
+          bottomNavigationBarOpacity: 0.5,
+          inputDecoratorBorderType: FlexInputBorderType.outline,
+        ),
+        visualDensity: FlexColorScheme.comfortablePlatformDensity,
+      ),
       home: StartPage(),
     );
   }

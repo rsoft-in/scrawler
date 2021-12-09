@@ -64,9 +64,9 @@ class _SettingsPageState extends State<SettingsPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // SizedBox(
-              //   height: 56,
-              // ),
+              SizedBox(
+                height: 80,
+              ),
               Padding(
                 padding: kGlobalOuterPadding,
                 child: Column(
@@ -113,11 +113,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       ],
                                     ),
                                     Container(
-                                      child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            primary: Colors.red,
-                                            backgroundColor:
-                                                Colors.red.withOpacity(0.2)),
+                                      child: OutlinedButton(
                                         child: Text('Sign Out'),
                                         onPressed: () {
                                           _confirmLogOut();
@@ -292,7 +288,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void showAppLockMenu() {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -338,7 +333,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void _confirmLogOut() async {
     showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
         isDismissible: true,
         builder: (context) {
           return Container(
@@ -370,7 +364,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
+                                child: OutlinedButton(
                                   onPressed: () => Navigator.of(context).pop(),
                                   child: Text('No'),
                                 ),
@@ -379,11 +373,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             Expanded(
                               child: Padding(
                                 padding: kGlobalCardPadding,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      primary: Colors.red,
-                                      backgroundColor:
-                                          Colors.red.withOpacity(0.2)),
+                                child: ElevatedButton(
                                   onPressed: () {
                                     sharedPreferences.clear();
                                     getPref();
