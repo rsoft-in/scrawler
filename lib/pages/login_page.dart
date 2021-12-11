@@ -87,49 +87,17 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 10,
                 ),
-                // Padding(
-                //   padding: kGlobalOuterPadding,
-                //   child: CustomTextField(
-                //     controller: _usernameController,
-                //     hint: 'Username',
-                //     icon: Icon(Icons.person_outline),
-                //     inputType: TextInputType.emailAddress,
-                //   ),
-                // ),
-                // Padding(
-                //   padding: kGlobalOuterPadding,
-                //   child: CustomTextField(
-                //     obscureText: true,
-                //     isPassword: true,
-                //     controller: _passwordController,
-                //     hint: 'Password',
-                //     icon: Icon(Icons.password),
-                //     inputType: TextInputType.emailAddress,
-                //   ),
-                // ),
-                Visibility(
-                  visible: !isLoading,
-                  child: Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (_hostController.text.isNotEmpty &&
-                              _usernameController.text.isNotEmpty &&
-                              _passwordController.text.isNotEmpty) {
-                            getdata();
-                          }
-                        },
-                        child: Text('Sign-In')),
-                  ),
-                ),
-                Visibility(
-                  visible: isLoading,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        padding: EdgeInsets.all(8),
-                        child: CircularProgressIndicator()),
-                  ),
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (_hostController.text.isNotEmpty &&
+                            _usernameController.text.isNotEmpty &&
+                            _passwordController.text.isNotEmpty) {
+                          getdata();
+                        }
+                      },
+                      child: Text('Sign-In')),
                 ),
                 Divider(
                   thickness: 2,
@@ -143,33 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                         'https://efss.qloud.my/index.php/apps/registration/'),
                   ),
                 ),
-                // TextButton(
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.red,
-                //     elevation: 0,
-                //   ),
-                //   onPressed: () => _launchURL(
-                //       'https://efss.qloud.my/index.php/apps/registration/'),
-                //   child: Image.network(
-                //     'https://www.qloud.my/wp-content/uploads/2019/06/logo_qloud-500.png',
-                //     width: 100,
-                //   ),
-                // ),
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.white,
-                //     elevation: 0,
-                //   ),
-                //   onPressed: () =>
-                //       _launchURL('https://owncloud.com/get-started/'),
-                //   child: Padding(
-                //     padding: const EdgeInsets.all(8.0),
-                //     child: Image.network(
-                //       'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/OwnCloud_logo_and_wordmark.svg/1200px-OwnCloud_logo_and_wordmark.svg.png',
-                //       scale: 14,
-                //     ),
-                //   ),
-                // )
               ],
             ),
           ),
@@ -254,9 +195,11 @@ class _LoginPageState extends State<LoginPage> {
   Future getdata() async {
     loginPreferences = await SharedPreferences.getInstance();
     try {
-      setState(() {
-        isLoading = true;
-      });
+      showLoaderDialog(context);
+      // setState(() {
+      //   isLoading = true;
+      // });
+
       final client = NextCloudClient.withCredentials(
         Uri(host: _hostController.text),
         _usernameController.text,
@@ -280,9 +223,10 @@ class _LoginPageState extends State<LoginPage> {
         loginPreferences.setString('nc_avatar', userData);
         loginPreferences.setBool('is_logged', true);
         loginPreferences.setBool('nextcloud_backup', true);
-        setState(() {
-          isLoading = false;
-        });
+        // setState(() {
+        //   isLoading = false;
+        // });
+        Navigator.pop(context);
         _restoreNote();
       } else {
         setState(() {
@@ -302,6 +246,30 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
       });
     }
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      elevation: 1,
+      title: Text('Logging in'),
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text('Please wait')),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future listFiles(NextCloudClient client) async {
