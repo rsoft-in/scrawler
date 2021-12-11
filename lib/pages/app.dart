@@ -5,6 +5,7 @@ import 'package:bnotes/pages/archive_page.dart';
 import 'package:bnotes/pages/home_page.dart';
 import 'package:bnotes/pages/search_page.dart';
 import 'package:bnotes/pages/settings_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
@@ -115,147 +116,156 @@ class _ScrawlAppState extends State<ScrawlApp> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
-        systemNavigationBarIconBrightness:
-            darkModeOn ? Brightness.light : Brightness.dark,
-        systemNavigationBarColor:
-            darkModeOn ? Colors.transparent : Colors.transparent,
-      ),
-    );
+    // SystemChrome.setSystemUIOverlayStyle(
+    //   SystemUiOverlayStyle(
+    //     statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
+    //     systemNavigationBarIconBrightness:
+    //         darkModeOn ? Brightness.light : Brightness.dark,
+    //     systemNavigationBarColor:
+    //         darkModeOn ? Colors.transparent : Colors.transparent,
+    //   ),
+    // );
+
     if (isAndroid || isIOS) {
-      return WillPopScope(
-        onWillPop: () => Future.sync(onWillPop),
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          appBar: PreferredSize(
-            preferredSize: Size(MediaQuery.of(context).size.width, 56),
-            child: Visibility(
-              child: AppBar(
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      'images/bnotes-transparent.png',
-                      height: 50,
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: FlexColorScheme.themedSystemNavigationBar(
+          context,
+          systemNavBarStyle: FlexSystemNavBarStyle.background,
+          useDivider: false,
+          opacity: 0,
+        ),
+        child: WillPopScope(
+          onWillPop: () => Future.sync(onWillPop),
+          child: Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: PreferredSize(
+              preferredSize: Size(MediaQuery.of(context).size.width, 56),
+              child: Visibility(
+                child: AppBar(
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'images/bnotes-transparent.png',
+                        height: 50,
+                      ),
+                      Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            kAppName,
+                            style: TextStyle(fontFamily: 'Raleway'),
+                          )),
+                    ],
+                  ),
+                  actions: [
+                    Visibility(
+                      visible: viewType == ViewType.Tile && _page == 0,
+                      child: IconButton(
+                        icon: Icon(Icons.grid_view_outlined),
+                        onPressed: () {
+                          setState(() {
+                            viewType = ViewType.Grid;
+                            HomePage.staticGlobalKey.currentState!
+                                .toggleView(viewType);
+                          });
+                        },
+                      ),
                     ),
-                    Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          kAppName,
-                          style: TextStyle(fontFamily: 'Raleway'),
-                        )),
+                    Visibility(
+                      visible: viewType == ViewType.Grid && _page == 0,
+                      child: IconButton(
+                        icon: Icon(Icons.view_agenda_outlined),
+                        onPressed: () {
+                          setState(() {
+                            viewType = ViewType.Tile;
+                            HomePage.staticGlobalKey.currentState!
+                                .toggleView(viewType);
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
-                actions: [
-                  Visibility(
-                    visible: viewType == ViewType.Tile && _page == 0,
-                    child: IconButton(
-                      icon: Icon(Icons.grid_view_outlined),
-                      onPressed: () {
-                        setState(() {
-                          viewType = ViewType.Grid;
-                          HomePage.staticGlobalKey.currentState!
-                              .toggleView(viewType);
-                        });
-                      },
-                    ),
-                  ),
-                  Visibility(
-                    visible: viewType == ViewType.Grid && _page == 0,
-                    child: IconButton(
-                      icon: Icon(Icons.view_agenda_outlined),
-                      onPressed: () {
-                        setState(() {
-                          viewType = ViewType.Tile;
-                          HomePage.staticGlobalKey.currentState!
-                              .toggleView(viewType);
-                        });
-                      },
-                    ),
-                  ),
-                ],
               ),
             ),
-          ),
-          body: PageView(
-            physics: NeverScrollableScrollPhysics(),
-            pageSnapping: false,
-            children: [
-              new HomePage(title: kAppName),
-              new ArchivePage(),
-              new SearchPage(),
-              new SettingsPage(),
-            ],
-            onPageChanged: onPageChanged,
-            controller: _pageController,
-          ),
-          // bottomNavigationBar: BottomAppBar(
-          //   // color: darkModeOn ? kSecondaryDark : Colors.white,
-          //   color: FlexN,
-          //   child: Container(
-          //     padding:
-          //         const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-          //     child: GNav(
-          //       selectedIndex: _page,
-          //       onTabChange: navigationTapped,
-          //       gap: 8,
-          //       activeColor: darkModeOn ? Colors.white : Colors.black,
-          //       iconSize: 24,
-          //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          //       duration: Duration(milliseconds: 400),
-          //       tabBackgroundColor: Colors.grey.withOpacity(0.1),
-          //       // color: darkModeOn ? Colors.grey : Colors.grey,
-          //       tabBorderRadius: 15.0,
-          //       tabs: [
-          //         GButton(
-          //           // icon: LineIcons.stickyNoteAlt,
-          //           icon: Icons.notes,
-          //           text: 'Notes',
-          //         ),
-          //         GButton(
-          //           // icon: LineIcons.archive,
-          //           icon: Icons.archive_outlined,
-          //           text: 'Archive',
-          //         ),
-          //         GButton(
-          //           // icon: LineIcons.search,
-          //           icon: Icons.search_outlined,
-          //           text: 'Search',
-          //         ),
-          //         GButton(
-          //           // icon: LineIcons.bars,
-          //           icon: Icons.menu_rounded,
-          //           text: 'More',
-          //         )
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          bottomNavigationBar: BottomNavigationBar(
-            // showUnselectedLabels: true,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.notes_outlined),
-                label: 'Notes',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.archive),
-                label: 'Archive',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'Search',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.menu),
-                label: 'Archive',
-              ),
-            ],
-            currentIndex: _page,
-            onTap: navigationTapped,
+            body: PageView(
+              physics: NeverScrollableScrollPhysics(),
+              pageSnapping: false,
+              children: [
+                new HomePage(title: kAppName),
+                new ArchivePage(),
+                new SearchPage(),
+                new SettingsPage(),
+              ],
+              onPageChanged: onPageChanged,
+              controller: _pageController,
+            ),
+            // bottomNavigationBar: BottomAppBar(
+            //   // color: darkModeOn ? kSecondaryDark : Colors.white,
+            //   color: FlexN,
+            //   child: Container(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            //     child: GNav(
+            //       selectedIndex: _page,
+            //       onTabChange: navigationTapped,
+            //       gap: 8,
+            //       activeColor: darkModeOn ? Colors.white : Colors.black,
+            //       iconSize: 24,
+            //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+            //       duration: Duration(milliseconds: 400),
+            //       tabBackgroundColor: Colors.grey.withOpacity(0.1),
+            //       // color: darkModeOn ? Colors.grey : Colors.grey,
+            //       tabBorderRadius: 15.0,
+            //       tabs: [
+            //         GButton(
+            //           // icon: LineIcons.stickyNoteAlt,
+            //           icon: Icons.notes,
+            //           text: 'Notes',
+            //         ),
+            //         GButton(
+            //           // icon: LineIcons.archive,
+            //           icon: Icons.archive_outlined,
+            //           text: 'Archive',
+            //         ),
+            //         GButton(
+            //           // icon: LineIcons.search,
+            //           icon: Icons.search_outlined,
+            //           text: 'Search',
+            //         ),
+            //         GButton(
+            //           // icon: LineIcons.bars,
+            //           icon: Icons.menu_rounded,
+            //           text: 'More',
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            bottomNavigationBar: BottomNavigationBar(
+              // showUnselectedLabels: true,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notes_outlined),
+                  label: 'Notes',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.archive),
+                  label: 'Archive',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.menu),
+                  label: 'Archive',
+                ),
+              ],
+              currentIndex: _page,
+              onTap: navigationTapped,
+            ),
           ),
         ),
       );

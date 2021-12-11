@@ -126,10 +126,22 @@ class _EditNotePageState extends State<EditNotePage> {
                     },
                     decoration: InputDecoration(
                       hintText: 'Title',
+                      // label: Text('Title'),
+                      // isCollapsed: true,
+                      fillColor: Colors.transparent,
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
                     ),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
+                  ),
+                  Divider(
+                    thickness: 1.2,
+                    endIndent: 10,
+                    indent: 10,
                   ),
                   // TextField(
                   //   controller: _noteTextController,
@@ -145,24 +157,23 @@ class _EditNotePageState extends State<EditNotePage> {
                   //             BorderSide(width: 10, color: Colors.white)),
                   //   ),
                   // ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: TextField(
-                      controller: _noteTextController,
-                      focusNode: contentFocusNode,
-                      maxLines: null,
-                      onSubmitted: (value) {
-                        contentFocusNode.requestFocus();
-                      },
-                      decoration: InputDecoration(
-                        hintText: 'sad',
-                        isCollapsed: true,
-                        fillColor: Colors.transparent,
-                        enabledBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none),
-                        focusedBorder:
-                            OutlineInputBorder(borderSide: BorderSide.none),
-                      ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  TextField(
+                    controller: _noteTextController,
+                    focusNode: contentFocusNode,
+                    maxLines: null,
+                    onSubmitted: (value) {
+                      contentFocusNode.requestFocus();
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Content',
+                      fillColor: Colors.transparent,
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
                     ),
                   ),
                   // Padding(

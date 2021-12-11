@@ -1,11 +1,14 @@
 import 'package:bnotes/constants.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 class NoteColor {
   static Color getColor(int code, bool isDark) {
     switch (code) {
       case 0:
-        return isDark ? kSecondaryDark : Colors.white;
+        return isDark
+            ? FlexColor.blueWhaleDarkPrimary.lighten()
+            : FlexColor.blueWhaleDarkPrimary.lighten(30);
       case 1:
         return Color(0xFFFCECDD);
       case 2:

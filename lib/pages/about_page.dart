@@ -56,6 +56,7 @@ class _AboutPageState extends State<AboutPage> {
       appBar: AppBar(
         title: Text('About'),
       ),
+      extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
@@ -65,6 +66,9 @@ class _AboutPageState extends State<AboutPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 80,
+                ),
                 Padding(
                   padding: kGlobalOuterPadding,
                   child: Row(

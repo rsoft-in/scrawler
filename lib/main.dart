@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   @override
   Widget build(BuildContext context) {
-    const FlexScheme usedScheme = FlexScheme.rosewood;
+    const FlexScheme usedScheme = FlexScheme.blueWhale;
 
     return MaterialApp(
       title: kAppName,
@@ -51,12 +51,15 @@ class _MyAppState extends State<MyApp> {
         appBarOpacity: 0.5,
         appBarStyle: FlexAppBarStyle.surface,
         useSubThemes: true,
+        transparentStatusBar: true,
+
         subThemesData: FlexSubThemesData(
-            elevatedButtonRadius: 25.0,
-            textButtonRadius: 25.0,
-            outlinedButtonRadius: 25.0,
-            cardRadius: 10.0,
-            bottomNavigationBarOpacity: 0.5),
+          elevatedButtonRadius: 25.0,
+          textButtonRadius: 25.0,
+          outlinedButtonRadius: 25.0,
+          cardRadius: 10.0,
+          bottomNavigationBarOpacity: 0.5,
+        ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
       ),
       // The Mandy red, dark theme.
@@ -68,8 +71,9 @@ class _MyAppState extends State<MyApp> {
         // goes better together with the highScaffoldLowSurfaces mode.
         blendLevel: 25,
         appBarOpacity: 0.5,
-        appBarStyle: FlexAppBarStyle.primary,
+        appBarStyle: FlexAppBarStyle.surface,
         useSubThemes: true,
+        transparentStatusBar: true,
         subThemesData: FlexSubThemesData(
           elevatedButtonRadius: 25.0,
           textButtonRadius: 25.0,

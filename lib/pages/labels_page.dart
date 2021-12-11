@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/labels_model.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -11,7 +12,8 @@ class LabelsPage extends StatefulWidget {
   final String noteid;
   final String notelabel;
 
-  const LabelsPage({Key? key,required this.noteid,required this.notelabel}) : super(key: key);
+  const LabelsPage({Key? key, required this.noteid, required this.notelabel})
+      : super(key: key);
   @override
   _LabelsPageState createState() => _LabelsPageState();
 }
@@ -98,11 +100,7 @@ class _LabelsPageState extends State<LabelsPage> {
               visible: widget.noteid.isNotEmpty,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                          backgroundColor: kSecondaryColor.withOpacity(0.2),
-                          primary: kSecondaryColor,
-                        ),
+                child: OutlinedButton(
                   child: Text('Done'),
                   onPressed: () => _assignLabel(),
                 ),
@@ -124,17 +122,19 @@ class _LabelsPageState extends State<LabelsPage> {
                       child: TextField(
                         controller: _newLabelController,
                         textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration.collapsed(
-                            hintText: 'Add a new Label'),
+                        decoration: InputDecoration(hintText: 'Add Label'),
                       ),
                     ),
                     IconButton(
                       icon: Icon(Icons.add),
-                      color: kPrimaryColor,
+                      // color: kPrimaryColor,
                       onPressed: () => _saveLabel(),
                     ),
                   ],
                 ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Expanded(
                 child: StreamBuilder<List<Labels>>(
@@ -162,18 +162,30 @@ class _LabelsPageState extends State<LabelsPage> {
                                   children: [
                                     Expanded(
                                       child: Container(
-                                        color: Colors.red.shade300,
                                         alignment: Alignment.centerLeft,
                                         padding: EdgeInsets.only(left: 15.0),
-                                        child: Icon(Icons.delete_outline_rounded),
+                                        decoration: BoxDecoration(
+                                          color: FlexColor.redDarkPrimary,
+                                          borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10)),
+                                        ),
+                                        child:
+                                            Icon(Icons.delete_outline_rounded),
                                       ),
                                     ),
                                     Expanded(
                                       child: Container(
-                                        color: Colors.red.shade300,
                                         alignment: Alignment.centerRight,
                                         padding: EdgeInsets.only(right: 15.0),
-                                        child: Icon(Icons.delete_outline_rounded),
+                                        decoration: BoxDecoration(
+                                          color: FlexColor.redDarkPrimary,
+                                          borderRadius: BorderRadius.only(
+                                              bottomRight: Radius.circular(10),
+                                              topRight: Radius.circular(10)),
+                                        ),
+                                        child:
+                                            Icon(Icons.delete_outline_rounded),
                                       ),
                                     ),
                                   ],
@@ -192,7 +204,8 @@ class _LabelsPageState extends State<LabelsPage> {
                                           .contains(label.labelName),
                                       title: Text(label.labelName),
                                       onChanged: (value) {
-                                        _onLabelSelected(value!, label.labelName);
+                                        _onLabelSelected(
+                                            value!, label.labelName);
                                       },
                                     )
                                   : ListTile(
@@ -214,6 +227,7 @@ class _LabelsPageState extends State<LabelsPage> {
       ),
     );
   }
+
   Future<bool> _onBackPressed() async {
     Navigator.pop(context, null);
     return true;

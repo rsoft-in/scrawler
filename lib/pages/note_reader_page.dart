@@ -87,36 +87,28 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             icon: UniversalPlatform.isIOS
                 ? Icon(CupertinoIcons.back)
                 : Icon(Icons.arrow_back),
-            color: darkModeOn && selectedPageColor == 0
-                ? Colors.white
-                : Colors.black,
+            color: Colors.black,
           ),
           actions: [
             IconButton(
               onPressed: () {
                 _showEdit(context, note);
               },
-              color: darkModeOn && selectedPageColor == 0
-                  ? Colors.white
-                  : Colors.black,
+              color: Colors.black,
               icon: Icon(Icons.edit_outlined),
             ),
             IconButton(
               onPressed: () {
                 _showColorPalette(context, note);
               },
-              color: darkModeOn && selectedPageColor == 0
-                  ? Colors.white
-                  : Colors.black,
+              color: Colors.black,
               icon: Icon(Icons.palette_outlined),
             ),
             IconButton(
               onPressed: () {
                 _assignLabel(note);
               },
-              color: darkModeOn && selectedPageColor == 0
-                  ? Colors.white
-                  : Colors.black,
+              color: Colors.black,
               icon: Icon(Icons.new_label_outlined),
             ),
             // Archive
@@ -130,9 +122,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   });
                   _archiveNote(1);
                 },
-                color: darkModeOn && selectedPageColor == 0
-                    ? Colors.white
-                    : Colors.black,
+                color: Colors.black,
                 icon: Icon(Icons.archive_outlined),
               ),
             ),
@@ -146,9 +136,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   });
                   _archiveNote(0);
                 },
-                color: darkModeOn && selectedPageColor == 0
-                    ? Colors.white
-                    : Colors.black,
+                color: Colors.black,
                 icon: Icon(Icons.archive_rounded),
               ),
             ),
@@ -159,9 +147,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 });
                 _confirmDelete();
               },
-              color: darkModeOn && selectedPageColor == 0
-                  ? Colors.white
-                  : Colors.black,
+              color: Colors.black,
               icon: Icon(Icons.delete_outline_rounded),
             ),
           ],
@@ -184,9 +170,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                               child: Text(
                                 note.noteTitle,
                                 style: TextStyle(
-                                    color: darkModeOn && selectedPageColor == 0
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color: Colors.black,
                                     fontSize: 22,
                                     fontWeight: FontWeight.w700),
                               ),
@@ -271,9 +255,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           child: Text(
                             note.noteTitle,
                             style: TextStyle(
-                                color: darkModeOn && selectedPageColor == 0
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: Colors.black,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700),
                           ),
@@ -289,9 +271,8 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             note.noteText.replaceAll('\n', '<br>'),
                             // textAlign: TextAlign.start,
                             textStyle: TextStyle(
-                                color: darkModeOn && selectedPageColor == 0
-                                    ? Colors.white
-                                    : Colors.black),
+                              color: Colors.black,
+                            ),
                           ),
                         ),
                       ),
@@ -300,6 +281,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ),
               ),
         bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent.withOpacity(0.1),
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
@@ -310,15 +292,13 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: darkModeOn && selectedPageColor == 0
-                          ? Colors.white
-                          : Colors.black,
+                      color: Colors.black,
                     ),
                   ),
                 ),
                 Text(Utility.formatDateTime(note.noteDate),
                     style: TextStyle(
-                      color: darkModeOn ? Colors.white : Colors.black,
+                      color: Colors.black,
                     )),
               ],
             ),
@@ -362,66 +342,66 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
         isDismissible: true,
         builder: (context) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
                 height: 100,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        ColorPalette(
-                          color: NoteColor.getColor(0, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 0);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 0,
-                        ),
-                        ColorPalette(
-                          color: NoteColor.getColor(1, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 1);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 1,
-                        ),
-                        ColorPalette(
-                          color: NoteColor.getColor(2, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 2);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 2,
-                        ),
-                        ColorPalette(
-                          color: NoteColor.getColor(3, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 3);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 3,
-                        ),
-                        ColorPalette(
-                          color: NoteColor.getColor(4, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 4);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 4,
-                        ),
-                        ColorPalette(
-                          color: NoteColor.getColor(5, darkModeOn),
-                          onTap: () {
-                            _updateColor(_note.noteId, 5);
-                            Navigator.pop(context);
-                          },
-                          isSelected: selectedPageColor == 5,
-                        ),
-                      ],
-                    ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 5.0, vertical: 12),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      ColorPalette(
+                        color: NoteColor.getColor(0, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 0);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 0,
+                      ),
+                      ColorPalette(
+                        color: NoteColor.getColor(1, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 1);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 1,
+                      ),
+                      ColorPalette(
+                        color: NoteColor.getColor(2, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 2);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 2,
+                      ),
+                      ColorPalette(
+                        color: NoteColor.getColor(3, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 3);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 3,
+                      ),
+                      ColorPalette(
+                        color: NoteColor.getColor(4, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 4);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 4,
+                      ),
+                      ColorPalette(
+                        color: NoteColor.getColor(5, darkModeOn),
+                        onTap: () {
+                          _updateColor(_note.noteId, 5);
+                          Navigator.pop(context);
+                        },
+                        isSelected: selectedPageColor == 5,
+                      ),
+                    ],
                   ),
                 ),
               ),

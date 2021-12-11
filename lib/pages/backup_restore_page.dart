@@ -29,6 +29,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   Storage storage = new Storage();
   String backupPath = "";
   bool isUploading = false;
+  bool isLoading = false;
   final dbHelper = DatabaseHelper.instance;
   late SharedPreferences sharedPreferences;
   bool isLogged = false;
@@ -119,6 +120,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
 
   Future _restore() async {
     if (isUploading) {
+      showLoaderDialog(context);
       try {
         final client = NextCloudClient.withCredentials(
           Uri(host: sharedPreferences.getString('nc_host')),
@@ -151,6 +153,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                 element.noteColor,
                 element.noteList));
           });
+          Navigator.pop(context);
           Navigator.pop(context, 'yes');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Restored'),
@@ -192,6 +195,29 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         ));
       });
     }
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   @override
