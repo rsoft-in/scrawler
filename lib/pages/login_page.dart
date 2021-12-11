@@ -190,64 +190,61 @@ class _LoginPageState extends State<LoginPage> {
               padding: kGlobalOuterPadding,
               child: Container(
                 height: 150,
-                child: Card(
-                  child: Padding(
-                    padding: kGlobalOuterPadding,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text(
-                            'Restore',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Text(
+                          'Restore',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child:
+                            Text('Do you want to restore your previous notes?'),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.pop(context,
+                                      'yes'); // Confirmation Dialog Pop
+                                  Navigator.pop(
+                                      context, true); // Login Page Pop
+                                },
+                                child: Text('No'),
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text(
-                              'Do you want to restore your previous notes?'),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: OutlinedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context,
-                                        'yes'); // Confirmation Dialog Pop
-                                    Navigator.pop(
-                                        context, true); // Login Page Pop
-                                  },
-                                  child: Text('No'),
-                                ),
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(
+                                      context, true); // Confirmation Dialog Pop
+                                  Navigator.pop(
+                                      context, true); // Login Page Pop
+                                  Navigator.of(context).push(CupertinoPageRoute(
+                                      builder: (context) =>
+                                          BackupRestorePage()));
+                                },
+                                child: Text('Yes'),
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context,
-                                        true); // Confirmation Dialog Pop
-                                    Navigator.pop(
-                                        context, true); // Login Page Pop
-                                    Navigator.of(context).push(
-                                        CupertinoPageRoute(
-                                            builder: (context) =>
-                                                BackupRestorePage()));
-                                  },
-                                  child: Text('Yes'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),

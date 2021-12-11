@@ -489,6 +489,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Navigator.of(context).pop();
                             setState(() {
@@ -516,6 +517,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Navigator.pop(context);
                             _showColorPalette(context, _note);
@@ -537,6 +539,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Navigator.pop(context);
                             _assignLabel(_note);
@@ -560,6 +563,7 @@ class _HomePageState extends State<HomePage> {
                         Visibility(
                           visible: _note.noteArchived == 0,
                           child: InkWell(
+                            borderRadius: BorderRadius.circular(15),
                             onTap: () {
                               Navigator.of(context).pop();
                               setState(() {
@@ -587,6 +591,7 @@ class _HomePageState extends State<HomePage> {
                         Visibility(
                           visible: _note.noteArchived == 1,
                           child: InkWell(
+                            borderRadius: BorderRadius.circular(15),
                             onTap: () {
                               Navigator.of(context).pop();
                               setState(() {
@@ -612,6 +617,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Navigator.of(context).pop();
                             setState(() {
@@ -636,6 +642,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         InkWell(
+                          borderRadius: BorderRadius.circular(15),
                           onTap: () {
                             Navigator.pop(context);
                           },

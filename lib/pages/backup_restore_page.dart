@@ -199,15 +199,16 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
 
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
+      elevation: 1,
+      title: Text('Restoring'),
       content: new Row(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(),
           SizedBox(
             width: 10,
           ),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: EdgeInsets.only(left: 7), child: Text('Please wait')),
         ],
       ),
     );

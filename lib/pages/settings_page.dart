@@ -295,33 +295,31 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: kGlobalOuterPadding,
               child: Container(
                 height: 140,
-                child: Card(
-                  child: Padding(
-                    padding: kGlobalOuterPadding,
-                    child: ListView(
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            callAppLock();
-                          },
-                          child: ListTile(
-                            title: Text('Reset Passcode'),
-                          ),
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: ListView(
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () {
+                          callAppLock();
+                        },
+                        child: ListTile(
+                          title: Text('Reset Passcode'),
                         ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            unSetAppLock();
-                            Navigator.pop(context);
-                          },
-                          child: ListTile(
-                            title: Text('Remove App lock'),
-                          ),
+                      ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        onTap: () {
+                          unSetAppLock();
+                          Navigator.pop(context);
+                        },
+                        child: ListTile(
+                          title: Text('Remove App lock'),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -340,53 +338,51 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: kGlobalOuterPadding,
               child: Container(
                 height: 150,
-                child: Card(
-                  child: Padding(
-                    padding: kGlobalOuterPadding,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Text('Are you sure you want to log out?'),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: OutlinedButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('No'),
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text('Are you sure you want to log out?'),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: OutlinedButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('No'),
-                                ),
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  sharedPreferences.clear();
+                                  getPref();
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('Yes'),
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    sharedPreferences.clear();
-                                    getPref();
-                                    Navigator.pop(context, true);
-                                  },
-                                  child: Text('Yes'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),

@@ -420,52 +420,50 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
               padding: kGlobalOuterPadding,
               child: Container(
                 height: 150,
-                child: Card(
-                  child: Padding(
-                    padding: kGlobalOuterPadding,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text(
-                            'Confirm',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w700),
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Text(
+                          'Confirm',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Text('Are you sure you want to delete?'),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: OutlinedButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('No'),
+                              ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: kGlobalCardPadding,
-                          child: Text('Are you sure you want to delete?'),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: OutlinedButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: Text('No'),
-                                ),
+                          Expanded(
+                            child: Padding(
+                              padding: kGlobalCardPadding,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  _deleteNote();
+                                  Navigator.pop(context, true);
+                                },
+                                child: Text('Yes'),
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: kGlobalCardPadding,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _deleteNote();
-                                    Navigator.pop(context, true);
-                                  },
-                                  child: Text('Yes'),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ),
