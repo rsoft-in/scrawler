@@ -10,15 +10,25 @@ class NoteColor {
             ? FlexColor.blueWhaleDarkPrimary.lighten()
             : FlexColor.blueWhaleDarkPrimary.lighten(30);
       case 1:
-        return Color(0xFFFCECDD);
+        return isDark
+            ? FlexColor.sakuraLightSecondary.lighten(15)
+            : FlexColor.sakuraLightSecondary.lighten(10);
       case 2:
-        return Color(0xffE4FBFF);
+        return isDark
+            ? FlexColor.greenDarkPrimary.lighten(10)
+            : FlexColor.greenDarkPrimary.lighten(10);
       case 3:
-        return Color(0xffB6C9F0);
+        return isDark
+            ? FlexColor.blueLightPrimary.lighten(40)
+            : FlexColor.blueLightPrimary.lighten(40);
       case 4:
-        return Color(0xffFFE8E8);
+        return isDark
+            ? FlexColor.sakuraLightPrimary.lighten(10)
+            : FlexColor.sakuraLightPrimary.lighten(20);
       case 5:
-        return Color(0xffE1CCEC);
+        return isDark
+            ? FlexColor.indigoLightSecondary.lighten(40)
+            : FlexColor.indigoLightSecondary.lighten(40);
       default:
         return Colors.transparent;
     }
