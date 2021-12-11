@@ -4,13 +4,11 @@ import 'dart:typed_data';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/about_page.dart';
-import 'package:bnotes/pages/account_page.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 

@@ -8,12 +8,9 @@ import 'package:bnotes/pages/settings_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:yaru_icons/widgets/yaru_icons.dart';
 
 enum ViewType { Tile, Grid }
 

@@ -1,9 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
-import 'package:bnotes/widgets/custom_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

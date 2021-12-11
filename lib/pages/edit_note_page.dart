@@ -3,11 +3,9 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/widgets/note_edit_list_textfield.dart';
-import 'package:bnotes/widgets/note_edit_title_textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:uuid/uuid.dart';
 
 class EditNotePage extends StatefulWidget {

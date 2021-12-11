@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/labels_model.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';

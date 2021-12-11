@@ -1,5 +1,4 @@
 import 'package:bnotes/constants.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';

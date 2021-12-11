@@ -6,7 +6,6 @@ import 'dart:convert';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';

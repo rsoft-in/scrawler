@@ -13,7 +13,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ArchivePage extends StatefulWidget {
@@ -122,10 +121,6 @@ class _ArchivePageState extends State<ArchivePage> {
                                 return Card(
                                   color: NoteColor.getColor(
                                       note.noteColor, darkModeOn),
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(15.0),
                                     onTap: () {
@@ -246,110 +241,114 @@ class _ArchivePageState extends State<ArchivePage> {
                                       .toList();
                                 }
                                 return Container(
-                                  margin: EdgeInsets.all(5.0),
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                      color: NoteColor.getColor(
-                                          note.noteColor, darkModeOn),
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black26,
-                                            blurRadius: 1.0,
-                                            offset: new Offset(1, 1)),
-                                      ]),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        selectedPageColor = note.noteColor;
-                                      });
-                                      _showNoteReader(context, note);
-                                    },
-                                    // onLongPress: () =>
-                                    //     _showOptionsSheet(context, note),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Visibility(
-                                          visible: note.noteTitle.isNotEmpty,
-                                          child: Padding(
-                                            padding: EdgeInsets.all(5.0),
-                                            child: Text(
-                                              note.noteTitle,
-                                              style: TextStyle(
-                                                fontSize: 16.0,
-                                                color: darkModeOn &&
-                                                        note.noteColor == 0
-                                                    ? Colors.white
-                                                    : Colors.black,
+                                  margin: EdgeInsets.only(top: 10),
+                                  child: Card(
+                                    color: NoteColor.getColor(
+                                        note.noteColor, darkModeOn),
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          selectedPageColor = note.noteColor;
+                                        });
+                                        _showNoteReader(context, note);
+                                      },
+                                      // onLongPress: () =>
+                                      //     _showOptionsSheet(context, note),
+                                      child: Padding(
+                                        padding: kGlobalCardPadding,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Visibility(
+                                              visible:
+                                                  note.noteTitle.isNotEmpty,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(5.0),
+                                                child: Text(
+                                                  note.noteTitle,
+                                                  style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    color: darkModeOn &&
+                                                            note.noteColor == 0
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Text(
-                                            note.noteText,
-                                            style: TextStyle(
-                                              color: darkModeOn &&
-                                                      note.noteColor == 0
-                                                  ? Colors.white60
-                                                  : Colors.black38,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                        Visibility(
-                                          visible: note.noteList.contains('{'),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(5.0),
-                                            child: Container(
-                                              height: 50,
-                                              child: NotesListViewExt(
-                                                  noteListItems: _noteList,
-                                                  noteColor: note.noteColor),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                            alignment: Alignment.centerRight,
-                                            padding: EdgeInsets.all(5.0),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    note.noteLabel,
-                                                    style: TextStyle(
-                                                        color: darkModeOn &&
-                                                                note.noteColor ==
-                                                                    0
-                                                            ? Colors.white38
-                                                            : Colors.black38,
-                                                        fontSize: 12.0),
-                                                  ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Text(
+                                                note.noteText,
+                                                style: TextStyle(
+                                                  color: darkModeOn &&
+                                                          note.noteColor == 0
+                                                      ? Colors.white60
+                                                      : Colors.black38,
                                                 ),
-                                                Expanded(
-                                                  child: Text(
-                                                    Utility.formatDateTime(
-                                                        note.noteDate),
-                                                    textAlign: TextAlign.end,
-                                                    style: TextStyle(
-                                                        color: darkModeOn &&
-                                                                note.noteColor ==
-                                                                    0
-                                                            ? Colors.white38
-                                                            : Colors.black38,
-                                                        fontSize: 12.0),
-                                                  ),
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Visibility(
+                                              visible:
+                                                  note.noteList.contains('{'),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(5.0),
+                                                child: Container(
+                                                  height: 50,
+                                                  child: NotesListViewExt(
+                                                      noteListItems: _noteList,
+                                                      noteColor:
+                                                          note.noteColor),
                                                 ),
-                                              ],
-                                            )),
-                                      ],
+                                              ),
+                                            ),
+                                            Container(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                padding: EdgeInsets.all(5.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        note.noteLabel,
+                                                        style: TextStyle(
+                                                            color: darkModeOn &&
+                                                                    note.noteColor ==
+                                                                        0
+                                                                ? Colors.white38
+                                                                : Colors
+                                                                    .black38,
+                                                            fontSize: 12.0),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        Utility.formatDateTime(
+                                                            note.noteDate),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: TextStyle(
+                                                            color: darkModeOn &&
+                                                                    note.noteColor ==
+                                                                        0
+                                                                ? Colors.white38
+                                                                : Colors
+                                                                    .black38,
+                                                            fontSize: 12.0),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 );

@@ -18,7 +18,6 @@ import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -318,19 +317,6 @@ class _HomePageState extends State<HomePage> {
                                   child: Card(
                                     color: NoteColor.getColor(
                                         note.noteColor, darkModeOn),
-                                    // margin: EdgeInsets.only(
-                                    //     left: 5, right: 5, top: 10),
-                                    // padding: EdgeInsets.all(8.0),
-                                    // decoration: BoxDecoration(
-                                    //     color: NoteColor.getColor(
-                                    //         note.noteColor, darkModeOn),
-                                    //     borderRadius: BorderRadius.circular(10.0),
-                                    //     boxShadow: [
-                                    //       BoxShadow(
-                                    //           color: Colors.black26,
-                                    //           blurRadius: 1.0,
-                                    //           offset: new Offset(1, 1)),
-                                    //     ]),
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
