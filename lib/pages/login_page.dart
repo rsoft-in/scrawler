@@ -1,4 +1,5 @@
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
   late SharedPreferences loginPreferences;
   bool isLoading = false;
 
+  bool isDesktop = false;
+
   void _launchURL(String _url) async => await canLaunch(_url)
       ? await launch(_url)
       : throw 'Could not launch $_url';
@@ -38,10 +41,9 @@ class _LoginPageState extends State<LoginPage> {
       body: Padding(
         padding: kGlobalOuterPadding,
         child: SingleChildScrollView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          // physics:
+          //     BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Container(
-            height: MediaQuery.of(context).size.height,
             padding: EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -120,9 +122,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _restoreNote() async {
+    isDesktop = isDisplayDesktop(context);
     showModalBottomSheet(
         context: context,
         isDismissible: true,
+        constraints: isDesktop
+            ? BoxConstraints(maxWidth: 450, minWidth: 400)
+            : BoxConstraints(),
         builder: (context) {
           return Container(
             child: Padding(
@@ -171,11 +177,33 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: () {
                                   Navigator.pop(
                                       context, true); // Confirmation Dialog Pop
-                                  Navigator.pop(
-                                      context, true); // Login Page Pop
-                                  Navigator.of(context).push(CupertinoPageRoute(
-                                      builder: (context) =>
-                                          BackupRestorePage()));
+
+                                  if (isDesktop) {
+                                    Navigator.pop(context, true);
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return Container(
+                                            child: Dialog(
+                                              child: Container(
+                                                width: isDesktop
+                                                    ? 800
+                                                    : MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                child: BackupRestorePage(),
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                    //Login Page Pop
+                                  } else {
+                                    Navigator.pop(context, true);
+                                    Navigator.of(context).push(
+                                        CupertinoPageRoute(
+                                            builder: (context) =>
+                                                BackupRestorePage()));
+                                  }
                                 },
                                 child: Text('Yes'),
                               ),

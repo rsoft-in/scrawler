@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
@@ -33,6 +34,8 @@ class _ArchivePageState extends State<ArchivePage> {
   final dbHelper = DatabaseHelper.instance;
 
   int selectedPageColor = 1;
+
+  bool isDesktop = false;
 
   loadArchiveNotes() async {
     setState(() {
@@ -68,6 +71,7 @@ class _ArchivePageState extends State<ArchivePage> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+    isDesktop = isDisplayDesktop(context);
     return Scaffold(
       body: Container(
         padding: kGlobalOuterPadding,
@@ -95,7 +99,7 @@ class _ArchivePageState extends State<ArchivePage> {
                   : (hasData
                       ? (_viewType == ViewType.Grid
                           ? StaggeredGridView.countBuilder(
-                              crossAxisCount: 2,
+                              crossAxisCount: isDesktop ? 4 : 2,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 8,
                               // shrinkWrap: true,
@@ -525,10 +529,29 @@ class _ArchivePageState extends State<ArchivePage> {
   // }
 
   void _showNoteReader(BuildContext context, Notes _note) async {
-    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
-        builder: (BuildContext context) => new NoteReaderPage(
-              note: _note,
-            )));
-    if (res) loadArchiveNotes();
+    isDesktop = isDisplayDesktop(context);
+   if (isDesktop) {
+      bool res = await showDialog(
+          context: context,
+          builder: (context) {
+            return Container(
+              child: Dialog(
+                child: Container(
+                  width: isDesktop ? 800 : MediaQuery.of(context).size.width,
+                  child: NoteReaderPage(
+                    note: _note,
+                  ),
+                ),
+              ),
+            );
+          });
+      if (res) loadArchiveNotes();
+    } else {
+      bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+          builder: (BuildContext context) => new NoteReaderPage(
+                note: _note,
+              )));
+      if (res) loadArchiveNotes();
+    }
   }
 }

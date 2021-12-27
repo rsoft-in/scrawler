@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
@@ -29,6 +30,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   String currentEditingNoteId = "";
   List<String> _checkList = [];
   List<NoteListItem> _noteList = [];
+  bool isDesktop = false;
 
   int selectedPageColor = 0;
 
@@ -337,9 +339,13 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   void _showColorPalette(BuildContext context, Notes _note) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+    isDesktop = isDisplayDesktop(context);
     showModalBottomSheet(
         context: context,
         isDismissible: true,
+        constraints: isDesktop
+            ? BoxConstraints(maxWidth: 450, minWidth: 400)
+            : BoxConstraints(),
         builder: (context) {
           return Container(
             margin: EdgeInsets.only(bottom: 10),
@@ -411,9 +417,13 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   }
 
   void _confirmDelete() async {
+    isDesktop = isDisplayDesktop(context);
     showModalBottomSheet(
         context: context,
         isDismissible: true,
+        constraints: isDesktop
+            ? BoxConstraints(maxWidth: 450, minWidth: 400)
+            : BoxConstraints(),
         builder: (context) {
           return Container(
             child: Padding(

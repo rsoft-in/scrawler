@@ -57,9 +57,8 @@ class _AboutPageState extends State<AboutPage> {
       ),
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        // physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
-          height: MediaQuery.of(context).size.height,
           child: Padding(
             padding: kGlobalOuterPadding,
             child: Column(

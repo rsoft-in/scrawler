@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/archive_page.dart';
 import 'package:bnotes/pages/home_page.dart';
 import 'package:bnotes/pages/search_page.dart';
@@ -27,11 +28,12 @@ class _ScrawlAppState extends State<ScrawlApp> {
   ViewType viewType = ViewType.Tile;
   bool isAppLogged = false;
   String appPin = "";
+  bool openNav = false;
 
   bool isAndroid = UniversalPlatform.isAndroid;
   bool isIOS = UniversalPlatform.isIOS;
   bool isWeb = UniversalPlatform.isWeb;
-  bool isDesktop = UniversalPlatform.isDesktop;
+  bool isDesktop = false;
 
   late PageController _pageController;
   int _page = 0;
@@ -42,6 +44,8 @@ class _ScrawlAppState extends State<ScrawlApp> {
     new SearchPage(),
     new SettingsPage(),
   ];
+
+  String username = '';
 
   void onPageChanged(int page) {
     setState(() {
@@ -55,6 +59,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
       isAppLogged = sharedPreferences.getBool("is_logged") ?? false;
       appPin = sharedPreferences.getString("app_pin") ?? '';
       bool isTile = sharedPreferences.getBool("is_tile") ?? false;
+      username = sharedPreferences.getString('nc_userdisplayname') ?? '';
       print(appPin);
       viewType = isTile ? ViewType.Tile : ViewType.Grid;
     });
@@ -113,6 +118,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+    isDesktop = isDisplayDesktop(context);
     // SystemChrome.setSystemUIOverlayStyle(
     //   SystemUiOverlayStyle(
     //     statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
@@ -123,7 +129,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
     //   ),
     // );
 
-    if (isAndroid || isIOS) {
+    if (!isDesktop) {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: FlexColorScheme.themedSystemNavigationBar(
           context,
@@ -135,56 +141,51 @@ class _ScrawlAppState extends State<ScrawlApp> {
           onWillPop: () => Future.sync(onWillPop),
           child: Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: PreferredSize(
-              preferredSize: Size(MediaQuery.of(context).size.width, 56),
-              child: Visibility(
-                child: AppBar(
-                  title: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'images/bnotes-transparent.png',
-                        height: 50,
-                      ),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            kAppName,
-                            style: TextStyle(fontFamily: 'Raleway'),
-                          )),
-                    ],
+            appBar: AppBar(
+              title: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    'images/bnotes-transparent.png',
+                    height: 50,
                   ),
-                  actions: [
-                    Visibility(
-                      visible: viewType == ViewType.Tile && _page == 0,
-                      child: IconButton(
-                        icon: Icon(Icons.grid_view_outlined),
-                        onPressed: () {
-                          setState(() {
-                            viewType = ViewType.Grid;
-                            HomePage.staticGlobalKey.currentState!
-                                .toggleView(viewType);
-                          });
-                        },
-                      ),
-                    ),
-                    Visibility(
-                      visible: viewType == ViewType.Grid && _page == 0,
-                      child: IconButton(
-                        icon: Icon(Icons.view_agenda_outlined),
-                        onPressed: () {
-                          setState(() {
-                            viewType = ViewType.Tile;
-                            HomePage.staticGlobalKey.currentState!
-                                .toggleView(viewType);
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        kAppName,
+                        style: TextStyle(fontFamily: 'Raleway'),
+                      )),
+                ],
               ),
+              actions: [
+                Visibility(
+                  visible: viewType == ViewType.Tile && _page == 0,
+                  child: IconButton(
+                    icon: Icon(Icons.grid_view_outlined),
+                    onPressed: () {
+                      setState(() {
+                        viewType = ViewType.Grid;
+                        HomePage.staticGlobalKey.currentState!
+                            .toggleView(viewType);
+                      });
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: viewType == ViewType.Grid && _page == 0,
+                  child: IconButton(
+                    icon: Icon(Icons.view_agenda_outlined),
+                    onPressed: () {
+                      setState(() {
+                        viewType = ViewType.Tile;
+                        HomePage.staticGlobalKey.currentState!
+                            .toggleView(viewType);
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             body: PageView(
               physics: NeverScrollableScrollPhysics(),
@@ -257,7 +258,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.menu),
-                  label: 'Archive',
+                  label: 'More',
                 ),
               ],
               currentIndex: _page,
@@ -295,93 +296,243 @@ class _ScrawlAppState extends State<ScrawlApp> {
         //     ),
         //   ),
         // ),
-        body: WindowBorder(
-          color: Colors.transparent,
-          width: 1,
-          child: Row(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // SizedBox(
-              //   width: 200,
-              //   child: Container(
-              //     color: Colors.red,
-              //     child: Column(
-              //       children: [
-              //         WindowTitleBarBox(
-              //           child: MoveWindow(),
-              //         ),
-              //         // Expanded(child: Container()),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              // SizedBox(width: 50,),
+              Image.asset(
+                'images/bnotes-transparent.png',
+                height: 50,
+              ),
+              SizedBox(
+                width: 20,
+              ),
               Container(
-                color: darkModeOn ? kSecondaryDark : Colors.grey[100],
-                child: Column(
-                  children: [
-                    Container(
-                      padding: kGlobalOuterPadding,
-                      child: Image.asset(
-                        'images/bnotes-transparent.png',
-                        height: 50,
-                      ),
-                    ),
-                    Expanded(
-                      child: NavigationRail(
-                        backgroundColor:
-                            darkModeOn ? kSecondaryDark : Colors.grey[100],
-                        labelType: NavigationRailLabelType.selected,
-                        destinations: <NavigationRailDestination>[
-                          NavigationRailDestination(
-                            icon: Icon(Icons.notes_rounded),
-                            label: Text('Notes'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.archive_outlined),
-                            label: Text('Archive'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.search_rounded),
-                            label: Text('Search'),
-                          ),
-                          NavigationRailDestination(
-                            icon: Icon(Icons.settings_outlined),
-                            label: Text('Settings'),
-                          ),
-                        ],
-                        selectedIndex: _page,
-                        // onDestinationSelected: navigationTapped,
-                        onDestinationSelected: (selectedIndex) {
-                          setState(() {
-                            _page = selectedIndex;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: PageTransitionSwitcher(
-                        transitionBuilder:
-                            (child, animation, secondaryAnimation) {
-                          return FadeThroughTransition(
-                            animation: animation,
-                            secondaryAnimation: secondaryAnimation,
-                            child: child,
-                            fillColor:
-                                darkModeOn ? kScaffoldDark : Colors.white,
-                          );
-                        },
-                        child: _pageList[_page],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    kAppName,
+                    style: TextStyle(fontFamily: 'Raleway'),
+                  )),
             ],
+          ),
+          actions: [
+            Visibility(
+              visible: viewType == ViewType.Tile && _page == 0,
+              child: IconButton(
+                icon: Icon(Icons.grid_view_outlined),
+                onPressed: () {
+                  setState(() {
+                    viewType = ViewType.Grid;
+                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
+                  });
+                },
+              ),
+            ),
+            Visibility(
+              visible: viewType == ViewType.Grid && _page == 0,
+              child: IconButton(
+                icon: Icon(Icons.view_agenda_outlined),
+                onPressed: () {
+                  setState(() {
+                    viewType = ViewType.Tile;
+                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+        body: Container(
+          child: WindowBorder(
+            color: Colors.transparent,
+            width: 1,
+            child: Row(
+              children: [
+                // SizedBox(
+                //   width: 200,
+                //   child: Container(
+                //     color: Colors.red,
+                //     child: Column(
+                //       children: [
+                //         WindowTitleBarBox(
+                //           child: MoveWindow(),
+                //         ),
+                //         // Expanded(child: Container()),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // NavigationRail(
+                //   leading: openNav
+                //       ? SizedBox(
+                //           width: 100,
+                //           child: Column(
+                //             crossAxisAlignment: CrossAxisAlignment.start,
+                //             children: [
+                //               SizedBox(
+                //                 height: 50,
+                //               ),
+                //               Divider(),
+                //               Container(
+                //                 // child: TextButton.icon(
+                //                 //     onPressed: () {
+                //                 //       setState(() {
+                //                 //         openNav = !openNav;
+                //                 //         print(openNav);
+                //                 //       });
+                //                 //     },
+                //                 //     icon: Icon(Icons.arrow_back_ios_new),
+                //                 //     label: Text('data')),
+                //                 margin: EdgeInsets.only(left: 10),
+                //                 child: Row(
+                //                   children: [
+                //                     IconButton(
+                //                       icon: Icon(Icons.arrow_back_ios_new),
+                //                       onPressed: () {
+                //                         setState(() {
+                //                           openNav = !openNav;
+                //                           print(openNav);
+                //                         });
+                //                       },
+                //                     ),
+                //                     SizedBox(
+                //                       width: 10,
+                //                     ),
+                //                     Text(
+                //                       isAppLogged ? username : 'Guest',
+                //                       textAlign: TextAlign.end,
+                //                       overflow: TextOverflow.ellipsis,
+                //                     )
+                //                   ],
+                //                 ),
+                //               ),
+                //               Divider(),
+                //             ],
+                //           ),
+                //         )
+                //       : Column(
+                //           children: [
+                //             SizedBox(
+                //               height: 50,
+                //             ),
+                //             Divider(),
+                //             IconButton(
+                //               icon: Icon(Icons.arrow_forward_ios),
+                //               onPressed: () {
+                //                 setState(() {
+                //                   openNav = !openNav;
+                //                   print(openNav);
+                //                 });
+                //               },
+                //             ),
+                //             Divider(),
+                //           ],
+                //         ),
+                //   extended: openNav,
+                //   labelType: NavigationRailLabelType.none,
+                //   destinations: <NavigationRailDestination>[
+                //     NavigationRailDestination(
+                //       icon: Icon(Icons.notes_rounded),
+                //       label: Text('Notes'),
+                //     ),
+                //     NavigationRailDestination(
+                //       icon: Icon(Icons.archive_outlined),
+                //       label: Text('Archive'),
+                //     ),
+                //     NavigationRailDestination(
+                //       icon: Icon(Icons.search_rounded),
+                //       label: Text('Search'),
+                //     ),
+                //     NavigationRailDestination(
+                //       icon: Icon(Icons.menu),
+                //       label: Text('More'),
+                //     ),
+                //   ],
+                //   selectedIndex: _page,
+                //   // onDestinationSelected: navigationTapped,
+                //   onDestinationSelected: (selectedIndex) {
+                //     setState(() {
+                //       _page = selectedIndex;
+                //     });
+                //   },
+                // ),
+                Container(
+                  width: 250,
+                  child: Drawer(
+                    child: ListView(
+                      children: [
+                        // ListTile(
+                        //   leading: SizedBox(
+                        //     width: 0,
+                        //   ),
+                        //   title: Text(
+                        //     isAppLogged ? username : 'Guest',
+                        //   ),
+                        // ),
+                        ListTile(
+                          onTap: () {
+                            setState(() {
+                              _page = 0;
+                            });
+                          },
+                          leading: Icon(Icons.notes_rounded),
+                          title: Text('Notes'),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            setState(() {
+                              _page = 1;
+                            });
+                          },
+                          leading: Icon(Icons.archive_outlined),
+                          title: Text('Archive'),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            setState(() {
+                              _page = 2;
+                            });
+                          },
+                          leading: Icon(Icons.search_rounded),
+                          title: Text('Search'),
+                        ),
+                        ListTile(
+                          onTap: () {
+                            setState(() {
+                              _page = 3;
+                            });
+                          },
+                          leading: Icon(Icons.menu),
+                          title: Text('More'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: PageTransitionSwitcher(
+                          transitionBuilder:
+                              (child, animation, secondaryAnimation) {
+                            return FadeThroughTransition(
+                              animation: animation,
+                              secondaryAnimation: secondaryAnimation,
+                              child: child,
+                            );
+                          },
+                          child: _pageList[_page],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
@@ -31,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isAndroid = UniversalPlatform.isAndroid;
   bool isIOS = UniversalPlatform.isIOS;
   bool isWeb = UniversalPlatform.isWeb;
-  bool isDesktop = UniversalPlatform.isDesktop;
+  bool isDesktop = false;
 
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -53,12 +54,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    isDesktop = isDisplayDesktop(context);
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          // physics:
+          //     BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -125,14 +127,44 @@ class _SettingsPageState extends State<SettingsPage> {
                           : InkWell(
                               borderRadius: BorderRadius.circular(15.0),
                               onTap: () async {
-                                final result = await Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                        builder: (context) => LoginPage()));
-                                if (result == true)
-                                  setState(() {
-                                    isAppLogged = true;
-                                    getPref();
-                                  });
+                                if (isDesktop) {
+                                  final result = await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return Container(
+                                          child: Dialog(
+                                            child: Container(
+                                              width: isDesktop
+                                                  ? 800
+                                                  : MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                              child: LoginPage(),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                  if (result == true)
+                                    setState(() {
+                                      isAppLogged = true;
+                                      getPref();
+                                    });
+                                } else {
+                                  final result = await Navigator.of(context)
+                                      .push(CupertinoPageRoute(
+                                          builder: (context) => LoginPage()));
+                                  setState(() {});
+                                  if (result == true)
+                                    setState(() {
+                                      isAppLogged = true;
+                                      getPref();
+                                    });
+                                }
+                                // if (result == true)
+                                //   setState(() {
+                                //     isAppLogged = true;
+                                //     getPref();
+                                //   });
                               },
                               child: ListTile(
                                 leading: CircleAvatar(
@@ -150,11 +182,31 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (context) => LabelsPage(
-                                    noteid: '',
-                                    notelabel: '',
-                                  )));
+                          if (isDesktop) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    child: Dialog(
+                                      child: Container(
+                                        width: isDesktop
+                                            ? 800
+                                            : MediaQuery.of(context).size.width,
+                                        child: LabelsPage(
+                                          noteid: '',
+                                          notelabel: '',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                });
+                          } else {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => LabelsPage(
+                                      noteid: '',
+                                      notelabel: '',
+                                    )));
+                          }
                         },
                         child: ListTile(
                           leading: CircleAvatar(
@@ -172,32 +224,28 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () async {
-                          if (isAndroid) {
+                          if (isDesktop) {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    child: Dialog(
+                                      child: Container(
+                                        width: isDesktop
+                                            ? 800
+                                            : MediaQuery.of(context).size.width,
+                                        child: BackupRestorePage(),
+                                      ),
+                                    ),
+                                  );
+                                });
+                          } else {
                             final res = await Navigator.of(context).push(
                                 CupertinoPageRoute(
                                     builder: (context) => BackupRestorePage()));
                             if (res == "yes") {
                               // loadNotes();
                             }
-                          }
-                          if (isDesktop) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.all(
-                                        MediaQuery.of(context).size.width * .1),
-                                    child: Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Container(
-                                        margin: const EdgeInsets.all(8.0),
-                                        child: BackupRestorePage(),
-                                      ),
-                                    ),
-                                  );
-                                });
                           }
                         },
                         child: ListTile(
@@ -238,28 +286,24 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () async {
-                          if (isAndroid || isIOS) {
-                            Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => AboutPage()));
-                          }
                           if (isDesktop) {
                             showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return Padding(
-                                    padding: EdgeInsets.all(
-                                        MediaQuery.of(context).size.width * .1),
+                                  return Container(
                                     child: Dialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
                                       child: Container(
-                                        margin: const EdgeInsets.all(8.0),
+                                        width: isDesktop
+                                            ? 800
+                                            : MediaQuery.of(context).size.width,
                                         child: AboutPage(),
                                       ),
                                     ),
                                   );
                                 });
+                          } else {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => AboutPage()));
                           }
                         },
                         child: ListTile(
@@ -287,6 +331,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
+        constraints: BoxConstraints(maxWidth: 800, minWidth: 300),
         builder: (context) {
           return Container(
             child: Padding(
@@ -330,6 +375,9 @@ class _SettingsPageState extends State<SettingsPage> {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
+        constraints: isDesktop
+            ? BoxConstraints(maxWidth: 450, minWidth: 400)
+            : BoxConstraints(),
         builder: (context) {
           return Container(
             child: Padding(
