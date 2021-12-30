@@ -7,9 +7,11 @@ import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/about_page.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
+import 'package:bnotes/pages/biometric_page.dart';
 import 'package:bnotes/pages/login_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -25,6 +27,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isAppLogged = false;
   bool isAppUnlocked = false;
   bool isPinRequired = false;
+  bool useBiometric = false;
   late String username;
   late String useremail;
   Uint8List? avatarData;
@@ -34,22 +37,74 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isWeb = UniversalPlatform.isWeb;
   bool isDesktop = false;
 
+  int themeModeState = 0;
+  String themeModeStateName = '';
+  ThemeMode themeMode = ThemeMode.system;
+  String _themeModeName = 'System';
+
   getPref() async {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       isAppUnlocked = sharedPreferences.getBool("is_app_unlocked") ?? false;
       isPinRequired = sharedPreferences.getBool("is_pin_required") ?? false;
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
+      themeModeState = sharedPreferences.getInt('themeMode')!;
+      useBiometric = sharedPreferences.getBool('use_biometric') ?? false;
       username = sharedPreferences.getString('nc_userdisplayname') ?? '';
       useremail = sharedPreferences.getString('nc_useremail') ?? '';
       avatarData = base64Decode(sharedPreferences.getString('nc_avatar') ?? '');
+    });
+    getThemeModeName();
+  }
+
+  setThemeMode(BuildContext context, String value) {
+    print(value);
+    setState(() {
+      if (value == '0') {
+        themeMode = ThemeMode.light;
+        sharedPreferences.setInt('themeMode', 0);
+        print(sharedPreferences.getInt('themeMode'));
+        Phoenix.rebirth(context);
+      } else if (value == '1') {
+        themeMode = ThemeMode.dark;
+        sharedPreferences.setInt('themeMode', 1);
+        print(sharedPreferences.getInt('themeMode'));
+        Phoenix.rebirth(context);
+      } else {
+        themeMode = ThemeMode.system;
+        sharedPreferences.setInt('themeMode', 2);
+        print(sharedPreferences.getInt('themeMode'));
+        Phoenix.rebirth(context);
+      }
+      getThemeModeName();
+    });
+  }
+
+  void getThemeModeName() async {
+    int _themeMode = 2;
+    setState(() {
+      _themeMode = sharedPreferences.getInt('themeMode') ?? 2;
+      switch (_themeMode) {
+        case 0:
+          _themeModeName = 'Light';
+          break;
+        case 1:
+          _themeModeName = 'Dark';
+          break;
+        case 2:
+          _themeModeName = 'System';
+          break;
+        default:
+          _themeModeName = 'System';
+          break;
+      }
     });
   }
 
   @override
   void initState() {
-    super.initState();
     getPref();
+    super.initState();
   }
 
   @override
@@ -172,7 +227,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                   foregroundColor: Colors.blue,
                                   child: Icon(Icons.person_outline),
                                 ),
-                                title: Text('Nextcloud Login'),
+                                title: Text(
+                                  'Nextcloud Login',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
                                 subtitle: Text('Sync Notes to cloud'),
                               ),
                             )),
@@ -214,7 +272,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             foregroundColor: Colors.purple,
                             child: Icon(Icons.label_outline),
                           ),
-                          title: Text('Labels'),
+                          title: Text(
+                            'Labels',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                           subtitle: Text('Create labels'),
                         ),
                       ),
@@ -254,30 +315,168 @@ class _SettingsPageState extends State<SettingsPage> {
                             foregroundColor: Colors.teal,
                             child: Icon(Icons.archive_outlined),
                           ),
-                          title: Text('Backup & Restore'),
+                          title: Text(
+                            'Backup & Restore',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                           subtitle: Text('Bring back the dead'),
                         ),
                       ),
                     ),
+                    Divider(),
                     Padding(
                       padding: kGlobalCardPadding,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15.0),
-                        onTap: () {
-                          if (isPinRequired) {
-                            showAppLockMenu();
-                          } else {
-                            callAppLock();
-                          }
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.red[100],
-                            foregroundColor: Colors.red,
-                            child: Icon(Icons.lock_outline),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.red[100],
+                          foregroundColor: Colors.red,
+                          child: Icon(Icons.lock_outline),
+                        ),
+                        title: Text(
+                          'App Lock',
+                          style: TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text('Secure your notes'),
+                      ),
+                    ),
+                    if (!isPinRequired)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15.0),
+                          onTap: () {
+                            if (isPinRequired) {
+                              showAppLockMenu();
+                            } else {
+                              callAppLock();
+                            }
+                          },
+                          child: ListTile(
+                            leading: SizedBox(
+                              width: 20,
+                            ),
+                            title: Text(
+                              'Set Pin',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
                           ),
-                          title: Text('App Lock'),
-                          subtitle: Text('Secure your notes'),
+                        ),
+                      ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5.0),
+                      child: ListTile(
+                        leading: SizedBox(
+                          width: 20,
+                        ),
+                        title: Text(
+                          'Use Biometric',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                        ),
+                        trailing: UniversalPlatform.isIOS
+                            ? CupertinoSwitch(
+                                value: useBiometric,
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value) {
+                                      confirmBiometrics();
+                                    }
+                                    print(useBiometric);
+                                  });
+                                },
+                              )
+                            : Switch(
+                                value: useBiometric,
+                                onChanged: (value) {
+                                  setState(() {
+                                    useBiometric = value;
+                                    if (value) {
+                                      confirmBiometrics();
+                                    } else {
+                                      sharedPreferences.setBool(
+                                          'use_biometric', false);
+                                    }
+                                    print(useBiometric);
+                                  });
+                                },
+                              ),
+                      ),
+                    ),
+                    if (isPinRequired)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            callAppLock();
+                          },
+                          child: ListTile(
+                            leading: SizedBox(
+                              width: 20,
+                            ),
+                            title: Text(
+                              'Reset Passcode',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (isPinRequired)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            unSetAppLock();
+                          },
+                          child: ListTile(
+                            leading: SizedBox(
+                              width: 20,
+                            ),
+                            title: Text(
+                              'Remove App lock',
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                      ),
+                    Divider(),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        child: PopupMenuButton(
+                          padding: EdgeInsets.all(50),
+                          tooltip: 'Choose Theme',
+                          offset: Offset(100, 0),
+                          itemBuilder: (_) => <PopupMenuItem<String>>[
+                            new PopupMenuItem<String>(
+                                child: const Text('Light'), value: '0'),
+                            new PopupMenuItem<String>(
+                                child: const Text('Dark'), value: '1'),
+                            new PopupMenuItem<String>(
+                                child: const Text('System'), value: '2'),
+                          ],
+                          onSelected: (value) =>
+                              setThemeMode(context, value.toString()),
+                          child: ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.orange[100],
+                              foregroundColor: Colors.orange,
+                              child: Icon(Icons.dark_mode_outlined),
+                            ),
+                            title: Text('App Theme'),
+                            subtitle: Text(_themeModeName),
+                            trailing: Icon(Icons.keyboard_arrow_down),
+                          ),
                         ),
                       ),
                     ),
@@ -312,7 +511,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             foregroundColor: Colors.grey,
                             child: Icon(Icons.info_outline_rounded),
                           ),
-                          title: Text('About'),
+                          title: Text(
+                            'About',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
                           subtitle: Text('Know the Team'),
                         ),
                       ),
@@ -325,6 +527,20 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  void confirmBiometrics() async {
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new BiometricPage()));
+    setState(() {
+      if (res) {
+        sharedPreferences.setBool('use_biometric', true);
+        useBiometric = true;
+      } else {
+        sharedPreferences.setBool('use_biometric', false);
+        useBiometric = false;
+      }
+    });
   }
 
   void showAppLockMenu() {

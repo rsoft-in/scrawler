@@ -4,12 +4,16 @@ import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/theme.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
+import 'pages/biometric_page.dart';
+
+late SharedPreferences prefs;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isDesktop) {
@@ -22,7 +26,9 @@ void main() {
       appWindow.title = "scrawl";
     });
   }
-  runApp(MyApp());
+  runApp(Phoenix(
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -32,6 +38,38 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
+
+  @override
+  void initState() {
+    getprefs();
+    super.initState();
+  }
+
+  getprefs() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getInt('themeMode') != null) {
+        switch (prefs.getInt('themeMode')) {
+          case 0:
+            themeMode = ThemeMode.light;
+            break;
+          case 1:
+            themeMode = ThemeMode.dark;
+            break;
+          case 2:
+            themeMode = ThemeMode.system;
+            break;
+          default:
+            themeMode = ThemeMode.system;
+            break;
+        }
+      } else {
+        themeMode = ThemeMode.system;
+        prefs.setInt('themeMode', 0);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,17 +91,19 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  late SharedPreferences prefs;
   bool isAppUnlocked = false;
   bool isPinRequired = false;
+  bool useBiometric = false;
 
   getPreferences() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       isAppUnlocked = prefs.getBool("is_app_unlocked") ?? false;
       isPinRequired = prefs.getBool("is_pin_required") ?? false;
+      useBiometric = prefs.getBool('use_biometric') ?? false;
       print(isAppUnlocked);
       print(isPinRequired);
+
       if (isPinRequired) {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
@@ -71,6 +111,8 @@ class _StartPageState extends State<StartPage> {
                   new AppLockPage(appLockState: AppLockState.CONFIRM),
             ),
             (Route<dynamic> route) => false);
+      } else if (useBiometric) {
+        confirmBiometrics();
       } else {
         Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
@@ -78,6 +120,20 @@ class _StartPageState extends State<StartPage> {
             (Route<dynamic> route) => false);
       }
     });
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void confirmBiometrics() async {
+    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new BiometricPage()));
+    if (res)
+      Navigator.of(context).pushAndRemoveUntil(
+          new MaterialPageRoute(
+            builder: (BuildContext context) => new ScrawlApp(),
+          ),
+          (Route<dynamic> route) => false);
   }
 
   @override

@@ -30,7 +30,7 @@ ThemeData themeDark() {
   return FlexThemeData.dark(
     scheme: usedScheme,
     surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-    blendLevel: 25,
+    blendLevel: 10,
     appBarOpacity: 0.5,
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,

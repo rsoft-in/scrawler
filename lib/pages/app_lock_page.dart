@@ -4,6 +4,7 @@ import 'package:bnotes/pages/app.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLockPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _AppLockPageState extends State<AppLockPage> {
   String pinNumber = '';
   String pinNumberConfirmed = '';
   bool isAppUnlocked = false;
+  bool useBiometric = false;
   String helperText = "";
   final String SET_PIN = 'Set your PIN';
   final String CONFIRM_PIN = 'Confirm PIN';
@@ -31,6 +33,7 @@ class _AppLockPageState extends State<AppLockPage> {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       isAppUnlocked = prefs.getBool("is_app_unlocked") ?? false;
+      useBiometric = prefs.getBool('use_biometric') ?? false;
     });
   }
 
@@ -49,6 +52,7 @@ class _AppLockPageState extends State<AppLockPage> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+
     return Scaffold(
       body: Column(
         children: [
