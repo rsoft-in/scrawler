@@ -50,172 +50,156 @@ class _AppLockPageState extends State<AppLockPage> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: kAccentColor,
       body: Column(
         children: [
           SizedBox(
             height: 200,
           ),
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: darkModeOn ? kSecondaryDark : Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(15),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black38,
-                  blurRadius: 25.0,
-                  spreadRadius: 5.0,
-                  offset: Offset(
-                    15.0,
-                    15.0,
+          Card(
+            margin: EdgeInsets.zero,
+            child: Container(
+              alignment: Alignment.center,
+              height: MediaQuery.of(context).size.height - 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Text(
+                      helperText,
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                )
-              ],
-            ),
-            height: MediaQuery.of(context).size.height - 200,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: kGlobalOuterPadding,
-                  child: Text(
-                    helperText,
-                    style: TextStyle(fontSize: 18),
+                  Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PinDots(
+                          isFilled: pinNumber.length > 0,
+                        ),
+                        PinDots(
+                          isFilled: pinNumber.length > 1,
+                        ),
+                        PinDots(
+                          isFilled: pinNumber.length > 2,
+                        ),
+                        PinDots(
+                          isFilled: pinNumber.length > 3,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: kGlobalOuterPadding,
-                  child: Row(
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      PinDots(
-                        isFilled: pinNumber.length > 0,
+                      PinButton(
+                        onTap: () => setPin('1'),
+                        child: Text(
+                          '1',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                      PinDots(
-                        isFilled: pinNumber.length > 1,
+                      PinButton(
+                        onTap: () => setPin('2'),
+                        child: Text(
+                          '2',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                      PinDots(
-                        isFilled: pinNumber.length > 2,
-                      ),
-                      PinDots(
-                        isFilled: pinNumber.length > 3,
+                      PinButton(
+                        onTap: () => setPin('3'),
+                        child: Text(
+                          '3',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PinButton(
-                      onTap: () => setPin('1'),
-                      child: Text(
-                        '1',
-                        style: TextStyle(fontSize: 18),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PinButton(
+                        onTap: () => setPin('4'),
+                        child: Text(
+                          '4',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('2'),
-                      child: Text(
-                        '2',
-                        style: TextStyle(fontSize: 18),
+                      PinButton(
+                        onTap: () => setPin('5'),
+                        child: Text(
+                          '5',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('3'),
-                      child: Text(
-                        '3',
-                        style: TextStyle(fontSize: 18),
+                      PinButton(
+                        onTap: () => setPin('6'),
+                        child: Text(
+                          '6',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PinButton(
-                      onTap: () => setPin('4'),
-                      child: Text(
-                        '4',
-                        style: TextStyle(fontSize: 18),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PinButton(
+                        onTap: () => setPin('7'),
+                        child: Text(
+                          '7',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('5'),
-                      child: Text(
-                        '5',
-                        style: TextStyle(fontSize: 18),
+                      PinButton(
+                        onTap: () => setPin('8'),
+                        child: Text(
+                          '8',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('6'),
-                      child: Text(
-                        '6',
-                        style: TextStyle(fontSize: 18),
+                      PinButton(
+                        onTap: () => setPin('9'),
+                        child: Text(
+                          '9',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PinButton(
-                      onTap: () => setPin('7'),
-                      child: Text(
-                        '7',
-                        style: TextStyle(fontSize: 18),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: widget.appLockState == AppLockState.SET,
+                        child: FunctionButton(
+                            onTap: () => Navigator.pop(context, 'no'),
+                            child: Icon(Icons.arrow_back)),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('8'),
-                      child: Text(
-                        '8',
-                        style: TextStyle(fontSize: 18),
+                      Visibility(
+                          visible: widget.appLockState != AppLockState.SET,
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                          )),
+                      PinButton(
+                        onTap: () => setPin('0'),
+                        child: Text(
+                          '0',
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
-                    ),
-                    PinButton(
-                      onTap: () => setPin('9'),
-                      child: Text(
-                        '9',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Visibility(
-                      visible: widget.appLockState == AppLockState.SET,
-                      child: FunctionButton(
-                          onTap: () => Navigator.pop(context, 'no'),
-                          child: Icon(Icons.arrow_back)),
-                    ),
-                    Visibility(
-                        visible: widget.appLockState != AppLockState.SET,
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                        )),
-                    PinButton(
-                      onTap: () => setPin('0'),
-                      child: Text(
-                        '0',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    FunctionButton(
-                        onTap: () => deleteDigit(),
-                        child: Icon(LineIcons.backspace)),
-                  ],
-                ),
-              ],
+                      FunctionButton(
+                          onTap: () => deleteDigit(),
+                          child: Icon(Icons.backspace_outlined)),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

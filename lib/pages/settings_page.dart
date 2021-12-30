@@ -259,28 +259,28 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
-                    // Padding(
-                    //   padding: kGlobalCardPadding,
-                    //   child: InkWell(
-                    //     borderRadius: BorderRadius.circular(15.0),
-                    //     onTap: () {
-                    //       if (isPinRequired) {
-                    //         showAppLockMenu();
-                    //       } else {
-                    //         callAppLock();
-                    //       }
-                    //     },
-                    //     child: ListTile(
-                    //       leading: CircleAvatar(
-                    //         backgroundColor: Colors.red[100],
-                    //         foregroundColor: Colors.red,
-                    //         child: Icon(Icons.lock_outline),
-                    //       ),
-                    //       title: Text('App Lock'),
-                    //       subtitle: Text('Secure your notes'),
-                    //     ),
-                    //   ),
-                    // ),
+                    Padding(
+                      padding: kGlobalCardPadding,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(15.0),
+                        onTap: () {
+                          if (isPinRequired) {
+                            showAppLockMenu();
+                          } else {
+                            callAppLock();
+                          }
+                        },
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.red[100],
+                            foregroundColor: Colors.red,
+                            child: Icon(Icons.lock_outline),
+                          ),
+                          title: Text('App Lock'),
+                          subtitle: Text('Secure your notes'),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: kGlobalCardPadding,
                       child: InkWell(
