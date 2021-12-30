@@ -1,128 +1,49 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'constants.dart';
 
+const FlexScheme usedScheme = FlexScheme.blueWhale;
+
 ThemeData theme() {
-  return ThemeData(
-    primaryColor: kPrimaryColor,
-    primarySwatch: Colors.teal,
-    appBarTheme: AppBarTheme(
-      color: Colors.white,
-      elevation: 0,
-      iconTheme: IconThemeData(color: Colors.black),
-      titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.black),
+  return FlexThemeData.light(
+    scheme: usedScheme,
+    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
+    blendLevel: 40,
+    appBarOpacity: 0.5,
+    appBarStyle: FlexAppBarStyle.surface,
+    useSubThemes: true,
+    transparentStatusBar: true,
+    subThemesData: FlexSubThemesData(
+      elevatedButtonRadius: 25.0,
+      textButtonRadius: 25.0,
+      outlinedButtonRadius: 25.0,
+      cardRadius: 10.0,
+      bottomNavigationBarOpacity: 0.5,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: kAccentColor,
-      elevation: 0,
-      focusElevation: 0,
-      hoverElevation: 0,
-      highlightElevation: 0,
-      splashColor: kPrimaryColor,
-      foregroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.0),
-        ),
-      ),
-    ),
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    scaffoldBackgroundColor: Colors.white,
-    backgroundColor: Colors.white,
-    dividerColor: Colors.black,
-    cardTheme: CardTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        primary: Colors.black,
-        backgroundColor: Colors.black12,
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-      ),
-    ),
-    snackBarTheme: SnackBarThemeData(
-      contentTextStyle: TextStyle(color: Colors.white),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal)
-        .copyWith(secondary: kAccentColor),
-    checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.all(Colors.black),
-      checkColor: MaterialStateProperty.all(Colors.white),
-    ),
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
   );
 }
 
 ThemeData themeDark() {
-  return ThemeData(
-    backgroundColor: Color(0xFF121212),
-    primarySwatch: Colors.teal,
-    appBarTheme: AppBarTheme(
-      color: Color(0xFF121212),
-      elevation: 0,
-      iconTheme: IconThemeData(color: Colors.white),
-      titleTextStyle: TextStyle(fontSize: 20.0, color: Colors.white),
+  return FlexThemeData.dark(
+    scheme: usedScheme,
+    surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+    blendLevel: 25,
+    appBarOpacity: 0.5,
+    appBarStyle: FlexAppBarStyle.surface,
+    useSubThemes: true,
+    transparentStatusBar: true,
+    subThemesData: FlexSubThemesData(
+      elevatedButtonRadius: 25.0,
+      textButtonRadius: 25.0,
+      outlinedButtonRadius: 25.0,
+      cardRadius: 10.0,
+      bottomNavigationBarOpacity: 0.5,
+      inputDecoratorBorderType: FlexInputBorderType.outline,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: kPrimaryColor,
-      elevation: 0,
-      focusElevation: 0,
-      hoverElevation: 0,
-      highlightElevation: 0,
-      foregroundColor: kSecondaryDark,
-      splashColor: kAccentColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.0),
-        ),
-      ),
-    ),
-    dividerColor: Colors.white,
-    bottomAppBarColor: kSecondaryDark,
-    visualDensity: VisualDensity.adaptivePlatformDensity,
-    cardTheme: CardTheme(
-      color: kSecondaryDark,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-    ),
-    textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(
-        primary: Colors.white,
-        backgroundColor: Colors.black26,
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 25.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-      ),
-    ),
-    checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.all(Colors.white),
-      checkColor: MaterialStateProperty.all(Colors.black),
-    ),
-    scaffoldBackgroundColor: Color(0xFF121212),
-    navigationRailTheme: NavigationRailThemeData(
-        unselectedIconTheme: IconThemeData(color: Colors.white)),
-    snackBarTheme: SnackBarThemeData(
-      contentTextStyle: TextStyle(color: Colors.white),
-      behavior: SnackBarBehavior.floating,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-    ),
-    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.teal).copyWith(
-      secondary: kPrimaryColor,
-      brightness: Brightness.dark,
-    ),
+    visualDensity: FlexColorScheme.comfortablePlatformDensity,
   );
 }
 
