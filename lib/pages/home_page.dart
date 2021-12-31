@@ -16,7 +16,6 @@ import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -216,11 +215,7 @@ class _HomePageState extends State<HomePage> {
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       fontSize: 20.0,
-                                                      color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
-                                                          ? Colors.white
-                                                          : Colors.black),
+                                                      color: Colors.black),
                                                 ),
                                               ),
                                             ),
@@ -233,11 +228,7 @@ class _HomePageState extends State<HomePage> {
                                                   maxLines: 6,
                                                   overflow: TextOverflow.fade,
                                                   style: TextStyle(
-                                                      color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
-                                                          ? Colors.white60
-                                                          : Colors.black38),
+                                                      color: Colors.black38),
                                                 ),
                                               ),
                                             ),
@@ -269,22 +260,14 @@ class _HomePageState extends State<HomePage> {
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
-                                                        color: darkModeOn &&
-                                                                note.noteColor ==
-                                                                    0
-                                                            ? Colors.white38
-                                                            : Colors.black38,
+                                                        color: Colors.black38,
                                                         fontSize: 12.0),
                                                   )),
                                                   Text(
                                                     Utility.formatDateTime(
                                                         note.noteDate),
                                                     style: TextStyle(
-                                                        color: darkModeOn &&
-                                                                note.noteColor ==
-                                                                    0
-                                                            ? Colors.white38
-                                                            : Colors.black38,
+                                                        color: Colors.black38,
                                                         fontSize: 12.0),
                                                   ),
                                                 ],
