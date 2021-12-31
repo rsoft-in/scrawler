@@ -156,8 +156,8 @@ class _HomePageState extends State<HomePage> {
                               crossAxisCount: isDesktop ? 5 : 2,
                               crossAxisSpacing: 8,
                               mainAxisSpacing: 0,
-                              // physics: BouncingScrollPhysics(
-                              //     parent: AlwaysScrollableScrollPhysics()),
+                              physics: BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics()),
                               itemCount: notesList.length,
                               staggeredTileBuilder: (index) {
                                 return StaggeredTile.count(

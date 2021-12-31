@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
       isAppUnlocked = sharedPreferences.getBool("is_app_unlocked") ?? false;
       isPinRequired = sharedPreferences.getBool("is_pin_required") ?? false;
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
-      themeModeState = sharedPreferences.getInt('themeMode')!;
+      themeModeState = sharedPreferences.getInt('themeMode') ?? 2;
       useBiometric = sharedPreferences.getBool('use_biometric') ?? false;
       username = sharedPreferences.getString('nc_userdisplayname') ?? '';
       useremail = sharedPreferences.getString('nc_useremail') ?? '';

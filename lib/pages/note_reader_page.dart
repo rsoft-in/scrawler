@@ -12,8 +12,10 @@ import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoteReaderPage extends StatefulWidget {
   final Notes note;
@@ -77,12 +79,13 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+    print(note.toJson());
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
         backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
         appBar: AppBar(
-          elevation: 1,
+          elevation: 1.5,
           backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
           leading: IconButton(
             onPressed: () => Navigator.pop(context, true),
@@ -242,6 +245,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 ],
               )
             : SingleChildScrollView(
+                controller: scrollController,
                 child: Container(
                   child: Column(
                     children: [
@@ -269,12 +273,56 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                           padding: kGlobalOuterPadding,
                           margin: EdgeInsets.only(left: 8),
                           alignment: Alignment.centerLeft,
-                          child: HtmlWidget(
-                            note.noteText.replaceAll('\n', '<br>'),
-                            // textAlign: TextAlign.start,
-                            textStyle: TextStyle(
-                              color: Colors.black,
+                          child: MarkdownBody(
+                            styleSheet: MarkdownStyleSheet(
+                              a: TextStyle(
+                                  color: Colors.purple,
+                                  decoration: TextDecoration.underline,
+                                  fontWeight: FontWeight.w600),
+                              p: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
+                            selectable: true,
+                            shrinkWrap: true,
+                            onTapLink: (text, href, title) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Attention!'),
+                                      content:
+                                          Text('Do you want to open the link?'),
+                                      actions: [
+                                        OutlinedButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('No'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () async {
+                                            if (await canLaunch(href!)) {
+                                              await launch(
+                                                href,
+                                                forceSafariVC: false,
+                                                forceWebView: false,
+                                              );
+                                              Navigator.pop(context);
+                                            } else {
+                                              throw 'Could not launch';
+                                            }
+                                          },
+                                          child: Text('Yes'),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            data: note.noteText,
+                            softLineBreak: true,
+                            fitContent: true,
                           ),
                         ),
                       ),
