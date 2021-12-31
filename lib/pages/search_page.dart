@@ -65,9 +65,9 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.all(6.0),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.search_rounded,
-                  ),
+                  // Icon(
+                  //   Icons.search_rounded,
+                  // ),
                   SizedBox(
                     width: 10,
                   ),
@@ -75,6 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                       child: TextField(
                     controller: _searchController,
                     focusNode: searchFocusNode,
+                    decoration: InputDecoration(hintText: 'Search'),
                     onChanged: (value) => loadNotes(value),
                   )),
                   SizedBox(
@@ -103,9 +104,7 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(LineIcons.search,
-                          size: 120,
-                          color: darkModeOn ? kAccentColor : kPrimaryColor),
+                      Icon(Icons.search, size: 120),
                       Text(
                         'Type to start searching',
                         style: TextStyle(
