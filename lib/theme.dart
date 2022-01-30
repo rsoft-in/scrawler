@@ -10,7 +10,7 @@ ThemeData theme() {
   return FlexThemeData.light(
     scheme: usedScheme,
     surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-    blendLevel: 40,
+    blendLevel: 0,
     appBarOpacity: 0.5,
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,
@@ -20,6 +20,7 @@ ThemeData theme() {
       textButtonRadius: 25.0,
       outlinedButtonRadius: 25.0,
       cardRadius: 10.0,
+      cardElevation: .5,
       bottomNavigationBarOpacity: 0.5,
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -30,7 +31,7 @@ ThemeData themeDark() {
   return FlexThemeData.dark(
     scheme: usedScheme,
     surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-    blendLevel: 10,
+    blendLevel: 0,
     appBarOpacity: 0.5,
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,
@@ -40,6 +41,7 @@ ThemeData themeDark() {
       textButtonRadius: 25.0,
       outlinedButtonRadius: 25.0,
       cardRadius: 10.0,
+      cardElevation: 1,
       bottomNavigationBarOpacity: 0.5,
       inputDecoratorBorderType: FlexInputBorderType.outline,
     ),

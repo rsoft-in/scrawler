@@ -235,7 +235,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       ),
       extendBodyBehindAppBar: true,
       body: SingleChildScrollView(
-        // physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         child: Container(
           padding: EdgeInsets.all(30.0),
           child: Column(

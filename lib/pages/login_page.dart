@@ -61,6 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                 TextField(
                   controller: _hostController,
                   keyboardType: TextInputType.url,
+                  autocorrect: false,
                   decoration: InputDecoration(
                     icon: Icon(Icons.http),
                   ),
@@ -70,7 +71,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 TextField(
                   controller: _usernameController,
-                  keyboardType: TextInputType.url,
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
                   decoration: InputDecoration(
                     icon: Icon(Icons.person_outline),
                   ),
@@ -82,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _passwordController,
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
+                  autocorrect: false,
                   decoration: InputDecoration(
                     icon: Icon(Icons.password),
                   ),

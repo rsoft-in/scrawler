@@ -136,6 +136,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
+
     isDesktop = isDisplayDesktop(context);
     return Scaffold(
       body: Container(
@@ -649,6 +650,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
+                          SizedBox(
+                            height: 30,
+                          ),
                         ],
                       ),
                     ),
@@ -777,6 +781,7 @@ class _HomePageState extends State<HomePage> {
             : BoxConstraints(),
         builder: (context) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10.0),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
@@ -823,7 +828,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),

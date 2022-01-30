@@ -9,6 +9,7 @@ import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/biometric_page.dart';
 import 'package:bnotes/pages/login_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -110,6 +111,9 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
+
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -120,7 +124,7 @@ class _SettingsPageState extends State<SettingsPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                height: 80,
+                height: UniversalPlatform.isAndroid ? 80 : 100,
               ),
               Padding(
                 padding: kGlobalOuterPadding,
@@ -323,127 +327,131 @@ class _SettingsPageState extends State<SettingsPage> {
                         ),
                       ),
                     ),
-                    Divider(),
                     Padding(
                       padding: kGlobalCardPadding,
-                      child: ListTile(
+                      child: ExpansionTile(
+                        subtitle: Text('Secure your notes'),
                         leading: CircleAvatar(
                           backgroundColor: Colors.red[100],
                           foregroundColor: Colors.red,
                           child: Icon(Icons.lock_outline),
                         ),
-                        title: Text(
-                          'App Lock',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text('Secure your notes'),
-                      ),
-                    ),
-                    if (!isPinRequired)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(15.0),
-                          onTap: () {
-                            if (isPinRequired) {
-                              showAppLockMenu();
-                            } else {
-                              callAppLock();
-                            }
-                          },
-                          child: ListTile(
-                            leading: SizedBox(
-                              width: 20,
-                            ),
-                            title: Text(
-                              'Set Pin',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: ListTile(
-                        leading: SizedBox(
-                          width: 20,
-                        ),
-                        title: Text(
-                          'Use Biometric',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400),
-                        ),
-                        trailing: UniversalPlatform.isIOS
-                            ? CupertinoSwitch(
-                                value: useBiometric,
-                                onChanged: (value) {
-                                  setState(() {
-                                    if (value) {
-                                      confirmBiometrics();
-                                    }
-                                    print(useBiometric);
-                                  });
+                        title: Text('App Lock'),
+                        children: [
+                          if (!isPinRequired)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(15.0),
+                                onTap: () {
+                                  if (isPinRequired) {
+                                    showAppLockMenu();
+                                  } else {
+                                    callAppLock();
+                                  }
                                 },
-                              )
-                            : Switch(
-                                value: useBiometric,
-                                onChanged: (value) {
-                                  setState(() {
-                                    useBiometric = value;
-                                    if (value) {
-                                      confirmBiometrics();
-                                    } else {
-                                      sharedPreferences.setBool(
-                                          'use_biometric', false);
-                                    }
-                                    print(useBiometric);
-                                  });
-                                },
+                                child: ListTile(
+                                  leading: SizedBox(
+                                    width: 20,
+                                  ),
+                                  title: Text(
+                                    'Set Pin',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
                               ),
+                            ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5.0),
+                            child: ListTile(
+                              leading: SizedBox(
+                                width: 20,
+                              ),
+                              title: Text(
+                                'Use Biometric',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.w400),
+                              ),
+                              trailing: UniversalPlatform.isIOS
+                                  ? CupertinoSwitch(
+                                      value: useBiometric,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          useBiometric = value;
+                                          if (value) {
+                                            confirmBiometrics();
+                                          } else {
+                                            sharedPreferences.setBool(
+                                                'use_biometric', false);
+                                          }
+                                          print(useBiometric);
+                                        });
+                                      },
+                                    )
+                                  : Switch(
+                                      value: useBiometric,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          useBiometric = value;
+                                          if (value) {
+                                            confirmBiometrics();
+                                          } else {
+                                            sharedPreferences.setBool(
+                                                'use_biometric', false);
+                                          }
+                                          print(useBiometric);
+                                        });
+                                      },
+                                    ),
+                            ),
+                          ),
+                          if (isPinRequired)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(15),
+                                onTap: () {
+                                  callAppLock();
+                                },
+                                child: ListTile(
+                                  leading: SizedBox(
+                                    width: 20,
+                                  ),
+                                  title: Text(
+                                    'Reset Passcode',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (isPinRequired)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(15),
+                                onTap: () {
+                                  unSetAppLock();
+                                },
+                                child: ListTile(
+                                  leading: SizedBox(
+                                    width: 20,
+                                  ),
+                                  title: Text(
+                                    'Remove App lock',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                    if (isPinRequired)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            callAppLock();
-                          },
-                          child: ListTile(
-                            leading: SizedBox(
-                              width: 20,
-                            ),
-                            title: Text(
-                              'Reset Passcode',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (isPinRequired)
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            unSetAppLock();
-                          },
-                          child: ListTile(
-                            leading: SizedBox(
-                              width: 20,
-                            ),
-                            title: Text(
-                              'Remove App lock',
-                              style: TextStyle(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Divider(),
                     Padding(
                       padding: kGlobalCardPadding,
                       child: Container(
