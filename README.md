@@ -41,8 +41,4 @@ $ flutter build apk
 
 ## Contributing
 
-Feel free to open a PR to suggest fixes, features or whatever you want, just remember that PRs are subjected to manual review so you gotta wait for actual people to look at your contributions
-
-For translations, head over to our Crowdin.
-
-If you want to receive the latest news head over to our Telegram channel, if you want to chat we even got the Telegram group.
+Feel free to open a PR to suggest fixes, features or whatever you want, just remember that PRs are subjected to manual review so you gotta wait for actual people to look at your contributions.
