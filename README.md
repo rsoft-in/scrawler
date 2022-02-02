@@ -1,20 +1,48 @@
-<h1><img src="images/bnotes-transparent.png" height="100" style="vertical-align: middle"> scrawl - Take Notes Easily</h1>
-<img src="images/scrawl-playstore.png" style="vertical-align: middle">
-<br>
-<br>
+# scrawl
 
-<a href='https://play.google.com/store/apps/details?id=com.rsoft.bnotes'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="80px"/></a>
+<img src="https://raw.githubusercontent.com/rsoft-in/scrawl/main/images/scrawl-playstore.png"/>
 
-## Description
 A simple notes app with offline and online backup. Uses Nextcloud to store your backup. Assign labels, set colours for notes. Search your notes easily. You can even archive your notes.
 
-### To-do
+## Features
+- Supports Android/iOS (iOS not published yet but works fine)
+- Search notes
+- List/grid view for notes
+- Labels for notes
+- Archive notes
+- Local backup/restore
+- Nextcloud backup/restore
+- Smooth UI
+- AppLock ``` yes, both fingerprint and FaceID works```
 
-- [x] Archive option
-- [x] Label notes
-- [x] Backup and Restore to Downloads folder
-- [x] Backup and Restore via Nextcloud
-- [x] Search notes
+## To-do
 - [ ] 'scrawl' Cloud Sync
 - [ ] Desktop Support
 - [ ] Web Support
+
+
+## Compiling the app
+Before anything, be sure to have a working flutter sdk setup.
+
+Be sure to disable signing on build.gradle or change keystore to sign the app.
+
+For now the required flutter channel is master, so issue those two commands before starting building:
+```
+$ flutter channel master
+$ flutter upgrade
+```
+
+After that, building is simple as this:
+```
+$ flutter pub get
+$ flutter run
+$ flutter build apk
+```
+
+## Contributing
+
+Feel free to open a PR to suggest fixes, features or whatever you want, just remember that PRs are subjected to manual review so you gotta wait for actual people to look at your contributions
+
+For translations, head over to our Crowdin.
+
+If you want to receive the latest news head over to our Telegram channel, if you want to chat we even got the Telegram group.
