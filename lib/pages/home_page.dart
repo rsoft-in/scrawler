@@ -869,12 +869,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _assignLabel(Notes note) async {
-    final res = await Navigator.of(context).push(new CupertinoPageRoute(
+    var res = await Navigator.of(context).push(new CupertinoPageRoute(
         builder: (BuildContext context) => new LabelsPage(
               noteid: note.noteId,
               notelabel: note.noteLabel,
             )));
-    if (res is Notes) loadNotes();
+    if (res != null) loadNotes();
   }
 
   void _showEdit(BuildContext context, Notes _note) async {

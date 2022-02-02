@@ -552,13 +552,17 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
         });
   }
 
-  void _assignLabel(Notes note) async {
-    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
+  void _assignLabel(Notes _note) async {
+    var res = await Navigator.of(context).push(new CupertinoPageRoute(
         builder: (BuildContext context) => new LabelsPage(
-              noteid: note.noteId,
-              notelabel: note.noteLabel,
+              noteid: _note.noteId,
+              notelabel: _note.noteLabel,
             )));
-    // if (res) loadNotes();
+    if (res != null) {
+      setState(() {
+        note.noteLabel = res;
+      });
+    }
   }
 
   Future<bool> _onBackPressed() async {

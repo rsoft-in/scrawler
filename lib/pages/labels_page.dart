@@ -54,7 +54,7 @@ class _LabelsPageState extends State<LabelsPage> {
     await dbHelper
         .updateNoteLabel(widget.noteid, _selectedLabels.join(","))
         .then((value) {
-      Navigator.pop(context, true);
+      Navigator.pop(context, _selectedLabels.join(","));
     });
   }
 
