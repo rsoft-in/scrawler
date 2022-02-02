@@ -54,6 +54,7 @@ class _AppLockPageState extends State<AppLockPage> {
     bool darkModeOn = brightness == Brightness.dark;
 
     return Scaffold(
+      backgroundColor: kPrimaryColor,
       body: Column(
         children: [
           SizedBox(
