@@ -345,11 +345,7 @@ class _HomePageState extends State<HomePage> {
                                                     note.noteTitle,
                                                     style: TextStyle(
                                                       fontSize: 16.0,
-                                                      color: darkModeOn &&
-                                                              note.noteColor ==
-                                                                  0
-                                                          ? Colors.white
-                                                          : Colors.black,
+                                                      color: Colors.black,
                                                     ),
                                                   ),
                                                 ),
@@ -360,10 +356,7 @@ class _HomePageState extends State<HomePage> {
                                                 child: Text(
                                                   note.noteText,
                                                   style: TextStyle(
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white60
-                                                        : Colors.black38,
+                                                    color: Colors.black38,
                                                   ),
                                                   maxLines: 1,
                                                   overflow:
@@ -386,44 +379,36 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                               Container(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  padding: EdgeInsets.all(5.0),
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(
-                                                          note.noteLabel,
-                                                          style: TextStyle(
-                                                              color: darkModeOn &&
-                                                                      note.noteColor ==
-                                                                          0
-                                                                  ? Colors
-                                                                      .white38
-                                                                  : Colors
-                                                                      .black38,
-                                                              fontSize: 12.0),
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                padding: EdgeInsets.all(5.0),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        note.noteLabel,
+                                                        style: TextStyle(
+                                                          color: Colors.black38,
+                                                          fontSize: 12.0,
                                                         ),
                                                       ),
-                                                      Expanded(
-                                                        child: Text(
-                                                          Utility.formatDateTime(
-                                                              note.noteDate),
-                                                          textAlign:
-                                                              TextAlign.end,
-                                                          style: TextStyle(
-                                                              color: darkModeOn &&
-                                                                      note.noteColor ==
-                                                                          0
-                                                                  ? Colors
-                                                                      .white38
-                                                                  : Colors
-                                                                      .black38,
-                                                              fontSize: 12.0),
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        Utility.formatDateTime(
+                                                          note.noteDate,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        style: TextStyle(
+                                                          color: Colors.black38,
+                                                          fontSize: 12.0,
                                                         ),
                                                       ),
-                                                    ],
-                                                  )),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ),

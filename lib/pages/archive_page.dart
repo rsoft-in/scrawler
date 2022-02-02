@@ -277,10 +277,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                                   note.noteTitle,
                                                   style: TextStyle(
                                                     fontSize: 16.0,
-                                                    color: darkModeOn &&
-                                                            note.noteColor == 0
-                                                        ? Colors.white
-                                                        : Colors.black,
+                                                    color: Colors.black,
                                                   ),
                                                 ),
                                               ),
@@ -291,10 +288,7 @@ class _ArchivePageState extends State<ArchivePage> {
                                               child: Text(
                                                 note.noteText,
                                                 style: TextStyle(
-                                                  color: darkModeOn &&
-                                                          note.noteColor == 0
-                                                      ? Colors.white60
-                                                      : Colors.black38,
+                                                  color: Colors.black38,
                                                 ),
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
@@ -324,12 +318,8 @@ class _ArchivePageState extends State<ArchivePage> {
                                                       child: Text(
                                                         note.noteLabel,
                                                         style: TextStyle(
-                                                            color: darkModeOn &&
-                                                                    note.noteColor ==
-                                                                        0
-                                                                ? Colors.white38
-                                                                : Colors
-                                                                    .black38,
+                                                            color:
+                                                                Colors.black38,
                                                             fontSize: 12.0),
                                                       ),
                                                     ),
@@ -340,12 +330,8 @@ class _ArchivePageState extends State<ArchivePage> {
                                                         textAlign:
                                                             TextAlign.end,
                                                         style: TextStyle(
-                                                            color: darkModeOn &&
-                                                                    note.noteColor ==
-                                                                        0
-                                                                ? Colors.white38
-                                                                : Colors
-                                                                    .black38,
+                                                            color:
+                                                                Colors.black38,
                                                             fontSize: 12.0),
                                                       ),
                                                     ),
