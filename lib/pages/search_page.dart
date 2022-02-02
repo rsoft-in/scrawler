@@ -91,7 +91,7 @@ class _SearchPageState extends State<SearchPage> {
                           });
                           notesList.clear();
                         },
-                        child: Icon(Icons.clear)),
+                        child: Icon(Iconsax.close_circle)),
                   ),
                 ],
               ),

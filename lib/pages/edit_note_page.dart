@@ -3,6 +3,7 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/widgets/note_edit_list_textfield.dart';
+import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -94,8 +95,11 @@ class _EditNotePageState extends State<EditNotePage> {
       child: Builder(builder: (context) {
         return new Scaffold(
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            actions: [],
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(56),
+            child: SAppBar(
+              title: '',
+            ),
           ),
           body: GestureDetector(
             onTap: () {
