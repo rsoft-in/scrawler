@@ -8,13 +8,15 @@ class SAppBar extends StatefulWidget {
   final bool? centerTitle;
   final Color? backgroundColor;
   final double? elevation;
+  final Function? onTap;
   const SAppBar(
       {Key? key,
       required this.title,
       this.action,
       this.centerTitle,
       this.backgroundColor,
-      this.elevation})
+      this.elevation,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -38,7 +40,10 @@ class _SAppBarState extends State<SAppBar> {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            Navigator.pop(context);
+            if (widget.onTap == null)
+              Navigator.pop(context);
+            else
+              widget.onTap!();
           },
           child: Icon(
             Iconsax.arrow_left_2,

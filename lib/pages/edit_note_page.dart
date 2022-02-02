@@ -94,11 +94,12 @@ class _EditNotePageState extends State<EditNotePage> {
       onWillPop: _onBackPressed,
       child: Builder(builder: (context) {
         return new Scaffold(
-          resizeToAvoidBottomInset: false,
+          resizeToAvoidBottomInset: true,
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(56),
             child: SAppBar(
               title: '',
+              onTap: _onBackPressed,
             ),
           ),
           body: GestureDetector(
