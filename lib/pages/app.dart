@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/archive_page.dart';
@@ -10,7 +9,6 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -173,8 +171,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 Visibility(
                   visible: viewType == ViewType.Grid && _page == 0,
                   child: IconButton(
-                    //find proper icon
-                    icon: Icon(Iconsax.more_square),
+                    icon: Icon(Iconsax.row_vertical),
                     onPressed: () {
                       setState(() {
                         viewType = ViewType.Tile;
@@ -197,50 +194,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
               onPageChanged: onPageChanged,
               controller: _pageController,
             ),
-            // bottomNavigationBar: BottomAppBar(
-            //   // color: darkModeOn ? kSecondaryDark : Colors.white,
-            //   color: FlexN,
-            //   child: Container(
-            //     padding:
-            //         const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
-            //     child: GNav(
-            //       selectedIndex: _page,
-            //       onTabChange: navigationTapped,
-            //       gap: 8,
-            //       activeColor: darkModeOn ? Colors.white : Colors.black,
-            //       iconSize: 24,
-            //       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            //       duration: Duration(milliseconds: 400),
-            //       tabBackgroundColor: Colors.grey.withOpacity(0.1),
-            //       // color: darkModeOn ? Colors.grey : Colors.grey,
-            //       tabBorderRadius: 15.0,
-            //       tabs: [
-            //         GButton(
-            //           // icon: LineIcons.stickyNoteAlt,
-            //           icon: Icons.notes,
-            //           text: 'Notes',
-            //         ),
-            //         GButton(
-            //           // icon: LineIcons.archive,
-            //           icon: Icons.archive_outlined,
-            //           text: 'Archive',
-            //         ),
-            //         GButton(
-            //           // icon: LineIcons.search,
-            //           icon: Icons.search_outlined,
-            //           text: 'Search',
-            //         ),
-            //         GButton(
-            //           // icon: LineIcons.bars,
-            //           icon: Icons.menu_rounded,
-            //           text: 'More',
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
             bottomNavigationBar: BottomNavigationBar(
-              // showUnselectedLabels: true,
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Iconsax.note),
@@ -414,32 +368,5 @@ class _ScrawlAppState extends State<ScrawlApp> {
         ),
       );
     }
-  }
-}
-
-class WindowButtons extends StatelessWidget {
-  final buttonColors = WindowButtonColors(
-      iconNormal: kPrimaryColor,
-      mouseOver: Colors.black12,
-      mouseDown: Colors.black12,
-      iconMouseOver: kPrimaryColor,
-      iconMouseDown: kPrimaryColor);
-
-  final closeButtonColors = WindowButtonColors(
-      mouseOver: Colors.black12,
-      mouseDown: Colors.black12,
-      iconNormal: kPrimaryColor,
-      iconMouseOver: Colors.red,
-      iconMouseDown: Colors.red);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        MinimizeWindowButton(colors: buttonColors),
-        MaximizeWindowButton(colors: buttonColors),
-        CloseWindowButton(colors: closeButtonColors),
-      ],
-    );
   }
 }

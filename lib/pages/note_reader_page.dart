@@ -409,71 +409,79 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ? BoxConstraints(maxWidth: 450, minWidth: 400)
             : BoxConstraints(),
         builder: (context) {
-          return Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: Padding(
-              padding: kGlobalOuterPadding,
-              child: Container(
-                height: 100,
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 5.0, vertical: 12),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      ColorPalette(
-                        color: NoteColor.getColor(0, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 0);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 0,
+                  padding: kGlobalOuterPadding,
+                  child: Container(
+                    height: 100,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5.0, vertical: 12),
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          ColorPalette(
+                            color: NoteColor.getColor(0, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 0);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 0,
+                          ),
+                          ColorPalette(
+                            color: NoteColor.getColor(1, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 1);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 1,
+                          ),
+                          ColorPalette(
+                            color: NoteColor.getColor(2, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 2);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 2,
+                          ),
+                          ColorPalette(
+                            color: NoteColor.getColor(3, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 3);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 3,
+                          ),
+                          ColorPalette(
+                            color: NoteColor.getColor(4, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 4);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 4,
+                          ),
+                          ColorPalette(
+                            color: NoteColor.getColor(5, darkModeOn),
+                            onTap: () {
+                              _updateColor(_note.noteId, 5);
+                              Navigator.pop(context);
+                            },
+                            isSelected: selectedPageColor == 5,
+                          ),
+                        ],
                       ),
-                      ColorPalette(
-                        color: NoteColor.getColor(1, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 1);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 1,
-                      ),
-                      ColorPalette(
-                        color: NoteColor.getColor(2, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 2);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 2,
-                      ),
-                      ColorPalette(
-                        color: NoteColor.getColor(3, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 3);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 3,
-                      ),
-                      ColorPalette(
-                        color: NoteColor.getColor(4, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 4);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 4,
-                      ),
-                      ColorPalette(
-                        color: NoteColor.getColor(5, darkModeOn),
-                        onTap: () {
-                          _updateColor(_note.noteId, 5);
-                          Navigator.pop(context);
-                        },
-                        isSelected: selectedPageColor == 5,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           );
         });
   }
@@ -491,11 +499,11 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
-                height: 150,
+                height: 160,
                 child: Padding(
                   padding: kGlobalOuterPadding,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(

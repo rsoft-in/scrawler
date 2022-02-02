@@ -135,11 +135,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
-                height: 150,
+                height: 160,
                 child: Padding(
                   padding: kGlobalOuterPadding,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
