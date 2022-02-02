@@ -4,6 +4,7 @@ import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:nextcloud/nextcloud.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.url,
                 autocorrect: false,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.http),
+                  icon: Icon(Iconsax.global),
                 ),
               ),
               SizedBox(
@@ -73,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.person_outline),
+                  icon: Icon(Iconsax.user),
                 ),
               ),
               SizedBox(
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.visiblePassword,
                 autocorrect: false,
                 decoration: InputDecoration(
-                  icon: Icon(Icons.password),
+                  icon: Icon(Iconsax.password_check),
                 ),
               ),
               SizedBox(

@@ -1,6 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -90,7 +91,7 @@ class _AboutPageState extends State<AboutPage> {
               onTap: () {},
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.memory),
+                  child: Icon(Iconsax.cpu),
                 ),
                 title: Text('App Version'),
                 subtitle: Text(_packageInfo.version),
@@ -121,7 +122,7 @@ class _AboutPageState extends State<AboutPage> {
               },
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.person),
+                  child: Icon(Iconsax.user),
                 ),
                 title: Text('Nandan Menon (nahnah)'),
                 subtitle: Text('Lead Dev & app design'),
@@ -142,7 +143,7 @@ class _AboutPageState extends State<AboutPage> {
               },
               child: ListTile(
                 leading: CircleAvatar(
-                  child: Icon(Icons.person),
+                  child: Icon(Iconsax.user),
                 ),
                 title: Text('Rajesh Menon (suranjum)'),
                 subtitle: Text('Lead Dev'),

@@ -516,7 +516,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.edit_outlined),
+                                    child: Icon(Iconsax.edit_2),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -538,7 +538,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.palette_outlined),
+                                    child: Icon(Iconsax.color_swatch),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -560,7 +560,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.new_label_outlined),
+                                    child: Icon(Iconsax.tag),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -587,7 +587,7 @@ class _HomePageState extends State<HomePage> {
                                   children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Icon(Icons.archive_outlined),
+                                      child: Icon(Iconsax.archive_add),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -615,7 +615,7 @@ class _HomePageState extends State<HomePage> {
                                   children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Icon(Icons.archive_rounded),
+                                      child: Icon(Iconsax.archive_minus),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -641,7 +641,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.delete_outline_rounded),
+                                    child: Icon(Iconsax.note_remove),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -662,7 +662,7 @@ class _HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Icon(Icons.clear),
+                                    child: Icon(Iconsax.close_circle),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),

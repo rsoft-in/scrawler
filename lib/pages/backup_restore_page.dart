@@ -265,20 +265,14 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
                 textAlign: TextAlign.justify,
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
             ListTile(
               title: Text('Back path'),
-              subtitle: Text('~/0/Android/data/com.rsoft.bnotes/files'),
+              subtitle: Text(backupPath),
             ),
-            Padding(
-              padding: kGlobalOuterPadding,
-              child: Container(
-                padding: EdgeInsets.all(2.0),
-                width: MediaQuery.of(context).size.width * .3,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                    color: Colors.black26),
-              ),
-            ),
+            Divider(),
             ListTile(
               title: Text('Use Nextcloud'),
               trailing: UniversalPlatform.isIOS
