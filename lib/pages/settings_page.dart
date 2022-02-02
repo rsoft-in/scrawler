@@ -13,6 +13,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -186,50 +187,21 @@ class _SettingsPageState extends State<SettingsPage> {
                           : InkWell(
                               borderRadius: BorderRadius.circular(15.0),
                               onTap: () async {
-                                if (isDesktop) {
-                                  final result = await showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return Container(
-                                          child: Dialog(
-                                            child: Container(
-                                              width: isDesktop
-                                                  ? 800
-                                                  : MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                              child: LoginPage(),
-                                            ),
-                                          ),
-                                        );
-                                      });
-                                  if (result == true)
-                                    setState(() {
-                                      isAppLogged = true;
-                                      getPref();
-                                    });
-                                } else {
-                                  final result = await Navigator.of(context)
-                                      .push(CupertinoPageRoute(
-                                          builder: (context) => LoginPage()));
-                                  setState(() {});
-                                  if (result == true)
-                                    setState(() {
-                                      isAppLogged = true;
-                                      getPref();
-                                    });
-                                }
-                                // if (result == true)
-                                //   setState(() {
-                                //     isAppLogged = true;
-                                //     getPref();
-                                //   });
+                                final result = await Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                        builder: (context) => LoginPage()));
+                                setState(() {});
+                                if (result == true)
+                                  setState(() {
+                                    isAppLogged = true;
+                                    getPref();
+                                  });
                               },
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: Colors.blue[100],
-                                  foregroundColor: Colors.blue,
-                                  child: Icon(Icons.person_outline),
+                                  // backgroundColor: Colors.blue[100],
+                                  // foregroundColor: Colors.blue,
+                                  child: Icon(Iconsax.user),
                                 ),
                                 title: Text(
                                   'Nextcloud Login',
@@ -244,37 +216,17 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () {
-                          if (isDesktop) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    child: Dialog(
-                                      child: Container(
-                                        width: isDesktop
-                                            ? 800
-                                            : MediaQuery.of(context).size.width,
-                                        child: LabelsPage(
-                                          noteid: '',
-                                          notelabel: '',
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                });
-                          } else {
-                            Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => LabelsPage(
-                                      noteid: '',
-                                      notelabel: '',
-                                    )));
-                          }
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => LabelsPage(
+                                    noteid: '',
+                                    notelabel: '',
+                                  )));
                         },
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.purple[100],
-                            foregroundColor: Colors.purple,
-                            child: Icon(Icons.label_outline),
+                            // backgroundColor: Colors.purple[100],
+                            // foregroundColor: Colors.purple,
+                            child: Icon(Iconsax.tag),
                           ),
                           title: Text(
                             'Labels',
@@ -289,35 +241,18 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
                         onTap: () async {
-                          if (isDesktop) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    child: Dialog(
-                                      child: Container(
-                                        width: isDesktop
-                                            ? 800
-                                            : MediaQuery.of(context).size.width,
-                                        child: BackupRestorePage(),
-                                      ),
-                                    ),
-                                  );
-                                });
-                          } else {
-                            final res = await Navigator.of(context).push(
-                                CupertinoPageRoute(
-                                    builder: (context) => BackupRestorePage()));
-                            if (res == "yes") {
-                              // loadNotes();
-                            }
+                          final res = await Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                  builder: (context) => BackupRestorePage()));
+                          if (res == "yes") {
+                            // loadNotes();
                           }
                         },
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.teal[100],
-                            foregroundColor: Colors.teal,
-                            child: Icon(Icons.archive_outlined),
+                            // backgroundColor: Colors.teal[100],
+                            // foregroundColor: Colors.teal,
+                            child: Icon(Iconsax.document_download),
                           ),
                           title: Text(
                             'Backup & Restore',
@@ -332,11 +267,12 @@ class _SettingsPageState extends State<SettingsPage> {
                       child: ExpansionTile(
                         subtitle: Text('Secure your notes'),
                         leading: CircleAvatar(
-                          backgroundColor: Colors.red[100],
-                          foregroundColor: Colors.red,
-                          child: Icon(Icons.lock_outline),
+                          // backgroundColor: Colors.red[100],
+                          // foregroundColor: Colors.red,
+                          child: Icon(Iconsax.lock),
                         ),
                         title: Text('App Lock'),
+                        trailing: Icon(Iconsax.arrow_down_1),
                         children: [
                           if (!isPinRequired)
                             Padding(
@@ -477,13 +413,13 @@ class _SettingsPageState extends State<SettingsPage> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             leading: CircleAvatar(
-                              backgroundColor: Colors.orange[100],
-                              foregroundColor: Colors.orange,
-                              child: Icon(Icons.dark_mode_outlined),
+                              // backgroundColor: Colors.orange[100],
+                              // foregroundColor: Colors.orange,
+                              child: Icon(Iconsax.moon),
                             ),
                             title: Text('App Theme'),
                             subtitle: Text(_themeModeName),
-                            trailing: Icon(Icons.keyboard_arrow_down),
+                            trailing: Icon(Iconsax.arrow_down_1),
                           ),
                         ),
                       ),
@@ -492,32 +428,15 @@ class _SettingsPageState extends State<SettingsPage> {
                       padding: kGlobalCardPadding,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(15.0),
-                        onTap: () async {
-                          if (isDesktop) {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    child: Dialog(
-                                      child: Container(
-                                        width: isDesktop
-                                            ? 800
-                                            : MediaQuery.of(context).size.width,
-                                        child: AboutPage(),
-                                      ),
-                                    ),
-                                  );
-                                });
-                          } else {
-                            Navigator.of(context).push(CupertinoPageRoute(
-                                builder: (context) => AboutPage()));
-                          }
+                        onTap: () {
+                          Navigator.of(context).push(CupertinoPageRoute(
+                              builder: (context) => AboutPage()));
                         },
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.grey[100],
-                            foregroundColor: Colors.grey,
-                            child: Icon(Icons.info_outline_rounded),
+                            // backgroundColor: Colors.grey[100],
+                            // foregroundColor: Colors.grey,
+                            child: Icon(Iconsax.info_circle),
                           ),
                           title: Text(
                             'About',

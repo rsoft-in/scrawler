@@ -29,6 +29,7 @@ dependencies:
 
   google_nav_bar: ^5.0.5
   
+  iconsax: ^0.0.8
   intl: ^0.17.0
 
   line_icons: ^2.0.1
@@ -41,6 +42,7 @@ dependencies:
   
   share: ^2.0.4
   shared_preferences: ^2.0.8
+  side_navigation: ^0.0.7
   sqflite: ^2.0.0+4
 
   uuid: ^3.0.5

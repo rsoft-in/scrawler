@@ -1,5 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/desktop/app.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
@@ -78,7 +79,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: themeMode,
       theme: theme(),
       darkTheme: themeDark(),
-      home: StartPage(),
+      home: UniversalPlatform.isDesktopOrWeb? ScrawlDesktop(): StartPage(),
     );
   }
 }

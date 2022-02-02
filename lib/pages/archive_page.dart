@@ -13,6 +13,7 @@ import 'package:bnotes/widgets/note_listview_ext.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -358,16 +359,24 @@ class _ArchivePageState extends State<ArchivePage> {
                                 );
                               },
                             ))
-                      : Center(
+                      : Container(
+                          alignment: Alignment.topCenter,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
+                              SizedBox(
+                                height: 150,
+                              ),
                               Icon(
-                                Icons.archive_outlined,
+                                Iconsax.archive_minus,
                                 size: 120,
                               ),
+                              SizedBox(
+                                height: 20,
+                              ),
                               Text(
-                                'No archived notes',
+                                'empty!',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w300, fontSize: 22),
                               ),
@@ -530,7 +539,7 @@ class _ArchivePageState extends State<ArchivePage> {
 
   void _showNoteReader(BuildContext context, Notes _note) async {
     isDesktop = isDisplayDesktop(context);
-   if (isDesktop) {
+    if (isDesktop) {
       bool res = await showDialog(
           context: context,
           builder: (context) {

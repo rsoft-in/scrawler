@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/labels_model.dart';
+import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -92,20 +93,38 @@ class _LabelsPageState extends State<LabelsPage> {
       onWillPop: _onBackPressed,
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('Labels'),
-          actions: [
-            Visibility(
-              visible: widget.noteid.isNotEmpty,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: OutlinedButton(
-                  child: Text('Done'),
-                  onPressed: () => _assignLabel(),
+        // appBar: AppBar(
+        //   title: Text('Labels'),
+        //   actions: [
+        //     Visibility(
+        //       visible: widget.noteid.isNotEmpty,
+        //       child: Padding(
+        //         padding: const EdgeInsets.all(8.0),
+        //         child: OutlinedButton(
+        //           child: Text('Done'),
+        //           onPressed: () => _assignLabel(),
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(56),
+          child: SAppBar(
+            title: 'Labels',
+            action: [
+              Visibility(
+                visible: widget.noteid.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: OutlinedButton(
+                    child: Text('Done'),
+                    onPressed: () => _assignLabel(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         body: Container(
           padding: EdgeInsets.all(8.0),

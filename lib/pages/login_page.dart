@@ -1,6 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
+import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nextcloud/nextcloud.dart';
@@ -34,90 +35,87 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: SAppBar(
+          title: 'Nextcloud Login',
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: Padding(
         padding: kGlobalOuterPadding,
-        child: SingleChildScrollView(
-          // physics:
-          //     BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          child: Container(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 80,
+        child: Container(
+          padding: EdgeInsets.only(right: 20.0, left: 20.0, top: 20.0),
+          child: ListView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            children: [
+              Image.network(
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/2560px-Nextcloud_Logo.svg.png',
+                height: 120,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _hostController,
+                keyboardType: TextInputType.url,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.http),
                 ),
-                Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Nextcloud_Logo.svg/2560px-Nextcloud_Logo.svg.png',
-                  width: 200,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _usernameController,
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.person_outline),
                 ),
-                SizedBox(
-                  height: 10,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                keyboardType: TextInputType.visiblePassword,
+                autocorrect: false,
+                decoration: InputDecoration(
+                  icon: Icon(Icons.password),
                 ),
-                TextField(
-                  controller: _hostController,
-                  keyboardType: TextInputType.url,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.http),
-                  ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (_hostController.text.isNotEmpty &&
+                          _usernameController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty) {
+                        getdata();
+                      }
+                    },
+                    child: Text('Sign-In')),
+              ),
+              Divider(
+                thickness: 2,
+              ),
+              ListTile(
+                title: Text('Register'),
+                subtitle: Text('on Nextcloud Provider'),
+                trailing: OutlinedButton(
+                  child: Text('Sign Up'),
+                  onPressed: () => _launchURL('https://nextcloud.com/signup/'),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  controller: _usernameController,
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.person_outline),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  keyboardType: TextInputType.visiblePassword,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.password),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (_hostController.text.isNotEmpty &&
-                            _usernameController.text.isNotEmpty &&
-                            _passwordController.text.isNotEmpty) {
-                          getdata();
-                        }
-                      },
-                      child: Text('Sign-In')),
-                ),
-                Divider(
-                  thickness: 2,
-                ),
-                ListTile(
-                  title: Text('Register'),
-                  subtitle: Text('on Nextcloud Provider'),
-                  trailing: OutlinedButton(
-                    child: Text('Qloud'),
-                    onPressed: () => _launchURL(
-                        'https://efss.qloud.my/index.php/apps/registration/'),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

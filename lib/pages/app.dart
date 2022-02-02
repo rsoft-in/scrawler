@@ -9,6 +9,8 @@ import 'package:bnotes/pages/settings_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -119,15 +121,11 @@ class _ScrawlAppState extends State<ScrawlApp> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     isDesktop = isDisplayDesktop(context);
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   SystemUiOverlayStyle(
-    //     statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
-    //     systemNavigationBarIconBrightness:
-    //         darkModeOn ? Brightness.light : Brightness.dark,
-    //     systemNavigationBarColor:
-    //         darkModeOn ? Colors.transparent : Colors.transparent,
-    //   ),
-    // );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: darkModeOn ? Colors.transparent : Colors.transparent,
+      ),
+    );
 
     if (!isDesktop) {
       return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -162,7 +160,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 Visibility(
                   visible: viewType == ViewType.Tile && _page == 0,
                   child: IconButton(
-                    icon: Icon(Icons.grid_view_outlined),
+                    icon: Icon(Iconsax.grid_3),
                     onPressed: () {
                       setState(() {
                         viewType = ViewType.Grid;
@@ -175,7 +173,8 @@ class _ScrawlAppState extends State<ScrawlApp> {
                 Visibility(
                   visible: viewType == ViewType.Grid && _page == 0,
                   child: IconButton(
-                    icon: Icon(Icons.view_agenda_outlined),
+                    //find proper icon
+                    icon: Icon(Iconsax.more_square),
                     onPressed: () {
                       setState(() {
                         viewType = ViewType.Tile;
@@ -189,7 +188,6 @@ class _ScrawlAppState extends State<ScrawlApp> {
             ),
             body: PageView(
               physics: NeverScrollableScrollPhysics(),
-              pageSnapping: false,
               children: [
                 new HomePage(title: kAppName),
                 new ArchivePage(),
@@ -245,19 +243,19 @@ class _ScrawlAppState extends State<ScrawlApp> {
               // showUnselectedLabels: true,
               items: [
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.notes_outlined),
+                  icon: Icon(Iconsax.note),
                   label: 'Notes',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.archive),
+                  icon: Icon(Iconsax.archive),
                   label: 'Archive',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Iconsax.search_normal),
                   label: 'Search',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.menu),
+                  icon: Icon(Iconsax.menu),
                   label: 'More',
                 ),
               ],
@@ -268,270 +266,149 @@ class _ScrawlAppState extends State<ScrawlApp> {
         ),
       );
     } else {
-      return Scaffold(
-        // appBar: PreferredSize(
-        //   preferredSize: Size(100, 40),
-        //   child: MoveWindow(
-        //     child: AppBar(
-        //       actions: [
-        //         IconButton(
-        //           onPressed: () {
-        //             appWindow.minimize();
-        //           },
-        //           icon: Icon(YaruIcons.window_minimize),
-        //         ),
-        //         IconButton(
-        //           onPressed: () {
-        //             appWindow.maximize();
-        //           },
-        //           icon: Icon(YaruIcons.window_maximize),
-        //         ),
-        //         IconButton(
-        //           onPressed: () {
-        //             appWindow.close();
-        //           },
-        //           icon: Icon(YaruIcons.window_close),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // SizedBox(width: 50,),
-              Image.asset(
-                'images/bnotes-transparent.png',
-                height: 50,
+      bool isPortrait =
+          MediaQuery.of(context).orientation == Orientation.portrait;
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: FlexColorScheme.themedSystemNavigationBar(
+          context,
+          systemNavBarStyle: FlexSystemNavBarStyle.background,
+          useDivider: false,
+          opacity: 0,
+        ),
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // SizedBox(width: 50,),
+                Image.asset(
+                  'images/bnotes-transparent.png',
+                  height: 50,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      kAppName,
+                      style: TextStyle(fontFamily: 'Raleway'),
+                    )),
+              ],
+            ),
+            actions: [
+              Visibility(
+                visible: viewType == ViewType.Tile && _page == 0,
+                child: IconButton(
+                  icon: Icon(Icons.grid_view_outlined),
+                  onPressed: () {
+                    setState(() {
+                      viewType = ViewType.Grid;
+                      HomePage.staticGlobalKey.currentState!
+                          .toggleView(viewType);
+                    });
+                  },
+                ),
               ),
-              SizedBox(
-                width: 20,
+              Visibility(
+                visible: viewType == ViewType.Grid && _page == 0,
+                child: IconButton(
+                  icon: Icon(Icons.view_agenda_outlined),
+                  onPressed: () {
+                    setState(() {
+                      viewType = ViewType.Tile;
+                      HomePage.staticGlobalKey.currentState!
+                          .toggleView(viewType);
+                    });
+                  },
+                ),
               ),
-              Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    kAppName,
-                    style: TextStyle(fontFamily: 'Raleway'),
-                  )),
             ],
           ),
-          actions: [
-            Visibility(
-              visible: viewType == ViewType.Tile && _page == 0,
-              child: IconButton(
-                icon: Icon(Icons.grid_view_outlined),
-                onPressed: () {
-                  setState(() {
-                    viewType = ViewType.Grid;
-                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
-                  });
-                },
-              ),
-            ),
-            Visibility(
-              visible: viewType == ViewType.Grid && _page == 0,
-              child: IconButton(
-                icon: Icon(Icons.view_agenda_outlined),
-                onPressed: () {
-                  setState(() {
-                    viewType = ViewType.Tile;
-                    HomePage.staticGlobalKey.currentState!.toggleView(viewType);
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-        body: Container(
-          child: WindowBorder(
-            color: Colors.transparent,
-            width: 1,
-            child: Row(
-              children: [
-                // SizedBox(
-                //   width: 200,
-                //   child: Container(
-                //     color: Colors.red,
-                //     child: Column(
-                //       children: [
-                //         WindowTitleBarBox(
-                //           child: MoveWindow(),
-                //         ),
-                //         // Expanded(child: Container()),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // NavigationRail(
-                //   leading: openNav
-                //       ? SizedBox(
-                //           width: 100,
-                //           child: Column(
-                //             crossAxisAlignment: CrossAxisAlignment.start,
-                //             children: [
-                //               SizedBox(
-                //                 height: 50,
-                //               ),
-                //               Divider(),
-                //               Container(
-                //                 // child: TextButton.icon(
-                //                 //     onPressed: () {
-                //                 //       setState(() {
-                //                 //         openNav = !openNav;
-                //                 //         print(openNav);
-                //                 //       });
-                //                 //     },
-                //                 //     icon: Icon(Icons.arrow_back_ios_new),
-                //                 //     label: Text('data')),
-                //                 margin: EdgeInsets.only(left: 10),
-                //                 child: Row(
-                //                   children: [
-                //                     IconButton(
-                //                       icon: Icon(Icons.arrow_back_ios_new),
-                //                       onPressed: () {
-                //                         setState(() {
-                //                           openNav = !openNav;
-                //                           print(openNav);
-                //                         });
-                //                       },
-                //                     ),
-                //                     SizedBox(
-                //                       width: 10,
-                //                     ),
-                //                     Text(
-                //                       isAppLogged ? username : 'Guest',
-                //                       textAlign: TextAlign.end,
-                //                       overflow: TextOverflow.ellipsis,
-                //                     )
-                //                   ],
-                //                 ),
-                //               ),
-                //               Divider(),
-                //             ],
-                //           ),
-                //         )
-                //       : Column(
-                //           children: [
-                //             SizedBox(
-                //               height: 50,
-                //             ),
-                //             Divider(),
-                //             IconButton(
-                //               icon: Icon(Icons.arrow_forward_ios),
-                //               onPressed: () {
-                //                 setState(() {
-                //                   openNav = !openNav;
-                //                   print(openNav);
-                //                 });
-                //               },
-                //             ),
-                //             Divider(),
-                //           ],
-                //         ),
-                //   extended: openNav,
-                //   labelType: NavigationRailLabelType.none,
-                //   destinations: <NavigationRailDestination>[
-                //     NavigationRailDestination(
-                //       icon: Icon(Icons.notes_rounded),
-                //       label: Text('Notes'),
-                //     ),
-                //     NavigationRailDestination(
-                //       icon: Icon(Icons.archive_outlined),
-                //       label: Text('Archive'),
-                //     ),
-                //     NavigationRailDestination(
-                //       icon: Icon(Icons.search_rounded),
-                //       label: Text('Search'),
-                //     ),
-                //     NavigationRailDestination(
-                //       icon: Icon(Icons.menu),
-                //       label: Text('More'),
-                //     ),
-                //   ],
-                //   selectedIndex: _page,
-                //   // onDestinationSelected: navigationTapped,
-                //   onDestinationSelected: (selectedIndex) {
-                //     setState(() {
-                //       _page = selectedIndex;
-                //     });
-                //   },
-                // ),
-                Container(
-                  width: 250,
-                  child: Drawer(
-                    child: ListView(
-                      children: [
-                        // ListTile(
-                        //   leading: SizedBox(
-                        //     width: 0,
-                        //   ),
-                        //   title: Text(
-                        //     isAppLogged ? username : 'Guest',
-                        //   ),
-                        // ),
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              _page = 0;
-                            });
-                          },
-                          leading: Icon(Icons.notes_rounded),
-                          title: Text('Notes'),
-                        ),
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              _page = 1;
-                            });
-                          },
-                          leading: Icon(Icons.archive_outlined),
-                          title: Text('Archive'),
-                        ),
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              _page = 2;
-                            });
-                          },
-                          leading: Icon(Icons.search_rounded),
-                          title: Text('Search'),
-                        ),
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              _page = 3;
-                            });
-                          },
-                          leading: Icon(Icons.menu),
-                          title: Text('More'),
-                        ),
-                      ],
+          body: PageTransitionSwitcher(
+            transitionBuilder: (child, animation, secondaryAnimation) {
+              return FadeThroughTransition(
+                animation: animation,
+                secondaryAnimation: secondaryAnimation,
+                child: child,
+              );
+            },
+            child: _pageList[_page],
+          ),
+          bottomNavigationBar: Container(
+            margin: isPortrait
+                ? EdgeInsets.only(bottom: 60)
+                : EdgeInsets.only(left: 480, bottom: 60, right: 480),
+            child: Card(
+              elevation: isPortrait ? 0 : 1,
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _page = 0;
+                        });
+                      },
+                      icon: Icon(Icons.notes_outlined),
+                      tooltip: 'Notes',
+                      color: _page == 0
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
                     ),
-                  ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _page = 1;
+                        });
+                      },
+                      icon: Icon(Icons.archive),
+                      tooltip: 'Archive',
+                      color: _page == 1
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _page = 2;
+                        });
+                      },
+                      icon: Icon(Icons.search),
+                      tooltip: 'Search',
+                      color: _page == 2
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _page = 3;
+                        });
+                      },
+                      icon: Icon(Icons.menu),
+                      tooltip: 'Menu',
+                      color: _page == 3
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: PageTransitionSwitcher(
-                          transitionBuilder:
-                              (child, animation, secondaryAnimation) {
-                            return FadeThroughTransition(
-                              animation: animation,
-                              secondaryAnimation: secondaryAnimation,
-                              child: child,
-                            );
-                          },
-                          child: _pageList[_page],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ),

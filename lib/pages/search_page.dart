@@ -6,6 +6,7 @@ import 'package:bnotes/pages/note_reader_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:line_icons/line_icons.dart';
 
 class SearchPage extends StatefulWidget {
@@ -99,16 +100,22 @@ class _SearchPageState extends State<SearchPage> {
               visible: _searchController.text.isEmpty,
               child: Expanded(
                 child: Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.topCenter,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.search, size: 120),
+                      SizedBox(
+                        height: 80,
+                      ),
+                      Icon(Iconsax.search_status, size: 100),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Text(
-                        'Type to start searching',
+                        'Type to start searching.....',
                         style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 22),
+                            fontWeight: FontWeight.w300, fontSize: 20),
                       ),
                     ],
                   ),

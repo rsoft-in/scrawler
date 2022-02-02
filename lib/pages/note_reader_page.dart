@@ -9,11 +9,13 @@ import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
 import 'package:bnotes/pages/labels_page.dart';
+import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:bnotes/widgets/color_palette.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -85,14 +87,26 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
       child: Scaffold(
         backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
         appBar: AppBar(
-          elevation: 1.5,
-          backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn),
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context, true),
-            icon: UniversalPlatform.isIOS
-                ? Icon(CupertinoIcons.back)
-                : Icon(Icons.arrow_back),
-            color: Colors.black,
+          elevation: 0.2,
+          backgroundColor: NoteColor.getColor(selectedPageColor, darkModeOn)
+              .withOpacity(0.6),
+          leading: Container(
+            margin: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black.withOpacity(0.1),
+            ),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(10),
+              onTap: () {
+                Navigator.pop(context, true);
+              },
+              child: Icon(
+                Iconsax.arrow_left_2,
+                size: 15,
+                color: Colors.black,
+              ),
+            ),
           ),
           actions: [
             IconButton(
@@ -100,21 +114,21 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 _showEdit(context, note);
               },
               color: Colors.black,
-              icon: Icon(Icons.edit_outlined),
+              icon: Icon(Iconsax.edit_2),
             ),
             IconButton(
               onPressed: () {
                 _showColorPalette(context, note);
               },
               color: Colors.black,
-              icon: Icon(Icons.palette_outlined),
+              icon: Icon(Iconsax.color_swatch),
             ),
             IconButton(
               onPressed: () {
                 _assignLabel(note);
               },
               color: Colors.black,
-              icon: Icon(Icons.new_label_outlined),
+              icon: Icon(Iconsax.tag),
             ),
             // Archive
             Visibility(
@@ -128,7 +142,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   _archiveNote(1);
                 },
                 color: Colors.black,
-                icon: Icon(Icons.archive_outlined),
+                icon: Icon(Iconsax.archive_add),
               ),
             ),
             Visibility(
@@ -142,7 +156,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                   _archiveNote(0);
                 },
                 color: Colors.black,
-                icon: Icon(Icons.archive_rounded),
+                icon: Icon(Iconsax.archive_minus),
               ),
             ),
             IconButton(
@@ -153,8 +167,8 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                 _confirmDelete();
               },
               color: Colors.black,
-              icon: Icon(Icons.delete_outline_rounded),
-            ),
+              icon: Icon(Iconsax.note_remove),
+            )
           ],
         ),
         body: note.noteText.contains('{')

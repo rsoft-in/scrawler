@@ -1,4 +1,5 @@
 import 'package:bnotes/constants.dart';
+import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -229,105 +230,117 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Backup & Restore'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: SAppBar(
+          title: 'Backup & Restore',
+        ),
       ),
       extendBodyBehindAppBar: true,
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        child: Container(
-          padding: EdgeInsets.all(30.0),
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                height: 80,
+      body: Container(
+        padding: EdgeInsets.all(30.0),
+        child: ListView(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          children: <Widget>[
+            // SizedBox(
+            //   height: 80,
+            // ),
+            Icon(
+              Icons.backup_outlined,
+              size: 100,
+              color: darkModeOn ? Colors.white54 : Colors.black26,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: kGlobalOuterPadding,
+              child: Text(
+                'Back up your notes onto your device/Nextcloud. You can restore the backup when you reinstall scrawl.',
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.justify,
               ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: Text(
-                  'Back up your notes onto your device/Nextcloud. You can restore the backup when you reinstall scrawl.',
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.justify,
-                ),
+            ),
+            ListTile(
+              title: Text('Back path'),
+              subtitle: Text('~/0/Android/data/com.rsoft.bnotes/files'),
+            ),
+            Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                padding: EdgeInsets.all(2.0),
+                width: MediaQuery.of(context).size.width * .3,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25.0),
+                    color: Colors.black26),
               ),
-              ListTile(
-                title: Text('Back path'),
-                subtitle: Text('~/0/Android/data/com.rsoft.bnotes/files'),
-              ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: Container(
-                  padding: EdgeInsets.all(2.0),
-                  width: MediaQuery.of(context).size.width * .3,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25.0),
-                      color: Colors.black26),
-                ),
-              ),
-              ListTile(
-                title: Text('Use Nextcloud'),
-                trailing: UniversalPlatform.isIOS
-                    ? CupertinoSwitch(
-                        value: isUploading,
-                        onChanged: (value) {
-                          setState(() {
-                            isUploading = value;
-                            print(isUploading);
-                          });
-                        },
-                      )
-                    : Switch(
-                        value: isUploading,
-                        onChanged: (value) {
-                          setState(() {
-                            isUploading = value;
-                            sharedPreferences.setBool(
-                                'nextcloud_backup', isUploading);
-                            print(isUploading);
-                          });
-                        },
-                      ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () => _makeBackup(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.upload_outlined),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Backup')
-                        ],
-                      ),
+            ),
+            ListTile(
+              title: Text('Use Nextcloud'),
+              trailing: UniversalPlatform.isIOS
+                  ? CupertinoSwitch(
+                      value: isUploading,
+                      onChanged: (value) {
+                        setState(() {
+                          isUploading = value;
+                          print(isUploading);
+                        });
+                      },
+                    )
+                  : Switch(
+                      value: isUploading,
+                      onChanged: (value) {
+                        setState(() {
+                          isUploading = value;
+                          sharedPreferences.setBool(
+                              'nextcloud_backup', isUploading);
+                          print(isUploading);
+                        });
+                      },
+                    ),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => _makeBackup(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.upload_outlined),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Backup')
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _restore(),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.download_outlined),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text('Restore'),
-                        ],
-                      ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => _restore(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.download_outlined),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text('Restore'),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
