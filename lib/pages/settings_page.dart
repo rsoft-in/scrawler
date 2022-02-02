@@ -28,7 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late SharedPreferences sharedPreferences;
   bool isAppLogged = false;
   bool isAppUnlocked = false;
-  bool isPinRequired = false;
+  bool usePin = false;
   bool useBiometric = false;
   late String username;
   late String useremail;
@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
     sharedPreferences = await SharedPreferences.getInstance();
     setState(() {
       isAppUnlocked = sharedPreferences.getBool("is_app_unlocked") ?? false;
-      isPinRequired = sharedPreferences.getBool("is_pin_required") ?? false;
+      usePin = sharedPreferences.getBool("is_pin_required") ?? false;
       isAppLogged = sharedPreferences.getBool('is_logged') ?? false;
       themeModeState = sharedPreferences.getInt('themeMode') ?? 2;
       useBiometric = sharedPreferences.getBool('use_biometric') ?? false;
@@ -274,13 +274,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text('App Lock'),
                         trailing: Icon(Iconsax.arrow_down_1),
                         children: [
-                          if (!isPinRequired)
+                          if (!usePin && !useBiometric)
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 5.0),
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(15.0),
                                 onTap: () {
-                                  if (isPinRequired) {
+                                  if (usePin) {
                                     showAppLockMenu();
                                   } else {
                                     callAppLock();
@@ -299,51 +299,53 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                             ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: ListTile(
-                              leading: SizedBox(
-                                width: 20,
+                          if (!usePin)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: ListTile(
+                                leading: SizedBox(
+                                  width: 20,
+                                ),
+                                title: Text(
+                                  'Use Biometric',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                trailing: UniversalPlatform.isIOS
+                                    ? CupertinoSwitch(
+                                        value: useBiometric,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            useBiometric = value;
+                                            if (value) {
+                                              confirmBiometrics();
+                                            } else {
+                                              sharedPreferences.setBool(
+                                                  'use_biometric', false);
+                                            }
+                                            print(useBiometric);
+                                          });
+                                        },
+                                      )
+                                    : Switch(
+                                        value: useBiometric,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            useBiometric = value;
+                                            if (value) {
+                                              confirmBiometrics();
+                                            } else {
+                                              sharedPreferences.setBool(
+                                                  'use_biometric', false);
+                                            }
+                                            print(useBiometric);
+                                          });
+                                        },
+                                      ),
                               ),
-                              title: Text(
-                                'Use Biometric',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.w400),
-                              ),
-                              trailing: UniversalPlatform.isIOS
-                                  ? CupertinoSwitch(
-                                      value: useBiometric,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          useBiometric = value;
-                                          if (value) {
-                                            confirmBiometrics();
-                                          } else {
-                                            sharedPreferences.setBool(
-                                                'use_biometric', false);
-                                          }
-                                          print(useBiometric);
-                                        });
-                                      },
-                                    )
-                                  : Switch(
-                                      value: useBiometric,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          useBiometric = value;
-                                          if (value) {
-                                            confirmBiometrics();
-                                          } else {
-                                            sharedPreferences.setBool(
-                                                'use_biometric', false);
-                                          }
-                                          print(useBiometric);
-                                        });
-                                      },
-                                    ),
                             ),
-                          ),
-                          if (isPinRequired)
+                          if (usePin)
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 5.0),
                               child: InkWell(
@@ -364,7 +366,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               ),
                             ),
-                          if (isPinRequired)
+                          if (usePin)
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 5.0),
                               child: InkWell(
@@ -594,7 +596,7 @@ class _SettingsPageState extends State<SettingsPage> {
       sharedPreferences.setBool("is_app_unlocked", true);
       sharedPreferences.setString("app_pin", '');
       isAppUnlocked = true;
-      isPinRequired = false;
+      usePin = false;
     });
   }
 }
