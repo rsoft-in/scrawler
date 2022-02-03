@@ -194,27 +194,28 @@ class _ScrawlAppState extends State<ScrawlApp> {
               onPageChanged: onPageChanged,
               controller: _pageController,
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              items: [
-                BottomNavigationBarItem(
+            bottomNavigationBar: NavigationBar(
+              selectedIndex: _page,
+              destinations: [
+                NavigationDestination(
                   icon: Icon(Iconsax.note),
                   label: 'Notes',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Iconsax.archive),
                   label: 'Archive',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Iconsax.search_normal),
                   label: 'Search',
                 ),
-                BottomNavigationBarItem(
+                NavigationDestination(
                   icon: Icon(Iconsax.menu),
                   label: 'More',
                 ),
               ],
-              currentIndex: _page,
-              onTap: navigationTapped,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+              onDestinationSelected: navigationTapped,
             ),
           ),
         ),
