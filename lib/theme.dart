@@ -36,6 +36,7 @@ ThemeData themeDark() {
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,
     transparentStatusBar: true,
+    darkIsTrueBlack: true,
     subThemesData: FlexSubThemesData(
       elevatedButtonRadius: 25.0,
       textButtonRadius: 25.0,
