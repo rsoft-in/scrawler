@@ -137,52 +137,6 @@ class _ScrawlAppState extends State<ScrawlApp> {
           onWillPop: () => Future.sync(onWillPop),
           child: Scaffold(
             extendBodyBehindAppBar: true,
-            appBar: AppBar(
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Image.asset(
-                    'images/bnotes-transparent.png',
-                    height: 50,
-                  ),
-                  Container(
-                      alignment: Alignment.center,
-                      child: Text(
-                        kAppName,
-                        style: TextStyle(fontFamily: 'Raleway'),
-                      )),
-                ],
-              ),
-              actions: [
-                Visibility(
-                  visible: viewType == ViewType.Tile && _page == 0,
-                  child: IconButton(
-                    icon: Icon(Iconsax.grid_3),
-                    onPressed: () {
-                      setState(() {
-                        viewType = ViewType.Grid;
-                        HomePage.staticGlobalKey.currentState!
-                            .toggleView(viewType);
-                      });
-                    },
-                  ),
-                ),
-                Visibility(
-                  visible: viewType == ViewType.Grid && _page == 0,
-                  child: IconButton(
-                    icon: Icon(Iconsax.row_vertical),
-                    onPressed: () {
-                      setState(() {
-                        viewType = ViewType.Tile;
-                        HomePage.staticGlobalKey.currentState!
-                            .toggleView(viewType);
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
             body: PageView(
               physics: NeverScrollableScrollPhysics(),
               children: [
@@ -194,28 +148,31 @@ class _ScrawlAppState extends State<ScrawlApp> {
               onPageChanged: onPageChanged,
               controller: _pageController,
             ),
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: _page,
-              destinations: [
-                NavigationDestination(
+            bottomNavigationBar: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
                   icon: Icon(Iconsax.note),
                   label: 'Notes',
                 ),
-                NavigationDestination(
+                BottomNavigationBarItem(
                   icon: Icon(Iconsax.archive),
                   label: 'Archive',
                 ),
-                NavigationDestination(
+                BottomNavigationBarItem(
                   icon: Icon(Iconsax.search_normal),
                   label: 'Search',
                 ),
-                NavigationDestination(
+                BottomNavigationBarItem(
                   icon: Icon(Iconsax.menu),
                   label: 'More',
                 ),
               ],
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-              onDestinationSelected: navigationTapped,
+              currentIndex: _page,
+              type: BottomNavigationBarType.fixed,
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
+              selectedIconTheme: IconThemeData(color: kPrimaryColor),
+              onTap: navigationTapped,
             ),
           ),
         ),

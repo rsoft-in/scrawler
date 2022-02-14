@@ -7,8 +7,9 @@ import '../helpers/note_color.dart';
 class NoteCardGrid extends StatefulWidget {
   final Notes note;
   final Function onTap;
-  final Function onLongPress;
-  const NoteCardGrid({Key? key, required this.note, required this.onTap, required this.onLongPress})
+  final Function? onLongPress;
+  const NoteCardGrid(
+      {Key? key, required this.note, required this.onTap, this.onLongPress})
       : super(key: key);
 
   @override
@@ -29,7 +30,7 @@ class _NoteCardGridState extends State<NoteCardGrid> {
         child: InkWell(
           borderRadius: BorderRadius.circular(15.0),
           onTap: () => widget.onTap(),
-          onLongPress: () => widget.onLongPress(),
+          onLongPress: () => widget.onLongPress!(),
           child: Container(
             padding: const EdgeInsets.all(8.0),
             child: Column(

@@ -114,344 +114,360 @@ class _SettingsPageState extends State<SettingsPage> {
     isDesktop = isDisplayDesktop(context);
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
-
     return Scaffold(
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          // physics:
-          //     BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                height: UniversalPlatform.isAndroid ? 80 : 100,
-              ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: (isAppLogged
-                          ? Card(
-                              child: Container(
-                                padding: kGlobalCardPadding * 3,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                          child: avatarData != null
-                                              ? Image(
-                                                  image:
-                                                      MemoryImage(avatarData!),
-                                                  width: 80,
-                                                )
-                                              : Image(
-                                                  image: AssetImage(
-                                                      'images/bnotes.png'),
-                                                  width: 100,
-                                                ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(username,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w700)),
-                                        Text(useremail,
-                                            style: TextStyle(fontSize: 14)),
-                                      ],
-                                    ),
-                                    Container(
-                                      child: OutlinedButton(
-                                        child: Text('Sign Out'),
-                                        onPressed: () {
-                                          _confirmLogOut();
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : InkWell(
-                              borderRadius: BorderRadius.circular(15.0),
-                              onTap: () async {
-                                final result = await Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                        builder: (context) => LoginPage()));
-                                setState(() {});
-                                if (result == true)
-                                  setState(() {
-                                    isAppLogged = true;
-                                    getPref();
-                                  });
-                              },
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  // backgroundColor: Colors.blue[100],
-                                  // foregroundColor: Colors.blue,
-                                  child: Icon(Iconsax.user),
-                                ),
-                                title: Text(
-                                  'Nextcloud Login',
-                                  style: TextStyle(fontWeight: FontWeight.w600),
-                                ),
-                                subtitle: Text('Sync Notes to cloud'),
-                              ),
-                            )),
-                    ),
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15.0),
-                        onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (context) => LabelsPage(
-                                    noteid: '',
-                                    notelabel: '',
-                                  )));
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            // backgroundColor: Colors.purple[100],
-                            // foregroundColor: Colors.purple,
-                            child: Icon(Iconsax.tag),
-                          ),
-                          title: Text(
-                            'Labels',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text('Create labels'),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15.0),
-                        onTap: () async {
-                          final res = await Navigator.of(context).push(
-                              CupertinoPageRoute(
-                                  builder: (context) => BackupRestorePage()));
-                          if (res == "yes") {
-                            // loadNotes();
-                          }
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            // backgroundColor: Colors.teal[100],
-                            // foregroundColor: Colors.teal,
-                            child: Icon(Iconsax.document_download),
-                          ),
-                          title: Text(
-                            'Backup & Restore',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text('Bring back the dead'),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: ExpansionTile(
-                        subtitle: Text('Secure your notes'),
-                        leading: CircleAvatar(
-                          // backgroundColor: Colors.red[100],
-                          // foregroundColor: Colors.red,
-                          child: Icon(Iconsax.lock),
-                        ),
-                        title: Text('App Lock'),
-                        trailing: Icon(Iconsax.arrow_down_1),
-                        children: [
-                          if (!usePin && !useBiometric)
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(15.0),
-                                onTap: () {
-                                  if (usePin) {
-                                    showAppLockMenu();
-                                  } else {
-                                    callAppLock();
-                                  }
-                                },
-                                child: ListTile(
-                                  leading: SizedBox(
-                                    width: 20,
-                                  ),
-                                  title: Text(
-                                    'Set Pin',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (!usePin)
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: ListTile(
-                                leading: SizedBox(
-                                  width: 20,
-                                ),
-                                title: Text(
-                                  'Use Biometric',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                trailing: UniversalPlatform.isIOS
-                                    ? CupertinoSwitch(
-                                        value: useBiometric,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            useBiometric = value;
-                                            if (value) {
-                                              confirmBiometrics();
-                                            } else {
-                                              sharedPreferences.setBool(
-                                                  'use_biometric', false);
-                                            }
-                                            print(useBiometric);
-                                          });
-                                        },
-                                      )
-                                    : Switch(
-                                        value: useBiometric,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            useBiometric = value;
-                                            if (value) {
-                                              confirmBiometrics();
-                                            } else {
-                                              sharedPreferences.setBool(
-                                                  'use_biometric', false);
-                                            }
-                                            print(useBiometric);
-                                          });
-                                        },
-                                      ),
-                              ),
-                            ),
-                          if (usePin)
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(15),
-                                onTap: () {
-                                  callAppLock();
-                                },
-                                child: ListTile(
-                                  leading: SizedBox(
-                                    width: 20,
-                                  ),
-                                  title: Text(
-                                    'Reset Passcode',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (usePin)
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 5.0),
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(15),
-                                onTap: () {
-                                  unSetAppLock();
-                                },
-                                child: ListTile(
-                                  leading: SizedBox(
-                                    width: 20,
-                                  ),
-                                  title: Text(
-                                    'Remove App lock',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: PopupMenuButton(
-                          padding: EdgeInsets.all(50),
-                          tooltip: 'Choose Theme',
-                          offset: Offset(100, 0),
-                          itemBuilder: (_) => <PopupMenuItem<String>>[
-                            new PopupMenuItem<String>(
-                                child: const Text('Light'), value: '0'),
-                            new PopupMenuItem<String>(
-                                child: const Text('Dark'), value: '1'),
-                            new PopupMenuItem<String>(
-                                child: const Text('System'), value: '2'),
-                          ],
-                          onSelected: (value) =>
-                              setThemeMode(context, value.toString()),
-                          child: ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            leading: CircleAvatar(
-                              // backgroundColor: Colors.orange[100],
-                              // foregroundColor: Colors.orange,
-                              child: Icon(Iconsax.moon),
-                            ),
-                            title: Text('App Theme'),
-                            subtitle: Text(_themeModeName),
-                            trailing: Icon(Iconsax.arrow_down_1),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: kGlobalCardPadding,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(15.0),
-                        onTap: () {
-                          Navigator.of(context).push(CupertinoPageRoute(
-                              builder: (context) => AboutPage()));
-                        },
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            // backgroundColor: Colors.grey[100],
-                            // foregroundColor: Colors.grey,
-                            child: Icon(Iconsax.info_circle),
-                          ),
-                          title: Text(
-                            'About',
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text('Know the Team'),
-                        ),
-                      ),
-                    ),
-                  ],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 100.0,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  'Settings',
+                  style: TextStyle(
+                      color: darkModeOn ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w400),
                 ),
+                titlePadding: EdgeInsets.only(left: 30, bottom: 15),
               ),
-            ],
+            ),
+          ];
+        },
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: (isAppLogged
+                            ? Card(
+                                child: Container(
+                                  padding: kGlobalCardPadding * 3,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(100),
+                                            child: avatarData != null
+                                                ? Image(
+                                                    image: MemoryImage(
+                                                        avatarData!),
+                                                    width: 80,
+                                                  )
+                                                : Image(
+                                                    image: AssetImage(
+                                                        'images/bnotes.png'),
+                                                    width: 100,
+                                                  ),
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(username,
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w700)),
+                                          Text(useremail,
+                                              style: TextStyle(fontSize: 14)),
+                                        ],
+                                      ),
+                                      Container(
+                                        child: OutlinedButton(
+                                          child: Text('Sign Out'),
+                                          onPressed: () {
+                                            _confirmLogOut();
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : InkWell(
+                                borderRadius: BorderRadius.circular(15.0),
+                                onTap: () async {
+                                  final result = await Navigator.of(context)
+                                      .push(CupertinoPageRoute(
+                                          builder: (context) => LoginPage()));
+                                  setState(() {});
+                                  if (result == true)
+                                    setState(() {
+                                      isAppLogged = true;
+                                      getPref();
+                                    });
+                                },
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    // backgroundColor: Colors.blue[100],
+                                    // foregroundColor: Colors.blue,
+                                    child: Icon(Iconsax.user),
+                                  ),
+                                  title: Text(
+                                    'Nextcloud Login',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                  subtitle: Text('Sync Notes to cloud'),
+                                ),
+                              )),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15.0),
+                          onTap: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => LabelsPage(
+                                      noteid: '',
+                                      notelabel: '',
+                                    )));
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              // backgroundColor: Colors.purple[100],
+                              // foregroundColor: Colors.purple,
+                              child: Icon(Iconsax.tag),
+                            ),
+                            title: Text(
+                              'Labels',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text('Create labels'),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15.0),
+                          onTap: () async {
+                            final res = await Navigator.of(context).push(
+                                CupertinoPageRoute(
+                                    builder: (context) => BackupRestorePage()));
+                            if (res == "yes") {
+                              // loadNotes();
+                            }
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              // backgroundColor: Colors.teal[100],
+                              // foregroundColor: Colors.teal,
+                              child: Icon(Iconsax.document_download),
+                            ),
+                            title: Text(
+                              'Backup & Restore',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text('Bring back the dead'),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: ExpansionTile(
+                          subtitle: Text('Secure your notes'),
+                          leading: CircleAvatar(
+                            // backgroundColor: Colors.red[100],
+                            // foregroundColor: Colors.red,
+                            child: Icon(Iconsax.lock),
+                          ),
+                          title: Text('App Lock'),
+                          trailing: Icon(Iconsax.arrow_down_1),
+                          children: [
+                            if (!usePin && !useBiometric)
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(15.0),
+                                  onTap: () {
+                                    if (usePin) {
+                                      showAppLockMenu();
+                                    } else {
+                                      callAppLock();
+                                    }
+                                  },
+                                  child: ListTile(
+                                    leading: SizedBox(
+                                      width: 20,
+                                    ),
+                                    title: Text(
+                                      'Set Pin',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (!usePin)
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: ListTile(
+                                  leading: SizedBox(
+                                    width: 20,
+                                  ),
+                                  title: Text(
+                                    'Use Biometric',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  trailing: UniversalPlatform.isIOS
+                                      ? CupertinoSwitch(
+                                          value: useBiometric,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              useBiometric = value;
+                                              if (value) {
+                                                confirmBiometrics();
+                                              } else {
+                                                sharedPreferences.setBool(
+                                                    'use_biometric', false);
+                                              }
+                                              print(useBiometric);
+                                            });
+                                          },
+                                        )
+                                      : Switch(
+                                          value: useBiometric,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              useBiometric = value;
+                                              if (value) {
+                                                confirmBiometrics();
+                                              } else {
+                                                sharedPreferences.setBool(
+                                                    'use_biometric', false);
+                                              }
+                                              print(useBiometric);
+                                            });
+                                          },
+                                        ),
+                                ),
+                              ),
+                            if (usePin)
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(15),
+                                  onTap: () {
+                                    callAppLock();
+                                  },
+                                  child: ListTile(
+                                    leading: SizedBox(
+                                      width: 20,
+                                    ),
+                                    title: Text(
+                                      'Reset Passcode',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (usePin)
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(15),
+                                  onTap: () {
+                                    unSetAppLock();
+                                  },
+                                  child: ListTile(
+                                    leading: SizedBox(
+                                      width: 20,
+                                    ),
+                                    title: Text(
+                                      'Remove App lock',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: PopupMenuButton(
+                            padding: EdgeInsets.all(50),
+                            tooltip: 'Choose Theme',
+                            offset: Offset(100, 0),
+                            itemBuilder: (_) => <PopupMenuItem<String>>[
+                              new PopupMenuItem<String>(
+                                  child: const Text('Light'), value: '0'),
+                              new PopupMenuItem<String>(
+                                  child: const Text('Dark'), value: '1'),
+                              new PopupMenuItem<String>(
+                                  child: const Text('System'), value: '2'),
+                            ],
+                            onSelected: (value) =>
+                                setThemeMode(context, value.toString()),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              leading: CircleAvatar(
+                                // backgroundColor: Colors.orange[100],
+                                // foregroundColor: Colors.orange,
+                                child: Icon(Iconsax.moon),
+                              ),
+                              title: Text('App Theme'),
+                              subtitle: Text(_themeModeName),
+                              trailing: Icon(Iconsax.arrow_down_1),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: kGlobalCardPadding,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15.0),
+                          onTap: () {
+                            Navigator.of(context).push(CupertinoPageRoute(
+                                builder: (context) => AboutPage()));
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              // backgroundColor: Colors.grey[100],
+                              // foregroundColor: Colors.grey,
+                              child: Icon(Iconsax.info_circle),
+                            ),
+                            title: Text(
+                              'About',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text('Know the Team'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

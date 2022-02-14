@@ -15,6 +15,7 @@ ThemeData theme() {
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,
     transparentStatusBar: true,
+    fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
       elevatedButtonRadius: 25.0,
       textButtonRadius: 25.0,
@@ -37,6 +38,7 @@ ThemeData themeDark() {
     useSubThemes: true,
     transparentStatusBar: true,
     darkIsTrueBlack: true,
+    fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
       elevatedButtonRadius: 25.0,
       textButtonRadius: 25.0,

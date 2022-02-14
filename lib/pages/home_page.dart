@@ -143,39 +143,124 @@ class _HomePageState extends State<HomePage> {
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-              child: isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : (hasData
-                      ? (_viewType == ViewType.Grid
-                          ? Container(
-                              margin: isPortrait
-                                  ? EdgeInsets.zero
-                                  : EdgeInsets.symmetric(horizontal: 200),
-                              child: StaggeredGridView.countBuilder(
-                                crossAxisCount: isDesktop ? 4 : 2,
-                                crossAxisSpacing: 8,
-                                mainAxisSpacing: 0,
-                                physics: BouncingScrollPhysics(
-                                    parent: AlwaysScrollableScrollPhysics()),
-                                itemCount: notesList.length,
-                                staggeredTileBuilder: (index) {
-                                  return StaggeredTile.count(
-                                      1, index.isOdd ? 0.9 : 1.02);
-                                },
-                                itemBuilder: (context, index) {
-                                  var note = notesList[index];
-                                  List<NoteListItem> _noteList = [];
-                                  if (note.noteList.contains('{')) {
-                                    try {
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
+              expandedHeight: 100.0,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                title: Text(
+                  'Notes',
+                  style: TextStyle(
+                      color: darkModeOn ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w400),
+                ),
+                titlePadding: EdgeInsets.only(left: 30, bottom: 15),
+              ),
+              actions: [
+                Visibility(
+                  visible: viewType == ViewType.Tile,
+                  child: IconButton(
+                    icon: Icon(Iconsax.grid_3),
+                    onPressed: () {
+                      setState(() {
+                        viewType = ViewType.Grid;
+                        HomePage.staticGlobalKey.currentState!
+                            .toggleView(viewType);
+                      });
+                    },
+                  ),
+                ),
+                Visibility(
+                  visible: viewType == ViewType.Grid,
+                  child: IconButton(
+                    icon: Icon(Iconsax.row_vertical),
+                    onPressed: () {
+                      setState(() {
+                        viewType = ViewType.Tile;
+                        HomePage.staticGlobalKey.currentState!
+                            .toggleView(viewType);
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ];
+        },
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : (hasData
+                        ? (_viewType == ViewType.Grid
+                            ? Container(
+                                margin: isPortrait
+                                    ? EdgeInsets.zero
+                                    : EdgeInsets.symmetric(horizontal: 200),
+                                child: StaggeredGridView.countBuilder(
+                                  crossAxisCount: isDesktop ? 4 : 2,
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 0,
+                                  physics: BouncingScrollPhysics(),
+                                  itemCount: notesList.length,
+                                  staggeredTileBuilder: (index) {
+                                    return StaggeredTile.count(
+                                        1, index.isOdd ? 0.9 : 1.02);
+                                  },
+                                  itemBuilder: (context, index) {
+                                    var note = notesList[index];
+                                    List<NoteListItem> _noteList = [];
+                                    if (note.noteList.contains('{')) {
+                                      try {
+                                        final parsed = json
+                                            .decode(note.noteText)
+                                            .cast<Map<String, dynamic>>();
+                                        _noteList = parsed
+                                            .map<NoteListItem>((json) =>
+                                                NoteListItem.fromJson(json))
+                                            .toList();
+                                      } on Exception catch (e) {
+                                        // TODO
+                                      }
+                                    }
+                                    return NoteCardGrid(
+                                      note: note,
+                                      onTap: () {
+                                        setState(() {
+                                          selectedPageColor = note.noteColor;
+                                        });
+                                        _showNoteReader(context, note);
+                                      },
+                                      onLongPress: () {
+                                        _showOptionsSheet(context, note);
+                                      },
+                                    );
+                                  },
+                                ),
+                              )
+                            : Container(
+                                alignment: Alignment.center,
+                                margin: isDesktop
+                                    ? EdgeInsets.symmetric(horizontal: 200)
+                                    : EdgeInsets.all(0),
+                                child: ListView.builder(
+                                  itemCount: notesList.length,
+                                  physics: BouncingScrollPhysics(
+                                      parent: AlwaysScrollableScrollPhysics()),
+                                  itemBuilder: (context, index) {
+                                    var note = notesList[index];
+                                    List<NoteListItem> _noteList = [];
+                                    if (note.noteList.contains('{')) {
                                       final parsed = json
                                           .decode(note.noteText)
                                           .cast<Map<String, dynamic>>();
@@ -183,87 +268,50 @@ class _HomePageState extends State<HomePage> {
                                           .map<NoteListItem>((json) =>
                                               NoteListItem.fromJson(json))
                                           .toList();
-                                    } on Exception catch (e) {
-                                      // TODO
                                     }
-                                  }
-                                  return NoteCardGrid(
-                                    note: note,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedPageColor = note.noteColor;
-                                      });
-                                      _showNoteReader(context, note);
-                                    },
-                                    onLongPress: () {
-                                      _showOptionsSheet(context, note);
-                                    },
-                                  );
-                                },
-                              ),
-                            )
-                          : Container(
-                              alignment: Alignment.center,
-                              margin: isDesktop
-                                  ? EdgeInsets.symmetric(horizontal: 200)
-                                  : EdgeInsets.all(0),
-                              child: ListView.builder(
-                                itemCount: notesList.length,
-                                physics: BouncingScrollPhysics(
-                                    parent: AlwaysScrollableScrollPhysics()),
-                                itemBuilder: (context, index) {
-                                  var note = notesList[index];
-                                  List<NoteListItem> _noteList = [];
-                                  if (note.noteList.contains('{')) {
-                                    final parsed = json
-                                        .decode(note.noteText)
-                                        .cast<Map<String, dynamic>>();
-                                    _noteList = parsed
-                                        .map<NoteListItem>((json) =>
-                                            NoteListItem.fromJson(json))
-                                        .toList();
-                                  }
-                                  return NoteCardList(
-                                    note: note,
-                                    onTap: () {
-                                      setState(() {
-                                        selectedPageColor = note.noteColor;
-                                      });
-                                      _showNoteReader(context, note);
-                                    },
-                                    onLongPress: () {
-                                      _showOptionsSheet(context, note);
-                                    },
-                                  );
-                                },
-                              ),
-                            ))
-                      : Container(
-                          alignment: Alignment.topCenter,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                height: 150,
-                              ),
-                              Icon(
-                                Iconsax.note_1,
-                                size: 120,
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                'empty!',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w300, fontSize: 22),
-                              ),
-                            ],
-                          ),
-                        )),
-            ),
-          ],
+                                    return NoteCardList(
+                                      note: note,
+                                      onTap: () {
+                                        setState(() {
+                                          selectedPageColor = note.noteColor;
+                                        });
+                                        _showNoteReader(context, note);
+                                      },
+                                      onLongPress: () {
+                                        _showOptionsSheet(context, note);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ))
+                        : Container(
+                            alignment: Alignment.topCenter,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  height: 150,
+                                ),
+                                Icon(
+                                  Iconsax.note_1,
+                                  size: 120,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'empty!',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 22),
+                                ),
+                              ],
+                            ),
+                          )),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

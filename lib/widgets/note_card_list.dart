@@ -7,12 +7,9 @@ import 'package:flutter/material.dart';
 class NoteCardList extends StatefulWidget {
   final Notes note;
   final Function onTap;
-  final Function onLongPress;
+  final Function? onLongPress;
   const NoteCardList(
-      {Key? key,
-      required this.note,
-      required this.onTap,
-      required this.onLongPress})
+      {Key? key, required this.note, required this.onTap, this.onLongPress})
       : super(key: key);
 
   @override
@@ -29,8 +26,8 @@ class _NoteCardListState extends State<NoteCardList> {
       child: Card(
         color: NoteColor.getColor(widget.note.noteColor, darkModeOn),
         child: InkWell(
-           onTap: () => widget.onTap(),
-          onLongPress: () => widget.onLongPress(),
+          onTap: () => widget.onTap(),
+          onLongPress: () => widget.onLongPress!(),
           child: Padding(
             padding: kGlobalCardPadding,
             child: Column(
@@ -58,7 +55,7 @@ class _NoteCardListState extends State<NoteCardList> {
                     style: TextStyle(
                       color: Colors.black38,
                     ),
-                    maxLines: 1,
+                    maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
