@@ -6,7 +6,6 @@ import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/theme.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -79,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: themeMode,
       theme: theme(),
       darkTheme: themeDark(),
-      home: UniversalPlatform.isDesktopOrWeb? ScrawlDesktop(): StartPage(),
+      home: UniversalPlatform.isDesktopOrWeb ? ScrawlDesktop() : StartPage(),
     );
   }
 }

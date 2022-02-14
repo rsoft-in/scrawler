@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ColorPalette extends StatelessWidget {
+class ColorPaletteButton extends StatelessWidget {
   final Function onTap;
   final Color color;
   final bool isSelected;
 
-  const ColorPalette(
+  const ColorPaletteButton(
       {Key? key,
       required this.onTap,
       required this.color,

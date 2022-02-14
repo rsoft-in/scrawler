@@ -8,7 +8,7 @@ import 'package:bnotes/desktop/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:side_navigation/side_navigation.dart';
-import 'package:yaru_icons/widgets/yaru_icons.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class ScrawlDesktop extends StatefulWidget {
   const ScrawlDesktop({Key? key}) : super(key: key);

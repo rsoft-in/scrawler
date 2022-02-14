@@ -10,7 +10,7 @@ import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
 import 'package:bnotes/pages/labels_page.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
-import 'package:bnotes/widgets/color_palette.dart';
+import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -424,7 +424,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(0, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 0);
@@ -432,7 +432,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             },
                             isSelected: selectedPageColor == 0,
                           ),
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(1, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 1);
@@ -440,7 +440,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             },
                             isSelected: selectedPageColor == 1,
                           ),
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(2, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 2);
@@ -448,7 +448,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             },
                             isSelected: selectedPageColor == 2,
                           ),
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(3, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 3);
@@ -456,7 +456,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             },
                             isSelected: selectedPageColor == 3,
                           ),
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(4, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 4);
@@ -464,7 +464,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                             },
                             isSelected: selectedPageColor == 4,
                           ),
-                          ColorPalette(
+                          ColorPaletteButton(
                             color: NoteColor.getColor(5, darkModeOn),
                             onTap: () {
                               _updateColor(_note.noteId, 5);
