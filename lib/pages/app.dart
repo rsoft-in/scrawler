@@ -138,7 +138,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
           child: Scaffold(
             extendBodyBehindAppBar: true,
             body: PageView(
-              physics: NeverScrollableScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(),
               children: [
                 new HomePage(title: kAppName),
                 new ArchivePage(),

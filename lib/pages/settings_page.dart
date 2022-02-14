@@ -286,7 +286,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             // foregroundColor: Colors.red,
                             child: Icon(Iconsax.lock),
                           ),
-                          title: Text('App Lock'),
+                          title: Text('App Lock',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                           trailing: Icon(Iconsax.arrow_down_1),
                           children: [
                             if (!usePin && !useBiometric)
@@ -426,15 +427,14 @@ class _SettingsPageState extends State<SettingsPage> {
                             onSelected: (value) =>
                                 setThemeMode(context, value.toString()),
                             child: ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
                               leading: CircleAvatar(
                                 // backgroundColor: Colors.orange[100],
                                 // foregroundColor: Colors.orange,
                                 child: Icon(Iconsax.moon),
                               ),
-                              title: Text('App Theme'),
+                              title: Text('App Theme',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               subtitle: Text(_themeModeName),
                               trailing: Icon(Iconsax.arrow_down_1),
                             ),

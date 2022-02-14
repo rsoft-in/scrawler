@@ -45,7 +45,7 @@ class _BiometricPageState extends State<BiometricPage> {
     bool authenticated = false;
     try {
       authenticated = await _localAuthentication.authenticate(
-        localizedReason: "Authenticate for Testing",
+        localizedReason: "Use fingerprint",
         useErrorDialogs: true,
         stickyAuth: true,
       );

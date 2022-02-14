@@ -54,7 +54,7 @@ class _SearchPageState extends State<SearchPage> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = brightness == Brightness.dark;
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size(0, 5), child: Container()),
+      appBar: PreferredSize(preferredSize: Size(0, 30), child: Container()),
       body: Padding(
         padding: kGlobalOuterPadding,
         child: Column(
@@ -66,9 +66,6 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.all(6.0),
               child: Row(
                 children: [
-                  // Icon(
-                  //   Icons.search_rounded,
-                  // ),
                   SizedBox(
                     width: 10,
                   ),
@@ -106,16 +103,16 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(
-                        height: 80,
+                        height: 150,
                       ),
-                      Icon(Iconsax.search_status, size: 100),
+                      Icon(Iconsax.search_status, size: 120),
                       SizedBox(
                         height: 20,
                       ),
                       Text(
                         'Type to start searching.....',
                         style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 20),
+                            fontWeight: FontWeight.w300, fontSize: 22),
                       ),
                     ],
                   ),
