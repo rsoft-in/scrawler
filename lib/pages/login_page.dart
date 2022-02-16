@@ -271,8 +271,9 @@ class _LoginPageState extends State<LoginPage> {
       print('qs' + e.statusCode.toString());
       print(e.body);
       print(stacktrace);
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        content: Text('Unable to login. Try again.'),
+        content: Text('Unable to login. Check credentials and try again.'),
         duration: Duration(seconds: 2),
       ));
       setState(() {
