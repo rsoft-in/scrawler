@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class EditNotePage extends StatefulWidget {
   final Notes note;
@@ -89,7 +90,9 @@ class _EditNotePageState extends State<EditNotePage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Builder(builder: (context) {

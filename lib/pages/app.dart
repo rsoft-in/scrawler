@@ -12,6 +12,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 enum ViewType { Tile, Grid }
 
@@ -117,7 +118,9 @@ class _ScrawlAppState extends State<ScrawlApp> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     isDesktop = isDisplayDesktop(context);
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
@@ -138,7 +141,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
           child: Scaffold(
             extendBodyBehindAppBar: true,
             body: PageView(
-              // physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 new HomePage(title: kAppName),
                 new ArchivePage(),

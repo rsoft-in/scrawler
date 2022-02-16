@@ -9,15 +9,13 @@ import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
 import 'package:bnotes/pages/labels_page.dart';
-import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class NoteReaderPage extends StatefulWidget {
   final Notes note;
@@ -80,7 +78,9 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     print(note.toJson());
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -92,10 +92,10 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
               .withOpacity(0.6),
           leading: Container(
             margin: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.black.withOpacity(0.1),
-            ),
+            // decoration: BoxDecoration(
+            //   borderRadius: BorderRadius.circular(10),
+            //   color: Colors.black.withOpacity(0.1),
+            // ),
             child: InkWell(
               borderRadius: BorderRadius.circular(10),
               onTap: () {
@@ -305,6 +305,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
+                                      actionsPadding: EdgeInsets.all(10),
                                       title: Text('Attention!'),
                                       content:
                                           Text('Do you want to open the link?'),
@@ -400,7 +401,9 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
 
   void _showColorPalette(BuildContext context, Notes _note) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     isDesktop = isDisplayDesktop(context);
     showModalBottomSheet(
         context: context,
@@ -496,6 +499,7 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             : BoxConstraints(),
         builder: (context) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10.0),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(

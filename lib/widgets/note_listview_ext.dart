@@ -1,5 +1,6 @@
 import 'package:bnotes/models/note_list_model.dart';
 import 'package:flutter/material.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class NotesListViewExt extends StatefulWidget {
   final List<NoteListItem> noteListItems;
@@ -17,7 +18,9 @@ class _NotesListViewExtState extends State<NotesListViewExt> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         itemCount: widget.noteListItems.length,

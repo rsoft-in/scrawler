@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:side_navigation/side_navigation.dart';
 import 'package:yaru_icons/yaru_icons.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ScrawlDesktop extends StatefulWidget {
   const ScrawlDesktop({Key? key}) : super(key: key);
@@ -169,7 +170,9 @@ class _WindowIconButtonsState extends State<WindowIconButtons> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2),
       child: InkWell(

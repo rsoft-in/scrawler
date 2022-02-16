@@ -18,6 +18,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ArchivePage extends StatefulWidget {
   const ArchivePage({Key? key}) : super(key: key);
@@ -73,7 +74,9 @@ class _ArchivePageState extends State<ArchivePage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     isDesktop = isDisplayDesktop(context);
     return Scaffold(
       body: NestedScrollView(

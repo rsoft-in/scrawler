@@ -1,17 +1,19 @@
+import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:io';
-
 import 'package:universal_platform/universal_platform.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class BackupRestorePage extends StatefulWidget {
   BackupRestorePage({
@@ -231,7 +233,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
@@ -250,7 +254,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
             //   height: 80,
             // ),
             Icon(
-              Icons.backup_outlined,
+              Iconsax.document_download5,
               size: 100,
               color: darkModeOn ? Colors.white54 : Colors.black26,
             ),
@@ -300,36 +304,20 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
             Row(
               children: [
                 Expanded(
-                  child: TextButton(
+                  child: OutlinedButton.icon(
                     onPressed: () => _makeBackup(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.upload_outlined),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Backup')
-                      ],
-                    ),
+                    icon: Icon(Iconsax.document_upload),
+                    label: Text('Backup'),
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Expanded(
-                  child: OutlinedButton(
+                  child: ElevatedButton.icon(
                     onPressed: () => _restore(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.download_outlined),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text('Restore'),
-                      ],
-                    ),
+                    icon: Icon(Iconsax.document_download),
+                    label: Text('Restore'),
                   ),
                 ),
               ],

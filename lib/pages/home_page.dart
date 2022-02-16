@@ -24,6 +24,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.title})
@@ -138,7 +139,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
+    print(globals.themeMode);
     isDesktop = isDisplayDesktop(context);
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;

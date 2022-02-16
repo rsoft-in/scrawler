@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'pages/biometric_page.dart';
+import 'helpers/globals.dart' as globals;
 
 late SharedPreferences prefs;
 void main() {
@@ -38,6 +39,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
+  int themeID = 3;
 
   @override
   void initState() {
@@ -67,6 +69,7 @@ class _MyAppState extends State<MyApp> {
         themeMode = ThemeMode.system;
         prefs.setInt('themeMode', 2);
       }
+      globals.themeMode = themeMode;
     });
   }
 

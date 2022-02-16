@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'constants.dart';
 
-const FlexScheme usedScheme = FlexScheme.blueWhale;
+const FlexScheme usedScheme = FlexScheme.jungle;
 
 ThemeData theme() {
   return FlexThemeData.light(
@@ -15,14 +15,16 @@ ThemeData theme() {
     appBarStyle: FlexAppBarStyle.surface,
     useSubThemes: true,
     transparentStatusBar: true,
+    lightIsWhite: true,
     fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
-      elevatedButtonRadius: 25.0,
-      textButtonRadius: 25.0,
-      outlinedButtonRadius: 25.0,
+      elevatedButtonRadius: 10.0,
+      textButtonRadius: 10.0,
+      outlinedButtonRadius: 10.0,
       cardRadius: 10.0,
       cardElevation: .5,
-      bottomNavigationBarOpacity: 0.5,
+      bottomNavigationBarElevation: 25,
+      bottomSheetRadius: 10,
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
   );
@@ -38,15 +40,15 @@ ThemeData themeDark() {
     useSubThemes: true,
     transparentStatusBar: true,
     darkIsTrueBlack: true,
+    tooltipsMatchBackground: true,
     fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
-      elevatedButtonRadius: 25.0,
-      textButtonRadius: 25.0,
-      outlinedButtonRadius: 25.0,
+      elevatedButtonRadius: 10.0,
+      textButtonRadius: 10.0,
+      outlinedButtonRadius: 10.0,
       cardRadius: 10.0,
       cardElevation: 1,
-      bottomNavigationBarOpacity: 0.5,
-      inputDecoratorBorderType: FlexInputBorderType.outline,
+      bottomSheetRadius: 10,
     ),
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
   );

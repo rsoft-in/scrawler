@@ -1,6 +1,7 @@
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:flutter/material.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 import '../helpers/note_color.dart';
 
@@ -20,7 +21,9 @@ class _NoteCardGridState extends State<NoteCardGrid> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       margin: EdgeInsets.only(
         top: 10,

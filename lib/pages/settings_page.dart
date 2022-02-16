@@ -9,13 +9,13 @@ import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/biometric_page.dart';
 import 'package:bnotes/pages/login_page.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 import 'labels_page.dart';
 
@@ -72,9 +72,14 @@ class _SettingsPageState extends State<SettingsPage> {
         sharedPreferences.setInt('themeMode', 1);
         print(sharedPreferences.getInt('themeMode'));
         Phoenix.rebirth(context);
+      } else if (value == '2') {
+        themeMode = ThemeMode.dark;
+        sharedPreferences.setInt('themeMode', 2);
+        print(sharedPreferences.getInt('themeMode'));
+        Phoenix.rebirth(context);
       } else {
         themeMode = ThemeMode.system;
-        sharedPreferences.setInt('themeMode', 2);
+        sharedPreferences.setInt('themeMode', 3);
         print(sharedPreferences.getInt('themeMode'));
         Phoenix.rebirth(context);
       }
@@ -113,7 +118,9 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -187,7 +194,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                         ],
                                       ),
                                       Container(
-                                        child: OutlinedButton(
+                                        // child: ElevatedButton(
+                                        //   style: ElevatedButton.styleFrom(
+                                        //     primary: darkModeOn
+                                        //         ? Colors.white
+                                        //         : Colors.black,
+                                        //     onPrimary: darkModeOn
+                                        //         ? Colors.black
+                                        //         : Colors.white,
+                                        //   ),
+                                        //   child: Text('Sign Out'),
+                                        //   onPressed: () {
+                                        //     _confirmLogOut();
+                                        //   },
+                                        // ),
+                                        child: ElevatedButton(
                                           child: Text('Sign Out'),
                                           onPressed: () {
                                             _confirmLogOut();
@@ -422,7 +443,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               new PopupMenuItem<String>(
                                   child: const Text('Dark'), value: '1'),
                               new PopupMenuItem<String>(
-                                  child: const Text('System'), value: '2'),
+                                  child: const Text('System'), value: '3'),
                             ],
                             onSelected: (value) =>
                                 setThemeMode(context, value.toString()),

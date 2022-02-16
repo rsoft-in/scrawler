@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ColorPaletteButton extends StatelessWidget {
   final Function onTap;
@@ -15,7 +16,9 @@ class ColorPaletteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return GestureDetector(
       child: new Container(
         margin: EdgeInsets.all(8.0),

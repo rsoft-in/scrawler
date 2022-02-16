@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class AppLockPage extends StatefulWidget {
   final AppLockState appLockState;
@@ -51,7 +52,9 @@ class _AppLockPageState extends State<AppLockPage> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
 
     return Scaffold(
       backgroundColor: kPrimaryColor,
@@ -288,7 +291,9 @@ class _PinDotsState extends State<PinDots> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       width: 10,
       height: 10,
@@ -320,7 +325,9 @@ class _PinButtonState extends State<PinButton> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       margin: EdgeInsets.all(10),
       child: InkWell(
@@ -357,7 +364,9 @@ class _FunctionButtonState extends State<FunctionButton> {
   @override
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       margin: EdgeInsets.all(10),
       child: InkWell(

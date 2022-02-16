@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class AppBarBackButton extends StatefulWidget {
   final Function? onTap;
@@ -12,8 +13,10 @@ class AppBarBackButton extends StatefulWidget {
 class _AppBarBackButtonState extends State<AppBarBackButton> {
   @override
   Widget build(BuildContext context) {
-     var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = brightness == Brightness.dark;
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
