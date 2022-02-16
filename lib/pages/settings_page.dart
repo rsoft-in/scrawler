@@ -9,6 +9,7 @@ import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/pages/biometric_page.dart';
 import 'package:bnotes/pages/login_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -155,6 +156,14 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: kGlobalCardPadding,
                         child: (isAppLogged
                             ? Card(
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: BorderSide(
+                                      color: darkModeOn
+                                          ? Colors.white24
+                                          : Colors.black12,
+                                    )),
                                 child: Container(
                                   padding: kGlobalCardPadding * 3,
                                   child: Row(
@@ -194,21 +203,15 @@ class _SettingsPageState extends State<SettingsPage> {
                                         ],
                                       ),
                                       Container(
-                                        // child: ElevatedButton(
-                                        //   style: ElevatedButton.styleFrom(
-                                        //     primary: darkModeOn
-                                        //         ? Colors.white
-                                        //         : Colors.black,
-                                        //     onPrimary: darkModeOn
-                                        //         ? Colors.black
-                                        //         : Colors.white,
-                                        //   ),
-                                        //   child: Text('Sign Out'),
-                                        //   onPressed: () {
-                                        //     _confirmLogOut();
-                                        //   },
-                                        // ),
                                         child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            primary: darkModeOn
+                                                ? Colors.white
+                                                : Colors.black,
+                                            onPrimary: darkModeOn
+                                                ? Colors.black
+                                                : Colors.white,
+                                          ),
                                           child: Text('Sign Out'),
                                           onPressed: () {
                                             _confirmLogOut();
