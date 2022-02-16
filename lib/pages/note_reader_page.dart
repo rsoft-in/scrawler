@@ -412,79 +412,68 @@ class _NoteReaderPageState extends State<NoteReaderPage> {
             ? BoxConstraints(maxWidth: 450, minWidth: 400)
             : BoxConstraints(),
         builder: (context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: Padding(
-                  padding: kGlobalOuterPadding,
-                  child: Container(
-                    height: 100,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 5.0, vertical: 12),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(0, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 0);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 0,
-                          ),
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(1, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 1);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 1,
-                          ),
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(2, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 2);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 2,
-                          ),
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(3, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 3);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 3,
-                          ),
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(4, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 4);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 4,
-                          ),
-                          ColorPaletteButton(
-                            color: NoteColor.getColor(5, darkModeOn),
-                            onTap: () {
-                              _updateColor(_note.noteId, 5);
-                              Navigator.pop(context);
-                            },
-                            isSelected: selectedPageColor == 5,
-                          ),
-                        ],
-                      ),
+          return Container(
+            margin: EdgeInsets.only(bottom: 30),
+            child: Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 60,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(0, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 0);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 0,
                     ),
-                  ),
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(1, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 1);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 1,
+                    ),
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(2, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 2);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 2,
+                    ),
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(3, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 3);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 3,
+                    ),
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(4, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 4);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 4,
+                    ),
+                    ColorPaletteButton(
+                      color: NoteColor.getColor(5, darkModeOn),
+                      onTap: () {
+                        _updateColor(_note.noteId, 5);
+                        Navigator.pop(context);
+                      },
+                      isSelected: selectedPageColor == 5,
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-            ],
+            ),
           );
         });
   }
