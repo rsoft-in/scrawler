@@ -1,6 +1,7 @@
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -57,7 +58,7 @@ class _AppLockPageState extends State<AppLockPage> {
             globals.themeMode == ThemeMode.system));
 
     return Scaffold(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: FlexColor.jungleDarkPrimary,
       body: Column(
         children: [
           SizedBox(
