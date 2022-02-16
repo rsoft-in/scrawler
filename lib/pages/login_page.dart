@@ -63,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.url,
                 autocorrect: false,
                 decoration: InputDecoration(
+                  hintText: 'Web address',
                   icon: Icon(Iconsax.global),
                 ),
               ),
@@ -74,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 decoration: InputDecoration(
+                  hintText: 'Username',
                   icon: Icon(Iconsax.user),
                 ),
               ),
@@ -86,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.visiblePassword,
                 autocorrect: false,
                 decoration: InputDecoration(
+                  hintText: 'Password',
                   icon: Icon(Iconsax.password_check),
                 ),
               ),
