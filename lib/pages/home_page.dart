@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/models/labels_model.dart';
 import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/edit_note_page.dart';
@@ -49,7 +50,9 @@ class _HomePageState extends State<HomePage> {
   late ViewType _viewType;
   ViewType viewType = ViewType.Tile;
   ScrollController scrollController = new ScrollController();
+  List<Notes> notesListAll = [];
   List<Notes> notesList = [];
+  List<Labels> labelList = [];
   bool isLoading = false;
   bool hasData = false;
 
@@ -57,6 +60,7 @@ class _HomePageState extends State<HomePage> {
   bool isIOS = UniversalPlatform.isIOS;
   bool isWeb = UniversalPlatform.isWeb;
   bool isDesktop = false;
+  String currentLabel = "";
 
   final dbHelper = DatabaseHelper.instance;
   var uuid = Uuid();
@@ -85,13 +89,20 @@ class _HomePageState extends State<HomePage> {
     if (isAndroid || isIOS) {
       await dbHelper.getNotesAll(_searchController.text).then((value) {
         setState(() {
-          print(value.length);
           isLoading = false;
           hasData = value.length > 0;
           notesList = value;
+          notesListAll = value;
         });
       });
     }
+  }
+
+  loadLabels() async {
+    await dbHelper.getLabelsAll().then((value) => setState(() {
+          labelList = value;
+          print(labelList.length);
+        }));
   }
 
   void toggleView(ViewType viewType) {
@@ -123,11 +134,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _filterNotes() {
+    setState(() {
+      notesList = notesListAll.where((element) {
+        return element.noteLabel.contains(currentLabel);
+      }).toList();
+    });
+  }
+
+  void _clearFilterNotes() {
+    setState(() {
+      notesList = notesListAll;
+    });
+  }
+
   @override
   void initState() {
     getPref();
     loadNotes();
-
+    loadLabels();
     super.initState();
   }
 
@@ -190,6 +215,41 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: 40,
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      Labels label = labelList[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (currentLabel.isEmpty ||
+                                  currentLabel != label.labelName) {
+                                currentLabel = label.labelName;
+                                _filterNotes();
+                              } else {
+                                currentLabel = "";
+                                _clearFilterNotes();
+                              }
+                            });
+                          },
+                          child: Chip(
+                              label: Text(label.labelName),
+                              backgroundColor: (currentLabel == label.labelName
+                                  ? kPrimaryColor
+                                  : Colors.grey)),
+                        ),
+                      );
+                    },
+                    scrollDirection: Axis.horizontal,
+                    itemCount: labelList.length,
+                  )),
             ),
           ];
         },
