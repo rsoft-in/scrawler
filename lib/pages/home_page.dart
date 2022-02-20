@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
@@ -11,6 +12,7 @@ import 'package:bnotes/pages/note_reader_page.dart';
 import 'package:bnotes/widgets/note_card_grid.dart';
 import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:bnotes/widgets/note_listview_ext.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
@@ -220,13 +222,15 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 40,
+                  height: 45,
                   child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       Labels label = labelList[index];
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () {
                             setState(() {
                               if (currentLabel.isEmpty ||
@@ -240,10 +244,19 @@ class _HomePageState extends State<HomePage> {
                             });
                           },
                           child: Chip(
-                              label: Text(label.labelName),
-                              backgroundColor: (currentLabel == label.labelName
-                                  ? kPrimaryColor
-                                  : Colors.grey)),
+                            label: Text(label.labelName),
+                            backgroundColor: (currentLabel == label.labelName
+                                ? FlexColor.jungleDarkPrimary
+                                : Colors.transparent),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              side: BorderSide(
+                                // width: 1,
+                                color: FlexColor.jungleDarkPrimary,
+                              ),
+                            ),
+                            padding: EdgeInsets.all(4),
+                          ),
                         ),
                       );
                     },
@@ -251,6 +264,9 @@ class _HomePageState extends State<HomePage> {
                     itemCount: labelList.length,
                   )),
             ),
+            // SliverPadding(
+            //   padding: EdgeInsets.only(top: 40),
+            // ),
           ];
         },
         body: Container(
@@ -389,11 +405,43 @@ class _HomePageState extends State<HomePage> {
             _noteTitleController.text = '';
             currentEditingNoteId = "";
           });
+
           _showEdit(context, new Notes('', '', '', '', '', 0, 0, ''));
         },
         child: Icon(Iconsax.add),
       ),
     );
+  }
+
+  openDialog(Widget page) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: darkModeOn ? Colors.black : Colors.white,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: darkModeOn ? Colors.white24 : Colors.black12,
+                ),
+                borderRadius: BorderRadius.circular(10)),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: darkModeOn ? Colors.black : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                constraints: BoxConstraints(
+                    maxWidth: 600,
+                    minWidth: 400,
+                    minHeight: 600,
+                    maxHeight: 600),
+                padding: EdgeInsets.all(8),
+                child: page),
+          );
+        });
   }
 
   void _showOptionsSheet(BuildContext context, Notes _note) {
@@ -770,11 +818,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showEdit(BuildContext context, Notes _note) async {
-    final res = await Navigator.of(context).push(new CupertinoPageRoute(
-        builder: (BuildContext context) => new EditNotePage(
-              note: _note,
-            )));
-    if (res is Notes) loadNotes();
+    if (!UniversalPlatform.isDesktop) {
+      final res = await Navigator.of(context).push(new CupertinoPageRoute(
+          builder: (BuildContext context) => new EditNotePage(
+                note: _note,
+              )));
+
+      if (res is Notes) loadNotes();
+    } else {
+      openDialog(EditNotePage(
+        note: _note,
+      ));
+    }
   }
 
   // Future<bool> _onBackPressed() async {

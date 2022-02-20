@@ -39,6 +39,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool isIOS = UniversalPlatform.isIOS;
   bool isWeb = UniversalPlatform.isWeb;
   bool isDesktop = false;
+  bool _isExpanded = false;
 
   int themeModeState = 0;
   String themeModeStateName = '';
@@ -223,17 +224,31 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ),
                               )
                             : InkWell(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(10.0),
                                 onTap: () async {
-                                  final result = await Navigator.of(context)
-                                      .push(CupertinoPageRoute(
-                                          builder: (context) => LoginPage()));
-                                  setState(() {});
-                                  if (result == true)
-                                    setState(() {
-                                      isAppLogged = true;
-                                      getPref();
-                                    });
+                                  if (!UniversalPlatform.isDesktop) {
+                                    final result = await Navigator.of(context)
+                                        .push(CupertinoPageRoute(
+                                            builder: (context) => LoginPage()));
+
+                                    setState(() {});
+                                    if (result == true)
+                                      setState(() {
+                                        isAppLogged = true;
+                                        getPref();
+                                      });
+                                  } else {
+                                    // final result = await Navigator.of(context)
+                                    //     .push(CupertinoPageRoute(
+                                    //         builder: (context) => LoginPage()));
+                                    openDialog(LoginPage());
+                                    setState(() {});
+                                    // if (result == true)
+                                    //   setState(() {
+                                    //     isAppLogged = true;
+                                    //     getPref();
+                                    //   });
+                                  }
                                 },
                                 child: ListTile(
                                   leading: CircleAvatar(
@@ -253,7 +268,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Padding(
                         padding: kGlobalCardPadding,
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           onTap: () {
                             Navigator.of(context).push(CupertinoPageRoute(
                                 builder: (context) => LabelsPage(
@@ -278,7 +293,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Padding(
                         padding: kGlobalCardPadding,
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           onTap: () async {
                             final res = await Navigator.of(context).push(
                                 CupertinoPageRoute(
@@ -318,7 +333,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(15.0),
+                                  borderRadius: BorderRadius.circular(10.0),
                                   onTap: () {
                                     if (usePin) {
                                       showAppLockMenu();
@@ -389,7 +404,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   onTap: () {
                                     callAppLock();
                                   },
@@ -410,7 +425,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(15),
+                                  borderRadius: BorderRadius.circular(10),
                                   onTap: () {
                                     unSetAppLock();
                                   },
@@ -434,7 +449,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         padding: kGlobalCardPadding,
                         child: Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: PopupMenuButton(
                             padding: EdgeInsets.all(50),
@@ -468,7 +483,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       Padding(
                         padding: kGlobalCardPadding,
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(10.0),
                           onTap: () {
                             Navigator.of(context).push(CupertinoPageRoute(
                                 builder: (context) => AboutPage()));
@@ -496,6 +511,37 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
+  }
+
+  openDialog(Widget page) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            backgroundColor: darkModeOn ? Colors.black : Colors.white,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: darkModeOn ? Colors.white24 : Colors.black12,
+                ),
+                borderRadius: BorderRadius.circular(10)),
+            child: Container(
+                decoration: BoxDecoration(
+                  color: darkModeOn ? Colors.black : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                constraints: BoxConstraints(
+                    maxWidth: 600,
+                    minWidth: 400,
+                    minHeight: 600,
+                    maxHeight: 600),
+                padding: EdgeInsets.all(8),
+                child: page),
+          );
+        });
   }
 
   void confirmBiometrics() async {

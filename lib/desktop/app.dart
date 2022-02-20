@@ -5,6 +5,11 @@ import 'package:bnotes/desktop/pages/archive_page.dart';
 import 'package:bnotes/desktop/pages/home_page.dart';
 import 'package:bnotes/desktop/pages/search_page.dart';
 import 'package:bnotes/desktop/pages/settings_page.dart';
+import 'package:bnotes/pages/archive_page.dart';
+import 'package:bnotes/pages/home_page.dart';
+import 'package:bnotes/pages/search_page.dart';
+import 'package:bnotes/pages/settings_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:side_navigation/side_navigation.dart';
@@ -20,97 +25,125 @@ class ScrawlDesktop extends StatefulWidget {
 
 class _ScrawlDesktopState extends State<ScrawlDesktop> {
   final _pageList = <Widget>[
-    new DHomePage(),
-    new DArchivePage(),
-    new DSearchPage(),
-    new DSettingsPage(),
+    new HomePage(
+      title: '',
+    ),
+    new ArchivePage(),
+    new SearchPage(),
+    new SettingsPage(),
   ];
   int _page = 0;
+  bool isExtended = false;
+
+  Widget menuItem(String title, int index, IconData? icon) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
+    // return Text(
+    //   title,
+    //   style: TextStyle(
+    //     fontWeight: _page == index ? FontWeight.bold : FontWeight.normal,
+    //     color: _page == index
+    //         ? FlexColor.jungleDarkPrimary
+    //         : (darkModeOn ? Colors.white : Colors.black),
+    //   ),
+    // );
+    return Tooltip(
+      message: title,
+      child: Icon(
+        icon,
+        color: _page == index
+            ? FlexColor.jungleDarkPrimary
+            : (darkModeOn ? Colors.white : Colors.black),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 56),
-        child: WindowTopBar(),
+        preferredSize: Size(MediaQuery.of(context).size.width, 80),
+        child: WindowTopBar(naviChildren: [
+          TextButton(
+            child: menuItem('Notes', 0, Iconsax.note),
+            onPressed: () {
+              setState(() {
+                _page = 0;
+              });
+            },
+          ),
+          TextButton(
+            child: menuItem('Archive', 1, Iconsax.archive),
+            onPressed: () {
+              setState(() {
+                _page = 1;
+              });
+            },
+          ),
+          TextButton(
+            child: menuItem('Search', 2, Iconsax.search_normal),
+            onPressed: () {
+              setState(() {
+                _page = 2;
+              });
+            },
+          ),
+          TextButton(
+            child: menuItem('Settings', 3, Iconsax.menu),
+            onPressed: () {
+              setState(() {
+                _page = 3;
+              });
+            },
+          ),
+        ]),
       ),
-      body: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Card(
-              child: SideNavigationBar(
-                initiallyExpanded: false,
-                toggler: SideBarToggler(
-                  expandIcon: Iconsax.arrow_right_3,
-                  shrinkIcon: Iconsax.arrow_left_2,
-                ),
-                theme: SideNavigationBarTheme(
-                    backgroundColor: null,
-                    showMainDivider: false,
-                    itemTheme: ItemTheme(selectedItemColor: kPrimaryColor),
-                    showFooterDivider: false,
-                    showHeaderDivider: false,
-                    togglerTheme: TogglerTheme()),
-                items: [
-                  SideNavigationBarItem(
-                    icon: Iconsax.note,
-                    label: 'Notes',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Iconsax.archive,
-                    label: 'Archive',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Iconsax.search_normal,
-                    label: 'Search',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Iconsax.menu,
-                    label: 'Menu',
-                  ),
-                ],
-                onTap: (index) {
-                  setState(() {
-                    _page = index;
-                  });
-                },
-                selectedIndex: _page,
-              ),
-            ),
-          ),
-          Expanded(
-            child: PageTransitionSwitcher(
-              transitionBuilder: (child, animation, secondaryAnimation) {
-                return FadeThroughTransition(
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                  child: child,
-                );
-              },
-              child: _pageList[_page],
-            ),
-          ),
-        ],
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 40),
+        child: PageTransitionSwitcher(
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return FadeThroughTransition(
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+              child: child,
+            );
+          },
+          child: _pageList[_page],
+        ),
       ),
     );
   }
 }
 
-class WindowTopBar extends StatelessWidget {
-  const WindowTopBar({Key? key}) : super(key: key);
+class WindowTopBar extends StatefulWidget {
+  final List<Widget> naviChildren;
+  const WindowTopBar({Key? key, required this.naviChildren}) : super(key: key);
 
+  @override
+  State<WindowTopBar> createState() => _WindowTopBarState();
+}
+
+class _WindowTopBarState extends State<WindowTopBar> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 0,
+      elevation: 1,
       child: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.all(8.0),
         child: WindowTitleBarBox(
           child: Row(
             children: [
               WindowButtons(),
               Expanded(child: MoveWindow()),
+              Row(
+                children: widget.naviChildren,
+              )
             ],
           ),
         ),
