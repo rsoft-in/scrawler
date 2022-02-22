@@ -60,6 +60,7 @@ class _LabelsPageState extends State<LabelsPage> {
 
   Future showTip() async {
     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+      behavior: SnackBarBehavior.floating,
       content: Text('Tap on the Label to Assign to a Note'),
       duration: Duration(seconds: 5),
     ));

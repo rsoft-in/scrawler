@@ -367,37 +367,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400),
                                   ),
-                                  trailing: UniversalPlatform.isIOS
-                                      ? CupertinoSwitch(
-                                          value: useBiometric,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              useBiometric = value;
-                                              if (value) {
-                                                confirmBiometrics();
-                                              } else {
-                                                sharedPreferences.setBool(
-                                                    'use_biometric', false);
-                                              }
-                                              print(useBiometric);
-                                            });
-                                          },
-                                        )
-                                      : Switch(
-                                          value: useBiometric,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              useBiometric = value;
-                                              if (value) {
-                                                confirmBiometrics();
-                                              } else {
-                                                sharedPreferences.setBool(
-                                                    'use_biometric', false);
-                                              }
-                                              print(useBiometric);
-                                            });
-                                          },
-                                        ),
+                                  trailing: Switch.adaptive(
+                                    value: useBiometric,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        useBiometric = value;
+                                        if (value) {
+                                          confirmBiometrics();
+                                        } else {
+                                          sharedPreferences.setBool(
+                                              'use_biometric', false);
+                                        }
+                                        print(useBiometric);
+                                      });
+                                    },
+                                  ),
                                 ),
                               ),
                             if (usePin)
@@ -611,6 +595,7 @@ class _SettingsPageState extends State<SettingsPage> {
             : BoxConstraints(),
         builder: (context) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10.0),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(

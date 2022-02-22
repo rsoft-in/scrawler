@@ -85,6 +85,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
         print(e.body);
         print(stacktrace);
         ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+          behavior: SnackBarBehavior.floating,
           content: Text('Unable to login. Try again.'),
           duration: Duration(seconds: 2),
         ));

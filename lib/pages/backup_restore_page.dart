@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
@@ -75,18 +74,26 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         await storage
             .writeData("[" + out.substring(0, out.length - 1) + "]")
             .then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Backup done'),
-          ));
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text('Backup done'),
+            ),
+          );
         });
       }
       if (UniversalPlatform.isIOS) {
         await storage
             .writeiOSData("[" + out.substring(0, out.length - 1) + "]")
             .then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Backup done'),
-          ));
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text('Backup done'),
+            ),
+          );
         });
       }
       if (isUploading) {
@@ -157,9 +164,12 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           });
           Navigator.pop(context);
           Navigator.pop(context, 'yes');
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('Restored'),
-          ));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              content: Text('Restored'),
+            ),
+          );
         });
         // final file = File(backupPath + '/bnotes.backup');
         // if (file.existsSync()) {
@@ -192,9 +202,12 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               element.noteList));
         });
         Navigator.pop(context, 'yes');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Restored'),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text('Restored'),
+          ),
+        );
       });
     }
   }
@@ -279,28 +292,18 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
             Divider(),
             ListTile(
               title: Text('Use Nextcloud'),
-              trailing: UniversalPlatform.isIOS
-                  ? CupertinoSwitch(
-                      value: isUploading,
-                      onChanged: (value) {
-                        setState(() {
-                          isUploading = value;
-                          print(isUploading);
-                        });
-                      },
-                    )
-                  : Switch(
-                      value: isUploading,
-                      onChanged: (value) {
-                        setState(() {
-                          isUploading = value;
-                          sharedPreferences.setBool(
-                              'nextcloud_backup', isUploading);
-                          print(isUploading);
-                        });
-                      },
-                    ),
+              trailing: Switch.adaptive(
+                value: isUploading,
+                onChanged: (value) {
+                  setState(() {
+                    isUploading = value;
+                    sharedPreferences.setBool('nextcloud_backup', isUploading);
+                    print(isUploading);
+                  });
+                },
+              ),
             ),
+
             Row(
               children: [
                 Expanded(

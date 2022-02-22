@@ -235,8 +235,8 @@ class _AppLockPageState extends State<AppLockPage> {
                   builder: (BuildContext context) => new ScrawlApp()),
               (route) => false);
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(new SnackBar(content: Text(INVALID_PIN)));
+          ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+              behavior: SnackBarBehavior.floating, content: Text(INVALID_PIN)));
           pinNumber = '';
           helperText = ENTER_PIN;
         }
@@ -258,13 +258,13 @@ class _AppLockPageState extends State<AppLockPage> {
             print('dingdong');
             Navigator.pop(context, true);
             ScaffoldMessenger.of(context)
-                .showSnackBar(new SnackBar(content: Text(LOCK_SET)));
+                .showSnackBar(new SnackBar(behavior: SnackBarBehavior.floating,content: Text(LOCK_SET)));
           } else {
             pinNumber = '';
             pinNumberConfirmed = '';
             helperText = SET_PIN;
             ScaffoldMessenger.of(context)
-                .showSnackBar(new SnackBar(content: Text(PIN_MISMATCH)));
+                .showSnackBar(new SnackBar(behavior: SnackBarBehavior.floating,content: Text(PIN_MISMATCH)));
           }
         }
       }

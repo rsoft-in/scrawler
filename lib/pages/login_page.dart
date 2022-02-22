@@ -136,6 +136,7 @@ class _LoginPageState extends State<LoginPage> {
             : BoxConstraints(),
         builder: (context) {
           return Container(
+            margin: EdgeInsets.only(bottom: 10.0),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
@@ -273,6 +274,7 @@ class _LoginPageState extends State<LoginPage> {
       print(stacktrace);
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+        behavior: SnackBarBehavior.floating,
         content: Text('Unable to login. Check credentials and try again.'),
         duration: Duration(seconds: 2),
       ));
