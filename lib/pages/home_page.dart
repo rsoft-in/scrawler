@@ -243,19 +243,20 @@ class _HomePageState extends State<HomePage> {
                               }
                             });
                           },
-                          child: Chip(
-                            label: Text(label.labelName),
-                            backgroundColor: (currentLabel == label.labelName
-                                ? FlexColor.jungleDarkPrimary
-                                : Colors.transparent),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: BorderSide(
-                                // width: 1,
-                                color: FlexColor.jungleDarkPrimary,
-                              ),
-                            ),
-                            padding: EdgeInsets.all(4),
+                          child: Container(
+                            child: Text(label.labelName),
+                            decoration: BoxDecoration(
+                                color: (currentLabel == label.labelName
+                                    ? FlexColor.jungleDarkPrimary
+                                    : Colors.transparent),
+                                border: Border.all(
+                                  color: (currentLabel == label.labelName
+                                      ? Colors.transparent
+                                      : FlexColor.jungleDarkPrimary),
+                                ),
+                                borderRadius: BorderRadius.circular(5)),
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(5),
                           ),
                         ),
                       );
@@ -264,9 +265,6 @@ class _HomePageState extends State<HomePage> {
                     itemCount: labelList.length,
                   )),
             ),
-            // SliverPadding(
-            //   padding: EdgeInsets.only(top: 40),
-            // ),
           ];
         },
         body: Container(
