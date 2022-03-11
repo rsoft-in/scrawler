@@ -218,53 +218,54 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            SliverToBoxAdapter(
-              child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  height: 45,
-                  child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      Labels label = labelList[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            setState(() {
-                              if (currentLabel.isEmpty ||
-                                  currentLabel != label.labelName) {
-                                currentLabel = label.labelName;
-                                _filterNotes();
-                              } else {
-                                currentLabel = "";
-                                _clearFilterNotes();
-                              }
-                            });
-                          },
-                          child: Container(
-                            child: Text(label.labelName),
-                            decoration: BoxDecoration(
-                                color: (currentLabel == label.labelName
-                                    ? FlexColor.jungleDarkPrimary
-                                    : Colors.transparent),
-                                border: Border.all(
+            if (labelList.length > 0)
+              SliverToBoxAdapter(
+                child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 10),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: 45,
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        Labels label = labelList[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            onTap: () {
+                              setState(() {
+                                if (currentLabel.isEmpty ||
+                                    currentLabel != label.labelName) {
+                                  currentLabel = label.labelName;
+                                  _filterNotes();
+                                } else {
+                                  currentLabel = "";
+                                  _clearFilterNotes();
+                                }
+                              });
+                            },
+                            child: Container(
+                              child: Text(label.labelName),
+                              decoration: BoxDecoration(
                                   color: (currentLabel == label.labelName
-                                      ? Colors.transparent
-                                      : FlexColor.jungleDarkPrimary),
-                                ),
-                                borderRadius: BorderRadius.circular(5)),
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(5),
+                                      ? FlexColor.jungleDarkPrimary
+                                      : Colors.transparent),
+                                  border: Border.all(
+                                    color: (currentLabel == label.labelName
+                                        ? Colors.transparent
+                                        : FlexColor.jungleDarkPrimary),
+                                  ),
+                                  borderRadius: BorderRadius.circular(5)),
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.all(5),
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    scrollDirection: Axis.horizontal,
-                    itemCount: labelList.length,
-                  )),
-            ),
+                        );
+                      },
+                      scrollDirection: Axis.horizontal,
+                      itemCount: labelList.length,
+                    )),
+              ),
           ];
         },
         body: Container(
