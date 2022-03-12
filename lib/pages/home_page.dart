@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
   bool isWeb = UniversalPlatform.isWeb;
   bool isDesktop = false;
   String currentLabel = "";
+  bool labelChecked = false;
 
   final dbHelper = DatabaseHelper.instance;
   var uuid = Uuid();
@@ -184,8 +185,9 @@ class _HomePageState extends State<HomePage> {
                 title: Text(
                   'Notes',
                   style: TextStyle(
-                      color: darkModeOn ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w400),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 titlePadding: EdgeInsets.only(left: 30, bottom: 15),
               ),
@@ -216,56 +218,13 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
+                IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer();
+                    },
+                    icon: Icon(Iconsax.filter))
               ],
             ),
-            if (labelList.length > 0)
-              SliverToBoxAdapter(
-                child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    height: 45,
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        Labels label = labelList[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: () {
-                              setState(() {
-                                if (currentLabel.isEmpty ||
-                                    currentLabel != label.labelName) {
-                                  currentLabel = label.labelName;
-                                  _filterNotes();
-                                } else {
-                                  currentLabel = "";
-                                  _clearFilterNotes();
-                                }
-                              });
-                            },
-                            child: Container(
-                              child: Text(label.labelName),
-                              decoration: BoxDecoration(
-                                  color: (currentLabel == label.labelName
-                                      ? FlexColor.jungleDarkPrimary
-                                      : Colors.transparent),
-                                  border: Border.all(
-                                    color: (currentLabel == label.labelName
-                                        ? Colors.transparent
-                                        : FlexColor.jungleDarkPrimary),
-                                  ),
-                                  borderRadius: BorderRadius.circular(5)),
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(5),
-                            ),
-                          ),
-                        );
-                      },
-                      scrollDirection: Axis.horizontal,
-                      itemCount: labelList.length,
-                    )),
-              ),
           ];
         },
         body: Container(
@@ -393,6 +352,82 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      endDrawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: 15, top: 30),
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  Icon(Iconsax.filter),
+                  SizedBox(
+                    width: 32,
+                  ),
+                  Text(
+                    'Filter Labels',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  Labels label = labelList[index];
+                  return ListTile(
+                    onTap: (() {
+                      setState(() {
+                        currentLabel = label.labelName;
+                        _filterNotes();
+                      });
+                    }),
+                    leading: Icon(Iconsax.tag),
+                    trailing: (currentLabel.isEmpty ||
+                            currentLabel != label.labelName)
+                        ? Icon(
+                            Icons.clear,
+                            color: Colors.transparent,
+                          )
+                        : Icon(
+                            Icons.check_outlined,
+                            color: FlexColor.jungleDarkPrimary,
+                          ),
+                    // leading: Checkbox(
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       if (currentLabel.isEmpty ||
+                    //           currentLabel != label.labelName) {
+                    //         currentLabel = label.labelName;
+                    //         _filterNotes();
+                    //       } else {
+                    //         currentLabel = "";
+                    //         _clearFilterNotes();
+                    //       }
+                    //     });
+                    //   },
+                    //   value: labelChecked,
+                    // ),
+                    title: Text(label.labelName),
+                  );
+                },
+                itemCount: labelList.length,
+              ),
+            ),
+            ListTile(
+              trailing: Icon(Iconsax.close_square),
+              title: Text('Clear Filter'),
+              onTap: () {
+                setState(() {
+                  currentLabel = "";
+                  _filterNotes();
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         elevation: 0,
         focusElevation: 0,
@@ -404,7 +439,6 @@ class _HomePageState extends State<HomePage> {
             _noteTitleController.text = '';
             currentEditingNoteId = "";
           });
-
           _showEdit(context, new Notes('', '', '', '', '', 0, 0, ''));
         },
         child: Icon(Iconsax.add),

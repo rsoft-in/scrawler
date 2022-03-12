@@ -134,8 +134,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(
                   'Settings',
                   style: TextStyle(
-                      color: darkModeOn ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w400),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 titlePadding: EdgeInsets.only(left: 30, bottom: 15),
               ),
@@ -431,36 +432,22 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                       Padding(
                         padding: kGlobalCardPadding,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: PopupMenuButton(
-                            padding: EdgeInsets.all(50),
-                            tooltip: 'Choose Theme',
-                            offset: Offset(100, 0),
-                            itemBuilder: (_) => <PopupMenuItem<String>>[
-                              new PopupMenuItem<String>(
-                                  child: const Text('Light'), value: '0'),
-                              new PopupMenuItem<String>(
-                                  child: const Text('Dark'), value: '1'),
-                              new PopupMenuItem<String>(
-                                  child: const Text('System'), value: '3'),
-                            ],
-                            onSelected: (value) =>
-                                setThemeMode(context, value.toString()),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                // backgroundColor: Colors.orange[100],
-                                // foregroundColor: Colors.orange,
-                                child: Icon(Iconsax.moon),
-                              ),
-                              title: Text('App Theme',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              subtitle: Text(_themeModeName),
-                              trailing: Icon(Iconsax.arrow_down_1),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(10.0),
+                          onTap: () {
+                            themeDialog();
+                          },
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              // backgroundColor: Colors.grey[100],
+                              // foregroundColor: Colors.grey,
+                              child: Icon(Iconsax.moon),
                             ),
+                            title: Text(
+                              'App Theme',
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(_themeModeName),
                           ),
                         ),
                       ),
@@ -524,6 +511,157 @@ class _SettingsPageState extends State<SettingsPage> {
                     maxHeight: 600),
                 padding: EdgeInsets.all(8),
                 child: page),
+          );
+        });
+  }
+
+  void themeDialog() {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
+    showModalBottomSheet(
+        context: context,
+        isDismissible: true,
+        constraints: isDesktop
+            ? BoxConstraints(maxWidth: 450, minWidth: 400)
+            : BoxConstraints(),
+        builder: (context) {
+          return Container(
+            margin: EdgeInsets.only(bottom: 20.0),
+            child: Padding(
+              padding: kGlobalOuterPadding,
+              child: Container(
+                height: 200,
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          'Change theme',
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: FlexColor.jungleDarkSecondary),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, bottom: 18),
+                        child: Text(
+                          _themeModeName,
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: FlexColor.jungleDarkSecondary),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.withOpacity(0.3),
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.sun_1,
+                                    size: 30,
+                                    color: Colors.amber,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Light',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () => setThemeMode(context, '0'),
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.moon,
+                                    size: 30,
+                                    color: Colors.purple,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'Dark',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () => setThemeMode(context, '1'),
+                          ),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.withOpacity(0.3),
+                                  ),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Iconsax.setting,
+                                    size: 30,
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    'System',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            onTap: () => setThemeMode(context, '2'),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           );
         });
   }

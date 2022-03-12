@@ -89,8 +89,9 @@ class _ArchivePageState extends State<ArchivePage> {
                 title: Text(
                   'Archive',
                   style: TextStyle(
-                      color: darkModeOn ? Colors.white : Colors.black,
-                      fontWeight: FontWeight.w400),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 titlePadding: EdgeInsets.only(left: 30, bottom: 15),
               ),

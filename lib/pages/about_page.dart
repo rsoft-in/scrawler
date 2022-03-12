@@ -180,6 +180,28 @@ class _AboutPageState extends State<AboutPage> {
                   child: Icon(LineIcons.telegram),
                 ),
                 title: Text('Telegram Channel'),
+                subtitle: Text('Latest news about \'scrawl\''),
+              ),
+            ),
+            InkWell(
+              borderRadius: BorderRadius.circular(15.0),
+              onTap: () async {
+                if (await canLaunch('https://paypal.me/nandanrmenon')) {
+                  await launch(
+                    'https://paypal.me/nandanrmenon',
+                    forceSafariVC: false,
+                    forceWebView: false,
+                  );
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(LineIcons.github),
+                ),
+                title: Text('Github'),
+                subtitle: Text('Check out our source code'),
               ),
             ),
             InkWell(
@@ -201,6 +223,28 @@ class _AboutPageState extends State<AboutPage> {
                   child: Icon(LineIcons.bug),
                 ),
                 title: Text('Report Bug'),
+                subtitle: Text('Found a bug? Report here.'),
+              ),
+            ),
+            InkWell(
+              borderRadius: BorderRadius.circular(15.0),
+              onTap: () async {
+                if (await canLaunch('https://paypal.me/nandanrmenon')) {
+                  await launch(
+                    'https://paypal.me/nandanrmenon',
+                    forceSafariVC: false,
+                    forceWebView: false,
+                  );
+                } else {
+                  throw 'Could not launch';
+                }
+              },
+              child: ListTile(
+                leading: CircleAvatar(
+                  child: Icon(LineIcons.donate),
+                ),
+                title: Text('Donate us!'),
+                subtitle: Text('using PayPal'),
               ),
             ),
           ],
