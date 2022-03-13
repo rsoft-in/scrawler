@@ -356,7 +356,12 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(left: 15, top: 30),
+              decoration: BoxDecoration(
+                color: darkModeOn
+                    ? FlexColor.jungleDarkPrimary.lighten(10).withOpacity(0.5)
+                    : FlexColor.jungleDarkPrimary.lighten(5).withOpacity(0.5),
+              ),
+              padding: EdgeInsets.only(left: 15, top: 56, bottom: 20),
               alignment: Alignment.center,
               child: Row(
                 children: [
@@ -371,60 +376,101 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, index) {
-                  Labels label = labelList[index];
-                  return ListTile(
-                    onTap: (() {
-                      setState(() {
-                        currentLabel = label.labelName;
-                        _filterNotes();
-                      });
-                    }),
-                    leading: Icon(Iconsax.tag),
-                    trailing: (currentLabel.isEmpty ||
-                            currentLabel != label.labelName)
-                        ? Icon(
-                            Icons.clear,
-                            color: Colors.transparent,
-                          )
-                        : Icon(
-                            Icons.check_outlined,
-                            color: FlexColor.jungleDarkPrimary,
-                          ),
-                    // leading: Checkbox(
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       if (currentLabel.isEmpty ||
-                    //           currentLabel != label.labelName) {
-                    //         currentLabel = label.labelName;
-                    //         _filterNotes();
-                    //       } else {
-                    //         currentLabel = "";
-                    //         _clearFilterNotes();
-                    //       }
-                    //     });
-                    //   },
-                    //   value: labelChecked,
-                    // ),
-                    title: Text(label.labelName),
-                  );
-                },
-                itemCount: labelList.length,
+            if (labelList.isEmpty)
+              Expanded(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Iconsax.tag,
+                        size: 80,
+                        color: FlexColor.jungleDarkPrimaryVariant,
+                      ),
+                      SizedBox(height: 20),
+                      Text('No labels created'),
+                      TextButton(
+                          onPressed: () {}, child: Text('Create labels')),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            ListTile(
-              trailing: Icon(Iconsax.close_square),
-              title: Text('Clear Filter'),
-              onTap: () {
-                setState(() {
-                  currentLabel = "";
-                  _filterNotes();
-                });
-                Navigator.pop(context);
-              },
-            ),
+            if (labelList.isNotEmpty)
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    Labels label = labelList[index];
+                    return ListTile(
+                      onTap: (() {
+                        setState(() {
+                          currentLabel = label.labelName;
+                          _filterNotes();
+                        });
+                      }),
+                      leading: Icon(Iconsax.tag),
+                      trailing: (currentLabel.isEmpty ||
+                              currentLabel != label.labelName)
+                          ? Icon(
+                              Icons.clear,
+                              color: Colors.transparent,
+                            )
+                          : Icon(
+                              Icons.check_outlined,
+                              color: FlexColor.jungleDarkPrimary,
+                            ),
+                      title: Text(label.labelName),
+                    );
+                  },
+                  itemCount: labelList.length,
+                ),
+              ),
+            if (labelList.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  tileColor: darkModeOn
+                      ? FlexColor.jungleDarkSecondary
+                          .lighten(20)
+                          .withOpacity(0.5)
+                      : FlexColor.jungleDarkSecondary
+                          .lighten(30)
+                          .withOpacity(0.5),
+                  trailing: Icon(Iconsax.close_square),
+                  title: Text('Clear Filter'),
+                  onTap: () {
+                    setState(() {
+                      currentLabel = "";
+                      _filterNotes();
+                    });
+                    Navigator.pop(context);
+                  },
+                  dense: true,
+                ),
+              ),
+            if (labelList.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  tileColor: darkModeOn
+                      ? FlexColor.jungleDarkSecondary
+                          .lighten(5)
+                          .withOpacity(0.5)
+                      : FlexColor.jungleDarkSecondary
+                          .lighten(10)
+                          .withOpacity(0.5),
+                  trailing: Icon(Iconsax.tag),
+                  title: Text('Manage Labels'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    openLabelEditor();
+                  },
+                  dense: true,
+                ),
+              ),
           ],
         ),
       ),
@@ -444,6 +490,15 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Iconsax.add),
       ),
     );
+  }
+
+  void openLabelEditor() async {
+    var res = await Navigator.of(context).push(new CupertinoPageRoute(
+        builder: (BuildContext context) => new LabelsPage(
+              noteid: '',
+              notelabel: '',
+            )));
+    loadLabels();
   }
 
   openDialog(Widget page) {
