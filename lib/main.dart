@@ -4,6 +4,7 @@ import 'package:bnotes/desktop/app.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
+import 'package:bnotes/pages/introduction_page.dart';
 import 'package:bnotes/theme.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter/cupertino.dart';
@@ -97,6 +98,7 @@ class _StartPageState extends State<StartPage> {
   bool isAppUnlocked = false;
   bool isPinRequired = false;
   bool useBiometric = false;
+  bool newUser = true;
 
   getPreferences() async {
     prefs = await SharedPreferences.getInstance();
@@ -104,8 +106,7 @@ class _StartPageState extends State<StartPage> {
       isAppUnlocked = prefs.getBool("is_app_unlocked") ?? false;
       isPinRequired = prefs.getBool("is_pin_required") ?? false;
       useBiometric = prefs.getBool('use_biometric') ?? false;
-      print(isAppUnlocked);
-      print(isPinRequired);
+      newUser = prefs.getBool('newUser') ?? true;
 
       if (isPinRequired) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -117,10 +118,17 @@ class _StartPageState extends State<StartPage> {
       } else if (useBiometric) {
         confirmBiometrics();
       } else {
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-                builder: (BuildContext context) => new ScrawlApp()),
-            (Route<dynamic> route) => false);
+        if (newUser) {
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(
+                builder: (BuildContext context) => new IntroductionPage(),
+              ),
+              (Route<dynamic> route) => false);
+        } else
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(
+                  builder: (BuildContext context) => new ScrawlApp()),
+              (Route<dynamic> route) => false);
       }
     });
     if (mounted) {
