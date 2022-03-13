@@ -3,6 +3,7 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/pages/note_reader_page.dart';
+import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +73,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 10,
+                      width: 20,
                     ),
                     Expanded(
                         child: TextField(
@@ -116,6 +117,7 @@ class _SearchPageState extends State<SearchPage> {
                     Visibility(
                       visible: _showClearButton,
                       child: InkWell(
+                          borderRadius: BorderRadius.circular(10),
                           onTap: () {
                             setState(() {
                               _searchController.clear();
@@ -165,86 +167,14 @@ class _SearchPageState extends State<SearchPage> {
               margin: EdgeInsets.symmetric(horizontal: 10),
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
+                physics: BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
                 itemBuilder: (context, index) {
-                  return Card(
-                    color: darkModeOn
-                        ? FlexColor.blueWhaleDarkPrimary.lighten()
-                        : FlexColor.blueWhaleDarkPrimary.lighten(30),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          selectedPageColor = notesList[index].noteColor;
-                        });
-                        _showNoteReader(context, notesList[index]);
-                      },
-                      child: Padding(
-                        padding: kGlobalCardPadding,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Visibility(
-                              visible: notesList[index].noteTitle.isNotEmpty,
-                              child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  notesList[index].noteTitle,
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: darkModeOn
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                notesList[index].noteText,
-                                style: TextStyle(
-                                  color: darkModeOn
-                                      ? Colors.white60
-                                      : Colors.black38,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.all(5.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        notesList[index].noteLabel,
-                                        style: TextStyle(
-                                            color: darkModeOn
-                                                ? Colors.white38
-                                                : Colors.black38,
-                                            fontSize: 12.0),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        Utility.formatDateTime(
-                                            notesList[index].noteDate),
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: darkModeOn
-                                                ? Colors.white38
-                                                : Colors.black38,
-                                            fontSize: 12.0),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
+                  return NoteCardList(
+                    note: notesList[index],
+                    onTap: () {
+                      _showNoteReader(context, notesList[index]);
+                    },
                   );
                 },
                 itemCount: notesList.length,

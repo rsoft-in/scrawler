@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
 class NoteCardList extends StatefulWidget {
-  final Notes note;
+  final Notes? note;
   final Function onTap;
   final Function? onLongPress;
   const NoteCardList(
-      {Key? key, required this.note, required this.onTap, this.onLongPress})
+      {Key? key, this.note, required this.onTap, this.onLongPress})
       : super(key: key);
 
   @override
@@ -27,7 +27,7 @@ class _NoteCardListState extends State<NoteCardList> {
     return Container(
       margin: EdgeInsets.only(top: 10),
       child: Card(
-        color: NoteColor.getColor(widget.note.noteColor, darkModeOn),
+        color: NoteColor.getColor(widget.note!.noteColor, darkModeOn),
         child: InkWell(
           onTap: () => widget.onTap(),
           onLongPress: () => widget.onLongPress!(),
@@ -39,11 +39,11 @@ class _NoteCardListState extends State<NoteCardList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Visibility(
-                  visible: widget.note.noteTitle.isNotEmpty,
+                  visible: widget.note!.noteTitle.isNotEmpty,
                   child: Padding(
                     padding: EdgeInsets.all(5.0),
                     child: Text(
-                      widget.note.noteTitle,
+                      widget.note!.noteTitle,
                       style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
@@ -54,9 +54,9 @@ class _NoteCardListState extends State<NoteCardList> {
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(
-                    widget.note.noteText,
+                    widget.note!.noteText,
                     style: TextStyle(
-                      color: Colors.black38,
+                      color: Colors.black54,
                     ),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -84,9 +84,11 @@ class _NoteCardListState extends State<NoteCardList> {
                     children: [
                       Expanded(
                         child: Text(
-                          widget.note.noteLabel,
+                          widget.note!.noteLabel.replaceAll(",", ", "),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.black38,
+                            color: Colors.black54,
                             fontSize: 12.0,
                           ),
                         ),
@@ -94,11 +96,11 @@ class _NoteCardListState extends State<NoteCardList> {
                       Expanded(
                         child: Text(
                           Utility.formatDateTime(
-                            widget.note.noteDate,
+                            widget.note!.noteDate,
                           ),
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            color: Colors.black38,
+                            color: Colors.black54,
                             fontSize: 12.0,
                           ),
                         ),

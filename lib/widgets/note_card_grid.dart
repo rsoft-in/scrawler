@@ -6,11 +6,11 @@ import 'package:bnotes/helpers/globals.dart' as globals;
 import '../helpers/note_color.dart';
 
 class NoteCardGrid extends StatefulWidget {
-  final Notes note;
+  final Notes? note;
   final Function onTap;
   final Function? onLongPress;
   const NoteCardGrid(
-      {Key? key, required this.note, required this.onTap, this.onLongPress})
+      {Key? key, this.note, required this.onTap, this.onLongPress})
       : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _NoteCardGridState extends State<NoteCardGrid> {
         top: 10,
       ),
       child: Card(
-        color: NoteColor.getColor(widget.note.noteColor, darkModeOn),
+        color: NoteColor.getColor(widget.note!.noteColor, darkModeOn),
         child: InkWell(
           borderRadius: BorderRadius.circular(15.0),
           onTap: () => widget.onTap(),
@@ -40,11 +40,11 @@ class _NoteCardGridState extends State<NoteCardGrid> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Visibility(
-                  visible: widget.note.noteTitle.isNotEmpty,
+                  visible: widget.note!.noteTitle.isNotEmpty,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      widget.note.noteTitle,
+                      widget.note!.noteTitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: 20.0, color: Colors.black),
@@ -55,10 +55,10 @@ class _NoteCardGridState extends State<NoteCardGrid> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      widget.note.noteText,
+                      widget.note!.noteText,
                       maxLines: 6,
                       overflow: TextOverflow.fade,
-                      style: TextStyle(color: Colors.black38),
+                      style: TextStyle(color: Colors.black54),
                     ),
                   ),
                 ),
@@ -80,14 +80,14 @@ class _NoteCardGridState extends State<NoteCardGrid> {
                     children: [
                       Expanded(
                           child: Text(
-                        widget.note.noteLabel,
+                        widget.note!.noteLabel,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.black38, fontSize: 12.0),
+                        style: TextStyle(color: Colors.black54, fontSize: 12.0),
                       )),
                       Text(
-                        Utility.formatDateTime(widget.note.noteDate),
-                        style: TextStyle(color: Colors.black38, fontSize: 12.0),
+                        Utility.formatDateTime(widget.note!.noteDate),
+                        style: TextStyle(color: Colors.black54, fontSize: 12.0),
                       ),
                     ],
                   ),
