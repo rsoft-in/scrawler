@@ -390,7 +390,10 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(height: 20),
                       Text('No labels created'),
                       TextButton(
-                          onPressed: () {}, child: Text('Create labels')),
+                          onPressed: () {
+                            openLabelEditor();
+                          },
+                          child: Text('Create labels')),
                     ],
                   ),
                 ),
