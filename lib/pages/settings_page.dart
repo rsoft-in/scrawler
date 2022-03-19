@@ -528,7 +528,7 @@ class _SettingsPageState extends State<SettingsPage> {
             : BoxConstraints(),
         builder: (context) {
           return Container(
-            margin: EdgeInsets.only(bottom: 20.0),
+            margin: EdgeInsets.only(bottom: 40.0),
             child: Padding(
               padding: kGlobalOuterPadding,
               child: Container(
