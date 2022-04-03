@@ -63,74 +63,66 @@ class _SearchPageState extends State<SearchPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            color: darkModeOn
-                ? FlexColor.jungleDarkPrimary.withOpacity(0.5)
-                : FlexColor.jungleLightPrimary.withOpacity(0.5),
-            child: SafeArea(
-              child: Container(
-                margin: EdgeInsets.only(top: 21, bottom: 20),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 20,
+          SafeArea(
+            child: Container(
+              margin: EdgeInsets.only(top: 21, bottom: 20),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Expanded(
+                      child: TextField(
+                    controller: _searchController,
+                    focusNode: searchFocusNode,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: darkModeOn
+                              ? Colors.grey.withOpacity(0.3)
+                              : FlexColor.jungleLightPrimary.withOpacity(0.4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: darkModeOn
+                              ? Colors.grey.withOpacity(0.3)
+                              : FlexColor.jungleLightPrimary.withOpacity(0.4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: darkModeOn
+                              ? Colors.grey.withOpacity(0.3)
+                              : FlexColor.jungleLightPrimary.withOpacity(0.4),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    Expanded(
-                        child: TextField(
-                      controller: _searchController,
-                      focusNode: searchFocusNode,
-                      decoration: InputDecoration(
-                          hintText: 'Search',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: darkModeOn
-                                  ? Colors.grey.withOpacity(0.3)
-                                  : FlexColor.jungleLightPrimary
-                                      .withOpacity(0.4),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: darkModeOn
-                                  ? Colors.grey.withOpacity(0.3)
-                                  : FlexColor.jungleLightPrimary
-                                      .withOpacity(0.4),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: darkModeOn
-                                  ? Colors.grey.withOpacity(0.3)
-                                  : FlexColor.jungleLightPrimary
-                                      .withOpacity(0.4),
-                            ),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          hintStyle: TextStyle(color: Colors.white)),
-                      onChanged: (value) => loadNotes(value),
-                    )),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Visibility(
-                      visible: _showClearButton,
-                      child: InkWell(
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            setState(() {
-                              _searchController.clear();
-                            });
-                            notesList.clear();
-                          },
-                          child: Icon(Iconsax.close_circle)),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                  ],
-                ),
+                    onChanged: (value) => loadNotes(value),
+                  )),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Visibility(
+                    visible: _showClearButton,
+                    child: InkWell(
+                        borderRadius: BorderRadius.circular(10),
+                        onTap: () {
+                          setState(() {
+                            _searchController.clear();
+                          });
+                          notesList.clear();
+                        },
+                        child: Icon(Iconsax.close_circle)),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                ],
               ),
             ),
           ),

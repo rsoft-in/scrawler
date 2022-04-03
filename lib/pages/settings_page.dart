@@ -134,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 title: Text(
                   'Settings',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: darkModeOn ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w400,
                   ),
                 ),

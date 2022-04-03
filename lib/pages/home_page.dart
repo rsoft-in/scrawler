@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                 title: Text(
                   'Notes',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: darkModeOn ? Colors.white : Colors.black,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
