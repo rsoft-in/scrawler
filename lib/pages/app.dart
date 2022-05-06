@@ -143,12 +143,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
             extendBodyBehindAppBar: true,
             body: PageView(
               physics: NeverScrollableScrollPhysics(),
-              children: [
-                new HomePage(title: kAppName),
-                new ArchivePage(),
-                new SearchPage(),
-                new SettingsPage(),
-              ],
+              children: _pageList,
               onPageChanged: onPageChanged,
               controller: _pageController,
             ),

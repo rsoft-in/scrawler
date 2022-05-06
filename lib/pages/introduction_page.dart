@@ -208,72 +208,76 @@ class _ScreenTwoState extends State<ScreenTwo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 100),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Iconsax.note,
-            size: 100,
-            color: Colors.white,
-          ),
-          SizedBox(height: 30),
-          Text(
-            'Take Notes Easily',
-            style: TextStyle(
-                fontSize: 35, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 30),
-          Divider(
-            color: Colors.white,
-            thickness: 1,
-          ),
-          SizedBox(height: 30),
-          Icon(
-            Iconsax.add_circle,
-            color: Colors.white,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Create notes',
-            style: TextStyle(fontSize: 20, color: Colors.white),
-          ),
-          SizedBox(height: 10),
-          Divider(
-            color: Colors.white,
-            thickness: 1,
-            indent: 40,
-            endIndent: 40,
-          ),
-          SizedBox(height: 10),
-          Icon(
-            Iconsax.tag,
-            color: Colors.white,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Label them',
-            style: TextStyle(fontSize: 20, color: Colors.grey.shade300),
-          ),
-          SizedBox(height: 10),
-          Divider(
-            color: Colors.white,
-            thickness: 1,
-            indent: 40,
-            endIndent: 40,
-          ),
-          SizedBox(height: 10),
-          Icon(
-            Iconsax.document_download,
-            color: Colors.white,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Backup them',
-            style: TextStyle(fontSize: 20, color: Colors.grey.shade300),
-          ),
-        ],
+      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 80),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Iconsax.note,
+              size: 100,
+              color: Colors.white,
+            ),
+            SizedBox(height: 30),
+            Text(
+              'Take Notes Easily',
+              style: TextStyle(
+                  fontSize: 35,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 30),
+            Divider(
+              color: Colors.white,
+              thickness: 1,
+            ),
+            SizedBox(height: 30),
+            Icon(
+              Iconsax.add_circle,
+              color: Colors.white,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Create notes',
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.white,
+              thickness: 1,
+              indent: 40,
+              endIndent: 40,
+            ),
+            SizedBox(height: 10),
+            Icon(
+              Iconsax.tag,
+              color: Colors.white,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Label them',
+              style: TextStyle(fontSize: 20, color: Colors.grey.shade300),
+            ),
+            SizedBox(height: 10),
+            Divider(
+              color: Colors.white,
+              thickness: 1,
+              indent: 40,
+              endIndent: 40,
+            ),
+            SizedBox(height: 10),
+            Icon(
+              Iconsax.document_download,
+              color: Colors.white,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Backup them',
+              style: TextStyle(fontSize: 20, color: Colors.grey.shade300),
+            ),
+          ],
+        ),
       ),
     );
   }
