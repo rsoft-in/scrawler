@@ -5,10 +5,6 @@ import 'package:bnotes/desktop/pages/archive_page.dart';
 import 'package:bnotes/desktop/pages/home_page.dart';
 import 'package:bnotes/desktop/pages/search_page.dart';
 import 'package:bnotes/desktop/pages/settings_page.dart';
-import 'package:bnotes/pages/archive_page.dart';
-import 'package:bnotes/pages/home_page.dart';
-import 'package:bnotes/pages/search_page.dart';
-import 'package:bnotes/pages/settings_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -25,12 +21,10 @@ class ScrawlDesktop extends StatefulWidget {
 
 class _ScrawlDesktopState extends State<ScrawlDesktop> {
   final _pageList = <Widget>[
-    new HomePage(
-      title: '',
-    ),
+    new HomePage(),
     new ArchivePage(),
     new SearchPage(),
-    new SettingsPage(),
+    new DSettingsPage(),
   ];
   int _page = 0;
   bool isExtended = false;

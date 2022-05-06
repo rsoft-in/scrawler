@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class DArchivePage extends StatefulWidget {
-  const DArchivePage({Key? key}) : super(key: key);
+class ArchivePage extends StatefulWidget {
+  const ArchivePage({Key? key}) : super(key: key);
 
   @override
-  _DArchivePageState createState() => _DArchivePageState();
+  _ArchivePageState createState() => _ArchivePageState();
 }
 
-class _DArchivePageState extends State<DArchivePage> {
+class _ArchivePageState extends State<ArchivePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
