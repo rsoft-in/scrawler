@@ -1,4 +1,5 @@
 import 'package:animations/animations.dart';
+import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/archive_page.dart';
@@ -151,19 +152,19 @@ class _ScrawlAppState extends State<ScrawlApp> {
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Iconsax.note),
-                  label: 'Notes',
+                  label: kLabelNotes,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Iconsax.archive),
-                  label: 'Archive',
+                  label: kLabelArchive,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Iconsax.search_normal),
-                  label: 'Search',
+                  label: kLabelSearch,
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Iconsax.menu),
-                  label: 'More',
+                  label: kLabelMore,
                 ),
               ],
               currentIndex: _page,
@@ -267,7 +268,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                         });
                       },
                       icon: Icon(Icons.notes_outlined),
-                      tooltip: 'Notes',
+                      tooltip: kLabelNotes,
                       color: _page == 0
                           ? Theme.of(context).primaryColor
                           : Colors.grey,
@@ -282,7 +283,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                         });
                       },
                       icon: Icon(Icons.archive),
-                      tooltip: 'Archive',
+                      tooltip: kLabelArchive,
                       color: _page == 1
                           ? Theme.of(context).primaryColor
                           : Colors.grey,
@@ -297,7 +298,7 @@ class _ScrawlAppState extends State<ScrawlApp> {
                         });
                       },
                       icon: Icon(Icons.search),
-                      tooltip: 'Search',
+                      tooltip: kLabelSearch,
                       color: _page == 2
                           ? Theme.of(context).primaryColor
                           : Colors.grey,

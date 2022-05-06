@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/archive_page.dart';
 import 'package:bnotes/desktop/pages/home_page.dart';
 import 'package:bnotes/desktop/pages/search_page.dart';
@@ -8,7 +8,6 @@ import 'package:bnotes/desktop/pages/settings_page.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:side_navigation/side_navigation.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
@@ -65,7 +64,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
         preferredSize: Size(MediaQuery.of(context).size.width, 80),
         child: WindowTopBar(naviChildren: [
           TextButton(
-            child: menuItem('Notes', 0, Iconsax.note),
+            child: menuItem(kLabelNotes, 0, Iconsax.note),
             onPressed: () {
               setState(() {
                 _page = 0;
@@ -73,7 +72,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
             },
           ),
           TextButton(
-            child: menuItem('Archive', 1, Iconsax.archive),
+            child: menuItem(kLabelArchive, 1, Iconsax.archive),
             onPressed: () {
               setState(() {
                 _page = 1;
@@ -81,7 +80,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
             },
           ),
           TextButton(
-            child: menuItem('Search', 2, Iconsax.search_normal),
+            child: menuItem(kLabelSearch, 2, Iconsax.search_normal),
             onPressed: () {
               setState(() {
                 _page = 2;
@@ -89,7 +88,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
             },
           ),
           TextButton(
-            child: menuItem('Settings', 3, Iconsax.menu),
+            child: menuItem(kLabelSettings, 3, Iconsax.menu),
             onPressed: () {
               setState(() {
                 _page = 3;
