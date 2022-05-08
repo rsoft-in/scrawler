@@ -15,3 +15,10 @@ const kGlobalTextPadding =
 const kBaseUrl = 'http://scrawl.knoxxbox.in/api/services';
 
 const kAppName = 'scrawl';
+
+const kVSpace = SizedBox(
+  height: 15.0,
+);
+const kHSpace = SizedBox(
+  width: 10.0,
+);

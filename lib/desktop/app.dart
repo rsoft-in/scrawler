@@ -98,7 +98,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
         ]),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 40),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         child: PageTransitionSwitcher(
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(

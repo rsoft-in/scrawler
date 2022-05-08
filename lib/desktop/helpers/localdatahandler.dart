@@ -35,7 +35,7 @@ class LocalDataHandler {
   static Future<bool> storeNotes(List<Notes> notes) async {
     try {
       final file = File('$path/data/notes.json');
-      await file.writeAsString(notes.toString());
+      await file.writeAsString(jsonEncode(notes));
       return true;
     } on Exception catch (e) {
       print(e.toString());
@@ -46,7 +46,7 @@ class LocalDataHandler {
   static Future<bool> storeLabels(List<Labels> labels) async {
     try {
       final file = File('$path/data/labels.json');
-      await file.writeAsString(labels.toString());
+      await file.writeAsString(jsonEncode(labels));
       return true;
     } on Exception catch (e) {
       print(e.toString());
