@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';

@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/archive_page.dart';
 import 'package:bnotes/pages/home_page.dart';

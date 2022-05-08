@@ -1,4 +1,4 @@
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';

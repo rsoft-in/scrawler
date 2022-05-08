@@ -1,4 +1,4 @@
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';

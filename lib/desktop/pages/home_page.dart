@@ -1,8 +1,7 @@
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/helpers/localdatahandler.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -98,10 +97,6 @@ class _HomePageState extends State<HomePage> {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    // trailing: IconButton(
-                    //   icon: Icon(Icons.delete_outlined),
-                    //   onPressed: () => confirmDelete(index),
-                    // ),
                     trailing: PopupMenuButton(
                       itemBuilder: (_) => <PopupMenuItem>[
                         PopupMenuItem(

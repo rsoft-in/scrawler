@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:http/http.dart' as http;
 

@@ -1,4 +1,4 @@
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/small_appbar.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
-import '../constants.dart';
+import '../common/constants.dart';
 
 class CustomTextField extends StatefulWidget {
   CustomTextField(

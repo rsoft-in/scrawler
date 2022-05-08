@@ -1,11 +1,11 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/app.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:bnotes/pages/app_lock_page.dart';
 import 'package:bnotes/pages/introduction_page.dart';
-import 'package:bnotes/theme.dart';
+import 'package:bnotes/common/theme.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/pages/app.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';

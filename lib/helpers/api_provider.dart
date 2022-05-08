@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bnotes/constants.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/models/users_model.dart';
 import 'package:http/http.dart' as http;
 
