@@ -27,6 +27,12 @@ class Utility {
     item = item.replaceAll('[CHECKBOX]\n', '');
     return item;
   }
+
+  static String getDateString() {
+    var formatter = new DateFormat('yyyy-MM-dd HH:mm:ss');
+    DateTime dt = DateTime.now();
+    return formatter.format(dt);
+  }
 }
 
 enum AppLockState { SET, CONFIRM }
