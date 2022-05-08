@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bnotes/models/labels_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 
-class DataHandler {
+class LocalDataHandler {
   static String path = Directory.current.path;
 
   static Future<List<Notes>> fetchNotes() async {

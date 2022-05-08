@@ -1,4 +1,4 @@
-import 'package:bnotes/desktop/helpers/datahandler.dart';
+import 'package:bnotes/desktop/helpers/localdatahandler.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   List<Notes> notesList = [];
 
   void loadNotes() async {
-    DataHandler.fetchNotes().then((value) {
+    LocalDataHandler.fetchNotes().then((value) {
       setState(() {
         notesList = value;
       });
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
           uuid.v1(), Utility.getDateString(), 'Demo', 'Hello', '', 0, 1, ''));
     });
 
-    DataHandler.storeNotes(notesList).then((value) {
+    LocalDataHandler.storeNotes(notesList).then((value) {
       if (value)
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
