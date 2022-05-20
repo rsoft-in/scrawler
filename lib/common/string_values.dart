@@ -15,3 +15,4 @@ const kLabelDelete = "Delete";
 const kLabelConfirmDelete = "Are you sure you want to delete?";
 const kLabelActionYes = "Yes";
 const kLabelActionNo = "No";
+const kLabelOptions = "Options";

@@ -3,7 +3,9 @@ import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/helpers/localdatahandler.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
@@ -122,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                       icon: Icon(Icons.more_vert_outlined),
+                      tooltip: kLabelOptions,
                     ),
                     onTap: () {},
                   );
@@ -131,9 +134,9 @@ class _HomePageState extends State<HomePage> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add_outlined),
+        child: Icon(Iconsax.add),
         onPressed: () {
-          isNewNote = true;
+          clearEditControllers();
           editNote(null);
         },
       ),
