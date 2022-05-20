@@ -181,7 +181,14 @@ class _HomePageState extends State<HomePage> {
                         TextFormField(
                           controller: _noteTitleController,
                           decoration: InputDecoration(
-                            hintText: '$kLabelTitle*',
+                            hintText: '$kLabelTitle',
+                            // label: Text('Title'),
+                            // isCollapsed: true,
+                            fillColor: Colors.transparent,
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -198,8 +205,12 @@ class _HomePageState extends State<HomePage> {
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
                             decoration: InputDecoration(
-                              hintText: kLabelTypeSomething,
-                              alignLabelWithHint: true,
+                              hintText: 'Content',
+                              fillColor: Colors.transparent,
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none),
                             ),
                           ),
                         ),
