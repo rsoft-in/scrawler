@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:bnotes/helpers/utility.dart';
 
@@ -46,8 +45,12 @@ class _BiometricPageState extends State<BiometricPage> {
     try {
       authenticated = await _localAuthentication.authenticate(
         localizedReason: "Use fingerprint",
-        useErrorDialogs: true,
-        stickyAuth: true,
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: true,
+          sensitiveTransaction: true,
+          biometricOnly: false,
+        ),
       );
       setState(() {
         _message = authenticated ? "Authorized" : "Not Authorized";

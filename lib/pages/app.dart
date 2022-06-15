@@ -171,7 +171,6 @@ class _ScrawlAppState extends State<ScrawlApp> {
               type: BottomNavigationBarType.fixed,
               showSelectedLabels: false,
               showUnselectedLabels: false,
-              selectedIconTheme: IconThemeData(color: kPrimaryColor),
               onTap: navigationTapped,
             ),
           ),
