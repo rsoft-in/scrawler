@@ -15,7 +15,7 @@ ThemeData theme() {
     // useSubThemes: true,
     transparentStatusBar: true,
     lightIsWhite: true,
-    fontFamily: 'Raleway',
+    // fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
       elevatedButtonRadius: 10.0,
       textButtonRadius: 10.0,
@@ -39,7 +39,7 @@ ThemeData themeDark() {
     transparentStatusBar: true,
     darkIsTrueBlack: true,
     tooltipsMatchBackground: true,
-    fontFamily: 'Raleway',
+    // fontFamily: 'Raleway',
     subThemesData: FlexSubThemesData(
       elevatedButtonRadius: 10.0,
       textButtonRadius: 10.0,

@@ -1,6 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/pages/app.dart';
+import 'package:bnotes/mobile/pages/app.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -257,14 +257,15 @@ class _AppLockPageState extends State<AppLockPage> {
             prefs.setString("app_pin", pinNumber);
             print('dingdong');
             Navigator.pop(context, true);
-            ScaffoldMessenger.of(context)
-                .showSnackBar(new SnackBar(behavior: SnackBarBehavior.floating,content: Text(LOCK_SET)));
+            ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                behavior: SnackBarBehavior.floating, content: Text(LOCK_SET)));
           } else {
             pinNumber = '';
             pinNumberConfirmed = '';
             helperText = SET_PIN;
-            ScaffoldMessenger.of(context)
-                .showSnackBar(new SnackBar(behavior: SnackBarBehavior.floating,content: Text(PIN_MISMATCH)));
+            ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+                behavior: SnackBarBehavior.floating,
+                content: Text(PIN_MISMATCH)));
           }
         }
       }

@@ -5,29 +5,19 @@ class NoteColor {
   static Color getColor(int code, bool isDark) {
     switch (code) {
       case 0:
-        return isDark
-            ? FlexColor.blueWhaleDarkPrimary.lighten()
-            : FlexColor.blueWhaleDarkPrimary.lighten(30);
+        return Color(0xFFFFDAA9);
       case 1:
-        return isDark
-            ? FlexColor.sakuraLightSecondary.lighten(15)
-            : FlexColor.sakuraLightSecondary.lighten(10);
+        return Color(0xFFFFC7B3);
       case 2:
-        return isDark
-            ? FlexColor.greenDarkPrimary.lighten(10)
-            : FlexColor.greenDarkPrimary.lighten(10);
+        return Color(0xFFFFDAA9);
       case 3:
-        return isDark
-            ? FlexColor.blueLightPrimary.lighten(40)
-            : FlexColor.blueLightPrimary.lighten(40);
+        return Color(0xFFFFCEE6);
       case 4:
-        return isDark
-            ? FlexColor.sakuraLightPrimary.lighten(10)
-            : FlexColor.sakuraLightPrimary.lighten(20);
+        return Color(0xFFEEC2FF);
       case 5:
-        return isDark
-            ? FlexColor.indigoLightSecondary.lighten(40)
-            : FlexColor.indigoLightSecondary.lighten(40);
+        return Color(0xFFC8D3FF);
+      case 6:
+        return Colors.transparent;
       default:
         return Colors.transparent;
     }
@@ -36,16 +26,18 @@ class NoteColor {
   static int getCode(Color color) {
     if (color == Colors.transparent)
       return 0;
-    else if (color == Color(0xFFFCECDD))
+    else if (color == Color(0xFFFFDAA9))
       return 1;
-    else if (color == Color(0xffE4FBFF))
+    else if (color == Color(0xFFFFC7B3))
       return 2;
-    else if (color == Color(0xffB6C9F0))
+    else if (color == Color(0xFFFFDAA9))
       return 3;
-    else if (color == Color(0xffFFE8E8))
+    else if (color == Color(0xFFFFCEE6))
       return 4;
-    else if (color == Color(0xffE1CCEC))
+    else if (color == Color(0xFFEEC2FF))
       return 5;
+    else if (color == Color(0xFFC8D3FF))
+      return 6;
     else
       return 0;
   }

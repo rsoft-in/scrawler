@@ -6,9 +6,9 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/labels_model.dart';
 import 'package:bnotes/models/note_list_model.dart';
-import 'package:bnotes/pages/app.dart';
-import 'package:bnotes/pages/edit_note_page.dart';
-import 'package:bnotes/pages/note_reader_page.dart';
+import 'package:bnotes/mobile/pages/app.dart';
+import 'package:bnotes/mobile/pages/edit_note_page.dart';
+import 'package:bnotes/mobile/pages/note_reader_page.dart';
 import 'package:bnotes/widgets/note_card_grid.dart';
 import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:bnotes/widgets/note_listview_ext.dart';
@@ -19,7 +19,7 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
-import 'package:bnotes/pages/labels_page.dart';
+import 'package:bnotes/mobile/pages/labels_page.dart';
 import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iconsax/iconsax.dart';
@@ -29,19 +29,17 @@ import 'package:uuid/uuid.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
-class HomePage extends StatefulWidget {
-  HomePage({Key? key, required this.title})
-      : super(key: HomePage.staticGlobalKey);
-  final String title;
+class NotesPage extends StatefulWidget {
+  NotesPage({Key? key}) : super(key: NotesPage.staticGlobalKey);
 
-  static final GlobalKey<_HomePageState> staticGlobalKey =
-      new GlobalKey<_HomePageState>();
+  static final GlobalKey<_NotesPageState> staticGlobalKey =
+      new GlobalKey<_NotesPageState>();
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _NotesPageState createState() => _NotesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NotesPageState extends State<NotesPage> {
   late SharedPreferences sharedPreferences;
   bool isAppLogged = false;
   String userFullname = "";
@@ -174,325 +172,86 @@ class _HomePageState extends State<HomePage> {
     isDesktop = isDisplayDesktop(context);
     bool isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              expandedHeight: 100.0,
-              pinned: true,
-              flexibleSpace: FlexibleSpaceBar(
-                title: Text(
-                  'Notes',
-                  style: TextStyle(
-                    color: darkModeOn ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                titlePadding: EdgeInsets.only(left: 30, bottom: 15),
-              ),
-              actions: [
-                Visibility(
-                  visible: viewType == ViewType.Tile,
-                  child: IconButton(
-                    icon: Icon(Iconsax.grid_3),
-                    onPressed: () {
-                      setState(() {
-                        viewType = ViewType.Grid;
-                        HomePage.staticGlobalKey.currentState!
-                            .toggleView(viewType);
-                      });
+    return isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : (hasData
+            ? (_viewType == ViewType.Grid
+                ? GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: notesList.length,
+                    itemBuilder: (context, index) {
+                      var note = notesList[index];
+
+                      return NoteCardGrid(
+                        note: note,
+                        onTap: () {
+                          setState(() {
+                            selectedPageColor = note.noteColor;
+                          });
+                          _showNoteReader(context, note);
+                        },
+                        onLongPress: () {
+                          _showOptionsSheet(context, note);
+                        },
+                      );
                     },
-                  ),
-                ),
-                Visibility(
-                  visible: viewType == ViewType.Grid,
-                  child: IconButton(
-                    icon: Icon(Iconsax.row_vertical),
-                    onPressed: () {
-                      setState(() {
-                        viewType = ViewType.Tile;
-                        HomePage.staticGlobalKey.currentState!
-                            .toggleView(viewType);
-                      });
-                    },
-                  ),
-                ),
-                IconButton(
-                    onPressed: () {
-                      Scaffold.of(context).openEndDrawer();
-                    },
-                    icon: Icon(Iconsax.filter))
-              ],
-            ),
-          ];
-        },
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: 10),
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : (hasData
-                        ? (_viewType == ViewType.Grid
-                            ? Container(
-                                margin: isPortrait
-                                    ? EdgeInsets.zero
-                                    : EdgeInsets.symmetric(horizontal: 200),
-                                child: StaggeredGridView.countBuilder(
-                                  crossAxisCount: isDesktop ? 4 : 2,
-                                  crossAxisSpacing: 8,
-                                  mainAxisSpacing: 0,
-                                  physics: BouncingScrollPhysics(),
-                                  itemCount: notesList.length,
-                                  staggeredTileBuilder: (index) {
-                                    return StaggeredTile.count(
-                                        1, index.isOdd ? 0.9 : 1.02);
-                                  },
-                                  itemBuilder: (context, index) {
-                                    var note = notesList[index];
-                                    List<NoteListItem> _noteList = [];
-                                    if (note.noteList.contains('{')) {
-                                      try {
-                                        final parsed = json
-                                            .decode(note.noteText)
-                                            .cast<Map<String, dynamic>>();
-                                        _noteList = parsed
-                                            .map<NoteListItem>((json) =>
-                                                NoteListItem.fromJson(json))
-                                            .toList();
-                                      } on Exception catch (e) {
-                                        // TODO
-                                      }
-                                    }
-                                    return NoteCardGrid(
-                                      note: note,
-                                      onTap: () {
-                                        setState(() {
-                                          selectedPageColor = note.noteColor;
-                                        });
-                                        _showNoteReader(context, note);
-                                      },
-                                      onLongPress: () {
-                                        _showOptionsSheet(context, note);
-                                      },
-                                    );
-                                  },
-                                ),
-                              )
-                            : Container(
-                                alignment: Alignment.center,
-                                margin: isDesktop
-                                    ? EdgeInsets.symmetric(horizontal: 200)
-                                    : EdgeInsets.all(0),
-                                child: ListView.builder(
-                                  itemCount: notesList.length,
-                                  physics: BouncingScrollPhysics(
-                                      parent: AlwaysScrollableScrollPhysics()),
-                                  itemBuilder: (context, index) {
-                                    var note = notesList[index];
-                                    List<NoteListItem> _noteList = [];
-                                    if (note.noteList.contains('{')) {
-                                      final parsed = json
-                                          .decode(note.noteText)
-                                          .cast<Map<String, dynamic>>();
-                                      _noteList = parsed
-                                          .map<NoteListItem>((json) =>
-                                              NoteListItem.fromJson(json))
-                                          .toList();
-                                    }
-                                    return NoteCardList(
-                                      note: note,
-                                      onTap: () {
-                                        setState(() {
-                                          selectedPageColor = note.noteColor;
-                                        });
-                                        _showNoteReader(context, note);
-                                      },
-                                      onLongPress: () {
-                                        _showOptionsSheet(context, note);
-                                      },
-                                    );
-                                  },
-                                ),
-                              ))
-                        : Container(
-                            alignment: Alignment.topCenter,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  height: 150,
-                                ),
-                                Icon(
-                                  Iconsax.note_1,
-                                  size: 120,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  'empty!',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 22),
-                                ),
-                              ],
-                            ),
-                          )),
-              ),
-            ],
-          ),
-        ),
-      ),
-      endDrawer: Drawer(
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: darkModeOn
-                    ? FlexColor.jungleDarkPrimary.lighten(10).withOpacity(0.5)
-                    : FlexColor.jungleDarkPrimary.lighten(5).withOpacity(0.5),
-              ),
-              padding: EdgeInsets.only(left: 15, top: 56, bottom: 20),
-              alignment: Alignment.center,
-              child: Row(
-                children: [
-                  Icon(Iconsax.filter),
-                  SizedBox(
-                    width: 32,
-                  ),
-                  Text(
-                    'Filter Labels',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
-            if (labelList.isEmpty)
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Iconsax.tag,
-                        size: 80,
-                        color: FlexColor.jungleDarkPrimaryVariant,
-                      ),
-                      SizedBox(height: 20),
-                      Text('No labels created'),
-                      TextButton(
-                          onPressed: () {
-                            openLabelEditor();
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    margin: isDesktop
+                        ? EdgeInsets.symmetric(horizontal: 200)
+                        : EdgeInsets.all(0),
+                    child: ListView.builder(
+                      itemCount: notesList.length,
+                      physics: BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      itemBuilder: (context, index) {
+                        var note = notesList[index];
+                        return NoteCardList(
+                          note: note,
+                          onTap: () {
+                            setState(() {
+                              selectedPageColor = note.noteColor;
+                            });
+                            _showNoteReader(context, note);
                           },
-                          child: Text('Create labels')),
-                    ],
-                  ),
+                          onLongPress: () {
+                            _showOptionsSheet(context, note);
+                          },
+                        );
+                      },
+                    ),
+                  ))
+            : Container(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 150,
+                    ),
+                    Icon(
+                      Iconsax.note_1,
+                      size: 120,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'empty!',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w300, fontSize: 22),
+                    ),
+                  ],
                 ),
-              ),
-            if (labelList.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    Labels label = labelList[index];
-                    return ListTile(
-                      onTap: (() {
-                        setState(() {
-                          currentLabel = label.labelName;
-                          _filterNotes();
-                        });
-                      }),
-                      leading: Icon(Iconsax.tag),
-                      trailing: (currentLabel.isEmpty ||
-                              currentLabel != label.labelName)
-                          ? Icon(
-                              Icons.clear,
-                              color: Colors.transparent,
-                            )
-                          : Icon(
-                              Icons.check_outlined,
-                              color: FlexColor.jungleDarkPrimary,
-                            ),
-                      title: Text(label.labelName),
-                    );
-                  },
-                  itemCount: labelList.length,
-                ),
-              ),
-            if (labelList.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  tileColor: darkModeOn
-                      ? FlexColor.jungleDarkSecondary
-                          .lighten(20)
-                          .withOpacity(0.5)
-                      : FlexColor.jungleDarkSecondary
-                          .lighten(30)
-                          .withOpacity(0.5),
-                  trailing: Icon(Iconsax.close_square),
-                  title: Text('Clear Filter'),
-                  onTap: () {
-                    setState(() {
-                      currentLabel = "";
-                      _filterNotes();
-                    });
-                    Navigator.pop(context);
-                  },
-                  dense: true,
-                ),
-              ),
-            if (labelList.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  tileColor: darkModeOn
-                      ? FlexColor.jungleDarkSecondary
-                          .lighten(5)
-                          .withOpacity(0.5)
-                      : FlexColor.jungleDarkSecondary
-                          .lighten(10)
-                          .withOpacity(0.5),
-                  trailing: Icon(Iconsax.tag),
-                  title: Text('Manage Labels'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    openLabelEditor();
-                  },
-                  dense: true,
-                ),
-              ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0,
-        focusElevation: 0,
-        hoverElevation: 0,
-        highlightElevation: 0,
-        onPressed: () {
-          setState(() {
-            _noteTextController.text = '';
-            _noteTitleController.text = '';
-            currentEditingNoteId = "";
-          });
-          _showEdit(context, new Notes('', '', '', '', '', 0, 0, ''));
-        },
-        child: Icon(Iconsax.add),
-      ),
-    );
+              ));
   }
 
   void openLabelEditor() async {
@@ -616,6 +375,14 @@ class _HomePageState extends State<HomePage> {
                               physics: BouncingScrollPhysics(),
                               shrinkWrap: true,
                               children: [
+                                ColorPaletteButton(
+                                  color: NoteColor.getColor(6, darkModeOn),
+                                  onTap: () {
+                                    _updateColor(_note.noteId, 6);
+                                    Navigator.pop(context);
+                                  },
+                                  isSelected: _note.noteColor == 6,
+                                ),
                                 ColorPaletteButton(
                                   color: NoteColor.getColor(0, darkModeOn),
                                   onTap: () {

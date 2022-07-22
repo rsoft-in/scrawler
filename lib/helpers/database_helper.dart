@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:bnotes/models/labels_model.dart';
 import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/tasks.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static final _databaseName = 'bnotes.s3db';
-  static final _databaseVersion = 2;
-  static final _databaseOldVersion = 1;
+  static final _databaseVersion = 3;
+  static final _databaseOldVersion = 2;
   Database? _database;
 
   DatabaseHelper._privateConstructor();
@@ -31,9 +34,69 @@ class DatabaseHelper {
           '''CREATE TABLE notes (note_id text primary key, note_date text, note_title text, note_text text, note_label text, note_archived integer, note_color integer, note_list text) ''');
       await db.execute(
           '''CREATE TABLE labels (label_id text primary key, label_name text)''');
+      await db.execute(
+          '''CREATE TABLE tasks (task_id text primary key, task_title text, task_items text, task_due_date text, task_reminder integer, task_reminder_type integer, task_reminder_attr text, task_completed integer, task_modified text)''');
     }, onUpgrade: (Database db, int oldVersion, int version) async {
-      await db.execute('''ALTER TABLE notes ADD note_list TEXT''');
+      if (version == 2)
+        await db.execute('''ALTER TABLE notes ADD note_list TEXT''');
+
+      if (version == 3) {
+        await db.execute(
+            '''CREATE TABLE tasks (task_id text primary key, task_title text, task_items text, task_due_date text, task_reminder integer, task_reminder_type integer, task_reminder_attr text, task_completed integer, task_modified text)''');
+      }
     });
+  }
+
+  Future<List<Task>> getTasksAll(String filter) async {
+    Database? db = await instance.database;
+    var parsed = await db!.query('tasks',
+        orderBy: 'task_date, task_modified DESC',
+        where: filter.isNotEmpty
+            ? ' AND (task_title LIKE \'%' +
+                filter +
+                '%\' OR task_items LIKE \'%' +
+                filter +
+                '%\')'
+            : '');
+    print(parsed);
+    return parsed.map<Task>((json) => Task.fromJson(json)).toList();
+  }
+
+  Future<List<Task>> getTasksCompleted(String filter) async {
+    Database? db = await instance.database;
+    var parsed = await db!.query('tasks',
+        orderBy: 'task_date, task_modified DESC',
+        where: '(task_completed == 1)' +
+            (filter.isNotEmpty
+                ? ' AND (task_title LIKE \'%' +
+                    filter +
+                    '%\' OR task_items LIKE \'%' +
+                    filter +
+                    '%\')'
+                : ''));
+    print(parsed);
+    return parsed.map<Task>((json) => Task.fromJson(json)).toList();
+  }
+
+  Future<bool> insertTask(Task task) async {
+    Database? db = await instance.database;
+    await db!.insert('tasks', task.toJson());
+    return true;
+  }
+
+  Future<bool> updateTask(Task task) async {
+    Database? db = await instance.database;
+    String _id = task.taskId;
+    final rowsAffected = await db!
+        .update('tasks', task.toJson(), where: 'task_id = ?', whereArgs: [_id]);
+    return (rowsAffected == 1);
+  }
+
+  Future<bool> deleteTask(String taskId) async {
+    Database? db = await instance.database;
+    int rowsAffected =
+        await db!.delete('tasks', where: 'task_id = ?', whereArgs: [taskId]);
+    return (rowsAffected == 1);
   }
 
   Future<List<Notes>> getNotesAll(String filter) async {

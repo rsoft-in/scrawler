@@ -2,9 +2,9 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/app.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/pages/app.dart';
-import 'package:bnotes/pages/app_lock_page.dart';
-import 'package:bnotes/pages/introduction_page.dart';
+import 'package:bnotes/mobile/pages/app.dart';
+import 'package:bnotes/mobile/pages/app_lock_page.dart';
+import 'package:bnotes/mobile/pages/introduction_page.dart';
 import 'package:bnotes/common/theme.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'pages/biometric_page.dart';
+import 'mobile/pages/biometric_page.dart';
 import 'helpers/globals.dart' as globals;
 
 late SharedPreferences prefs;

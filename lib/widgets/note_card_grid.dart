@@ -1,3 +1,4 @@
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,15 @@ class _NoteCardGridState extends State<NoteCardGrid> {
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
     return Container(
-      margin: EdgeInsets.only(
-        top: 10,
-      ),
+      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
       child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
+            side: BorderSide(width: 1, color: kBorderColor)),
         color: NoteColor.getColor(widget.note!.noteColor, darkModeOn),
         child: InkWell(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(5.0),
           onTap: () => widget.onTap(),
           onLongPress: () => widget.onLongPress!(),
           child: Container(
@@ -42,18 +45,20 @@ class _NoteCardGridState extends State<NoteCardGrid> {
                 Visibility(
                   visible: widget.note!.noteTitle.isNotEmpty,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 3),
                     child: Text(
                       widget.note!.noteTitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 20.0, color: Colors.black),
+                      style: TextStyle(fontSize: 18.0, color: Colors.black),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 3),
                     child: Text(
                       widget.note!.noteText,
                       maxLines: 6,
@@ -62,36 +67,33 @@ class _NoteCardGridState extends State<NoteCardGrid> {
                     ),
                   ),
                 ),
-                // NOTE WITH CHECK BOX
-                // Visibility(
-                //   visible: widget.note.noteList.contains('{'),
-                //   child: Expanded(
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(8.0),
-                //       child: NotesListViewExt(
-                //           noteListItems: _noteList, noteColor: widget.note.noteColor),
-                //     ),
-                //   ),
-                // ),
-                Container(
-                  padding: EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          child: Text(
-                        widget.note!.noteLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(color: Colors.black54, fontSize: 12.0),
-                      )),
-                      Text(
-                        Utility.formatDateTime(widget.note!.noteDate),
-                        style: TextStyle(color: Colors.black54, fontSize: 12.0),
-                      ),
-                    ],
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3),
+                  child: Text(
+                    Utility.formatDateTime(widget.note!.noteDate),
+                    style: TextStyle(color: Colors.black54, fontSize: 12.0),
                   ),
                 ),
+                // Container(
+                //   padding: EdgeInsets.all(8.0),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Expanded(
+                //           child: Text(
+                //         widget.note!.noteLabel,
+                //         maxLines: 1,
+                //         overflow: TextOverflow.ellipsis,
+                //         style: TextStyle(color: Colors.black54, fontSize: 12.0),
+                //       )),
+                //       Text(
+                //         Utility.formatDateTime(widget.note!.noteDate),
+                //         style: TextStyle(color: Colors.black54, fontSize: 12.0),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
