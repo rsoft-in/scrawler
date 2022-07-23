@@ -16,3 +16,10 @@ const kLabelConfirmDelete = "Are you sure you want to delete?";
 const kLabelActionYes = "Yes";
 const kLabelActionNo = "No";
 const kLabelOptions = "Options";
+
+const kLabels = {
+  "email": "Email",
+  "password": "Password",
+  "welcome_back": "Welcome Back",
+  "login": "Login"
+};

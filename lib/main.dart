@@ -1,11 +1,13 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/app.dart';
+import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:bnotes/mobile/pages/app_lock_page.dart';
 import 'package:bnotes/mobile/pages/introduction_page.dart';
 import 'package:bnotes/common/theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +84,9 @@ class _MyAppState extends State<MyApp> {
       themeMode: themeMode,
       theme: theme(),
       darkTheme: themeDark(),
-      home: UniversalPlatform.isDesktopOrWeb ? ScrawlDesktop() : StartPage(),
+      home: UniversalPlatform.isDesktopOrWeb || kIsWeb
+          ? DesktopApp()
+          : StartPage(),
     );
   }
 }
@@ -119,6 +123,7 @@ class _StartPageState extends State<StartPage> {
         confirmBiometrics();
       } else {
         if (newUser) {
+          // for Mobile Users
           Navigator.of(context).pushAndRemoveUntil(
               new MaterialPageRoute(
                 builder: (BuildContext context) => new IntroductionPage(),

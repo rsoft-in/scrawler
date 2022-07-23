@@ -11,6 +11,7 @@ const kGlobalOuterPadding = EdgeInsets.all(10.0);
 const kGlobalCardPadding = EdgeInsets.all(5.0);
 const kGlobalTextPadding =
     EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0);
+const kLinkColor = Color(0xFF001AFF);
 
 const kBaseUrl = 'http://scrawl.knoxxbox.in/api/services';
 
@@ -22,3 +23,9 @@ const kVSpace = SizedBox(
 const kHSpace = SizedBox(
   width: 10.0,
 );
+const kButtonBorderRadius = 10.0;
+const kInputDecorationBorderRadius = 10.0;
+const kCardBorderRadius = 15.0;
+const kButtonPadding = EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0);
+const kInputDecorationPadding =
+    EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);

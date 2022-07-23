@@ -6,26 +6,25 @@ import 'constants.dart';
 const FlexScheme usedScheme = FlexScheme.jungle;
 
 ThemeData theme() {
-  return FlexThemeData.light(
-    scheme: usedScheme,
-    surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
-    blendLevel: 0,
-    appBarOpacity: 0.5,
-    appBarStyle: FlexAppBarStyle.background,
-    // useSubThemes: true,
-    transparentStatusBar: true,
-    lightIsWhite: true,
-    // fontFamily: 'Raleway',
-    subThemesData: FlexSubThemesData(
-      elevatedButtonRadius: 10.0,
-      textButtonRadius: 10.0,
-      outlinedButtonRadius: 10.0,
-      cardRadius: 10.0,
-      cardElevation: .5,
-      bottomNavigationBarElevation: 25,
-      bottomSheetRadius: 10,
+  return ThemeData(
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
+        .copyWith(primary: kPrimaryColor, secondary: kAccentColor),
+    fontFamily: 'Raleway',
+    textTheme: TextTheme(
+      bodyText2: TextStyle(fontSize: 14.0),
     ),
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    appBarTheme: AppBarTheme(
+      color: Colors.transparent,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Colors.black),
+      titleTextStyle: TextStyle(
+        fontSize: 20.0,
+        color: Colors.black,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    scaffoldBackgroundColor: Colors.white,
   );
 }
 

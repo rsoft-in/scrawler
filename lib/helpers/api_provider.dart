@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ApiProvider {
 
-  static Future<List<Users>> fetchClients(Map _post) async {
+  static Future<List<User>> fetchClients(Map _post) async {
     try {
       var response = await http.Client()
           .post(Uri.parse(kBaseUrl + "checkUser"), body: _post);
@@ -14,7 +14,7 @@ class ApiProvider {
         String result = response.body;
         if (result.contains("{")) {
           final parsed = json.decode(result).cast<Map<String, dynamic>>();
-          return parsed.map<Users>((json) => Users.fromJson(json)).toList();
+          return parsed.map<User>((json) => User.fromJson(json)).toList();
         } else {
           print(result);
           return [];
