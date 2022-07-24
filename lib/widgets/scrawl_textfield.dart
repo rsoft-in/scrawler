@@ -5,7 +5,9 @@ class ScrawlTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? hint;
   final bool? obscure;
-  const ScrawlTextField({Key? key, this.controller, this.hint, this.obscure})
+  final bool? isOTP;
+  const ScrawlTextField(
+      {Key? key, this.controller, this.hint, this.obscure, this.isOTP})
       : super(key: key);
 
   @override
@@ -20,6 +22,12 @@ class _ScrawlTextFieldState extends State<ScrawlTextField> {
       child: TextField(
         obscureText: widget.obscure ?? false,
         controller: widget.controller,
+        textAlign: (widget.isOTP ?? false) ? TextAlign.center : TextAlign.left,
+        style: TextStyle(
+          fontSize: (widget.isOTP ?? false) ? 18.0 : 14.0,
+          fontWeight:
+              (widget.isOTP ?? false) ? FontWeight.bold : FontWeight.normal,
+        ),
         decoration: InputDecoration(
           hintText: widget.hint,
           fillColor: Colors.white,

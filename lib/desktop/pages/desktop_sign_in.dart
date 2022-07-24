@@ -1,5 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/widgets/scrawl_primary_button.dart';
 import 'package:bnotes/widgets/scrawl_textfield.dart';
@@ -22,12 +23,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Color(0xFF0072A2),
-          Color(0xFF18837c),
-          Color(0xFF33b864)
-        ], begin: Alignment.topLeft, end: Alignment.bottomRight)),
+        decoration: kBackGroundGradient,
         child: Center(
           child: Container(
               margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -50,7 +46,9 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                           child: Text(
                             kAppName,
                             style: TextStyle(
-                                fontSize: 40.0, fontWeight: FontWeight.w500),
+                                color: Colors.black,
+                                fontSize: 40.0,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
                         Text(
@@ -115,7 +113,11 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      print('Login Text Clicked');
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          new MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  new DesktopSignUp()),
+                                          (route) => false);
                                     }),
                             ]),
                           ),
