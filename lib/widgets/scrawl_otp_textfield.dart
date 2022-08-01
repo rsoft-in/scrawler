@@ -84,7 +84,10 @@ class _ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
             filled: true,
           ),
           onChanged: (String value) {
-            if (value.isEmpty) return;
+            if (value.isEmpty) {
+              if (index == 0) return;
+              FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
+            }
             if (value.length == 1) {
               if (index < widget.length - 1) {
                 FocusScope.of(context).requestFocus(_focusNodes[index + 1]);

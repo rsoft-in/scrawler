@@ -23,6 +23,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
   TextEditingController fullNameController = TextEditingController();
   ScrawlOtpFieldController otpController = ScrawlOtpFieldController();
 
+  String otp = '';
+
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
@@ -117,7 +119,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                             ),
                             // SCREEN 2
                             Visibility(
-                              visible: showIndex == 1,
+                              visible: showIndex > 0,
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 15.0),
                                 child: Text(
@@ -130,7 +132,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                               ),
                             ),
                             Visibility(
-                              visible: showIndex == 1,
+                              visible: showIndex > 0,
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 25.0),
                                 child: Text(
@@ -142,7 +144,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                               ),
                             ),
                             Visibility(
-                              visible: showIndex == 1,
+                              visible: showIndex > 0,
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 25.0),
                                 child: Text(
@@ -155,7 +157,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                               ),
                             ),
                             Visibility(
-                              visible: showIndex == 1,
+                              visible: showIndex > 0,
                               child: Padding(
                                 padding: const EdgeInsets.only(bottom: 40.0),
                                 child: Row(
@@ -164,11 +166,9 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                         child: ScrawlOtpTextField(
                                             length: 6,
                                             otpController: otpController,
-                                            onChanged: (pin) {
-                                              print("Changed: " + pin);
-                                            },
+                                            onChanged: (pin) {},
                                             onCompleted: (pin) {
-                                              print("Completed: " + pin);
+                                              otp = pin;
                                             })),
                                   ],
                                 ),
@@ -180,8 +180,13 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                     child: ScrawlButtonPrimary(
                                         label: kLabels['continue']!,
                                         onPressed: () {
-                                          showIndex++;
+                                          if (showIndex == 0 ||
+                                              (showIndex == 1 &&
+                                                  otp.length == 6)) showIndex++;
                                           setState(() {});
+                                          if (showIndex == 2) {
+                                            print(otp);
+                                          }
                                         })),
                               ],
                             ),
