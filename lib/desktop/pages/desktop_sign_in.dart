@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_primary_button.dart';
 import 'package:bnotes/widgets/scrawl_textfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:bnotes/common/globals.dart' as globals;
 
 class DesktopSignIn extends StatefulWidget {
   const DesktopSignIn({Key? key}) : super(key: key);
@@ -16,6 +20,29 @@ class DesktopSignIn extends StatefulWidget {
 
 class _DesktopSignInState extends State<DesktopSignIn> {
   bool isDesktop = false;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _pwdController = TextEditingController();
+
+  void signIn() async {
+    Map<String, String> _post = {
+      'postdata': jsonEncode({
+        'api_key': globals.apiKey,
+        'email': _emailController.text,
+        'pwd': _pwdController.text
+      })
+    };
+    UserApiProvider.checkUserCredential(_post).then((value) {
+      if (value['error'].toString().isEmpty) {
+        globals.user = value['user'];
+        setState(() {});
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(value['error']),
+          duration: Duration(seconds: 2),
+        ));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +94,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             color: Colors.black87,
                           ),
                         ),
-                        ScrawlTextField(),
+                        ScrawlTextField(controller: _emailController),
                         SizedBox(
                           height: 25.0,
                         ),
@@ -78,6 +105,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                           ),
                         ),
                         ScrawlTextField(
+                          controller: _pwdController,
                           obscure: true,
                         ),
                         SizedBox(
@@ -86,9 +114,16 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                         Row(
                           children: [
                             Expanded(
-                                child: ScrawlButtonPrimary(
-                                    label: kLabels['login']!,
-                                    onPressed: () {})),
+                              child: ScrawlButtonPrimary(
+                                label: kLabels['login']!,
+                                onPressed: () {
+                                  if (_emailController.text.isNotEmpty &&
+                                      _pwdController.text.isNotEmpty) {
+                                    signIn();
+                                  }
+                                },
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -122,15 +157,6 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             ]),
                           ),
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Expanded(child: Text('Don\'t have an Account?')),
-                        //     kHSpace,
-                        //     ScrawlButtonLink(
-                        //         label: 'Register Now', onPressed: () {}),
-                        //   ],
-                        // ),
                       ]),
                 ),
               )),

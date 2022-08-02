@@ -185,6 +185,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                                   otp.length == 6)) showIndex++;
                                           setState(() {});
                                           if (showIndex == 2) {
+                                            // Verify OTP
                                             print(otp);
                                           }
                                         })),

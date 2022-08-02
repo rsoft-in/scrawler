@@ -1,7 +1,9 @@
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
+import 'package:bnotes/providers/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:bnotes/common/globals.dart' as globals;
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -17,7 +19,8 @@ class _DesktopAppState extends State<DesktopApp> {
   getPreferences() async {
     sharedPreferences = await SharedPreferences.getInstance();
     isSignedIn = sharedPreferences.getBool('is_signed_in') ?? false;
-    print(isSignedIn);
+    globals.apiKey = await ApiProvider.fetchAPIKey();
+    print(globals.apiKey);
     if (!isSignedIn) {
       Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(

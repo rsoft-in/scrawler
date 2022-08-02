@@ -75,3 +75,4 @@ flutter:
     - images/bnotes.png
     - images/bnotes-transparent.png
     - images/google.png
+    - res/apikey

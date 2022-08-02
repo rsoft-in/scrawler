@@ -1,28 +1,32 @@
 import 'dart:convert';
 
 import 'package:bnotes/common/constants.dart';
-import 'package:nextcloud/nextcloud.dart';
+import 'package:bnotes/models/users_model.dart';
+
 import 'package:http/http.dart' as http;
 
 class UserApiProvider {
-  static Future<User?> checkUserCredential(Map post) async {
+  static Future<Map<String, dynamic>> checkUserCredential(Map post) async {
     String result = "";
     try {
-      var loginResponse = await http.Client()
-          .post(Uri.parse(kBaseUrl + "services/checkUser"), body: post);
-      result = loginResponse.body;
+      var response = await http.Client()
+          .post(Uri.parse(kBaseUrl + "users/signIn"), body: post);
+      result = response.body;
       print(result);
-      if (result.contains('{')) {
-        Map<String, dynamic> userMap = jsonDecode(result);
-        var user = new User.fromJson(userMap);
-        return user;
+      if (response.statusCode == 200) {
+        var parsed = jsonDecode(result);
+        if (parsed['error'] != null) {
+          return {'user': null, 'error': parsed['messages']['error']};
+        } else {
+          var user = new User.fromJson(parsed['user']);
+          return {'user': user, 'error': ''};
+        }
       } else {
         print(result);
-        return null;
+        return {'user': null, 'error': result};
       }
     } catch (ex) {
-      result = "Unable to check!\n" + ex.toString();
-      return null;
+      return {'user': null, 'error': ex.toString()};
     }
   }
 }
