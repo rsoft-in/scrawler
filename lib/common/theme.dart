@@ -29,6 +29,54 @@ ThemeData theme() {
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
     ),
+    inputDecorationTheme: InputDecorationTheme(
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+        borderSide: BorderSide.none,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+        borderSide: BorderSide.none,
+      ),
+      prefixIconColor: kPrimaryColor,
+      suffixIconColor: kPrimaryColor,
+      floatingLabelStyle: TextStyle(color: kPrimaryColor),
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: kInputDecorationPadding,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.black,
+        padding: kButtonPadding,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Raleway',
+          fontSize: 18.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kButtonBorderRadius),
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        primary: Colors.black,
+        padding: kButtonPadding,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Raleway',
+          fontSize: 18.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kButtonBorderRadius),
+        ),
+      ),
+    ),
   );
 }
 

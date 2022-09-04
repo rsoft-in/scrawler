@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 class ScrawlButtonPrimary extends StatefulWidget {
   final String label;
-  final Function onPressed;
-  const ScrawlButtonPrimary(
-      {Key? key, required this.label, required this.onPressed})
+  final VoidCallback? onPressed;
+  const ScrawlButtonPrimary({Key? key, required this.label, this.onPressed})
       : super(key: key);
 
   @override
@@ -16,7 +15,7 @@ class _ScrawlButtonPrimaryState extends State<ScrawlButtonPrimary> {
   Widget build(BuildContext context) {
     return TextButton(
       child: Text(widget.label),
-      onPressed: () => widget.onPressed(),
+      onPressed: widget.onPressed,
       style: TextButton.styleFrom(
         primary: Colors.white,
         backgroundColor: Colors.black,

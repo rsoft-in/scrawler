@@ -1,10 +1,10 @@
 class User {
-  final String userId;
-  final String userEmail;
-  final String userName;
-  final String userOtp;
-  final String userPwd;
-  final String userEnabled;
+  String userId;
+  String userEmail;
+  String userName;
+  String userOtp;
+  String userPwd;
+  bool userEnabled;
 
   User(this.userId, this.userEmail, this.userName, this.userOtp, this.userPwd,
       this.userEnabled);
@@ -15,5 +15,5 @@ class User {
         userName = json['user_name'],
         userOtp = json['user_otp'],
         userPwd = json['user_pwd'],
-        userEnabled = json['user_enabled'];
+        userEnabled = json['user_enabled'] == '1';
 }

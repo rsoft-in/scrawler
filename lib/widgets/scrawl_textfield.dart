@@ -1,4 +1,5 @@
 import 'package:bnotes/common/constants.dart';
+import 'package:bnotes/common/string_values.dart';
 import 'package:flutter/material.dart';
 
 class ScrawlTextField extends StatefulWidget {
@@ -6,8 +7,14 @@ class ScrawlTextField extends StatefulWidget {
   final String? hint;
   final bool? obscure;
   final bool? isOTP;
+  final bool? validate;
   const ScrawlTextField(
-      {Key? key, this.controller, this.hint, this.obscure, this.isOTP})
+      {Key? key,
+      this.controller,
+      this.hint,
+      this.obscure,
+      this.isOTP,
+      this.validate})
       : super(key: key);
 
   @override
@@ -19,7 +26,7 @@ class _ScrawlTextFieldState extends State<ScrawlTextField> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: TextField(
+      child: TextFormField(
         obscureText: widget.obscure ?? false,
         controller: widget.controller,
         textAlign: (widget.isOTP ?? false) ? TextAlign.center : TextAlign.left,
@@ -46,6 +53,14 @@ class _ScrawlTextFieldState extends State<ScrawlTextField> {
           prefixIconColor: kPrimaryColor,
           suffixIconColor: kPrimaryColor,
         ),
+        validator: ((widget.validate ?? false)
+            ? (value) {
+                if (value == null || value.isEmpty) {
+                  return kLabels['please_enter_text']!;
+                }
+                return null;
+              }
+            : null),
       ),
     );
   }

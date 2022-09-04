@@ -45,5 +45,11 @@ const kLabels = {
   "continue": "Continue",
   "verify_email": "Verify your Email",
   "otp_sent_to_email": "We have sent an OTP to your Email",
-  "otp": "OTP"
+  "otp": "OTP",
+  "confirm_password": "Confirm Password",
+  "already_have_account": "Already have an account? ",
+  "please_enter_text": "Please enter some text",
+  "password_mismatch": "Password mismatch",
+  "invalid_email": "Invalid Email",
+  "have_otp": "I already have OTP"
 };
