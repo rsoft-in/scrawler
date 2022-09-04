@@ -13,7 +13,6 @@ class UserApiProvider {
           .post(Uri.parse("$kBaseUrl/users/signIn"), body: post);
       result = response.body;
       if (response.statusCode == 200) {
-        print(result);
         var parsed = jsonDecode(result);
         if (parsed['error'] != null) {
           return {'user': null, 'error': parsed['messages']['error']};

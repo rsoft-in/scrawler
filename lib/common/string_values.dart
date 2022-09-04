@@ -51,5 +51,8 @@ const kLabels = {
   "please_enter_text": "Please enter some text",
   "password_mismatch": "Password mismatch",
   "invalid_email": "Invalid Email",
-  "have_otp": "I already have OTP"
+  "have_otp": "I already have OTP",
+  "dont_have_account": "Don\'t have an Account? ",
+  "register_now": "Register Now",
+  "forgot_password": "Forgot Password?"
 };
