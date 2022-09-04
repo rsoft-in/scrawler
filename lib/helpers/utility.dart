@@ -1,6 +1,20 @@
 import 'package:intl/intl.dart';
 
 class Utility {
+  static String getInitials(String text) {
+    var aText = text.trim().split(" ");
+    String initials = "";
+    for (var i = 0; i < aText.length; i++) {
+      if (i > 1) break;
+      try {
+        initials += aText[i].substring(0, 1);
+      } on Exception catch (e) {
+        print(e.toString());
+      }
+    }
+    return initials;
+  }
+
   static String formatDateTime(String dateTime) {
     var formatter = new DateFormat('MMM dd, yyyy');
     var formatter2 = new DateFormat('hh:mm a');
@@ -36,7 +50,9 @@ class Utility {
 }
 
 enum AppLockState { SET, CONFIRM }
+
 enum ThemeModeState { light, dark, system }
+
 enum SupportState {
   unknown,
   supported,

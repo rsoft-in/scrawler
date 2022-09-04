@@ -46,7 +46,7 @@ ThemeData theme() {
       suffixIconColor: kPrimaryColor,
       floatingLabelStyle: TextStyle(color: kPrimaryColor),
       filled: true,
-      fillColor: Colors.white,
+      fillColor: Colors.grey.shade50,
       contentPadding: kInputDecorationPadding,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -56,7 +56,7 @@ ThemeData theme() {
         textStyle: TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
-          fontSize: 18.0,
+          fontSize: 16.0,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kButtonBorderRadius),

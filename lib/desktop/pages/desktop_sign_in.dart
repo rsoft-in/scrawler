@@ -23,6 +23,7 @@ class DesktopSignIn extends StatefulWidget {
 class _DesktopSignInState extends State<DesktopSignIn> {
   late SharedPreferences prefs;
   final _formKey = GlobalKey<FormState>();
+  late FocusNode focusNodePassword;
 
   bool isDesktop = false;
   TextEditingController _emailController = TextEditingController();
@@ -59,6 +60,12 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         ));
       }
     });
+  }
+
+  @override
+  void initState() {
+    focusNodePassword = new FocusNode();
+    super.initState();
   }
 
   @override
@@ -114,20 +121,24 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               color: Colors.black87,
                             ),
                           ),
-                          TextFormField(
-                            controller: _emailController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return kLabels['please_enter_text'];
-                              }
-                              if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                                return kLabels['invalid_email'];
-                              }
-                              return null;
-                            },
-                          ),
-                          SizedBox(
-                            height: 25.0,
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 25.0, top: 10.0),
+                            child: TextFormField(
+                              controller: _emailController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return kLabels['please_enter_text'];
+                                }
+                                if (!RegExp(kEmailRegEx).hasMatch(value)) {
+                                  return kLabels['invalid_email'];
+                                }
+                                return null;
+                              },
+                              onFieldSubmitted: (value) {
+                                focusNodePassword.requestFocus();
+                              },
+                            ),
                           ),
                           Text(
                             kLabels['password']!,
@@ -135,18 +146,28 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               color: Colors.black87,
                             ),
                           ),
-                          TextFormField(
-                            controller: _pwdController,
-                            obscureText: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return kLabels['please_enter_text'];
-                              }
-                              return null;
-                            },
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 25.0, top: 10.0),
+                            child: TextFormField(
+                              focusNode: focusNodePassword,
+                              controller: _pwdController,
+                              obscureText: true,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return kLabels['please_enter_text'];
+                                }
+                                return null;
+                              },
+                              onFieldSubmitted: (value) {
+                                if (_formKey.currentState!.validate()) {
+                                  signIn();
+                                }
+                              },
+                            ),
                           ),
                           SizedBox(
-                            height: 40.0,
+                            height: 20.0,
                           ),
                           Row(
                             children: [

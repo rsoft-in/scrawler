@@ -20,7 +20,7 @@ const kHSpace = SizedBox(width: 10.0);
 const kButtonBorderRadius = 15.0;
 const kInputDecorationBorderRadius = 15.0;
 const kCardBorderRadius = 15.0;
-const kButtonPadding = EdgeInsets.symmetric(vertical: 25.0, horizontal: 15.0);
+const kButtonPadding = EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0);
 const kInputDecorationPadding =
     EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0);
 const kBackGroundGradient = BoxDecoration(
