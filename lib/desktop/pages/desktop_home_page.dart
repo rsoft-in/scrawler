@@ -1,7 +1,6 @@
-import 'package:bnotes/common/avatar_color.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/string_values.dart';
 import 'package:flutter/material.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -18,9 +17,20 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
   @override
   void initState() {
     super.initState();
+    // Menu Items
     menu = [
-      {'icon': Icons.notes_outlined, 'text': 'Notes'},
-      {'icon': Icons.check_box_outlined, 'text': 'Tasks'},
+      {
+        'id': 'all_notes',
+        'icon': Icons.notes_outlined,
+        'text': 'Notes',
+        'color': 0xFF5EAAA8
+      },
+      {
+        'id': 'all_tasks',
+        'icon': Icons.check_box_outlined,
+        'text': 'Tasks',
+        'color': 0xFFFBABAB
+      },
     ];
   }
 
@@ -40,6 +50,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
               style: TextStyle(fontSize: 26.0),
             ),
           ),
+          // Menu Items
           Expanded(
             child: ListView(
               children: [
@@ -50,14 +61,13 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                       height: 35,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: AvatarColor.getColor(menu[index]['text'])
-                            .withOpacity(0.3),
+                        color: Color(menu[index]['color']).withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Icon(
                         menu[index]['icon'],
                         size: 20.0,
-                        color: AvatarColor.getColor(menu[index]['text']),
+                        color: Color(menu[index]['color']),
                       ),
                     ),
                     title: Text(menu[index]['text']),
@@ -142,7 +152,7 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
             width: 180.0,
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search',
+                hintText: kLabels['search'],
                 prefixIcon: Icon(Icons.search_outlined),
               ),
             ),
@@ -151,7 +161,7 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
           ElevatedButton.icon(
             onPressed: () {},
             icon: Icon(Icons.add_outlined),
-            label: Text('New Note'),
+            label: Text(kLabels['new_note']!),
           ),
         ],
       ),

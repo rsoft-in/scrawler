@@ -54,5 +54,6 @@ const kLabels = {
   "have_otp": "I already have OTP",
   "dont_have_account": "Don\'t have an Account? ",
   "register_now": "Register Now",
-  "forgot_password": "Forgot Password?"
+  "forgot_password": "Forgot Password?",
+  "new_note": "New Note"
 };
