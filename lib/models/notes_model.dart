@@ -32,3 +32,11 @@ class Notes {
         'note_list': noteList
       };
 }
+
+class NotesResult {
+  List<Notes> notes;
+  int rows;
+  String error;
+
+  NotesResult(this.notes, this.rows, this.error);
+}

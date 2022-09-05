@@ -181,7 +181,11 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                   },
                                 ),
                               ),
-                              kHSpace,
+                            ],
+                          ),
+                          kVSpace,
+                          Row(
+                            children: [
                               Expanded(
                                 child: TextButton(
                                   child: Text(kLabels['forgot_password']!),

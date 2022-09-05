@@ -1,3 +1,5 @@
+import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class DesktopTasksPage extends StatefulWidget {
@@ -11,6 +13,11 @@ class _DesktopTasksPageState extends State<DesktopTasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: ScrawlAppBar(
+        title: kLabels['notes']!,
+        actionButtonTitle: kLabels['new_task']!,
+        onActionPressed: () {},
+      ),
       body: Center(
         child: Text('All Tasks'),
       ),

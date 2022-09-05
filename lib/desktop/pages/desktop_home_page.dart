@@ -1,9 +1,11 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopHomePage extends StatefulWidget {
   const DesktopHomePage({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class DesktopHomePage extends StatefulWidget {
 }
 
 class _DesktopHomePageState extends State<DesktopHomePage> {
-  String _selectedMenu = "Notes";
+  late SharedPreferences prefs;
   List<Map<String, dynamic>> menu = [];
   String _selectedDrawerIndex = 'all_notes';
 
@@ -40,13 +42,13 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       {
         'id': 'all_notes',
         'icon': Icons.notes_outlined,
-        'text': 'Notes',
+        'text': kLabels['notes']!,
         'color': 0xFF5EAAA8
       },
       {
         'id': 'all_tasks',
         'icon': Icons.check_box_outlined,
-        'text': 'Tasks',
+        'text': kLabels['tasks']!,
         'color': 0xFFFBABAB
       },
     ];
@@ -97,7 +99,6 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                       title: Text(menu[index]['text']),
                       selected: menu[index]['id'] == _selectedDrawerIndex,
                       onTap: () {
-                        _selectedMenu = menu[index]['text'];
                         setState(() {});
                         _onDrawerItemSelect(menu[index]['id']);
                       },
@@ -109,15 +110,30 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           ),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.black87,
-                  child: Icon(Icons.person_outline_outlined),
+                Expanded(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.black87,
+                      child: Icon(Icons.person_outline_outlined),
+                    ),
+                    title: Text(globals.user!.userName),
+                    onTap: () {},
+                  ),
                 ),
                 kHSpace,
-                Text(globals.user!.userName),
+                IconButton(
+                  onPressed: () async {
+                    prefs = await SharedPreferences.getInstance();
+                    prefs.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => DesktopApp()),
+                        (route) => false);
+                  },
+                  icon: Icon(Icons.exit_to_app_outlined),
+                ),
               ],
             ),
           )
@@ -133,68 +149,9 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           width: 0.5,
         ),
         Expanded(
-          child: Scaffold(
-            appBar: ScrawlAppBar(title: _selectedMenu),
-            body: _getDrawerItemWidget(_selectedDrawerIndex),
-          ),
+          child: _getDrawerItemWidget(_selectedDrawerIndex),
         ),
       ],
-    );
-  }
-}
-
-class ScrawlAppBar extends StatefulWidget with PreferredSizeWidget {
-  @override
-  final Size preferredSize;
-
-  final String title;
-  const ScrawlAppBar({Key? key, required this.title})
-      : preferredSize = const Size.fromHeight(140.0),
-        super(key: key);
-
-  @override
-  State<ScrawlAppBar> createState() => _ScrawlAppBarState();
-}
-
-class _ScrawlAppBarState extends State<ScrawlAppBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(width: 0.5, color: Colors.black12),
-        ),
-      ),
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: 18.0,
-              ),
-            ),
-          ),
-          Spacer(),
-          SizedBox(
-            width: 180.0,
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: kLabels['search'],
-                prefixIcon: Icon(Icons.search_outlined),
-              ),
-            ),
-          ),
-          kHSpace,
-          ElevatedButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.add_outlined),
-            label: Text(kLabels['new_note']!),
-          ),
-        ],
-      ),
     );
   }
 }
