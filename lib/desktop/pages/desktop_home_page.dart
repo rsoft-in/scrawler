@@ -1,6 +1,8 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
+import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
 import 'package:flutter/material.dart';
 
 class DesktopHomePage extends StatefulWidget {
@@ -11,8 +13,24 @@ class DesktopHomePage extends StatefulWidget {
 }
 
 class _DesktopHomePageState extends State<DesktopHomePage> {
-  String _selectedMenu = "All Notes";
+  String _selectedMenu = "Notes";
   List<Map<String, dynamic>> menu = [];
+  String _selectedDrawerIndex = 'all_notes';
+
+  _onDrawerItemSelect(String menuId) {
+    setState(() => _selectedDrawerIndex = menuId);
+  }
+
+  _getDrawerItemWidget(String menuId) {
+    switch (menuId) {
+      case 'all_notes':
+        return DesktopNotesPage();
+      case 'all_tasks':
+        return DesktopTasksPage();
+      default:
+        return new Text("Error");
+    }
+  }
 
   @override
   void initState() {
@@ -52,29 +70,41 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           ),
           // Menu Items
           Expanded(
-            child: ListView(
-              children: [
-                ...List.generate(menu.length, (index) {
-                  return ListTile(
-                    leading: Container(
-                      width: 35,
-                      height: 35,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Color(menu[index]['color']).withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  ...List.generate(menu.length, (index) {
+                    return ListTile(
+                      selectedTileColor: Colors.grey.shade100,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Icon(
-                        menu[index]['icon'],
-                        size: 20.0,
-                        color: Color(menu[index]['color']),
+                      leading: Container(
+                        width: 35,
+                        height: 35,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Color(menu[index]['color']).withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Icon(
+                          menu[index]['icon'],
+                          size: 20.0,
+                          color: Color(menu[index]['color']),
+                        ),
                       ),
-                    ),
-                    title: Text(menu[index]['text']),
-                    onTap: () {},
-                  );
-                }),
-              ],
+                      title: Text(menu[index]['text']),
+                      selected: menu[index]['id'] == _selectedDrawerIndex,
+                      onTap: () {
+                        _selectedMenu = menu[index]['text'];
+                        setState(() {});
+                        _onDrawerItemSelect(menu[index]['id']);
+                      },
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
           Padding(
@@ -105,7 +135,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
         Expanded(
           child: Scaffold(
             appBar: ScrawlAppBar(title: _selectedMenu),
-            body: Container(),
+            body: _getDrawerItemWidget(_selectedDrawerIndex),
           ),
         ),
       ],
