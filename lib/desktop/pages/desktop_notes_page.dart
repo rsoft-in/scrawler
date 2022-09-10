@@ -24,6 +24,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   FocusNode focusNode = FocusNode();
   int wordCount = 0;
 
+  TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
 
   void getNotes() async {
@@ -65,15 +66,12 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
     return showEdit
         ? Scaffold(
             appBar: ScrawlNotesAppBar(
-              child: Text(
-                kLabels['new_note']!,
-                style: const TextStyle(
-                  fontSize: 18.0,
-                ),
-              ),
+              title: kLabels['new_note']!,
+              titleController: noteTitleController,
               onActionPressed: () {
                 setState(() {
                   showEdit = false;
+                  print(noteTitleController.text);
                 });
               },
               onColorPressed: () {},
@@ -103,8 +101,12 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                   filled: false,
                 ),
                 onChanged: (value) {
-                  var wordList = value.split(' ');
-                  wordCount = wordList.length;
+                  var wordList = value.trim().split(' ');
+                  if (value.trim().isEmpty) {
+                    wordCount = 0;
+                  } else {
+                    wordCount = wordList.length;
+                  }
                   setState(() {});
                 },
               ),
