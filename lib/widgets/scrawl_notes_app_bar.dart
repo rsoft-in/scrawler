@@ -10,15 +10,15 @@ class ScrawlNotesAppBar extends StatefulWidget with PreferredSizeWidget {
   VoidCallback? onColorPressed;
   VoidCallback? onTagPressed;
   VoidCallback? onActionPressed;
-  VoidCallback onClosePressed;
+  
 
   ScrawlNotesAppBar(
       {Key? key,
       required this.child,
       this.onColorPressed,
       this.onTagPressed,
-      this.onActionPressed,
-      required this.onClosePressed})
+      this.onActionPressed
+      })
       : preferredSize = const Size.fromHeight(140.0),
         super(key: key);
 
@@ -58,10 +58,6 @@ class _ScrawlNotesAppBarState extends State<ScrawlNotesAppBar> {
             child: Icon(Icons.check_outlined),
           ),
           kHSpace,
-          IconButton(
-            onPressed: widget.onClosePressed,
-            icon: Icon(Icons.clear_outlined),
-          ),
         ],
       ),
     );

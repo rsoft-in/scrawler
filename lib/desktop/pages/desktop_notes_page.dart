@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/models/notes_model.dart';
@@ -20,6 +21,10 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   int _pageNr = 0;
   bool isBusy = false;
   bool showEdit = false;
+  FocusNode focusNode = FocusNode();
+  int wordCount = 0;
+
+  TextEditingController noteTextController = TextEditingController();
 
   void getNotes() async {
     Map<String, String> post = {
@@ -60,21 +65,64 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
     return showEdit
         ? Scaffold(
             appBar: ScrawlNotesAppBar(
-                child: Text(
-                  kLabels['new_note']!,
-                  style: const TextStyle(
-                    fontSize: 18.0,
-                  ),
+              child: Text(
+                kLabels['new_note']!,
+                style: const TextStyle(
+                  fontSize: 18.0,
                 ),
-                onActionPressed: () {},
-                onColorPressed: () {},
-                onTagPressed: () {},
-                onClosePressed: () {
-                  setState(() {
-                    showEdit = false;
-                  });
-                }),
-            body: Container(),
+              ),
+              onActionPressed: () {
+                setState(() {
+                  showEdit = false;
+                });
+              },
+              onColorPressed: () {},
+              onTagPressed: () {},
+            ),
+            body: Container(
+              child: TextField(
+                textAlignVertical: TextAlignVertical.top,
+                controller: noteTextController,
+                focusNode: focusNode,
+                expands: true,
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: 'Type something here',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: false,
+                ),
+                onChanged: (value) {
+                  var wordList = value.split(' ');
+                  wordCount = wordList.length;
+                  setState(() {});
+                },
+              ),
+            ),
+            bottomNavigationBar: BottomAppBar(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '$wordCount words',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           )
         : Scaffold(
             appBar: ScrawlAppBar(
@@ -83,6 +131,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               onActionPressed: () {
                 setState(() {
                   showEdit = true;
+                  focusNode.requestFocus();
                 });
               },
             ),
