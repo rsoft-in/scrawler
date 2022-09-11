@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     var uuid = Uuid();
     setState(() {
       notesList.add(new Notes(uuid.v1(), Utility.getDateString(),
-          _noteTitleController.text, _noteTextController.text, '', 0, 0, ''));
+          _noteTitleController.text, _noteTextController.text, '', false, 0, ''));
     });
     saveNotes();
     Navigator.pop(context);

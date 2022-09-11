@@ -4,7 +4,7 @@ class Notes {
   String noteTitle;
   String noteText;
   String noteLabel;
-  int noteArchived;
+  bool noteArchived;
   int noteColor;
   String noteList;
 
@@ -17,8 +17,8 @@ class Notes {
         noteTitle = json['note_title'],
         noteText = json['note_text'],
         noteLabel = json['note_label'],
-        noteArchived = json['note_archived'],
-        noteColor = json['note_color'],
+        noteArchived = json['note_archived'] == '1',
+        noteColor = int.parse(json['note_color']),
         noteList = json['note_list'] ?? '';
 
   Map<String, dynamic> toJson() => {

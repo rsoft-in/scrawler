@@ -43,7 +43,7 @@ class _EditNotePageState extends State<EditNotePage> {
             _noteTitleController.text,
             _noteTextController.text,
             '',
-            0,
+            false,
             0,
             _noteListJsonString);
       });
@@ -58,7 +58,7 @@ class _EditNotePageState extends State<EditNotePage> {
             _noteTitleController.text,
             _noteTextController.text,
             '',
-            0,
+            false,
             0,
             _noteListJsonString);
       });

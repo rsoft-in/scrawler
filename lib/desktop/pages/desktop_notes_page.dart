@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
@@ -26,13 +27,14 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
 
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
+  String noteId = "";
 
   void getNotes() async {
     Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
         'uid': globals.user!.userId,
-        'qry': 'test',
+        'qry': '',
         'sort': 'note_title',
         'page_no': _pageNr,
         'offset': 30
@@ -55,6 +57,37 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
     });
   }
 
+  void saveNotes() async {
+    Map<String, String> post = {
+      'postdata': jsonEncode({
+        'api_key': globals.apiKey,
+        'note_id': noteId,
+        'note_user_id': globals.user!.userId,
+        'note_date': Utility.getDateString(),
+        'note_title': noteTitleController.text,
+        'note_text': noteTextController.text,
+        'note_label': '',
+        'note_archived': 0,
+        'note_color': 0,
+        'note_image': '',
+        'note_audio_file': ''
+      })
+    };
+    print(post);
+    NotesApiProvider.updateNotes(post).then((value) {
+      if (value['status']) {
+        getNotes();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(value['error']),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     getNotes();
@@ -66,13 +99,13 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
     return showEdit
         ? Scaffold(
             appBar: ScrawlNotesAppBar(
-              title: kLabels['new_note']!,
+              title: noteTitleController.text,
               titleController: noteTitleController,
               onActionPressed: () {
                 setState(() {
                   showEdit = false;
-                  print(noteTitleController.text);
                 });
+                saveNotes();
               },
               onColorPressed: () {},
               onTagPressed: () {},
@@ -133,6 +166,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               onActionPressed: () {
                 setState(() {
                   showEdit = true;
+                  noteTitleController.text = "New Note";
+                  noteTextController.text = "";
                   focusNode.requestFocus();
                 });
               },
@@ -147,6 +182,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                         itemBuilder: (context, index) {
                           return ListTile(
                             title: Text(notes[index].noteTitle),
+                            // subtitle: Text(notes[index].noteText),
+                            // isThreeLine: true,
                           );
                         },
                       )
