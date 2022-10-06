@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
@@ -24,6 +25,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   bool showEdit = false;
   FocusNode focusNode = FocusNode();
   int wordCount = 0;
+  bool isDesktop = false;
 
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
@@ -96,6 +98,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
 
   @override
   Widget build(BuildContext context) {
+    isDesktop = isDisplayDesktop(context);
     return showEdit
         ? Scaffold(
             appBar: ScrawlNotesAppBar(
@@ -105,7 +108,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                 setState(() {
                   showEdit = false;
                 });
-                saveNotes();
+                if (noteTextController.text.isNotEmpty) saveNotes();
               },
               onColorPressed: () {},
               onTagPressed: () {},

@@ -1,5 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:flutter/material.dart';
 
 class ScrawlAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -23,8 +24,11 @@ class ScrawlAppBar extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _ScrawlAppBarState extends State<ScrawlAppBar> {
+  bool isDesktop = false;
+
   @override
   Widget build(BuildContext context) {
+    isDesktop = isDisplayDesktop(context);
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -54,10 +58,20 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
             ),
           ),
           kHSpace,
-          ElevatedButton.icon(
-            onPressed: widget.onActionPressed,
-            icon: Icon(Icons.add_outlined),
-            label: Text(widget.actionButtonTitle),
+          Visibility(
+            visible: isDesktop,
+            child: ElevatedButton.icon(
+              onPressed: widget.onActionPressed,
+              icon: Icon(Icons.add_outlined),
+              label: Text(widget.actionButtonTitle),
+            ),
+          ),
+          Visibility(
+            visible: !isDesktop,
+            child: ElevatedButton(
+              onPressed: widget.onActionPressed,
+              child: Icon(Icons.add_outlined),
+            ),
           ),
         ],
       ),

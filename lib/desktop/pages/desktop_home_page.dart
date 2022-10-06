@@ -4,6 +4,7 @@ import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
+import 'package:bnotes/helpers/adaptive.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,8 +17,11 @@ class DesktopHomePage extends StatefulWidget {
 
 class _DesktopHomePageState extends State<DesktopHomePage> {
   late SharedPreferences prefs;
+  bool isDesktop = false;
   List<Map<String, dynamic>> menu = [];
   String _selectedDrawerIndex = 'all_notes';
+  int _selectedIndex = 0;
+  NavigationRailLabelType labelType = NavigationRailLabelType.none;
 
   _onDrawerItemSelect(String menuId) {
     setState(() => _selectedDrawerIndex = menuId);
@@ -41,13 +45,17 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
     menu = [
       {
         'id': 'all_notes',
+        'index': 0,
         'icon': Icons.notes_outlined,
+        'icon_filled': Icons.notes,
         'text': kLabels['notes']!,
         'color': 0xFF5EAAA8
       },
       {
         'id': 'all_tasks',
+        'index': 1,
         'icon': Icons.check_box_outlined,
+        'icon_filled': Icons.check_box,
         'text': kLabels['tasks']!,
         'color': 0xFFFBABAB
       },
@@ -56,6 +64,8 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    isDesktop = isDisplayDesktop(context);
+
     Widget drawer = Drawer(
       elevation: 0,
       backgroundColor: Colors.white,
@@ -63,8 +73,9 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            margin: const EdgeInsets.only(top: 25.0, bottom: 5.0),
             padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 35.0),
             child: Text(
               kAppName,
               style: TextStyle(fontSize: 26.0),
@@ -73,35 +84,40 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           // Menu Items
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: ListView(
                 children: [
                   ...List.generate(menu.length, (index) {
-                    return ListTile(
-                      selectedTileColor: Colors.grey.shade100,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      leading: Container(
-                        width: 35,
-                        height: 35,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Color(menu[index]['color']).withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(8.0),
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 5.0),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 15.0),
+                        selectedTileColor: Colors.grey.shade100,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Icon(
-                          menu[index]['icon'],
-                          size: 20.0,
-                          color: Color(menu[index]['color']),
+                        leading: Container(
+                          width: 35,
+                          height: 35,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color(menu[index]['color']).withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Icon(
+                            menu[index]['icon'],
+                            size: 20.0,
+                            color: Color(menu[index]['color']),
+                          ),
                         ),
+                        title: Text(menu[index]['text']),
+                        selected: menu[index]['id'] == _selectedDrawerIndex,
+                        onTap: () {
+                          setState(() {});
+                          _onDrawerItemSelect(menu[index]['id']);
+                        },
                       ),
-                      title: Text(menu[index]['text']),
-                      selected: menu[index]['id'] == _selectedDrawerIndex,
-                      onTap: () {
-                        setState(() {});
-                        _onDrawerItemSelect(menu[index]['id']);
-                      },
                     );
                   }),
                 ],
@@ -110,41 +126,82 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           ),
           Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.black87,
-                      child: Icon(Icons.person_outline_outlined),
-                    ),
-                    title: Text(globals.user!.userName),
-                    onTap: () {},
-                  ),
-                ),
-                kHSpace,
-                IconButton(
-                  onPressed: () async {
-                    prefs = await SharedPreferences.getInstance();
-                    prefs.clear();
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (context) => DesktopApp()),
-                        (route) => false);
-                  },
-                  icon: Icon(Icons.exit_to_app_outlined),
-                ),
-              ],
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+            child: ListTile(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+              leading: CircleAvatar(
+                backgroundColor: Colors.black87,
+                child: Icon(Icons.person_outline_outlined),
+              ),
+              title: Text(globals.user!.userName),
+              onTap: () {},
             ),
           )
         ],
       ),
     );
 
+    Widget navigationRail = NavigationRail(
+      labelType: labelType,
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: (int index) {
+        setState(() {
+          _selectedIndex = index;
+          _onDrawerItemSelect(menu[index]['id']);
+        });
+      },
+      leading: CircleAvatar(
+        child: Image.asset('images/bnotes-transparent.png'),
+        backgroundColor: Colors.transparent,
+      ),
+      destinations: <NavigationRailDestination>[
+        ...List.generate(menu.length, (index) {
+          return NavigationRailDestination(
+            icon: Container(
+              width: 35,
+              height: 35,
+              alignment: Alignment.center,
+              child: Icon(
+                menu[index]['icon'],
+                size: 20.0,
+                color: Color(menu[index]['color']),
+              ),
+            ),
+            selectedIcon: Container(
+              width: 35,
+              height: 35,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Color(menu[index]['color']).withOpacity(0.2),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Icon(
+                menu[index]['icon'],
+                size: 20.0,
+                color: Color(menu[index]['color']),
+              ),
+            ),
+            label: Text(menu[index]['text']),
+          );
+        }),
+      ],
+      trailing: IconButton(
+        onPressed: () {},
+        icon: Icon(
+          Icons.person_outline_outlined,
+          color: kPrimaryColor,
+        ),
+      ),
+    );
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        drawer,
+        if (isDesktop) drawer else navigationRail,
         VerticalDivider(
           width: 0.5,
         ),
