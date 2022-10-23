@@ -47,9 +47,8 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
               ),
             ),
           ),
-          Spacer(),
-          SizedBox(
-            width: 180.0,
+          kHSpace,
+          Expanded(
             child: TextField(
               decoration: InputDecoration(
                 hintText: kLabels['search'],
