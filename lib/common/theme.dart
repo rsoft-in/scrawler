@@ -11,7 +11,9 @@ ThemeData theme() {
         .copyWith(primary: kPrimaryColor, secondary: kAccentColor),
     fontFamily: 'Raleway',
     textTheme: TextTheme(
-      bodyText2: TextStyle(fontSize: 14.0),
+      titleSmall: TextStyle(fontSize: 12.0),
+      titleMedium: TextStyle(fontSize: 14.0),
+      titleLarge: TextStyle(fontSize: 16.0),
     ),
     appBarTheme: AppBarTheme(
       color: Colors.transparent,

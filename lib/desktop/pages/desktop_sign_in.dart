@@ -1,16 +1,13 @@
 import 'dart:convert';
 
 import 'package:bnotes/common/constants.dart';
+import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
-import 'package:bnotes/widgets/scrawl_primary_button.dart';
-import 'package:bnotes/widgets/scrawl_textfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:bnotes/common/globals.dart' as globals;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopSignIn extends StatefulWidget {
@@ -24,8 +21,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   late SharedPreferences prefs;
   final _formKey = GlobalKey<FormState>();
   late FocusNode focusNodePassword;
+  double loginWidth = 500;
 
-  bool isDesktop = false;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _pwdController = TextEditingController();
 
@@ -70,7 +67,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
 
   @override
   Widget build(BuildContext context) {
-    isDesktop = isDisplayDesktop(context);
+    loginWidth = MediaQuery.of(context).size.width * 0.9;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Form(
@@ -80,8 +77,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
           child: Center(
             child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 10.0),
-                width:
-                    isDesktop ? 500 : MediaQuery.of(context).size.width * 0.9,
+                width: loginWidth <= 500 ? loginWidth : 500,
                 // height: 600,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.8),

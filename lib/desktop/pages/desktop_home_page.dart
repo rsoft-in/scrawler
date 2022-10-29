@@ -66,82 +66,87 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
 
-    Widget drawer = Drawer(
-      elevation: 0,
-      backgroundColor: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 25.0, bottom: 5.0),
-            padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 35.0),
-            child: Text(
-              kAppName,
-              style: TextStyle(fontSize: 26.0),
+    Widget drawer = SizedBox(
+      width: 250,
+      child: Drawer(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 25.0, bottom: 5.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 35.0),
+              child: Text(
+                kAppName,
+                style: TextStyle(fontSize: 26.0),
+              ),
             ),
-          ),
-          // Menu Items
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              child: ListView(
-                children: [
-                  ...List.generate(menu.length, (index) {
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 5.0),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 15.0),
-                        selectedTileColor: Colors.grey.shade100,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        leading: Container(
-                          width: 35,
-                          height: 35,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Color(menu[index]['color']).withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(8.0),
+            // Menu Items
+            Expanded(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                child: ListView(
+                  children: [
+                    ...List.generate(menu.length, (index) {
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 5.0),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 15.0),
+                          selectedTileColor: Colors.grey.shade100,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          child: Icon(
-                            menu[index]['icon'],
-                            size: 20.0,
-                            color: Color(menu[index]['color']),
+                          leading: Container(
+                            width: 35,
+                            height: 35,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color:
+                                  Color(menu[index]['color']).withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Icon(
+                              menu[index]['icon'],
+                              size: 20.0,
+                              color: Color(menu[index]['color']),
+                            ),
                           ),
+                          title: Text(menu[index]['text']),
+                          selected: menu[index]['id'] == _selectedDrawerIndex,
+                          onTap: () {
+                            setState(() {});
+                            _onDrawerItemSelect(menu[index]['id']);
+                          },
                         ),
-                        title: Text(menu[index]['text']),
-                        selected: menu[index]['id'] == _selectedDrawerIndex,
-                        onTap: () {
-                          setState(() {});
-                          _onDrawerItemSelect(menu[index]['id']);
-                        },
-                      ),
-                    );
-                  }),
-                ],
+                      );
+                    }),
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+              child: ListTile(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.black87,
+                  child: Icon(Icons.person_outline_outlined),
+                ),
+                title: Text(globals.user!.userName),
+                onTap: () {},
               ),
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-              leading: CircleAvatar(
-                backgroundColor: Colors.black87,
-                child: Icon(Icons.person_outline_outlined),
-              ),
-              title: Text(globals.user!.userName),
-              onTap: () {},
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
 
