@@ -21,6 +21,7 @@ ThemeData theme() {
       iconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(
         fontSize: 20.0,
+        fontFamily: 'Raleway',
         color: Colors.black,
         fontWeight: FontWeight.w400,
       ),

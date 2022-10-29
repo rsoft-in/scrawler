@@ -7,6 +7,7 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -169,92 +170,128 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               SizedBox(
                 width: 350,
                 child: Scaffold(
-                  appBar: ScrawlAppBar(
-                    title: kLabels['notes']!,
-                    actionButtonTitle: kLabels['new_note']!,
-                    onActionPressed: () {
-                      setState(() {
-                        showEdit = true;
-                        noteTitleController.text = "New Note";
-                        noteTextController.text = "";
-                        focusNode.requestFocus();
-                      });
-                    },
+                  appBar: AppBar(
+                    title: Text(kLabels['notes']!),
+                    centerTitle: false,
+                    actions: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.filter_alt_outlined))
+                    ],
                   ),
-                  body: isBusy
-                      ? Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        )
-                      : (notes.length > 0
-                          ? ListView.builder(
-                              padding: kGlobalOuterPadding,
-                              itemCount: notes.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 5.0,
-                                    horizontal: 10.0,
-                                  ),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    onTap: () {
-                                      setState(() {
-                                        selectedIndex = index;
-                                        isSelected = true;
-                                      });
-                                    },
-                                    child: Container(
-                                      padding: kGlobalCardPadding * 2,
-                                      decoration: BoxDecoration(
-                                        color: index == selectedIndex &&
-                                                isSelected
-                                            ? kPrimaryColor.withOpacity(0.08)
-                                            : Color(0xFFF9F9F9)
-                                                .withOpacity(0.6),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0,
-                                              vertical: 4.0,
+                  body: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: kGlobalOuterPadding,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: kLabels['search'],
+                                  prefixIcon: Icon(Icons.search_outlined),
+                                ),
+                              ),
+                            ),
+                            kHSpace,
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  showEdit = true;
+                                  noteTitleController.text = "New Note";
+                                  noteTextController.text = "";
+                                });
+                              },
+                              child: Icon(Icons.add_outlined),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: isBusy
+                            ? Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              )
+                            : (notes.length > 0
+                                ? ListView.builder(
+                                    padding: kGlobalOuterPadding,
+                                    itemCount: notes.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 5.0,
+                                          horizontal: 10.0,
+                                        ),
+                                        child: InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          onTap: () {
+                                            setState(() {
+                                              selectedIndex = index;
+                                              isSelected = true;
+                                            });
+                                          },
+                                          child: Container(
+                                            padding: kGlobalCardPadding * 2,
+                                            decoration: BoxDecoration(
+                                              color: index == selectedIndex &&
+                                                      isSelected
+                                                  ? kPrimaryColor
+                                                      .withOpacity(0.08)
+                                                  : Color(0xFFF9F9F9)
+                                                      .withOpacity(0.6),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
                                             ),
-                                            child: Text(
-                                              notes[index].noteTitle,
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                              ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 4.0,
+                                                  ),
+                                                  child: Text(
+                                                    notes[index].noteTitle,
+                                                    style: TextStyle(
+                                                      fontSize: 14.0,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 4.0,
+                                                  ),
+                                                  child: Text(
+                                                    notes[index].noteText,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      fontSize: 12.0,
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
                                             ),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0,
-                                              vertical: 4.0,
-                                            ),
-                                            child: Text(
-                                              notes[index].noteText,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              style: TextStyle(
-                                                fontSize: 12.0,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                          : Center(
-                              child: Text('No Data'),
-                            )),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Center(
+                                    child: Text('No Data'),
+                                  )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               VerticalDivider(
@@ -268,11 +305,17 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                     child: Padding(
                       padding: kGlobalOuterPadding * 2,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          NoteTitleWidget(
+                              text: notes.isEmpty
+                                  ? ''
+                                  : notes[selectedIndex].noteTitle),
+                          SelectableText(
                             notes.isEmpty ? '' : notes[selectedIndex].noteText,
                             style: TextStyle(
                               fontSize: 14.0,
+                              height: 1.2,
                             ),
                           ),
                         ],
