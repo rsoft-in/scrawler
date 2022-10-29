@@ -47,31 +47,31 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
               ),
             ),
           ),
-          kHSpace,
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: kLabels['search'],
-                prefixIcon: Icon(Icons.search_outlined),
-              ),
-            ),
-          ),
-          kHSpace,
-          Visibility(
-            visible: isDesktop,
-            child: ElevatedButton.icon(
-              onPressed: widget.onActionPressed,
-              icon: Icon(Icons.add_outlined),
-              label: Text(widget.actionButtonTitle),
-            ),
-          ),
-          Visibility(
-            visible: !isDesktop,
-            child: ElevatedButton(
-              onPressed: widget.onActionPressed,
-              child: Icon(Icons.add_outlined),
-            ),
-          ),
+          // kHSpace,
+          // Expanded(
+          //   child: TextField(
+          //     decoration: InputDecoration(
+          //       hintText: kLabels['search'],
+          //       prefixIcon: Icon(Icons.search_outlined),
+          //     ),
+          //   ),
+          // ),
+          // kHSpace,
+          // Visibility(
+          //   visible: isDesktop,
+          //   child: ElevatedButton.icon(
+          //     onPressed: widget.onActionPressed,
+          //     icon: Icon(Icons.add_outlined),
+          //     label: Text(widget.actionButtonTitle),
+          //   ),
+          // ),
+          // Visibility(
+          //   visible: !isDesktop,
+          //   child: ElevatedButton(
+          //     onPressed: widget.onActionPressed,
+          //     child: Icon(Icons.add_outlined),
+          //   ),
+          // ),
         ],
       ),
     );

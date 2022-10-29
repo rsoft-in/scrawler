@@ -30,6 +30,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
   String noteId = "";
+  int selectedIndex = 0;
+  bool isSelected = false;
 
   void getNotes() async {
     Map<String, String> post = {
@@ -162,35 +164,124 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               ),
             ),
           )
-        : Scaffold(
-            appBar: ScrawlAppBar(
-              title: kLabels['notes']!,
-              actionButtonTitle: kLabels['new_note']!,
-              onActionPressed: () {
-                setState(() {
-                  showEdit = true;
-                  noteTitleController.text = "New Note";
-                  noteTextController.text = "";
-                  focusNode.requestFocus();
-                });
-              },
-            ),
-            body: isBusy
-                ? Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : (notes.length > 0
-                    ? ListView.builder(
-                        itemCount: notes.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(notes[index].noteTitle),
-                            // subtitle: Text(notes[index].noteText),
-                            // isThreeLine: true,
-                          );
-                        },
-                      )
-                    : Center(child: Text('No Data'))),
+        : Row(
+            children: [
+              SizedBox(
+                width: 350,
+                child: Scaffold(
+                  appBar: ScrawlAppBar(
+                    title: kLabels['notes']!,
+                    actionButtonTitle: kLabels['new_note']!,
+                    onActionPressed: () {
+                      setState(() {
+                        showEdit = true;
+                        noteTitleController.text = "New Note";
+                        noteTextController.text = "";
+                        focusNode.requestFocus();
+                      });
+                    },
+                  ),
+                  body: isBusy
+                      ? Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                      : (notes.length > 0
+                          ? ListView.builder(
+                              padding: kGlobalOuterPadding,
+                              itemCount: notes.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 5.0,
+                                    horizontal: 10.0,
+                                  ),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    onTap: () {
+                                      setState(() {
+                                        selectedIndex = index;
+                                        isSelected = true;
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: kGlobalCardPadding * 2,
+                                      decoration: BoxDecoration(
+                                        color: index == selectedIndex &&
+                                                isSelected
+                                            ? kPrimaryColor.withOpacity(0.08)
+                                            : Color(0xFFF9F9F9)
+                                                .withOpacity(0.6),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0,
+                                              vertical: 4.0,
+                                            ),
+                                            child: Text(
+                                              notes[index].noteTitle,
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0,
+                                              vertical: 4.0,
+                                            ),
+                                            child: Text(
+                                              notes[index].noteText,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text('No Data'),
+                            )),
+                ),
+              ),
+              VerticalDivider(
+                width: 0.5,
+              ),
+              Expanded(
+                child: Scaffold(
+                  body: Visibility(
+                    visible: isSelected,
+                    replacement: Container(), // Replace with an illustration
+                    child: Padding(
+                      padding: kGlobalOuterPadding * 2,
+                      child: Column(
+                        children: [
+                          Text(
+                            notes.isEmpty ? '' : notes[selectedIndex].noteText,
+                            style: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
   }
 }

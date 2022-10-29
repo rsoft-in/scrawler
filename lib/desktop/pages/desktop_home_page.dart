@@ -1,7 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
 import 'package:bnotes/helpers/adaptive.dart';
