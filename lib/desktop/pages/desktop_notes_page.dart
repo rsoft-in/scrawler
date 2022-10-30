@@ -7,8 +7,8 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
-import 'package:bnotes/widgets/note_date_widget.dart';
-import 'package:bnotes/widgets/note_title_header.dart';
+import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
+import 'package:bnotes/widgets/scrawl_note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -377,10 +377,6 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                       ],
                     ),
                   ),
-                  // bottomNavigationBar: BottomAppBar(
-                  //   elevation: 0,
-                  //   child:
-                  // ),
                 ),
               ),
             ],
