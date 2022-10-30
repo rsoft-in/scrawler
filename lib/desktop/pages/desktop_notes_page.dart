@@ -7,6 +7,7 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/note_date_widget.dart';
 import 'package:bnotes/widgets/note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
@@ -170,21 +171,18 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               SizedBox(
                 width: 350,
                 child: Scaffold(
-                  appBar: AppBar(
-                    title: Text(kLabels['notes']!),
-                    centerTitle: false,
-                    actions: [
-                      IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.filter_alt_outlined))
-                    ],
+                  appBar: ScrawlAppBar(
+                    title: kLabels['notes']!,
                   ),
                   body: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Padding(
-                        padding: kGlobalOuterPadding,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 15,
+                          vertical: 15,
+                        ),
                         child: Row(
                           children: [
                             Expanded(
@@ -278,7 +276,24 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                                       color: Colors.grey,
                                                     ),
                                                   ),
-                                                )
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(notes[index]
+                                                          .noteLabel),
+                                                    ),
+                                                    Text(
+                                                      Utility.formatDateTime(
+                                                          notes[index]
+                                                              .noteDate),
+                                                      style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -311,6 +326,12 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                               text: notes.isEmpty
                                   ? ''
                                   : notes[selectedIndex].noteTitle),
+                          NoteDateWidget(
+                            text: notes.isEmpty
+                                ? ''
+                                : Utility.formatDateTime(
+                                    notes[selectedIndex].noteDate),
+                          ),
                           SelectableText(
                             notes.isEmpty ? '' : notes[selectedIndex].noteText,
                             style: TextStyle(
@@ -322,6 +343,44 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                       ),
                     ),
                   ),
+                  floatingActionButton: Visibility(
+                    visible: isSelected,
+                    replacement: Container(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.all(15.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                              color: kBorderColor,
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Icon(Icons.edit_outlined)),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Icon(Icons.palette_outlined)),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Icon(Icons.label_outline)),
+                              TextButton(
+                                  onPressed: () {},
+                                  child: Icon(Icons.delete_outlined)),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  // bottomNavigationBar: BottomAppBar(
+                  //   elevation: 0,
+                  //   child:
+                  // ),
                 ),
               ),
             ],

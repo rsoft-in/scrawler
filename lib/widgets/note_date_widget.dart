@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class NoteTitleWidget extends StatelessWidget {
+class NoteDateWidget extends StatelessWidget {
   final String text;
-  const NoteTitleWidget({Key? key, required this.text}) : super(key: key);
+  const NoteDateWidget({Key? key, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
-      child: SelectableText(
+      child: Text(
         text,
         style: TextStyle(
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
+          fontSize: 12,
+          color: Colors.grey,
         ),
       ),
     );

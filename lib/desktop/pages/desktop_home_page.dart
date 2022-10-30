@@ -74,7 +74,6 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 25.0, bottom: 5.0),
               padding:
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 35.0),
               child: Text(

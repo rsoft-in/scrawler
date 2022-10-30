@@ -16,8 +16,8 @@ ThemeData theme() {
       titleLarge: TextStyle(fontSize: 16.0),
     ),
     appBarTheme: AppBarTheme(
-      color: Colors.transparent,
-      elevation: 0,
+      color: Colors.white,
+      elevation: 1,
       iconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(
         fontSize: 20.0,

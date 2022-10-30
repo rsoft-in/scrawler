@@ -15,7 +15,6 @@ class _DesktopTasksPageState extends State<DesktopTasksPage> {
     return Scaffold(
       appBar: ScrawlAppBar(
         title: kLabels['notes']!,
-        actionButtonTitle: kLabels['new_task']!,
         onActionPressed: () {},
       ),
       body: Center(
