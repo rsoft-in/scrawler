@@ -180,7 +180,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
+                          horizontal: 20,
                           vertical: 15,
                         ),
                         child: Row(

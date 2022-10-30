@@ -19,7 +19,10 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: 15.0,
+      ),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 0.5, color: Colors.black12),
