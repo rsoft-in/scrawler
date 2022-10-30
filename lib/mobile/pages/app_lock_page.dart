@@ -1,5 +1,5 @@
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/cupertino.dart';

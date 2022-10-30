@@ -5,7 +5,7 @@ import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
 import 'package:flutter/gestures.dart';

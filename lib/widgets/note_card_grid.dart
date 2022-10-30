@@ -1,10 +1,10 @@
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
-import '../helpers/note_color.dart';
+import '../common/note_color.dart';
 
 class NoteCardGrid extends StatefulWidget {
   final Notes? note;

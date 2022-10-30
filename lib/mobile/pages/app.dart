@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/mobile/pages/archive_page.dart';
 import 'package:bnotes/mobile/pages/notes_page.dart';

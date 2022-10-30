@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/adaptive.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/mobile/pages/about_page.dart';
 import 'package:bnotes/mobile/pages/app_lock_page.dart';
 import 'package:bnotes/mobile/pages/backup_restore_page.dart';

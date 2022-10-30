@@ -3,7 +3,7 @@ import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

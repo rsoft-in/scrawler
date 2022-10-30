@@ -1,5 +1,5 @@
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/mobile/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';

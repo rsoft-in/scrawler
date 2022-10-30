@@ -1,7 +1,7 @@
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/desktop/helpers/localdatahandler.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:flutter/material.dart';

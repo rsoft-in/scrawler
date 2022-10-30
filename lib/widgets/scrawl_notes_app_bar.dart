@@ -1,5 +1,5 @@
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

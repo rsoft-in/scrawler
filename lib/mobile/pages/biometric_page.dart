@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 
 class BiometricPage extends StatefulWidget {
   const BiometricPage({Key? key}) : super(key: key);

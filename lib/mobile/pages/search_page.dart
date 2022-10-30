@@ -1,6 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/mobile/pages/note_reader_page.dart';
 import 'package:bnotes/widgets/note_card_list.dart';

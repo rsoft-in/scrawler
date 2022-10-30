@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/helpers/database_helper.dart';
-import 'package:bnotes/helpers/note_color.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/note_color.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/note_list_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/mobile/pages/edit_note_page.dart';

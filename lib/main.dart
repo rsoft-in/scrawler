@@ -4,7 +4,7 @@ import 'package:bnotes/desktop/app.dart';
 import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:bnotes/mobile/pages/app_lock_page.dart';
 import 'package:bnotes/mobile/pages/introduction_page.dart';
