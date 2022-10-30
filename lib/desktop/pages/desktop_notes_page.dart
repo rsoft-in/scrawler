@@ -7,12 +7,14 @@ import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DesktopNotesPage extends StatefulWidget {
   const DesktopNotesPage({Key? key}) : super(key: key);
@@ -281,22 +283,29 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                                     ),
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(notes[index]
-                                                          .noteLabel),
-                                                    ),
-                                                    Text(
-                                                      Utility.formatDateTime(
-                                                          notes[index]
-                                                              .noteDate),
-                                                      style: TextStyle(
-                                                        fontSize: 12.0,
-                                                        color: Colors.grey,
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                    horizontal: 8.0,
+                                                    vertical: 4.0,
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(notes[index]
+                                                            .noteLabel),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Text(
+                                                        Utility.formatDateTime(
+                                                            notes[index]
+                                                                .noteDate),
+                                                        style: TextStyle(
+                                                          fontSize: 12.0,
+                                                          color: Colors.grey,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -306,7 +315,10 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                     },
                                   )
                                 : Center(
-                                    child: Text('No Data'),
+                                    child: SvgPicture.asset(
+                                      'images/undraw_playful_cat.svg',
+                                      width: 200,
+                                    ),
                                   )),
                       ),
                     ],
@@ -320,7 +332,10 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                 child: Scaffold(
                   body: Visibility(
                     visible: isSelected,
-                    replacement: Container(), // Replace with an illustration
+                    replacement: EmptyWidget(
+                        text: 'Select a note to Preview.',
+                        width: MediaQuery.of(context).size.width * 0.5 * 0.8,
+                        asset: 'images/undraw_playful_cat.svg'),
                     child: Padding(
                       padding: kGlobalOuterPadding * 2,
                       child: Column(
