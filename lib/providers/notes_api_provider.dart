@@ -48,4 +48,24 @@ class NotesApiProvider {
       return {'status': false, 'error': e.toString()};
     }
   }
+
+  static Future<Map<String, dynamic>> deleteNotes(Map post) async {
+    String result = "";
+    try {
+      var response = await http.Client()
+          .post(Uri.parse('$kBaseUrl/notes/delete'), body: post);
+      result = response.body;
+      if (response.statusCode == 200) {
+        if (result.contains('SUCCESS')) {
+          return {'status': true, 'error': ''};
+        } else {
+          return {'status': false, 'error': result};
+        }
+      } else {
+        return {'status': false, 'error': result};
+      }
+    } catch (e) {
+      return {'status': false, 'error': e.toString()};
+    }
+  }
 }

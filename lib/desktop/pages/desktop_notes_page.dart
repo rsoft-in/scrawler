@@ -9,6 +9,7 @@ import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
+import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
@@ -82,10 +83,32 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
         'note_audio_file': ''
       })
     };
-    print(post);
     NotesApiProvider.updateNotes(post).then((value) {
       if (value['status']) {
         getNotes();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(value['error']),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+  }
+
+  void deleteNotes(String noteId) async {
+    Map<String, String> post = {
+      'postdata': jsonEncode({
+        'api_key': globals.apiKey,
+        'note_id': noteId,
+      })
+    };
+    NotesApiProvider.deleteNotes(post).then((value) {
+      if (value['status']) {
+        getNotes();
+        selectedIndex = 0;
+        isSelected = false;
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -223,102 +246,21 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                     padding: kGlobalOuterPadding,
                                     itemCount: notes.length,
                                     itemBuilder: (context, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 5.0,
-                                          horizontal: 10.0,
-                                        ),
-                                        child: InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                                      return NoteListItemWidget(
+                                          note: notes[index],
+                                          selectedIndex: selectedIndex,
                                           onTap: () {
                                             setState(() {
                                               selectedIndex = index;
                                               isSelected = true;
                                             });
                                           },
-                                          child: Container(
-                                            padding: kGlobalCardPadding * 2,
-                                            decoration: BoxDecoration(
-                                              color: index == selectedIndex &&
-                                                      isSelected
-                                                  ? kPrimaryColor
-                                                      .withOpacity(0.08)
-                                                  : Color(0xFFF9F9F9)
-                                                      .withOpacity(0.6),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 8.0,
-                                                    vertical: 4.0,
-                                                  ),
-                                                  child: Text(
-                                                    notes[index].noteTitle,
-                                                    style: TextStyle(
-                                                      fontSize: 14.0,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 8.0,
-                                                    vertical: 4.0,
-                                                  ),
-                                                  child: Text(
-                                                    notes[index].noteText,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      color: Colors.grey,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 8.0,
-                                                    vertical: 4.0,
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Text(notes[index]
-                                                            .noteLabel),
-                                                      ),
-                                                      Text(
-                                                        Utility.formatDateTime(
-                                                            notes[index]
-                                                                .noteDate),
-                                                        style: TextStyle(
-                                                          fontSize: 12.0,
-                                                          color: Colors.grey,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
+                                          isSelected: index == selectedIndex &&
+                                              isSelected);
                                     },
                                   )
                                 : Center(
-                                    child: SvgPicture.asset(
-                                      'images/undraw_playful_cat.svg',
-                                      width: 200,
-                                    ),
+                                    child: Text('No Notes!'),
                                   )),
                       ),
                     ],
@@ -388,7 +330,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                   onPressed: () {},
                                   child: Icon(BootstrapIcons.tags)),
                               TextButton(
-                                  onPressed: () {},
+                                  onPressed: () =>
+                                      deleteNotes(notes[selectedIndex].noteId),
                                   child: Icon(BootstrapIcons.trash3)),
                             ],
                           ),
