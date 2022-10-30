@@ -1,8 +1,7 @@
-import 'package:animations/animations.dart';
-import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/adaptive.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/mobile/pages/archive_page.dart';
 import 'package:bnotes/mobile/pages/notes_page.dart';
 import 'package:bnotes/mobile/pages/search_page.dart';
@@ -14,12 +13,8 @@ import 'package:bnotes/widgets/note_card_grid.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:glassmorphism/glassmorphism.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 
 enum ViewType { Tile, Grid }
 
@@ -82,29 +77,29 @@ class _ScrawlAppState extends State<ScrawlApp> {
 
   Future getdata() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (isAppLogged) {
-      try {
-        final client = NextCloudClient.withCredentials(
-          Uri(host: sharedPreferences.getString('nc_host')),
-          sharedPreferences.getString('nc_username') ?? '',
-          sharedPreferences.getString('nc_password') ?? '',
-        );
-        final userData = await client.avatar.getAvatar(
-            sharedPreferences.getString('nc_username').toString(), 150);
-        sharedPreferences.setString('nc_avatar', userData);
+    // if (isAppLogged) {
+    //   try {
+    //     final client = NextCloudClient.withCredentials(
+    //       Uri(host: sharedPreferences.getString('nc_host')),
+    //       sharedPreferences.getString('nc_username') ?? '',
+    //       sharedPreferences.getString('nc_password') ?? '',
+    //     );
+    //     final userData = await client.avatar.getAvatar(
+    //         sharedPreferences.getString('nc_username').toString(), 150);
+    //     sharedPreferences.setString('nc_avatar', userData);
 
-        // ignore: unnecessary_null_comparison
-      } on RequestException catch (e, stacktrace) {
-        print('qs' + e.statusCode.toString());
-        print(e.body);
-        print(stacktrace);
-        ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text('Unable to login. Try again.'),
-          duration: Duration(seconds: 2),
-        ));
-      }
-    }
+    //     // ignore: unnecessary_null_comparison
+    //   } on RequestException catch (e, stacktrace) {
+    //     print('qs' + e.statusCode.toString());
+    //     print(e.body);
+    //     print(stacktrace);
+    //     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+    //       behavior: SnackBarBehavior.floating,
+    //       content: Text('Unable to login. Try again.'),
+    //       duration: Duration(seconds: 2),
+    //     ));
+    //   }
+    // }
     loadNotes();
   }
 

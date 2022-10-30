@@ -4,6 +4,8 @@ import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
 import 'package:bnotes/common/adaptive.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,16 +47,16 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       {
         'id': 'all_notes',
         'index': 0,
-        'icon': Icons.notes_outlined,
-        'icon_filled': Icons.notes,
+        'icon': BootstrapIcons.justify_left,
+        'icon_filled': BootstrapIcons.justify_left,
         'text': kLabels['notes']!,
         'color': 0xFF5EAAA8
       },
       {
         'id': 'all_tasks',
         'index': 1,
-        'icon': Icons.check_box_outlined,
-        'icon_filled': Icons.check_box,
+        'icon': BootstrapIcons.check_square,
+        'icon_filled': BootstrapIcons.check_square,
         'text': kLabels['tasks']!,
         'color': 0xFFFBABAB
       },
@@ -109,7 +111,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                             ),
                             child: Icon(
                               menu[index]['icon'],
-                              size: 20.0,
+                              size: 16.0,
                               color: Color(menu[index]['color']),
                             ),
                           ),
@@ -137,7 +139,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: CircleAvatar(
                   backgroundColor: Colors.black87,
-                  child: Icon(Icons.person_outline_outlined),
+                  child: Icon(BootstrapIcons.person),
                 ),
                 title: Text(globals.user!.userName),
                 onTap: () {},
@@ -195,7 +197,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       trailing: IconButton(
         onPressed: () {},
         icon: Icon(
-          Icons.person_outline_outlined,
+          BootstrapIcons.person,
           color: kPrimaryColor,
         ),
       ),

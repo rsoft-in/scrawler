@@ -1,17 +1,15 @@
 import 'package:animations/animations.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/archive_page.dart';
 import 'package:bnotes/desktop/pages/home_page.dart';
 import 'package:bnotes/desktop/pages/search_page.dart';
 import 'package:bnotes/desktop/pages/settings_page.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/widgets/topbar.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:yaru_icons/yaru_icons.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ScrawlDesktop extends StatefulWidget {
   const ScrawlDesktop({Key? key}) : super(key: key);

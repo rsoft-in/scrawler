@@ -1,12 +1,10 @@
-import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/adaptive.dart';
+import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/mobile/pages/backup_restore_page.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:nextcloud/nextcloud.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -228,60 +226,59 @@ class _LoginPageState extends State<LoginPage> {
 
   Future getdata() async {
     loginPreferences = await SharedPreferences.getInstance();
-    try {
-      showLoaderDialog(context);
-      // setState(() {
-      //   isLoading = true;
-      // });
+    // try {
+    //   showLoaderDialog(context);
+    //   // setState(() {
+    //   //   isLoading = true;
+    //   // });
 
-      final client = NextCloudClient.withCredentials(
-        Uri(host: _hostController.text),
-        _usernameController.text,
-        _passwordController.text,
-      );
+    //   final client = NextCloudClient.withCredentials(
+    //     Uri(host: _hostController.text),
+    //     _usernameController.text,
+    //     _passwordController.text,
+    //   );
 
-      final user = await client.user.getUser();
-      print(user);
+    //   final user = await client.user.getUser();
 
-      // ignore: unnecessary_null_comparison
-      if (user != null) {
-        loginPreferences.setString('nc_host', _hostController.text);
-        loginPreferences.setString('nc_username', _usernameController.text);
-        loginPreferences.setString('nc_password', _passwordController.text);
+    //   // ignore: unnecessary_null_comparison
+    //   if (user != null) {
+    //     loginPreferences.setString('nc_host', _hostController.text);
+    //     loginPreferences.setString('nc_username', _usernameController.text);
+    //     loginPreferences.setString('nc_password', _passwordController.text);
 
-        loginPreferences.setString('nc_userdisplayname', user.displayName);
-        loginPreferences.setString('nc_useremail', user.email);
+    //     loginPreferences.setString('nc_userdisplayname', user.displayName);
+    //     loginPreferences.setString('nc_useremail', user.email);
 
-        final userData = await client.avatar.getAvatar(
-            loginPreferences.getString('nc_username').toString(), 150);
-        loginPreferences.setString('nc_avatar', userData);
-        loginPreferences.setBool('is_logged', true);
-        loginPreferences.setBool('nextcloud_backup', true);
-        // setState(() {
-        //   isLoading = false;
-        // });
-        Navigator.pop(context);
-        _restoreNote();
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        _showAlert();
-      }
-    } on RequestException catch (e, stacktrace) {
-      print('qs' + e.statusCode.toString());
-      print(e.body);
-      print(stacktrace);
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text('Unable to login. Check credentials and try again.'),
-        duration: Duration(seconds: 2),
-      ));
-      setState(() {
-        isLoading = false;
-      });
-    }
+    //     final userData = await client.avatar.getAvatar(
+    //         loginPreferences.getString('nc_username').toString(), 150);
+    //     loginPreferences.setString('nc_avatar', userData);
+    //     loginPreferences.setBool('is_logged', true);
+    //     loginPreferences.setBool('nextcloud_backup', true);
+    //     // setState(() {
+    //     //   isLoading = false;
+    //     // });
+    //     Navigator.pop(context);
+    //     _restoreNote();
+    //   } else {
+    //     setState(() {
+    //       isLoading = false;
+    //     });
+    //     _showAlert();
+    //   }
+    // } on RequestException catch (e, stacktrace) {
+    //   print('qs' + e.statusCode.toString());
+    //   print(e.body);
+    //   print(stacktrace);
+    //   Navigator.pop(context);
+    //   ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+    //     behavior: SnackBarBehavior.floating,
+    //     content: Text('Unable to login. Check credentials and try again.'),
+    //     duration: Duration(seconds: 2),
+    //   ));
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    // }
   }
 
   showLoaderDialog(BuildContext context) {
@@ -308,12 +305,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future listFiles(NextCloudClient client) async {
-    final files = await client.webDav.ls('/');
-    for (final file in files) {
-      print(file.path);
-    }
-  }
+  // Future listFiles(NextCloudClient client) async {
+  //   final files = await client.webDav.ls('/');
+  //   for (final file in files) {
+  //     print(file.path);
+  //   }
+  // }
 
   void _showAlert() {
     showDialog(

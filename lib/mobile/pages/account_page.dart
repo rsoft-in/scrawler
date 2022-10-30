@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:bnotes/common/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AccountPage extends StatefulWidget {
@@ -104,31 +103,31 @@ class _AccountPageState extends State<AccountPage> {
 
   Future getdata() async {
     loginPreferences = await SharedPreferences.getInstance();
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      final client = NextCloudClient.withCredentials(
-        Uri(host: loginPreferences.getString('nc_host')),
-        loginPreferences.getString('nc_username') ?? '',
-        loginPreferences.getString('nc_password') ?? '',
-      );
-      final user = await client.user.getUser();
-      print(user);
-      setState(() {
-        isLoading = false;
-      });
-      getPref();
-      // ignore: unnecessary_null_comparison
-    } on RequestException catch (e, stacktrace) {
-      print('qs' + e.statusCode.toString());
-      print(e.body);
-      print(stacktrace);
-      ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-        behavior: SnackBarBehavior.floating,
-        content: Text('Unable to login. Try again.'),
-        duration: Duration(seconds: 2),
-      ));
-    }
+    // try {
+    //   setState(() {
+    //     isLoading = true;
+    //   });
+    //   final client = NextCloudClient.withCredentials(
+    //     Uri(host: loginPreferences.getString('nc_host')),
+    //     loginPreferences.getString('nc_username') ?? '',
+    //     loginPreferences.getString('nc_password') ?? '',
+    //   );
+    //   final user = await client.user.getUser();
+    //   print(user);
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //   getPref();
+    //   // ignore: unnecessary_null_comparison
+    // } on RequestException catch (e, stacktrace) {
+    //   print('qs' + e.statusCode.toString());
+    //   print(e.body);
+    //   print(stacktrace);
+    //   ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
+    //     behavior: SnackBarBehavior.floating,
+    //     content: Text('Unable to login. Try again.'),
+    //     duration: Duration(seconds: 2),
+    //   ));
+    // }
   }
 }

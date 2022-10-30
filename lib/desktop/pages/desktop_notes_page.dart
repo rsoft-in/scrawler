@@ -11,6 +11,7 @@ import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_title_header.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
 class DesktopNotesPage extends StatefulWidget {
@@ -189,7 +190,10 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                               child: TextField(
                                 decoration: InputDecoration(
                                   hintText: kLabels['search'],
-                                  prefixIcon: Icon(Icons.search_outlined),
+                                  prefixIcon: Icon(
+                                    BootstrapIcons.search,
+                                    size: 16,
+                                  ),
                                 ),
                               ),
                             ),
@@ -202,7 +206,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                   noteTextController.text = "";
                                 });
                               },
-                              child: Icon(Icons.add_outlined),
+                              child: Icon(BootstrapIcons.plus),
                             ),
                           ],
                         ),
@@ -361,16 +365,16 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                             children: [
                               TextButton(
                                   onPressed: () {},
-                                  child: Icon(Icons.edit_outlined)),
+                                  child: Icon(BootstrapIcons.pencil)),
                               TextButton(
                                   onPressed: () {},
-                                  child: Icon(Icons.palette_outlined)),
+                                  child: Icon(BootstrapIcons.palette2)),
                               TextButton(
                                   onPressed: () {},
-                                  child: Icon(Icons.label_outline)),
+                                  child: Icon(BootstrapIcons.tags)),
                               TextButton(
                                   onPressed: () {},
-                                  child: Icon(Icons.delete_outlined)),
+                                  child: Icon(BootstrapIcons.trash3)),
                             ],
                           ),
                         )

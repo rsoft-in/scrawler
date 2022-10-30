@@ -9,7 +9,6 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:nextcloud/nextcloud.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
@@ -97,21 +96,21 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         });
       }
       if (isUploading) {
-        try {
-          final client = NextCloudClient.withCredentials(
-            Uri(host: sharedPreferences.getString('nc_host')),
-            sharedPreferences.getString('nc_username') ?? '',
-            sharedPreferences.getString('nc_password') ?? '',
-          );
+        // try {
+        //   final client = NextCloudClient.withCredentials(
+        //     Uri(host: sharedPreferences.getString('nc_host')),
+        //     sharedPreferences.getString('nc_username') ?? '',
+        //     sharedPreferences.getString('nc_password') ?? '',
+        //   );
 
-          await client.webDav.upload(
-              File(backupPath + '/bnotes.backup').readAsBytesSync(),
-              '/bnotes.backup');
-        } on RequestException catch (e, stacktrace) {
-          print(e.statusCode);
-          print(e.body);
-          print(stacktrace);
-        }
+        //   await client.webDav.upload(
+        //       File(backupPath + '/bnotes.backup').readAsBytesSync(),
+        //       '/bnotes.backup');
+        // } on RequestException catch (e, stacktrace) {
+        //   print(e.statusCode);
+        //   print(e.body);
+        //   print(stacktrace);
+        // }
       }
     }
 
@@ -129,61 +128,61 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
 
   Future _restore() async {
     if (isUploading) {
-      showLoaderDialog(context);
-      try {
-        final client = NextCloudClient.withCredentials(
-          Uri(host: sharedPreferences.getString('nc_host')),
-          sharedPreferences.getString('nc_username') ?? '',
-          sharedPreferences.getString('nc_password') ?? '',
-        );
+      // showLoaderDialog(context);
+      // try {
+      //   final client = NextCloudClient.withCredentials(
+      //     Uri(host: sharedPreferences.getString('nc_host')),
+      //     sharedPreferences.getString('nc_username') ?? '',
+      //     sharedPreferences.getString('nc_password') ?? '',
+      //   );
 
-        // final downloadedData =
-        //     await client.webDav.downloadStream('/bnotes.backup').then((value) { print(value);});
-        // ignore: unused_local_variable
-        final downloadedBytes =
-            client.webDav.download('/bnotes.backup').then((value) {
-          print(value);
-          String restoredString = new String.fromCharCodes(value);
-          final parsed =
-              json.decode(restoredString).cast<Map<String, dynamic>>();
-          List<Notes> notesList = [];
-          notesList =
-              parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
-          dbHelper.deleteNotesAll();
-          notesList.forEach((element) {
-            // Test back resoration from old version backup to check if note_list field gives error
-            dbHelper.insertNotes(new Notes(
-                element.noteId,
-                element.noteDate,
-                element.noteTitle,
-                element.noteText,
-                element.noteLabel,
-                element.noteArchived,
-                element.noteColor,
-                element.noteList));
-          });
-          Navigator.pop(context);
-          Navigator.pop(context, 'yes');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              content: Text('Restored'),
-            ),
-          );
-        });
-        // final file = File(backupPath + '/bnotes.backup');
-        // if (file.existsSync()) {
-        //   file.deleteSync();
-        // }
-        // final inputStream = file.openWrite();
-        // await inputStream.addStream(downloadedData).then((value) {
-        //   inputStream.close();
-        // });
-      } on RequestException catch (e, stacktrace) {
-        print(e.statusCode);
-        print(e.body);
-        print(stacktrace);
-      }
+      //   // final downloadedData =
+      //   //     await client.webDav.downloadStream('/bnotes.backup').then((value) { print(value);});
+      //   // ignore: unused_local_variable
+      //   final downloadedBytes =
+      //       client.webDav.download('/bnotes.backup').then((value) {
+      //     print(value);
+      //     String restoredString = new String.fromCharCodes(value);
+      //     final parsed =
+      //         json.decode(restoredString).cast<Map<String, dynamic>>();
+      //     List<Notes> notesList = [];
+      //     notesList =
+      //         parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+      //     dbHelper.deleteNotesAll();
+      //     notesList.forEach((element) {
+      //       // Test back resoration from old version backup to check if note_list field gives error
+      //       dbHelper.insertNotes(new Notes(
+      //           element.noteId,
+      //           element.noteDate,
+      //           element.noteTitle,
+      //           element.noteText,
+      //           element.noteLabel,
+      //           element.noteArchived,
+      //           element.noteColor,
+      //           element.noteList));
+      //     });
+      //     Navigator.pop(context);
+      //     Navigator.pop(context, 'yes');
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       SnackBar(
+      //         behavior: SnackBarBehavior.floating,
+      //         content: Text('Restored'),
+      //       ),
+      //     );
+      //   });
+      //   // final file = File(backupPath + '/bnotes.backup');
+      //   // if (file.existsSync()) {
+      //   //   file.deleteSync();
+      //   // }
+      //   // final inputStream = file.openWrite();
+      //   // await inputStream.addStream(downloadedData).then((value) {
+      //   //   inputStream.close();
+      //   // });
+      // } on RequestException catch (e, stacktrace) {
+      //   print(e.statusCode);
+      //   print(e.body);
+      //   print(stacktrace);
+      // }
     } else {
       await storage.readData().then((value) {
         final parsed = json.decode(value).cast<Map<String, dynamic>>();

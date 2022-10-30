@@ -8,6 +8,7 @@ import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
+import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -307,7 +308,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         alignment: Alignment.center,
         child: TextButton.icon(
           label: Text('Back'),
-          icon: Icon(Iconsax.arrow_left),
+          icon: Icon(BootstrapIcons.arrow_left),
           onPressed: () {
             setState(() {
               showIndex = 0;
