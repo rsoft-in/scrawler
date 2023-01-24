@@ -124,7 +124,7 @@ class _ArchivePageState extends State<ArchivePage> {
                       )
                     : (hasData
                         ? (_viewType == ViewType.Grid
-                            ? StaggeredGridView.countBuilder(
+                            ? MasonryGridView.count(
                                 crossAxisCount: isDesktop ? 4 : 2,
                                 crossAxisSpacing: 8,
                                 mainAxisSpacing: 8,
@@ -132,10 +132,10 @@ class _ArchivePageState extends State<ArchivePage> {
                                 physics: BouncingScrollPhysics(
                                     parent: AlwaysScrollableScrollPhysics()),
                                 itemCount: notesList.length,
-                                staggeredTileBuilder: (index) {
-                                  return StaggeredTile.count(
-                                      1, index.isOdd ? 0.9 : 1.02);
-                                },
+                                // staggeredTileBuilder: (index) {
+                                //   return StaggeredTile.count(
+                                //       1, index.isOdd ? 0.9 : 1.02);
+                                // },
                                 itemBuilder: (context, index) {
                                   var note = notesList[index];
                                   List<NoteListItem> _noteList = [];
