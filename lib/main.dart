@@ -1,23 +1,22 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/desktop/app.dart';
+import 'package:bnotes/common/theme.dart';
+import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/desktop/desktop_app.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:bnotes/mobile/pages/app_lock_page.dart';
 import 'package:bnotes/mobile/pages/introduction_page.dart';
-import 'package:bnotes/common/theme.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'mobile/pages/biometric_page.dart';
 import 'helpers/globals.dart' as globals;
+import 'mobile/pages/biometric_page.dart';
 
 late SharedPreferences prefs;
 void main() {
@@ -88,12 +87,12 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark(),
       routes: {
         '/': (context) => DesktopApp(),
-        '/signin': (context) => DesktopSignIn(),
-        '/signup': (context) => DesktopSignUp(),
+        '/dsignin': (context) => DesktopSignIn(),
+        '/dsignup': (context) => DesktopSignUp(),
         '/mobilestart': (context) => StartPage()
       },
       initialRoute:
-          UniversalPlatform.isDesktopOrWeb || kIsWeb ? '/' : 'mobilestart',
+          UniversalPlatform.isDesktopOrWeb || kIsWeb ? '/' : '/mobilestart',
     );
   }
 }

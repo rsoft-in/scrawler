@@ -1,21 +1,20 @@
 import 'dart:convert';
 
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_note_title_header.dart';
-import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DesktopNotesPage extends StatefulWidget {
   const DesktopNotesPage({Key? key}) : super(key: key);
@@ -151,7 +150,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                 expands: true,
                 maxLines: null,
                 decoration: InputDecoration(
-                  hintText: 'Type something here',
+                  hintText: kLabels['type_something_here']!,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(0),
                     borderSide: BorderSide.none,
@@ -330,8 +329,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                                   onPressed: () {},
                                   child: Icon(BootstrapIcons.tags)),
                               TextButton(
-                                  onPressed: () =>
-                                      deleteNotes(notes[selectedIndex].noteId),
+                                  onPressed: () => confirmDelete(
+                                      context, notes[selectedIndex].noteId),
                                   child: Icon(BootstrapIcons.trash3)),
                             ],
                           ),
@@ -343,5 +342,28 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               ),
             ],
           );
+  }
+
+  void confirmDelete(BuildContext context, String noteId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(kLabels['confirm_delete']!),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  deleteNotes(noteId);
+                },
+                child: Text('Yes'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('No'),
+              ),
+            ],
+          );
+        });
   }
 }
