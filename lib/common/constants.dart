@@ -10,6 +10,7 @@ const kSecondaryDark = Color(0xff1c1c1c);
 const kScaffoldDark = Color(0xFF121212);
 const kTextColor = Color(0xFF757575);
 const kBorderColor = Color(0xFFE5E5E5);
+const kAlertColor = Color(0xFFD12A4C);
 const kGlobalOuterPadding = EdgeInsets.all(10.0);
 const kGlobalCardPadding = EdgeInsets.all(5.0);
 const kGlobalTextPadding =

@@ -3,16 +3,19 @@ import 'dart:convert';
 import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
+import 'package:bnotes/common/language.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
+import 'package:bnotes/widgets/scrawl_button_alert.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_note_title_header.dart';
-import 'package:bnotes/widgets/scrawl_notes_app_bar.dart';
+import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 
@@ -27,16 +30,16 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   List<Notes> notes = [];
   int _pageNr = 0;
   bool isBusy = false;
-  bool showEdit = false;
   FocusNode focusNode = FocusNode();
   int wordCount = 0;
   bool isDesktop = false;
+  int selectedIndex = 0;
+  bool isSelected = false;
+  bool darkModeOn = false;
 
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
   String noteId = "";
-  int selectedIndex = 0;
-  bool isSelected = false;
 
   void getNotes() async {
     Map<String, String> post = {
@@ -84,6 +87,8 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
     };
     NotesApiProvider.updateNotes(post).then((value) {
       if (value['status']) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(ScrawlSnackBar.show('Successfully Updated'));
         getNotes();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -128,241 +133,286 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
-    return showEdit
-        ? Scaffold(
-            appBar: ScrawlNotesAppBar(
-              title: noteTitleController.text,
-              titleController: noteTitleController,
-              onActionPressed: () {
-                setState(() {
-                  showEdit = false;
-                });
-                if (noteTextController.text.isNotEmpty) saveNotes();
-              },
-              onColorPressed: () {},
-              onTagPressed: () {},
+    var brightness = MediaQuery.of(context).platformBrightness;
+    darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (globals.themeMode == ThemeMode.system &&
+            brightness == Brightness.dark));
+    return Row(
+      children: [
+        SizedBox(
+          width: 350,
+          child: Scaffold(
+            appBar: ScrawlAppBar(
+              title: Language.get('notes'),
             ),
-            body: Container(
-              child: TextField(
-                textAlignVertical: TextAlignVertical.top,
-                controller: noteTextController,
-                focusNode: focusNode,
-                expands: true,
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: kLabels['type_something_here']!,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(0),
-                    borderSide: BorderSide.none,
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 15,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(0),
-                    borderSide: BorderSide.none,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: kLabels['search'],
+                            prefixIcon: Icon(
+                              BootstrapIcons.search,
+                              size: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      kHSpace,
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            noteId = "";
+                            noteTitleController.text = "";
+                            noteTextController.text = "";
+                          });
+                          showEditDialog(context);
+                        },
+                        child: Icon(BootstrapIcons.plus),
+                      ),
+                    ],
                   ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(0),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: false,
                 ),
-                onChanged: (value) {
-                  var wordList = value.trim().split(' ');
-                  if (value.trim().isEmpty) {
-                    wordCount = 0;
-                  } else {
-                    wordCount = wordList.length;
-                  }
-                  setState(() {});
-                },
-              ),
+                Expanded(
+                  child: isBusy
+                      ? Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                      : (notes.length > 0
+                          ? ListView.builder(
+                              padding: kGlobalOuterPadding,
+                              itemCount: notes.length,
+                              itemBuilder: (context, index) {
+                                return NoteListItemWidget(
+                                    note: notes[index],
+                                    selectedIndex: selectedIndex,
+                                    onTap: () {
+                                      setState(() {
+                                        selectedIndex = index;
+                                        isSelected = true;
+                                      });
+                                    },
+                                    isSelected:
+                                        index == selectedIndex && isSelected);
+                              },
+                            )
+                          : Center(
+                              child: Text(Language.get('no_notes')),
+                            )),
+                ),
+              ],
             ),
-            bottomNavigationBar: BottomAppBar(
+          ),
+        ),
+        VerticalDivider(
+          width: 0.5,
+        ),
+        Expanded(
+          child: Scaffold(
+            body: Visibility(
+              visible: isSelected,
+              replacement: EmptyWidget(
+                  text: Language.get('select_note'),
+                  width: MediaQuery.of(context).size.width * 0.5 * 0.8,
+                  asset: 'images/undraw_playful_cat.svg'),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                padding: kGlobalOuterPadding * 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '$wordCount words',
-                      style: TextStyle(color: Colors.grey),
+                    NoteTitleWidget(
+                        text: notes.isEmpty
+                            ? ''
+                            : notes[selectedIndex].noteTitle),
+                    NoteDateWidget(
+                      text: notes.isEmpty
+                          ? ''
+                          : Utility.formatDateTime(
+                              notes[selectedIndex].noteDate),
+                    ),
+                    SelectableText(
+                      notes.isEmpty ? '' : notes[selectedIndex].noteText,
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        height: 1.2,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-          )
-        : Row(
-            children: [
-              SizedBox(
-                width: 350,
-                child: Scaffold(
-                  appBar: ScrawlAppBar(
-                    title: kLabels['notes']!,
-                  ),
-                  body: Column(
+            floatingActionButton: Visibility(
+              visible: isSelected,
+              replacement: Container(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      border: Border.all(
+                        color: kBorderColor,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        TextButton(
+                            onPressed: () {
+                              setState(() {
+                                noteId = notes[selectedIndex].noteId;
+                                noteTitleController.text =
+                                    notes[selectedIndex].noteTitle;
+                                noteTextController.text =
+                                    notes[selectedIndex].noteText;
+                              });
+                              showEditDialog(context);
+                            },
+                            child: Icon(
+                              BootstrapIcons.pencil,
+                              size: 18,
+                            )),
+                        TextButton(
+                            onPressed: () {},
+                            child: Icon(
+                              BootstrapIcons.palette2,
+                              size: 18,
+                            )),
+                        TextButton(
+                            onPressed: () {},
+                            child: Icon(
+                              BootstrapIcons.tags,
+                              size: 18,
+                            )),
+                        TextButton(
+                            onPressed: () => confirmDelete(
+                                context, notes[selectedIndex].noteId),
+                            child: Icon(
+                              BootstrapIcons.trash3,
+                              size: 18,
+                            )),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void showEditDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(74.0),
+              child: Container(
+                padding: kGlobalOuterPadding,
+                decoration: BoxDecoration(
+                  color: darkModeOn ? Color(0xFF333333) : Colors.white,
+                  borderRadius: BorderRadius.circular(50.0),
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 1000),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 15,
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: kLabels['search'],
-                                  prefixIcon: Icon(
-                                    BootstrapIcons.search,
-                                    size: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            kHSpace,
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  showEdit = true;
-                                  noteTitleController.text = "New Note";
-                                  noteTextController.text = "";
-                                });
-                              },
-                              child: Icon(BootstrapIcons.plus),
-                            ),
-                          ],
+                      TextField(
+                        controller: noteTitleController,
+                        style: TextStyle(fontSize: 20.0),
+                        decoration: InputDecoration.collapsed(
+                          hintText: Language.get('enter_title'),
                         ),
                       ),
+                      kVSpace,
+                      Text(
+                        '1 ${Language.get('min_ago')}',
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      kVSpace,
+                      Row(
+                        children: [
+                          Icon(
+                            BootstrapIcons.tag,
+                            size: 16,
+                          ),
+                          VerticalDivider(color: Colors.black),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(BootstrapIcons.plus),
+                          ),
+                        ],
+                      ),
+                      kVSpace,
                       Expanded(
-                        child: isBusy
-                            ? Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              )
-                            : (notes.length > 0
-                                ? ListView.builder(
-                                    padding: kGlobalOuterPadding,
-                                    itemCount: notes.length,
-                                    itemBuilder: (context, index) {
-                                      return NoteListItemWidget(
-                                          note: notes[index],
-                                          selectedIndex: selectedIndex,
-                                          onTap: () {
-                                            setState(() {
-                                              selectedIndex = index;
-                                              isSelected = true;
-                                            });
-                                          },
-                                          isSelected: index == selectedIndex &&
-                                              isSelected);
-                                    },
-                                  )
-                                : Center(
-                                    child: Text('No Notes!'),
-                                  )),
+                        child: TextField(
+                          controller: noteTextController,
+                          decoration: InputDecoration.collapsed(
+                            hintText: Language.get('type_something'),
+                          ),
+                          expands: true,
+                          maxLines: null,
+                        ),
                       ),
+                      Row(
+                        children: [
+                          Icon(
+                            BootstrapIcons.palette,
+                            size: 16,
+                          ),
+                          Spacer(),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (noteTextController.text.isNotEmpty)
+                                saveNotes();
+                              Navigator.pop(context);
+                            },
+                            child: Text(Language.get('save')),
+                          ),
+                          kHSpace,
+                          OutlinedButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(Language.get('cancel')),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ),
-              VerticalDivider(
-                width: 0.5,
-              ),
-              Expanded(
-                child: Scaffold(
-                  body: Visibility(
-                    visible: isSelected,
-                    replacement: EmptyWidget(
-                        text: 'Select a note to Preview.',
-                        width: MediaQuery.of(context).size.width * 0.5 * 0.8,
-                        asset: 'images/undraw_playful_cat.svg'),
-                    child: Padding(
-                      padding: kGlobalOuterPadding * 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          NoteTitleWidget(
-                              text: notes.isEmpty
-                                  ? ''
-                                  : notes[selectedIndex].noteTitle),
-                          NoteDateWidget(
-                            text: notes.isEmpty
-                                ? ''
-                                : Utility.formatDateTime(
-                                    notes[selectedIndex].noteDate),
-                          ),
-                          SelectableText(
-                            notes.isEmpty ? '' : notes[selectedIndex].noteText,
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              height: 1.2,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  floatingActionButton: Visibility(
-                    visible: isSelected,
-                    replacement: Container(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            border: Border.all(
-                              color: kBorderColor,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Icon(BootstrapIcons.pencil)),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Icon(BootstrapIcons.palette2)),
-                              TextButton(
-                                  onPressed: () {},
-                                  child: Icon(BootstrapIcons.tags)),
-                              TextButton(
-                                  onPressed: () => confirmDelete(
-                                      context, notes[selectedIndex].noteId),
-                                  child: Icon(BootstrapIcons.trash3)),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           );
+        });
   }
 
   void confirmDelete(BuildContext context, String noteId) {
     showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            content: Text(kLabels['confirm_delete']!),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  deleteNotes(noteId);
-                },
-                child: Text('Yes'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('No'),
-              ),
-            ],
+          return ScrawlConfirmDialog(
+            onAcceptPressed: () {
+              deleteNotes(noteId);
+              Navigator.pop(context);
+            },
+            content: Language.get('confirm_delete'),
           );
         });
   }

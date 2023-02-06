@@ -36,6 +36,7 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
               widget.title,
               style: const TextStyle(
                 fontSize: 18.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

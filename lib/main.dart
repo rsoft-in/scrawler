@@ -1,5 +1,5 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/common/constants.dart';
+import 'package:bnotes/common/language.dart';
 import 'package:bnotes/common/theme.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/desktop/desktop_app.dart';
@@ -22,14 +22,14 @@ late SharedPreferences prefs;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isDesktop) {
-    doWhenWindowReady(() {
-      final initialSize = Size(1000, 650);
-      appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-      appWindow.title = "scrawl";
-    });
+    // doWhenWindowReady(() {
+    //   final initialSize = Size(1000, 650);
+    //   appWindow.minSize = initialSize;
+    //   appWindow.size = initialSize;
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.show();
+    //   appWindow.title = "scrawl";
+    // });
   }
   runApp(Phoenix(
     child: MyApp(),
@@ -48,6 +48,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     getprefs();
+
+    // Load Language Resource into Memory
+    Language.readJson();
+
     super.initState();
   }
 
@@ -66,7 +70,7 @@ class _MyAppState extends State<MyApp> {
             themeMode = ThemeMode.system;
             break;
           default:
-            themeMode = ThemeMode.system;
+            themeMode = ThemeMode.light;
             break;
         }
       } else {

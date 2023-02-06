@@ -32,29 +32,11 @@ ThemeData theme() {
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
-        borderSide: BorderSide.none,
-      ),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
-        borderSide: BorderSide.none,
-      ),
-      prefixIconColor: kPrimaryColor,
-      suffixIconColor: kPrimaryColor,
-      floatingLabelStyle: TextStyle(color: kPrimaryColor),
-      filled: true,
-      fillColor: Colors.grey.shade50,
-      contentPadding: kInputDecorationPadding,
-    ),
+    inputDecorationTheme: inputDecorationTheme(),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        primary: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.black,
         padding: kButtonPadding,
         textStyle: TextStyle(
           color: Colors.white,
@@ -68,58 +50,153 @@ ThemeData theme() {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        primary: Colors.black,
+        foregroundColor: Colors.black,
         padding: kButtonPadding,
         textStyle: TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
-          fontSize: 18.0,
+          fontSize: 16.0,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kButtonBorderRadius),
         ),
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+      padding: kButtonPadding,
+      foregroundColor: Colors.black,
+      textStyle: TextStyle(
+        fontFamily: 'Raleway',
+        fontSize: 16.0,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kButtonBorderRadius),
+      ),
+    )),
   );
 }
 
 ThemeData themeDark() {
-  return FlexThemeData.dark(
-    scheme: usedScheme,
-    surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-    blendLevel: 0,
-    appBarOpacity: 0.5,
-    appBarStyle: FlexAppBarStyle.background,
-    transparentStatusBar: true,
-    darkIsTrueBlack: true,
-    tooltipsMatchBackground: true,
-    // fontFamily: 'Raleway',
-    subThemesData: FlexSubThemesData(
-      elevatedButtonRadius: 10.0,
-      textButtonRadius: 10.0,
-      outlinedButtonRadius: 10.0,
-      cardRadius: 10.0,
-      cardElevation: 1,
-      bottomSheetRadius: 10,
+  return ThemeData(
+    colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
+        primary: kPrimaryColor,
+        secondary: kAccentColor,
+        brightness: Brightness.dark),
+    fontFamily: 'Raleway',
+    textTheme: TextTheme(
+      titleSmall: TextStyle(fontSize: 12.0),
+      titleMedium: TextStyle(fontSize: 14.0),
+      titleLarge: TextStyle(fontSize: 16.0),
     ),
-    visualDensity: FlexColorScheme.comfortablePlatformDensity,
+    appBarTheme: AppBarTheme(
+      color: Colors.black,
+      elevation: 1,
+      iconTheme: IconThemeData(color: Colors.black),
+      titleTextStyle: TextStyle(
+        fontSize: 20.0,
+        fontFamily: 'Raleway',
+        color: Colors.white,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    // scaffoldBackgroundColor: Colors.white,
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+    ),
+    inputDecorationTheme: inputDecorationThemeDark(),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: kPrimaryColor,
+        padding: kButtonPadding,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Raleway',
+          fontSize: 16.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kButtonBorderRadius),
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.black,
+        padding: kButtonPadding,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontFamily: 'Raleway',
+          fontSize: 16.0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kButtonBorderRadius),
+        ),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+      padding: kButtonPadding,
+      foregroundColor: Colors.white,
+      textStyle: TextStyle(
+        fontFamily: 'Raleway',
+        fontSize: 16.0,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kButtonBorderRadius),
+        side: BorderSide(color: Colors.white),
+      ),
+    )),
+    drawerTheme: DrawerThemeData(
+      backgroundColor: Colors.white,
+    ),
   );
 }
 
 InputDecorationTheme inputDecorationTheme() {
-  OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15.0),
-    borderSide: BorderSide(width: 0.5, color: kBorderColor),
-  );
-  OutlineInputBorder focusedInputBorder = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(15.0),
-    borderSide: BorderSide(width: 0.5, color: kPrimaryColor),
-  );
   return InputDecorationTheme(
-    // contentPadding: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-    enabledBorder: outlineInputBorder,
-    focusedBorder: focusedInputBorder,
-    border: outlineInputBorder,
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    prefixIconColor: kPrimaryColor,
+    suffixIconColor: kPrimaryColor,
+    floatingLabelStyle: TextStyle(color: kPrimaryColor),
     filled: true,
+    fillColor: Colors.grey.shade50,
+    contentPadding: kInputDecorationPadding,
+  );
+}
+
+InputDecorationTheme inputDecorationThemeDark() {
+  return InputDecorationTheme(
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(kInputDecorationBorderRadius),
+      borderSide: BorderSide.none,
+    ),
+    prefixIconColor: kAccentColor,
+    suffixIconColor: kAccentColor,
+    floatingLabelStyle: TextStyle(color: kAccentColor),
+    filled: true,
+    fillColor: Colors.grey.shade800,
+    contentPadding: kInputDecorationPadding,
   );
 }

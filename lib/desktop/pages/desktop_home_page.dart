@@ -1,11 +1,10 @@
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
-import 'package:bnotes/common/adaptive.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
-import 'package:fluentui_system_icons/fluentui_system_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,6 +41,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
   @override
   void initState() {
     super.initState();
+
     // Menu Items
     menu = [
       {
@@ -71,7 +71,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       width: 250,
       child: Drawer(
         elevation: 0,
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

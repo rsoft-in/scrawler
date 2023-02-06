@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
+import 'package:bnotes/common/language.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
@@ -102,7 +103,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             ),
                           ),
                           Text(
-                            kLabels['welcome_back']!,
+                            Language.get('welcome_back'),
                             style: TextStyle(
                               color: Colors.black87,
                               fontSize: 18.0,
@@ -112,7 +113,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             height: 25.0,
                           ),
                           Text(
-                            kLabels['email']!,
+                            Language.get('email'),
                             style: TextStyle(
                               color: Colors.black87,
                             ),
@@ -124,10 +125,10 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               controller: _emailController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return kLabels['please_enter_text'];
+                                  return Language.get('mandatory_field');
                                 }
                                 if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                                  return kLabels['invalid_email'];
+                                  return Language.get('invalid_email');
                                 }
                                 return null;
                               },
@@ -137,7 +138,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             ),
                           ),
                           Text(
-                            kLabels['password']!,
+                            Language.get('password'),
                             style: TextStyle(
                               color: Colors.black87,
                             ),
@@ -151,7 +152,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               obscureText: true,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return kLabels['please_enter_text'];
+                                  return Language.get('mandatory_field');
                                 }
                                 return null;
                               },
@@ -169,7 +170,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
-                                  child: Text(kLabels['login']!),
+                                  child: Text(Language.get('sign_in')),
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
                                       signIn();
@@ -184,7 +185,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             children: [
                               Expanded(
                                 child: TextButton(
-                                  child: Text(kLabels['forgot_password']!),
+                                  child: Text(Language.get('forgot_password')),
                                   onPressed: () {
                                     if (_emailController.text.isNotEmpty) {}
                                   },
@@ -200,14 +201,14 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             child: RichText(
                               text: TextSpan(children: [
                                 TextSpan(
-                                  text: kLabels['dont_have_account'],
+                                  text: Language.get('dont_have_account'),
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Raleway',
                                   ),
                                 ),
                                 TextSpan(
-                                    text: kLabels['register_now'],
+                                    text: Language.get('register_now'),
                                     style: TextStyle(
                                       color: kLinkColor,
                                       fontFamily: 'Raleway',
