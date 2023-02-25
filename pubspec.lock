@@ -648,6 +648,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  package_info_plus_web:
+    dependency: "direct main"
+    description:
+      name: package_info_plus_web
+      sha256: fb408fed17c00ed4b4b963d124a83bcbf25de990dea0c43a73d48b20339f62a4
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   path:
     dependency: transitive
     description:
@@ -800,6 +808,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.0"
+  share_plus_web:
+    dependency: "direct main"
+    description:
+      name: share_plus_web
+      sha256: eaef05fa8548b372253e772837dd1fbe4ce3aca30ea330765c945d7d4f7c9935
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   shared_preferences:
     dependency: "direct main"
     description:
