@@ -17,7 +17,7 @@ class _DesktopAppState extends State<DesktopApp> {
   late SharedPreferences prefs;
   bool isSignedIn = false;
 
-  getPreferences() async {
+  getPreferences(context) async {
     prefs = await SharedPreferences.getInstance();
     isSignedIn = prefs.getBool('is_signed_in') ?? false;
     globals.apiKey = await ApiProvider.fetchAPIKey();
@@ -32,12 +32,12 @@ class _DesktopAppState extends State<DesktopApp> {
     if (!isSignedIn) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => new DesktopSignIn()),
+              builder: (BuildContext context) => const DesktopSignIn()),
           (route) => false);
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => new DesktopHomePage()),
+              builder: (BuildContext context) => const DesktopHomePage()),
           (route) => false);
     }
   }
@@ -45,7 +45,7 @@ class _DesktopAppState extends State<DesktopApp> {
   @override
   void initState() {
     super.initState();
-    getPreferences();
+    getPreferences(context);
   }
 
   @override

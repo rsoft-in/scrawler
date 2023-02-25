@@ -10,12 +10,12 @@ ThemeData theme() {
     colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
         .copyWith(primary: kPrimaryColor, secondary: kAccentColor),
     fontFamily: 'Raleway',
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       titleSmall: TextStyle(fontSize: 12.0),
       titleMedium: TextStyle(fontSize: 14.0),
       titleLarge: TextStyle(fontSize: 16.0),
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       color: Colors.white,
       elevation: 1,
       iconTheme: IconThemeData(color: Colors.black),
@@ -38,7 +38,7 @@ ThemeData theme() {
         elevation: 0,
         backgroundColor: Colors.black,
         padding: kButtonPadding,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
           fontSize: 16.0,
@@ -52,7 +52,7 @@ ThemeData theme() {
       style: TextButton.styleFrom(
         foregroundColor: Colors.black,
         padding: kButtonPadding,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
           fontSize: 16.0,
@@ -66,7 +66,7 @@ ThemeData theme() {
         style: OutlinedButton.styleFrom(
       padding: kButtonPadding,
       foregroundColor: Colors.black,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'Raleway',
         fontSize: 16.0,
       ),
@@ -84,12 +84,12 @@ ThemeData themeDark() {
         secondary: kAccentColor,
         brightness: Brightness.dark),
     fontFamily: 'Raleway',
-    textTheme: TextTheme(
+    textTheme: const TextTheme(
       titleSmall: TextStyle(fontSize: 12.0),
       titleMedium: TextStyle(fontSize: 14.0),
       titleLarge: TextStyle(fontSize: 16.0),
     ),
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       color: Colors.black,
       elevation: 1,
       iconTheme: IconThemeData(color: Colors.black),
@@ -112,7 +112,7 @@ ThemeData themeDark() {
         elevation: 0,
         backgroundColor: kPrimaryColor,
         padding: kButtonPadding,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
           fontSize: 16.0,
@@ -126,7 +126,7 @@ ThemeData themeDark() {
       style: TextButton.styleFrom(
         foregroundColor: Colors.black,
         padding: kButtonPadding,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           color: Colors.white,
           fontFamily: 'Raleway',
           fontSize: 16.0,
@@ -140,16 +140,16 @@ ThemeData themeDark() {
         style: OutlinedButton.styleFrom(
       padding: kButtonPadding,
       foregroundColor: Colors.white,
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
         fontFamily: 'Raleway',
         fontSize: 16.0,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kButtonBorderRadius),
-        side: BorderSide(color: Colors.white),
+        side: const BorderSide(color: Colors.white),
       ),
     )),
-    drawerTheme: DrawerThemeData(
+    drawerTheme: const DrawerThemeData(
       backgroundColor: Colors.white,
     ),
   );
@@ -171,7 +171,7 @@ InputDecorationTheme inputDecorationTheme() {
     ),
     prefixIconColor: kPrimaryColor,
     suffixIconColor: kPrimaryColor,
-    floatingLabelStyle: TextStyle(color: kPrimaryColor),
+    floatingLabelStyle: const TextStyle(color: kPrimaryColor),
     filled: true,
     fillColor: Colors.grey.shade50,
     contentPadding: kInputDecorationPadding,
@@ -194,7 +194,7 @@ InputDecorationTheme inputDecorationThemeDark() {
     ),
     prefixIconColor: kAccentColor,
     suffixIconColor: kAccentColor,
-    floatingLabelStyle: TextStyle(color: kAccentColor),
+    floatingLabelStyle: const TextStyle(color: kAccentColor),
     filled: true,
     fillColor: Colors.grey.shade800,
     contentPadding: kInputDecorationPadding,

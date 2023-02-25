@@ -1,9 +1,8 @@
-import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/desktop/helpers/localdatahandler.dart';
+import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/utility.dart';
+import 'package:bnotes/desktop/helpers/localdatahandler.dart';
 import 'package:bnotes/models/notes_model.dart';
-import 'package:bnotes/widgets/note_card_list.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:uuid/uuid.dart';
@@ -12,13 +11,13 @@ class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   List<Notes> notesList = [];
-  TextEditingController _noteTitleController = TextEditingController();
-  TextEditingController _noteTextController = TextEditingController();
+  final TextEditingController _noteTitleController = TextEditingController();
+  final TextEditingController _noteTextController = TextEditingController();
   bool isNewNote = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -31,9 +30,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void addNote() {
-    var uuid = Uuid();
+    var uuid = const Uuid();
     setState(() {
-      notesList.add(new Notes(uuid.v1(), Utility.getDateString(),
+      notesList.add(Notes(uuid.v1(), Utility.getDateString(),
           _noteTitleController.text, _noteTextController.text, '', false, 0, ''));
     });
     saveNotes();
@@ -62,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         clearEditControllers();
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(kLabelUpdated),
             duration: Duration(seconds: 2),
           ),
@@ -87,7 +86,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: notesList.length > 0
+        child: notesList.isNotEmpty
             ? ListView.builder(
                 itemCount: notesList.length,
                 itemBuilder: (context, index) {
@@ -102,7 +101,6 @@ class _HomePageState extends State<HomePage> {
                     trailing: PopupMenuButton(
                       itemBuilder: (_) => <PopupMenuItem>[
                         PopupMenuItem(
-                          child: Text(kLabelEdit),
                           value: 'edit',
                           onTap: () => Future<void>.delayed(
                               const Duration(microseconds: 1000), () {
@@ -113,28 +111,29 @@ class _HomePageState extends State<HomePage> {
                             });
                             editNote(index);
                           }),
+                          child: const Text(kLabelEdit),
                         ),
                         PopupMenuItem(
-                          child: Text(kLabelDelete),
                           value: 'delete',
                           onTap: () => Future<void>.delayed(
                               const Duration(microseconds: 1000), () {
                             confirmDelete(index);
                           }),
+                          child: const Text(kLabelDelete),
                         ),
                       ],
-                      icon: Icon(Icons.more_vert_outlined),
+                      icon: const Icon(Icons.more_vert_outlined),
                       tooltip: kLabelOptions,
                     ),
                     onTap: () {},
                   );
                 })
-            : Center(
+            : const Center(
                 child: Text(kLabelNoNotes),
               ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Iconsax.add),
+        child: const Icon(Iconsax.add),
         onPressed: () {
           clearEditControllers();
           editNote(null);
@@ -154,7 +153,7 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: kGlobalOuterPadding,
                 child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: 500, maxWidth: 800),
+                    constraints: const BoxConstraints(maxHeight: 500, maxWidth: 800),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -164,27 +163,27 @@ class _HomePageState extends State<HomePage> {
                             IconButton(
                               onPressed: () {
                                 if (_formKey.currentState!.validate()) {
-                                  if (isNewNote)
+                                  if (isNewNote) {
                                     addNote();
-                                  else {
+                                  } else {
                                     print(index);
                                     if (index != null) updateNote(index);
                                   }
                                 }
                               },
-                              icon: Icon(Icons.check_outlined),
+                              icon: const Icon(Icons.check_outlined),
                             ),
                             kHSpace,
                             IconButton(
                               onPressed: () => Navigator.pop(context),
-                              icon: Icon(Icons.clear),
+                              icon: const Icon(Icons.clear),
                             ),
                           ],
                         ),
                         TextFormField(
                           controller: _noteTitleController,
-                          decoration: InputDecoration(
-                            hintText: '$kLabelTitle',
+                          decoration: const InputDecoration(
+                            hintText: kLabelTitle,
                             // label: Text('Title'),
                             // isCollapsed: true,
                             fillColor: Colors.transparent,
@@ -207,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                             maxLines: null,
                             expands: true,
                             textAlignVertical: TextAlignVertical.top,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'Content',
                               fillColor: Colors.transparent,
                               enabledBorder: OutlineInputBorder(
@@ -230,18 +229,18 @@ class _HomePageState extends State<HomePage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(kLabelDelete),
-            content: Text(kLabelConfirmDelete),
+            title: const Text(kLabelDelete),
+            content: const Text(kLabelConfirmDelete),
             actions: [
               TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                     deleteNote(index);
                   },
-                  child: Text(kLabelActionYes)),
+                  child: const Text(kLabelActionYes)),
               TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text(kLabelActionNo))
+                  child: const Text(kLabelActionNo))
             ],
           );
         });

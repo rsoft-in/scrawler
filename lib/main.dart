@@ -32,11 +32,13 @@ void main() {
     // });
   }
   runApp(Phoenix(
-    child: MyApp(),
+    child: const MyApp(),
   ));
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -90,10 +92,10 @@ class _MyAppState extends State<MyApp> {
       theme: theme(),
       darkTheme: themeDark(),
       routes: {
-        '/': (context) => DesktopApp(),
-        '/dsignin': (context) => DesktopSignIn(),
-        '/dsignup': (context) => DesktopSignUp(),
-        '/mobilestart': (context) => StartPage()
+        '/': (context) => const DesktopApp(),
+        '/dsignin': (context) => const DesktopSignIn(),
+        '/dsignup': (context) => const DesktopSignUp(),
+        '/mobilestart': (context) => const StartPage()
       },
       initialRoute:
           UniversalPlatform.isDesktopOrWeb || kIsWeb ? '/' : '/mobilestart',
@@ -105,7 +107,7 @@ class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
 
   @override
-  _StartPageState createState() => _StartPageState();
+  State<StartPage> createState() => _StartPageState();
 }
 
 class _StartPageState extends State<StartPage> {
@@ -124,9 +126,9 @@ class _StartPageState extends State<StartPage> {
 
       if (isPinRequired) {
         Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
+            MaterialPageRoute(
               builder: (BuildContext context) =>
-                  new AppLockPage(appLockState: AppLockState.CONFIRM),
+                  const AppLockPage(appLockState: AppLockState.confirm),
             ),
             (Route<dynamic> route) => false);
       } else if (useBiometric) {
@@ -135,15 +137,16 @@ class _StartPageState extends State<StartPage> {
         if (newUser) {
           // for Mobile Users
           Navigator.of(context).pushAndRemoveUntil(
-              new MaterialPageRoute(
-                builder: (BuildContext context) => new IntroductionPage(),
+              MaterialPageRoute(
+                builder: (BuildContext context) => const IntroductionPage(),
               ),
               (Route<dynamic> route) => false);
-        } else
+        } else {
           Navigator.of(context).pushAndRemoveUntil(
-              new MaterialPageRoute(
-                  builder: (BuildContext context) => new ScrawlApp()),
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const ScrawlApp()),
               (Route<dynamic> route) => false);
+        }
       }
     });
     if (mounted) {
@@ -152,14 +155,15 @@ class _StartPageState extends State<StartPage> {
   }
 
   void confirmBiometrics() async {
-    bool res = await Navigator.of(context).push(new CupertinoPageRoute(
-        builder: (BuildContext context) => new BiometricPage()));
-    if (res)
+    bool res = await Navigator.of(context).push(CupertinoPageRoute(
+        builder: (BuildContext context) => const BiometricPage()));
+    if (res) {
       Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(
-            builder: (BuildContext context) => new ScrawlApp(),
+          MaterialPageRoute(
+            builder: (BuildContext context) => const ScrawlApp(),
           ),
           (Route<dynamic> route) => false);
+    }
   }
 
   @override

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bnotes/models/labels_model.dart';
 import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/models/tasks.dart';
@@ -7,9 +5,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
-  static final _databaseName = 'bnotes.s3db';
-  static final _databaseVersion = 3;
-  static final _databaseOldVersion = 2;
+  static const _databaseName = 'bnotes.s3db';
+  static const _databaseVersion = 3;
   Database? _database;
 
   DatabaseHelper._privateConstructor();
@@ -37,8 +34,9 @@ class DatabaseHelper {
       await db.execute(
           '''CREATE TABLE tasks (task_id text primary key, task_title text, task_items text, task_due_date text, task_reminder integer, task_reminder_type integer, task_reminder_attr text, task_completed integer, task_modified text)''');
     }, onUpgrade: (Database db, int oldVersion, int version) async {
-      if (version == 2)
+      if (version == 2) {
         await db.execute('''ALTER TABLE notes ADD note_list TEXT''');
+      }
 
       if (version == 3) {
         await db.execute(
@@ -52,11 +50,7 @@ class DatabaseHelper {
     var parsed = await db!.query('tasks',
         orderBy: 'task_date, task_modified DESC',
         where: filter.isNotEmpty
-            ? ' AND (task_title LIKE \'%' +
-                filter +
-                '%\' OR task_items LIKE \'%' +
-                filter +
-                '%\')'
+            ? ' AND (task_title LIKE \'%$filter%\' OR task_items LIKE \'%$filter%\')'
             : '');
     print(parsed);
     return parsed.map<Task>((json) => Task.fromJson(json)).toList();
@@ -66,14 +60,9 @@ class DatabaseHelper {
     Database? db = await instance.database;
     var parsed = await db!.query('tasks',
         orderBy: 'task_date, task_modified DESC',
-        where: '(task_completed == 1)' +
-            (filter.isNotEmpty
-                ? ' AND (task_title LIKE \'%' +
-                    filter +
-                    '%\' OR task_items LIKE \'%' +
-                    filter +
-                    '%\')'
-                : ''));
+        where: '(task_completed == 1)${filter.isNotEmpty
+                ? ' AND (task_title LIKE \'%$filter%\' OR task_items LIKE \'%$filter%\')'
+                : ''}');
     print(parsed);
     return parsed.map<Task>((json) => Task.fromJson(json)).toList();
   }
@@ -86,9 +75,9 @@ class DatabaseHelper {
 
   Future<bool> updateTask(Task task) async {
     Database? db = await instance.database;
-    String _id = task.taskId;
+    String id = task.taskId;
     final rowsAffected = await db!
-        .update('tasks', task.toJson(), where: 'task_id = ?', whereArgs: [_id]);
+        .update('tasks', task.toJson(), where: 'task_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
@@ -103,14 +92,9 @@ class DatabaseHelper {
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: 'note_date DESC',
-        where: 'note_archived = 0' +
-            (filter.isNotEmpty
-                ? ' AND (note_title LIKE \'%' +
-                    filter +
-                    '%\' OR note_text LIKE \'%' +
-                    filter +
-                    '%\')'
-                : ''));
+        where: 'note_archived = 0${filter.isNotEmpty
+                ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\')'
+                : ''}');
     print(parsed);
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
@@ -119,14 +103,9 @@ class DatabaseHelper {
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: 'note_date DESC',
-        where: 'note_archived = 1' +
-            (filter.isNotEmpty
-                ? ' AND (note_title LIKE \'%' +
-                    filter +
-                    '%\' OR note_text LIKE \'%' +
-                    filter +
-                    '%\')'
-                : ''));
+        where: 'note_archived = 1${filter.isNotEmpty
+                ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\')'
+                : ''}');
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
@@ -142,9 +121,9 @@ class DatabaseHelper {
   Future<bool> archiveNote(String noteId, int archive) async {
     Database? db = await instance.database;
     Map<String, dynamic> map = {'note_id': noteId, 'note_archived': archive};
-    String _id = map['note_id'];
+    String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
 
     return (rowsAffected == 1);
   }
@@ -163,27 +142,27 @@ class DatabaseHelper {
       'note_title': note.noteTitle,
       'note_text': note.noteText
     };
-    String _id = map['note_id'];
+    String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> updateNoteColor(String noteId, int noteColor) async {
     Database? db = await instance.database;
     Map<String, dynamic> map = {'note_id': noteId, 'note_color': noteColor};
-    String _id = map['note_id'];
+    String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> updateNoteLabel(String noteId, String noteLabel) async {
     Database? db = await instance.database;
     Map<String, dynamic> map = {'note_id': noteId, 'note_label': noteLabel};
-    String _id = map['note_id'];
+    String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [_id]);
+        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
@@ -219,9 +198,9 @@ class DatabaseHelper {
       'label_id': label.labelId,
       'label_name': label.labelName
     };
-    String _id = map['label_id'];
+    String id = map['label_id'];
     final rowsAffected = await db!
-        .update('labels', map, where: 'label_id = ?', whereArgs: [_id]);
+        .update('labels', map, where: 'label_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 

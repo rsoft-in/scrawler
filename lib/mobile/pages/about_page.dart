@@ -57,7 +57,7 @@ class _AboutPageState extends State<AboutPage> {
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
     return Scaffold(
-      appBar: PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size.fromHeight(56),
         child: SAppBar(
           title: 'About',
@@ -65,10 +65,10 @@ class _AboutPageState extends State<AboutPage> {
       ),
       extendBodyBehindAppBar: true,
       body: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: ListView(
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics()),
           children: [
             Padding(
               padding: kGlobalOuterPadding,
@@ -82,7 +82,7 @@ class _AboutPageState extends State<AboutPage> {
                   ),
                   Container(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         kAppName,
                         style: TextStyle(fontFamily: 'Raleway', fontSize: 24.0),
                       )),
@@ -93,17 +93,17 @@ class _AboutPageState extends State<AboutPage> {
               borderRadius: BorderRadius.circular(15.0),
               onTap: () {},
               child: ListTile(
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   child: Icon(Iconsax.cpu),
                 ),
-                title: Text('App Version'),
+                title: const Text('App Version'),
                 subtitle: Text(_packageInfo.version),
               ),
             ),
-            Padding(
+            const Padding(
               padding: kGlobalOuterPadding,
               child: Padding(
-                padding: const EdgeInsets.all(6.0),
+                padding: EdgeInsets.all(6.0),
                 child: Text(
                   'Contributors',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -113,17 +113,9 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch('https://github.com/Nandanrmenon')) {
-                  await launch(
-                    'https://github.com/Nandanrmenon',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(Uri.parse('https://github.com/Nandanrmenon'));
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(Iconsax.user),
                 ),
@@ -134,17 +126,11 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch('https://github.com/suranjum')) {
-                  await launch(
-                    'https://github.com/suranjum',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(
+                  Uri.parse('https://github.com/suranjum'),
+                );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(Iconsax.user),
                 ),
@@ -152,10 +138,10 @@ class _AboutPageState extends State<AboutPage> {
                 subtitle: Text('Lead Dev'),
               ),
             ),
-            Padding(
+            const Padding(
               padding: kGlobalOuterPadding,
               child: Padding(
-                padding: const EdgeInsets.all(6.0),
+                padding: EdgeInsets.all(6.0),
                 child: Text(
                   'Links',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
@@ -165,17 +151,11 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch('https://t.me/srawlapp')) {
-                  await launch(
-                    'https://t.me/srawlapp',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(
+                  Uri.parse('https://t.me/srawlapp'),
+                );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(LineIcons.telegram),
                 ),
@@ -186,17 +166,11 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch('https://paypal.me/nandanrmenon')) {
-                  await launch(
-                    'https://paypal.me/nandanrmenon',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(
+                  Uri.parse('https://paypal.me/nandanrmenon'),
+                );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(LineIcons.github),
                 ),
@@ -207,18 +181,11 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch(
-                    'https://github.com/rsoft-in/scrawl/issues/new')) {
-                  await launch(
-                    'https://github.com/rsoft-in/scrawl/issues/new',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(
+                  Uri.parse('https://github.com/rsoft-in/scrawl/issues/new'),
+                );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(LineIcons.bug),
                 ),
@@ -229,17 +196,11 @@ class _AboutPageState extends State<AboutPage> {
             InkWell(
               borderRadius: BorderRadius.circular(15.0),
               onTap: () async {
-                if (await canLaunch('https://paypal.me/nandanrmenon')) {
-                  await launch(
-                    'https://paypal.me/nandanrmenon',
-                    forceSafariVC: false,
-                    forceWebView: false,
-                  );
-                } else {
-                  throw 'Could not launch';
-                }
+                await launchUrl(
+                  Uri.parse('https://paypal.me/nandanrmenon'),
+                );
               },
-              child: ListTile(
+              child: const ListTile(
                 leading: CircleAvatar(
                   child: Icon(LineIcons.donate),
                 ),

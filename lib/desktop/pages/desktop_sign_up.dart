@@ -1,17 +1,16 @@
 import 'dart:convert';
 
+import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
-import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopSignUp extends StatefulWidget {
@@ -40,7 +39,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
   final _signUpFormKey = GlobalKey<FormState>();
 
   void signUp() async {
-    Map<String, String> _post = {
+    Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
         'email': emailController.text,
@@ -51,7 +50,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
     setState(() {
       isBusy = true;
     });
-    UserApiProvider.sendVerification(_post).then((value) {
+    UserApiProvider.sendVerification(post).then((value) {
       if (value['status']) {
         otpSent = true;
         showIndex++;
@@ -59,14 +58,14 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value['error']),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
       }
     });
   }
 
   void otpVerification() async {
-    Map<String, String> _post = {
+    Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
         'email': emailController.text,
@@ -76,7 +75,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
     setState(() {
       isBusy = true;
     });
-    UserApiProvider.verifyOtp(_post).then((value) async {
+    UserApiProvider.verifyOtp(post).then((value) async {
       if (value['user'] != null) {
         prefs = await SharedPreferences.getInstance();
         prefs.setBool('is_signed_in', true);
@@ -90,12 +89,12 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         setState(() {});
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => new DesktopHomePage()),
+                builder: (BuildContext context) => const DesktopHomePage()),
             (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value['error']),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
       }
     });
@@ -113,7 +112,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
             padding: const EdgeInsets.only(bottom: 25.0),
             child: Text(
               kLabels['join_the_family']!,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black87,
                 fontSize: 18.0,
               ),
@@ -121,7 +120,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['email']!,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black87,
             ),
           ),
@@ -163,7 +162,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['fullname']!,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black87,
             ),
           ),
@@ -181,7 +180,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['password']!,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black87,
             ),
           ),
@@ -200,7 +199,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['confirm_password']!,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black87,
             ),
           ),
@@ -245,7 +244,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         padding: const EdgeInsets.only(bottom: 15.0),
         child: Text(
           kLabels['verify_email']!,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black87,
             fontSize: 18.0,
           ),
@@ -255,7 +254,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         padding: const EdgeInsets.only(bottom: 25.0),
         child: Text(
           kLabels['otp_sent_to_email']!,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black87,
           ),
         ),
@@ -264,7 +263,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         padding: const EdgeInsets.only(bottom: 20.0),
         child: Text(
           kLabels['otp']!,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black87,
             fontSize: 18.0,
           ),
@@ -293,12 +292,12 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         children: [
           Expanded(
             child: ElevatedButton(
-              child: Text(kLabels['continue']!),
               onPressed: otp.length == 6
                   ? () {
                       otpVerification();
                     }
                   : null,
+              child: Text(kLabels['continue']!),
             ),
           ),
         ],
@@ -307,8 +306,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         padding: kGlobalOuterPadding,
         alignment: Alignment.center,
         child: TextButton.icon(
-          label: Text('Back'),
-          icon: Icon(BootstrapIcons.arrow_left),
+          label: const Text('Back'),
+          icon: const Icon(BootstrapIcons.arrow_left),
           onPressed: () {
             setState(() {
               showIndex = 0;
@@ -347,8 +346,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 10.0),
                               child: Text(
                                 kAppName,
                                 style: TextStyle(
@@ -359,7 +358,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                             ),
                             if (showIndex == 0) signUpItems,
                             if (showIndex == 1 && otpSent) otpItems,
-                            SizedBox(
+                            const SizedBox(
                               height: 40.0,
                             ),
                             Container(
@@ -368,14 +367,14 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                 text: TextSpan(children: [
                                   TextSpan(
                                     text: kLabels['already_have_account'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Raleway',
                                     ),
                                   ),
                                   TextSpan(
                                       text: kLabels['login'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: kLinkColor,
                                         fontFamily: 'Raleway',
                                       ),
@@ -383,10 +382,10 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                         ..onTap = () {
                                           Navigator.of(context)
                                               .pushAndRemoveUntil(
-                                                  new MaterialPageRoute(
+                                                  MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
-                                                          new DesktopSignIn()),
+                                                          const DesktopSignIn()),
                                                   (route) => false);
                                         }),
                                 ]),

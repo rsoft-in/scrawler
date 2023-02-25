@@ -10,7 +10,6 @@ import 'package:bnotes/models/notes_model.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
-import 'package:bnotes/widgets/scrawl_button_alert.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
@@ -63,7 +62,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value.error),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
       }
     });
@@ -94,7 +93,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(value['error']),
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -117,7 +116,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(value['error']),
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -160,7 +159,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                         child: TextField(
                           decoration: InputDecoration(
                             hintText: kLabels['search'],
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               BootstrapIcons.search,
                               size: 16,
                             ),
@@ -177,17 +176,17 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                           });
                           showEditDialog(context);
                         },
-                        child: Icon(BootstrapIcons.plus),
+                        child: const Icon(BootstrapIcons.plus),
                       ),
                     ],
                   ),
                 ),
                 Expanded(
                   child: isBusy
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator.adaptive(),
                         )
-                      : (notes.length > 0
+                      : (notes.isNotEmpty
                           ? ListView.builder(
                               padding: kGlobalOuterPadding,
                               itemCount: notes.length,
@@ -213,7 +212,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
             ),
           ),
         ),
-        VerticalDivider(
+        const VerticalDivider(
           width: 0.5,
         ),
         Expanded(
@@ -241,7 +240,7 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                     ),
                     SelectableText(
                       notes.isEmpty ? '' : notes[selectedIndex].noteText,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14.0,
                         height: 1.2,
                       ),
@@ -277,26 +276,26 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                               });
                               showEditDialog(context);
                             },
-                            child: Icon(
+                            child: const Icon(
                               BootstrapIcons.pencil,
                               size: 18,
                             )),
                         TextButton(
                             onPressed: () {},
-                            child: Icon(
+                            child: const Icon(
                               BootstrapIcons.palette2,
                               size: 18,
                             )),
                         TextButton(
                             onPressed: () {},
-                            child: Icon(
+                            child: const Icon(
                               BootstrapIcons.tags,
                               size: 18,
                             )),
                         TextButton(
                             onPressed: () => confirmDelete(
                                 context, notes[selectedIndex].noteId),
-                            child: Icon(
+                            child: const Icon(
                               BootstrapIcons.trash3,
                               size: 18,
                             )),
@@ -325,17 +324,17 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
               child: Container(
                 padding: kGlobalOuterPadding,
                 decoration: BoxDecoration(
-                  color: darkModeOn ? Color(0xFF333333) : Colors.white,
+                  color: darkModeOn ? const Color(0xFF333333) : Colors.white,
                   borderRadius: BorderRadius.circular(50.0),
                 ),
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxWidth: 1000),
+                  constraints: const BoxConstraints(maxWidth: 1000),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextField(
                         controller: noteTitleController,
-                        style: TextStyle(fontSize: 20.0),
+                        style: const TextStyle(fontSize: 20.0),
                         decoration: InputDecoration.collapsed(
                           hintText: Language.get('enter_title'),
                         ),
@@ -343,21 +342,21 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                       kVSpace,
                       Text(
                         '1 ${Language.get('min_ago')}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.grey,
                         ),
                       ),
                       kVSpace,
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             BootstrapIcons.tag,
                             size: 16,
                           ),
-                          VerticalDivider(color: Colors.black),
+                          const VerticalDivider(color: Colors.black),
                           IconButton(
                             onPressed: () {},
-                            icon: Icon(BootstrapIcons.plus),
+                            icon: const Icon(BootstrapIcons.plus),
                           ),
                         ],
                       ),
@@ -374,15 +373,16 @@ class _DesktopNotesPageState extends State<DesktopNotesPage> {
                       ),
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             BootstrapIcons.palette,
                             size: 16,
                           ),
-                          Spacer(),
+                          const Spacer(),
                           ElevatedButton(
                             onPressed: () {
-                              if (noteTextController.text.isNotEmpty)
+                              if (noteTextController.text.isNotEmpty) {
                                 saveNotes();
+                              }
                               Navigator.pop(context);
                             },
                             child: Text(Language.get('save')),
