@@ -40,9 +40,11 @@ dependencies:
   local_auth: ^2.1.0
 
   package_info_plus: ^3.0.2
+  package_info_plus_web: ^2.0.0
   path_provider: ^2.0.9
   
   share_plus: ^6.3.0
+  share_plus_web: ^3.1.0
   shared_preferences: ^2.0.13
   side_navigation: ^1.0.2
   sqflite: ^2.0.2
