@@ -15,15 +15,15 @@ class ScrawlDesktop extends StatefulWidget {
   const ScrawlDesktop({Key? key}) : super(key: key);
 
   @override
-  _ScrawlDesktopState createState() => _ScrawlDesktopState();
+  State<ScrawlDesktop> createState() => _ScrawlDesktopState();
 }
 
 class _ScrawlDesktopState extends State<ScrawlDesktop> {
   final _pageList = <Widget>[
-    new HomePage(),
-    new ArchivePage(),
-    new SearchPage(),
-    new DSettingsPage(),
+    const HomePage(),
+    const ArchivePage(),
+    const SearchPage(),
+    const DSettingsPage(),
   ];
   int _page = 0;
   bool isExtended = false;
@@ -101,7 +101,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
         children: [
           Container(
             color: darkModeOn ? kSecondaryDark : Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
             child: Column(children: [
               kVSpace,
               TextButton(
@@ -144,7 +144,7 @@ class _ScrawlDesktopState extends State<ScrawlDesktop> {
           Expanded(
             child: Column(
               children: [
-                WindowTopBar(),
+                const WindowTopBar(),
                 Expanded(
                   child: PageTransitionSwitcher(
                     transitionBuilder: (child, animation, secondaryAnimation) {

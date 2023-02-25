@@ -30,11 +30,11 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
   _getDrawerItemWidget(String menuId) {
     switch (menuId) {
       case 'all_notes':
-        return DesktopNotesPage();
+        return const DesktopNotesPage();
       case 'all_tasks':
-        return DesktopTasksPage();
+        return const DesktopTasksPage();
       default:
-        return new Text("Error");
+        return const Text("Error");
     }
   }
 
@@ -78,7 +78,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
             Container(
               padding:
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 35.0),
-              child: Text(
+              child: const Text(
                 kAppName,
                 style: TextStyle(fontSize: 26.0),
               ),
@@ -137,7 +137,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                 ),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-                leading: CircleAvatar(
+                leading: const CircleAvatar(
                   backgroundColor: Colors.black87,
                   child: Icon(BootstrapIcons.person),
                 ),
@@ -160,8 +160,8 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
         });
       },
       leading: CircleAvatar(
-        child: Image.asset('images/bnotes-transparent.png'),
         backgroundColor: Colors.transparent,
+        child: Image.asset('images/bnotes-transparent.png'),
       ),
       destinations: <NavigationRailDestination>[
         ...List.generate(menu.length, (index) {
@@ -196,7 +196,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       ],
       trailing: IconButton(
         onPressed: () {},
-        icon: Icon(
+        icon: const Icon(
           BootstrapIcons.person,
           color: kPrimaryColor,
         ),
@@ -207,7 +207,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (isDesktop) drawer else navigationRail,
-        VerticalDivider(
+        const VerticalDivider(
           width: 0.5,
         ),
         Expanded(

@@ -9,7 +9,7 @@ class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   @override
-  _AccountPageState createState() => _AccountPageState();
+  State<AccountPage> createState() => _AccountPageState();
 }
 
 class _AccountPageState extends State<AccountPage> {
@@ -39,63 +39,61 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: kGlobalOuterPadding,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: avatarData != null
-                            ? Image(
-                                image: MemoryImage(avatarData!),
-                                width: 100,
-                              )
-                            : Image(
-                                image: AssetImage('images/bnotes.png'),
-                                width: 100,
-                              ),
-                      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: kGlobalOuterPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: kGlobalOuterPadding,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: avatarData != null
+                          ? Image(
+                              image: MemoryImage(avatarData!),
+                              width: 100,
+                            )
+                          : const Image(
+                              image: AssetImage('images/bnotes.png'),
+                              width: 100,
+                            ),
                     ),
-                    Padding(
-                      padding: kGlobalOuterPadding,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(username, style: TextStyle(fontSize: 24)),
-                          Text(useremail, style: TextStyle(fontSize: 12)),
-                        ],
-                      ),
+                  ),
+                  Padding(
+                    padding: kGlobalOuterPadding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(username, style: const TextStyle(fontSize: 24)),
+                        Text(useremail, style: const TextStyle(fontSize: 12)),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: kGlobalOuterPadding,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: kGlobalOuterPadding,
-                        child: TextButton(
-                            onPressed: () {
-                              loginPreferences.clear();
-                              Navigator.pop(context, 'yes');
-                            },
-                            child: Text('Log Out')),
-                      ),
+            ),
+            Padding(
+              padding: kGlobalOuterPadding,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: kGlobalOuterPadding,
+                      child: TextButton(
+                          onPressed: () {
+                            loginPreferences.clear();
+                            Navigator.pop(context, 'yes');
+                          },
+                          child: const Text('Log Out')),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

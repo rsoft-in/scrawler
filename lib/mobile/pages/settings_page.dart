@@ -794,7 +794,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void callAppLock() async {
     final res = await Navigator.of(context).push(CupertinoPageRoute(
         builder: (context) => AppLockPage(
-              appLockState: AppLockState.SET,
+              appLockState: AppLockState.set,
             )));
     if (res == true) getPref();
   }

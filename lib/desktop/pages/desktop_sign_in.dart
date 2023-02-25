@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/language.dart';
-import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_home_page.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
@@ -24,18 +23,18 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   late FocusNode focusNodePassword;
   double loginWidth = 500;
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _pwdController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _pwdController = TextEditingController();
 
   void signIn() async {
-    Map<String, String> _post = {
+    Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
         'email': _emailController.text,
         'pwd': _pwdController.text
       })
     };
-    UserApiProvider.checkUserCredential(_post).then((value) async {
+    UserApiProvider.checkUserCredential(post).then((value) async {
       if (value['error'].toString().isEmpty) {
         globals.user = value['user'];
         prefs = await SharedPreferences.getInstance();
@@ -49,12 +48,12 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         setState(() {});
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => new DesktopHomePage()),
+                builder: (BuildContext context) => const DesktopHomePage()),
             (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value['error']),
-          duration: Duration(seconds: 2),
+          duration: const Duration(seconds: 2),
         ));
       }
     });
@@ -62,7 +61,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
 
   @override
   void initState() {
-    focusNodePassword = new FocusNode();
+    focusNodePassword = FocusNode();
     super.initState();
   }
 
@@ -92,8 +91,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10.0),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 10.0),
                             child: Text(
                               kAppName,
                               style: TextStyle(
@@ -104,17 +103,17 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                           ),
                           Text(
                             Language.get('welcome_back'),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 18.0,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 25.0,
                           ),
                           Text(
                             Language.get('email'),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                             ),
                           ),
@@ -139,7 +138,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                           ),
                           Text(
                             Language.get('password'),
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                             ),
                           ),
@@ -163,7 +162,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               },
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20.0,
                           ),
                           Row(
@@ -193,7 +192,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40.0,
                           ),
                           Container(
@@ -202,14 +201,14 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               text: TextSpan(children: [
                                 TextSpan(
                                   text: Language.get('dont_have_account'),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Raleway',
                                   ),
                                 ),
                                 TextSpan(
                                     text: Language.get('register_now'),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: kLinkColor,
                                       fontFamily: 'Raleway',
                                     ),
@@ -217,10 +216,10 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                       ..onTap = () {
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(
-                                                new MaterialPageRoute(
+                                                MaterialPageRoute(
                                                     builder: (BuildContext
                                                             context) =>
-                                                        new DesktopSignUp()),
+                                                        const DesktopSignUp()),
                                                 (route) => false);
                                       }),
                               ]),

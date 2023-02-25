@@ -17,7 +17,7 @@ class _DesktopTasksPageState extends State<DesktopTasksPage> {
         title: kLabels['notes']!,
         onActionPressed: () {},
       ),
-      body: Center(
+      body: const Center(
         child: Text('All Tasks'),
       ),
     );
