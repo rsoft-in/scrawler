@@ -8,6 +8,7 @@ import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:bnotes/mobile/pages/app_lock_page.dart';
 import 'package:bnotes/mobile/pages/introduction_page.dart';
+import 'package:bnotes/mobile/pages/mobile_start_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +32,7 @@ void main() {
     //   appWindow.title = "scrawl";
     // });
   }
-  runApp(Phoenix(
-    child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -92,13 +91,14 @@ class _MyAppState extends State<MyApp> {
       theme: theme(),
       darkTheme: themeDark(),
       routes: {
-        '/': (context) => const DesktopApp(),
+        '/': (context) => UniversalPlatform.isDesktopOrWeb || kIsWeb
+            ? const DesktopApp()
+            : const MobileStartPage(),
         '/dsignin': (context) => const DesktopSignIn(),
         '/dsignup': (context) => const DesktopSignUp(),
-        '/mobilestart': (context) => const StartPage()
+        '/mobilestart': (context) => const MobileStartPage()
       },
-      initialRoute:
-          UniversalPlatform.isDesktopOrWeb || kIsWeb ? '/' : '/mobilestart',
+      initialRoute: '/',
     );
   }
 }
