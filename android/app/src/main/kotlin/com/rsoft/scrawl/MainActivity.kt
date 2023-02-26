@@ -1,4 +1,4 @@
-package com.rsoft.scrawl
+package com.rsoft.bnotes
 
 import io.flutter.embedding.android.FlutterActivity
 
