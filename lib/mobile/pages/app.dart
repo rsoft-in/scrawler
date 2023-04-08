@@ -7,7 +7,7 @@ import 'package:bnotes/mobile/pages/notes_page.dart';
 import 'package:bnotes/mobile/pages/search_page.dart';
 import 'package:bnotes/mobile/pages/settings_page.dart';
 import 'package:bnotes/models/labels_model.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/appbar.dart';
 import 'package:bnotes/widgets/note_card_grid.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';

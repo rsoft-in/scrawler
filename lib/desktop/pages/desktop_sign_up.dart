@@ -4,11 +4,11 @@ import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/desktop/pages/desktop_home_page.dart';
+import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
-import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,8 +56,9 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         showIndex++;
         setState(() {});
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(value['error']),
+        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
+          context,
+          value['error'],
           duration: const Duration(seconds: 2),
         ));
       }
@@ -89,7 +90,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         setState(() {});
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-                builder: (BuildContext context) => const DesktopHomePage()),
+                builder: (BuildContext context) => const DesktopApp()),
             (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -113,16 +114,13 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
             child: Text(
               kLabels['join_the_family']!,
               style: const TextStyle(
-                color: Colors.black87,
                 fontSize: 18.0,
               ),
             ),
           ),
           Text(
             kLabels['email']!,
-            style: const TextStyle(
-              color: Colors.black87,
-            ),
+            style: const TextStyle(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
@@ -162,9 +160,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['fullname']!,
-            style: const TextStyle(
-              color: Colors.black87,
-            ),
+            style: const TextStyle(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
@@ -180,9 +176,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['password']!,
-            style: const TextStyle(
-              color: Colors.black87,
-            ),
+            style: const TextStyle(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
@@ -199,9 +193,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           Text(
             kLabels['confirm_password']!,
-            style: const TextStyle(
-              color: Colors.black87,
-            ),
+            style: const TextStyle(),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
@@ -219,10 +211,11 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
               },
             ),
           ),
+          kVSpace,
           Row(
             children: [
               Expanded(
-                child: ElevatedButton(
+                child: FilledButton.tonal(
                   child: Text(kLabels['continue']!),
                   onPressed: () {
                     if (_signUpFormKey.currentState!.validate()) {
@@ -245,7 +238,6 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         child: Text(
           kLabels['verify_email']!,
           style: const TextStyle(
-            color: Colors.black87,
             fontSize: 18.0,
           ),
         ),
@@ -254,9 +246,6 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         padding: const EdgeInsets.only(bottom: 25.0),
         child: Text(
           kLabels['otp_sent_to_email']!,
-          style: const TextStyle(
-            color: Colors.black87,
-          ),
         ),
       ),
       Padding(
@@ -264,7 +253,6 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         child: Text(
           kLabels['otp']!,
           style: const TextStyle(
-            color: Colors.black87,
             fontSize: 18.0,
           ),
         ),
@@ -290,8 +278,18 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
       ),
       Row(
         children: [
+          FilledButton.tonal(
+            onPressed: () {
+              setState(() {
+                showIndex = 0;
+                otpSent = false;
+              });
+            },
+            child: const Icon(Icons.arrow_back),
+          ),
+          kHSpace,
           Expanded(
-            child: ElevatedButton(
+            child: FilledButton(
               onPressed: otp.length == 6
                   ? () {
                       otpVerification();
@@ -302,98 +300,98 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
         ],
       ),
-      Container(
-        padding: kGlobalOuterPadding,
-        alignment: Alignment.center,
-        child: TextButton.icon(
-          label: const Text('Back'),
-          icon: const Icon(BootstrapIcons.arrow_left),
-          onPressed: () {
-            setState(() {
-              showIndex = 0;
-              otpSent = false;
-            });
-          },
-        ),
-      ),
     ]);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: kBackGroundGradient,
+        // decoration: kBackGroundGradient,
+        decoration: const BoxDecoration(color: kPrimaryColor),
         child: Row(
           children: [
             Visibility(
                 visible: isDesktop,
-                child: Expanded(flex: 2, child: Container())),
-            Expanded(
-              flex: 1,
-              child: Container(
-                  width:
-                      isDesktop ? 500 : MediaQuery.of(context).size.width * 0.9,
-                  height: MediaQuery.of(context).size.height,
-                  // height: 600,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
+                child: const Expanded(
+                    child: Center(
+                  child: FlutterLogo(
+                    size: 300,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 30, vertical: 60),
-                    child: SingleChildScrollView(
-                      child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 10.0),
-                              child: Text(
-                                kAppName,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 40.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                ))),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.all(30),
+                alignment: isDesktop ? Alignment.centerRight : Alignment.center,
+                child: SizedBox(
+                  width: 500,
+                  child: Card(
+                    child: Container(
+                        // width: isDesktop
+                        //     ? 500
+                        //     : MediaQuery.of(context).size.width * 0.9,
+                        // height: MediaQuery.of(context).size.height * 0.95,
+                        // height: 600,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                            // color: Colors.white.withOpacity(0.8),
                             ),
-                            if (showIndex == 0) signUpItems,
-                            if (showIndex == 1 && otpSent) otpItems,
-                            const SizedBox(
-                              height: 40.0,
-                            ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text: kLabels['already_have_account'],
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'Raleway',
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 30),
+                          child: SingleChildScrollView(
+                            child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(bottom: 10.0),
+                                    child: Text(
+                                      kAppName,
+                                      style: TextStyle(
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
-                                  TextSpan(
-                                      text: kLabels['login'],
-                                      style: const TextStyle(
-                                        color: kLinkColor,
-                                        fontFamily: 'Raleway',
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          const DesktopSignIn()),
-                                                  (route) => false);
-                                        }),
+                                  if (showIndex == 0) signUpItems,
+                                  if (showIndex == 1 && otpSent) otpItems,
+                                  const SizedBox(
+                                    height: 40.0,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    child: RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                          text: kLabels['already_have_account'],
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: 'Raleway',
+                                          ),
+                                        ),
+                                        TextSpan(
+                                            text: kLabels['login'],
+                                            style: const TextStyle(
+                                              color: kLinkColor,
+                                              fontFamily: 'Raleway',
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                const DesktopSignIn()),
+                                                        (route) => false);
+                                              }),
+                                      ]),
+                                    ),
+                                  ),
                                 ]),
-                              ),
-                            ),
-                          ]),
-                    ),
-                  )),
+                          ),
+                        )),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

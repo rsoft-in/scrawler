@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:bnotes/models/labels_model.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 
 class LocalDataHandler {
   static String path = Directory.current.path;

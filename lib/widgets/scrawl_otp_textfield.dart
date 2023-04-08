@@ -37,7 +37,9 @@ class _ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
 
   @override
   void dispose() {
-    _textControllers.forEach((controller) => controller?.dispose());
+    for (var controller in _textControllers) {
+      controller?.dispose();
+    }
     super.dispose();
   }
 
@@ -58,30 +60,17 @@ class _ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
     if (_focusNodes[index] == null) _focusNodes[index] = FocusNode();
     return Expanded(
       child: Container(
-        margin: EdgeInsets.only(right: 5, left: 5),
+        margin: const EdgeInsets.only(right: 5, left: 5),
         child: TextField(
           focusNode: _focusNodes[index],
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           maxLength: 1,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             counterText: '',
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide.none,
-            ),
-            filled: true,
           ),
           onChanged: (String value) {
             if (value.isEmpty) {
@@ -123,11 +112,11 @@ class ScrawlOtpFieldController {
     });
 
     final textControllers = _scrawlOtpTextFieldState._textControllers;
-    textControllers.forEach((textController) {
+    for (var textController in textControllers) {
       if (textController != null) {
         textController.text = '';
       }
-    });
+    }
 
     final firstFocusNode = _scrawlOtpTextFieldState._focusNodes[0];
     if (firstFocusNode != null) {
@@ -180,9 +169,9 @@ class ScrawlOtpFieldController {
     }
 
     String newPin = "";
-    currentPin.forEach((item) {
+    for (var item in currentPin) {
       newPin += item;
-    });
+    }
 
     final widget = _scrawlOtpTextFieldState.widget;
     if (widget.onChanged != null) {

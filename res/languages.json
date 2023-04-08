@@ -27,5 +27,9 @@
     "invalid_email": "Invalid Email",
     "forgot_password": "Forgot password?",
     "dont_have_account": "Do not have an account yet?",
-    "register_now": "Register Now"
+    "register_now": "Register Now",
+    "changes_saved": "All changes saved",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "sort": "Sort"
 }

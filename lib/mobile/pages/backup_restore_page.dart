@@ -7,7 +7,7 @@ import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/helpers/storage.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';

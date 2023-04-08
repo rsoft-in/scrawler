@@ -2,20 +2,21 @@ import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/desktop/pages/desktop_notes_page.dart';
-import 'package:bnotes/desktop/pages/desktop_tasks_page.dart';
+import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
+import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
+import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DesktopHomePage extends StatefulWidget {
-  const DesktopHomePage({Key? key}) : super(key: key);
+class DesktopApp extends StatefulWidget {
+  const DesktopApp({Key? key}) : super(key: key);
 
   @override
-  State<DesktopHomePage> createState() => _DesktopHomePageState();
+  State<DesktopApp> createState() => _DesktopAppState();
 }
 
-class _DesktopHomePageState extends State<DesktopHomePage> {
+class _DesktopAppState extends State<DesktopApp> {
   late SharedPreferences prefs;
   bool isDesktop = false;
   List<Map<String, dynamic>> menu = [];
@@ -30,9 +31,9 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
   _getDrawerItemWidget(String menuId) {
     switch (menuId) {
       case 'all_notes':
-        return const DesktopNotesPage();
+        return const DesktopNotesScreen();
       case 'all_tasks':
-        return const DesktopTasksPage();
+        return const DesktopTasksScreen();
       default:
         return const Text("Error");
     }
@@ -70,7 +71,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
     Widget drawer = SizedBox(
       width: 250,
       child: Drawer(
-        elevation: 0,
+        // elevation: 0,
         // backgroundColor: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +97,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 15.0),
-                          selectedTileColor: Colors.grey.shade100,
+                          selectedTileColor: kPrimaryColor.withOpacity(0.2),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -104,11 +105,11 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                             width: 35,
                             height: 35,
                             alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color:
-                                  Color(menu[index]['color']).withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                            // decoration: BoxDecoration(
+                            //   color:
+                            //       Color(menu[index]['color']).withOpacity(0.2),
+                            //   borderRadius: BorderRadius.circular(8.0),
+                            // ),
                             child: Icon(
                               menu[index]['icon'],
                               size: 16.0,
@@ -138,11 +139,11 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: const CircleAvatar(
-                  backgroundColor: Colors.black87,
+                  // backgroundColor: Colors.black87,
                   child: Icon(BootstrapIcons.person),
                 ),
                 title: Text(globals.user!.userName),
-                onTap: () {},
+                onTap: () => showProfile(),
               ),
             )
           ],
@@ -180,10 +181,10 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
               width: 35,
               height: 35,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: Color(menu[index]['color']).withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
+              // decoration: BoxDecoration(
+              //   color: Color(menu[index]['color']).withOpacity(0.2),
+              //   borderRadius: BorderRadius.circular(8.0),
+              // ),
               child: Icon(
                 menu[index]['icon'],
                 size: 20.0,
@@ -195,7 +196,7 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
         }),
       ],
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () => showProfile(),
         icon: const Icon(
           BootstrapIcons.person,
           color: kPrimaryColor,
@@ -203,17 +204,40 @@ class _DesktopHomePageState extends State<DesktopHomePage> {
       ),
     );
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (isDesktop) drawer else navigationRail,
-        const VerticalDivider(
-          width: 0.5,
-        ),
-        Expanded(
-          child: _getDrawerItemWidget(_selectedDrawerIndex),
-        ),
-      ],
+    return Scaffold(
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (isDesktop) drawer else navigationRail,
+          // const VerticalDivider(
+          //   width: 0.5,
+          // ),
+          Expanded(
+            child: _getDrawerItemWidget(_selectedDrawerIndex),
+          ),
+        ],
+      ),
     );
+  }
+
+  void showProfile() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: ConstrainedBox(
+                constraints:
+                    const BoxConstraints(maxWidth: 1000, maxHeight: 800),
+                child: const DesktopProfileScreen()),
+          );
+        });
+  }
+
+  void signOut() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    if (context.mounted) {
+      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+    }
   }
 }

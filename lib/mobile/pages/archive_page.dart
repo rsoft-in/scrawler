@@ -6,7 +6,7 @@ import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/common/note_color.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/note_list_model.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/mobile/pages/app.dart';
 import 'package:bnotes/mobile/pages/note_reader_page.dart';
 import 'package:bnotes/widgets/note_card_grid.dart';

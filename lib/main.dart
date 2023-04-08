@@ -2,7 +2,7 @@ import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/language.dart';
 import 'package:bnotes/common/theme.dart';
 import 'package:bnotes/common/utility.dart';
-import 'package:bnotes/desktop/desktop_app.dart';
+import 'package:bnotes/desktop/desktop_landing.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/mobile/pages/app.dart';
@@ -12,7 +12,6 @@ import 'package:bnotes/mobile/pages/mobile_start_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -88,11 +87,12 @@ class _MyAppState extends State<MyApp> {
       title: kAppName,
       debugShowCheckedModeBanner: false,
       themeMode: themeMode,
+      // themeMode: ThemeMode.light,
       theme: theme(),
       darkTheme: themeDark(),
       routes: {
         '/': (context) => UniversalPlatform.isDesktopOrWeb || kIsWeb
-            ? const DesktopApp()
+            ? const DesktopLanding()
             : const MobileStartPage(),
         '/dsignin': (context) => const DesktopSignIn(),
         '/dsignup': (context) => const DesktopSignUp(),

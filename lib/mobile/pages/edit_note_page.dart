@@ -1,7 +1,7 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/helpers/database_helper.dart';
 import 'package:bnotes/models/note_list_model.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/note_edit_list_textfield.dart';
 import 'package:bnotes/widgets/small_appbar.dart';
 import 'package:flutter/cupertino.dart';

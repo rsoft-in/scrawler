@@ -2,14 +2,14 @@ import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:flutter/material.dart';
 
-class DesktopTasksPage extends StatefulWidget {
-  const DesktopTasksPage({Key? key}) : super(key: key);
+class DesktopTasksScreen extends StatefulWidget {
+  const DesktopTasksScreen({Key? key}) : super(key: key);
 
   @override
-  State<DesktopTasksPage> createState() => _DesktopTasksPageState();
+  State<DesktopTasksScreen> createState() => _DesktopTasksScreenState();
 }
 
-class _DesktopTasksPageState extends State<DesktopTasksPage> {
+class _DesktopTasksScreenState extends State<DesktopTasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

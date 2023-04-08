@@ -1,6 +1,6 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/utility.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -36,8 +36,8 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
           padding: kGlobalCardPadding * 2,
           decoration: BoxDecoration(
             color: widget.isSelected
-                ? kPrimaryColor.withOpacity(0.08)
-                : Color(0xFFF9F9F9).withOpacity(0.6),
+                ? kPrimaryColor.withOpacity(0.25)
+                : kPrimaryColor.withOpacity(0.05),
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Column(
@@ -50,7 +50,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                 ),
                 child: Text(
                   widget.note.noteTitle,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14.0,
                   ),
                 ),
@@ -64,7 +64,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                   widget.note.noteText,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12.0,
                     color: Colors.grey,
                   ),
@@ -82,7 +82,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                     ),
                     Text(
                       Utility.formatDateTime(widget.note.noteDate),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12.0,
                         color: Colors.grey,
                       ),

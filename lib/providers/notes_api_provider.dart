@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:http/http.dart' as http;
 
 class NotesApiProvider {

@@ -1,5 +1,5 @@
 import 'package:bnotes/models/labels_model.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/models/tasks.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';

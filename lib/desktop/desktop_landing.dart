@@ -1,4 +1,4 @@
-import 'package:bnotes/desktop/pages/desktop_home_page.dart';
+import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/models/users_model.dart';
 import 'package:bnotes/providers/api_provider.dart';
@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 
-class DesktopApp extends StatefulWidget {
-  const DesktopApp({Key? key}) : super(key: key);
+class DesktopLanding extends StatefulWidget {
+  const DesktopLanding({Key? key}) : super(key: key);
 
   @override
-  State<DesktopApp> createState() => _DesktopAppState();
+  State<DesktopLanding> createState() => _DesktopLandingState();
 }
 
-class _DesktopAppState extends State<DesktopApp> {
+class _DesktopLandingState extends State<DesktopLanding> {
   late SharedPreferences prefs;
   bool isSignedIn = false;
 
@@ -37,7 +37,7 @@ class _DesktopAppState extends State<DesktopApp> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (BuildContext context) => const DesktopHomePage()),
+              builder: (BuildContext context) => const DesktopApp()),
           (route) => false);
     }
   }

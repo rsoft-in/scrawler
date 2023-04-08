@@ -1,7 +1,7 @@
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/note_color.dart';
 import 'package:bnotes/common/utility.dart';
-import 'package:bnotes/models/notes_model.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
