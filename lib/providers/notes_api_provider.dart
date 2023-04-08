@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:http/http.dart' as http;
+import 'package:bnotes/common/globals.dart' as globals;
 
 class NotesApiProvider {
   static Future<NotesResult> fecthNotes(Map post) async {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse("$kBaseUrl/notes/get"), body: post);
+          .post(Uri.parse("${globals.apiServer}/notes/get"), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
@@ -33,7 +33,7 @@ class NotesApiProvider {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse('$kBaseUrl/notes/update'), body: post);
+          .post(Uri.parse('${globals.apiServer}/notes/update'), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         if (result.contains('SUCCESS')) {
@@ -53,7 +53,7 @@ class NotesApiProvider {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse('$kBaseUrl/notes/delete'), body: post);
+          .post(Uri.parse('${globals.apiServer}/notes/delete'), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         if (result.contains('SUCCESS')) {

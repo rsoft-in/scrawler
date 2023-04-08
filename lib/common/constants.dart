@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 const kAppName = 'scrawl';
-const kBaseUrl = 'https://scrawl.knoxxbox.in/api';
-// const kBaseUrl = 'http://192.168.29.42/scrawl/index.php';
 
 const kPrimaryColor = Color(0xFF18837c);
 const kAccentColor = Color(0xFFA3D2CA);

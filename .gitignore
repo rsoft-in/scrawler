@@ -45,5 +45,6 @@ key.properties
 google-services.json
 scrawl_api_key.json
 apikey
+apiserver
 
 data/

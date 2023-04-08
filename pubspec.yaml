@@ -82,4 +82,5 @@ flutter:
     - images/undraw_playful_cat.svg
     - images/undraw_login.svg
     - res/apikey
+    - res/apiserver
     - res/languages.json
