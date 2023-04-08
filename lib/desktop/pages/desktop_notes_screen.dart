@@ -8,6 +8,7 @@ import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/menu_item.dart';
 import 'package:bnotes/models/notes.dart';
+import 'package:bnotes/models/sort_items.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
@@ -43,6 +44,12 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     MenuItem('delete', Language.get('delete'), ''),
     MenuItem('color', Language.get('color'), ''),
     MenuItem('tags', Language.get('tag'), '')
+  ];
+  List<SortItem> sortItems = [
+    SortItem(NoteSort.title, 'A-Z'),
+    SortItem(NoteSort.titleDesc, 'Z-A'),
+    SortItem(NoteSort.newest, Language.get('latest')),
+    SortItem(NoteSort.oldest, Language.get('oldest'))
   ];
 
   TextEditingController noteTitleController = TextEditingController();
@@ -86,15 +93,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         break;
       case NoteSort.titleDesc:
         notesList
-            .sort((Notes a, Notes b) => a.noteTitle.compareTo(b.noteTitle));
-        notesList = notesList.reversed.toList();
+            .sort((Notes a, Notes b) => b.noteTitle.compareTo(a.noteTitle));
+        // notesList = notesList.reversed.toList();
+        break;
+      case NoteSort.newest:
+        notesList.sort((Notes a, Notes b) => b.noteDate.compareTo(a.noteDate));
         break;
       case NoteSort.oldest:
         notesList.sort((Notes a, Notes b) => a.noteDate.compareTo(b.noteDate));
-        break;
-      case NoteSort.newest:
-        notesList.sort((Notes a, Notes b) => a.noteDate.compareTo(b.noteDate));
-        notesList = notesList.reversed.toList();
+        // notesList = notesList.reversed.toList();
         break;
       default:
         break;
@@ -178,6 +185,27 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     });
   }
 
+  List<PopupMenuItem<NoteSort>> getSortItems() {
+    return sortItems
+        .map<PopupMenuItem<NoteSort>>((item) => PopupMenuItem(
+            value: item.sortBy,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item.caption,
+                  ),
+                ),
+                if (item.sortBy == currentSort)
+                  const Icon(
+                    BootstrapIcons.check,
+                    size: 16.0,
+                  )
+              ],
+            )))
+        .toList();
+  }
+
   @override
   void initState() {
     getNotes();
@@ -196,31 +224,17 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         SizedBox(
           width: 350,
           child: Scaffold(
-            appBar: AppBar(title: Text(Language.get('notes')), actions: [
-              PopupMenuButton<NoteSort>(
-                itemBuilder: (_) => <PopupMenuItem<NoteSort>>[
-                  const PopupMenuItem<NoteSort>(
-                    value: NoteSort.title,
-                    child: Text('A-Z'),
-                  ),
-                  const PopupMenuItem<NoteSort>(
-                    value: NoteSort.titleDesc,
-                    child: Text('Z-A'),
-                  ),
-                  PopupMenuItem<NoteSort>(
-                    value: NoteSort.newest,
-                    child: Text(Language.get('latest')),
-                  ),
-                  PopupMenuItem<NoteSort>(
-                    value: NoteSort.oldest,
-                    child: Text(Language.get('oldest')),
-                  ),
-                ],
-                onSelected: (value) => sortList(value),
-                icon: const Icon(BootstrapIcons.sort_up),
-                tooltip: Language.get('sort'),
-              ),
-            ]),
+            appBar: AppBar(
+              title: Text(Language.get('notes')),
+              actions: [
+                PopupMenuButton<NoteSort>(
+                  itemBuilder: (_) => getSortItems(),
+                  onSelected: (value) => sortList(value),
+                  icon: const Icon(BootstrapIcons.sort_up),
+                  tooltip: Language.get('sort'),
+                ),
+              ],
+            ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
@@ -552,5 +566,3 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         });
   }
 }
-
-enum NoteSort { title, titleDesc, newest, oldest }
