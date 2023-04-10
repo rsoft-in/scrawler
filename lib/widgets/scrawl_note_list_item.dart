@@ -1,4 +1,5 @@
 import 'package:bnotes/common/constants.dart';
+import 'package:bnotes/common/note_color.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +49,25 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                   horizontal: 8.0,
                   vertical: 4.0,
                 ),
-                child: Text(
-                  widget.note.noteTitle,
-                  style: const TextStyle(
-                    fontSize: 14.0,
-                  ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.note.noteTitle,
+                        style: const TextStyle(
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 15,
+                      height: 15,
+                      decoration: BoxDecoration(
+                        color: NoteColor.getColor(widget.note.noteColor, false),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Padding(

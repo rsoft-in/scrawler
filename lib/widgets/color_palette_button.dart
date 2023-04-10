@@ -20,16 +20,16 @@ class ColorPaletteButton extends StatelessWidget {
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
     return GestureDetector(
-      child: new Container(
-        margin: EdgeInsets.all(8.0),
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
         width: 60,
         height: 60,
         decoration: BoxDecoration(
-            color: this.color,
+            color: color,
             borderRadius: BorderRadius.circular(15.0),
             border: Border.all(
                 color: darkModeOn ? Colors.white12 : Colors.black26)),
-        child: isSelected ? Icon(Icons.check) : Container(),
+        child: isSelected ? const Icon(Icons.check) : Container(),
       ),
       onTap: () => onTap(),
     );

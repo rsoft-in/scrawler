@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 class NoteColor {
   static Color getColor(int code, bool isDark) {
     switch (code) {
-      case 0:
-        return const Color(0xFFFFDAA9);
       case 1:
-        return const Color(0xFFFFC7B3);
-      case 2:
         return const Color(0xFFFFDAA9);
+      case 2:
+        return const Color(0xFFFFC7B3);
       case 3:
-        return const Color(0xFFFFCEE6);
+        return const Color(0xFFFFDAA9);
       case 4:
-        return const Color(0xFFEEC2FF);
+        return const Color(0xFFFFCEE6);
       case 5:
-        return const Color(0xFFC8D3FF);
+        return const Color(0xFFEEC2FF);
       case 6:
+        return const Color(0xFFC8D3FF);
+      case 0:
         return Colors.transparent;
       default:
         return Colors.transparent;

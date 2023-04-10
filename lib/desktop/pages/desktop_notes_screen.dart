@@ -4,12 +4,14 @@ import 'package:bnotes/common/adaptive.dart';
 import 'package:bnotes/common/constants.dart';
 import 'package:bnotes/common/globals.dart' as globals;
 import 'package:bnotes/common/language.dart';
+import 'package:bnotes/common/note_color.dart';
 import 'package:bnotes/common/string_values.dart';
 import 'package:bnotes/common/utility.dart';
 import 'package:bnotes/models/menu_item.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/models/sort_items.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
+import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
@@ -113,17 +115,24 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   void saveNotes() async {
     var uuid = const Uuid();
     var newId = uuid.v1();
+    late Notes currentNote;
     if (isNewNote) {
-      notesList.add(Notes(newId, Utility.getDateString(),
-          noteTitleController.text, noteTextController.text, '', false, 0, ''));
+      currentNote = Notes(newId, Utility.getDateString(),
+          noteTitleController.text, noteTextController.text, '', false, 0, '');
+      notesList.add(currentNote);
     } else {
       int editIndex =
           notesList.indexWhere((element) => element.noteId == currentNoteId);
       notesList[editIndex].noteTitle = noteTitleController.text;
       notesList[editIndex].noteText = noteTextController.text;
+      currentNote = notesList[editIndex];
     }
     setState(() {});
     sortList(currentSort);
+    syncNotes(currentNote, newId);
+  }
+
+  void syncNotes(Notes note, String newId) async {
     Map<String, String> post = {
       'postdata': jsonEncode({
         'new': isNewNote,
@@ -131,11 +140,11 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         'note_id': isNewNote ? newId : currentNoteId,
         'note_user_id': globals.user!.userId,
         'note_date': Utility.getDateString(),
-        'note_title': noteTitleController.text,
-        'note_text': noteTextController.text,
-        'note_label': '',
-        'note_archived': 0,
-        'note_color': 0,
+        'note_title': note.noteTitle,
+        'note_text': note.noteText,
+        'note_label': note.noteLabel,
+        'note_archived': note.noteArchived,
+        'note_color': note.noteColor,
         'note_image': '',
         'note_audio_file': ''
       })
@@ -252,7 +261,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                             hintText: kLabels['search'],
                             prefixIcon: const Icon(
                               BootstrapIcons.search,
-                              // size: 16,
                             ),
                           ),
                         ),
@@ -331,11 +339,25 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      NoteDateWidget(
-                        text: notesList.isEmpty
-                            ? ''
-                            : Utility.formatDateTime(
-                                notesList[selectedIndex].noteDate),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          NoteDateWidget(
+                            text: notesList.isEmpty
+                                ? ''
+                                : Utility.formatDateTime(
+                                    notesList[selectedIndex].noteDate),
+                          ),
+                          Container(
+                            width: 15,
+                            height: 15,
+                            decoration: BoxDecoration(
+                              color: NoteColor.getColor(
+                                  notesList[selectedIndex].noteColor, false),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ],
                       ),
                       Container(
                         margin: const EdgeInsets.only(bottom: 60),
@@ -376,7 +398,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                 size: 18,
                               )),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () => selectColor(
+                                  context, notesList[selectedIndex].noteId),
                               child: const Icon(
                                 BootstrapIcons.palette2,
                                 size: 18,
@@ -456,7 +479,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         }
         break;
       case 'delete':
-        deleteNotes(note.noteId);
+        if (context.mounted) confirmDelete(context, note.noteId);
+        break;
+      case 'color':
+        if (context.mounted) selectColor(context, note.noteId);
         break;
       default:
         break;
@@ -564,5 +590,86 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             content: Language.get('confirm_delete'),
           );
         });
+  }
+
+  void selectColor(BuildContext context, String noteId) async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 160),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('Select Color'),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 1),
+                            color: NoteColor.getColor(1, false),
+                            isSelected: false),
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 2),
+                            color: NoteColor.getColor(2, false),
+                            isSelected: false),
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 3),
+                            color: NoteColor.getColor(3, false),
+                            isSelected: false),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 4),
+                            color: NoteColor.getColor(4, false),
+                            isSelected: false),
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 5),
+                            color: NoteColor.getColor(5, false),
+                            isSelected: false),
+                        ColorPaletteButton(
+                            onTap: () => Navigator.pop(context, 6),
+                            color: NoteColor.getColor(6, false),
+                            isSelected: false),
+                      ],
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context, 0),
+                      child: Container(
+                        margin: const EdgeInsets.all(8.0),
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            border: Border.all(
+                                color: darkModeOn
+                                    ? Colors.white12
+                                    : Colors.black26)),
+                        child: const Icon(Icons.block),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+    if (colorCode != null) {
+      int index = notesList.indexWhere((element) => element.noteId == noteId);
+      notesList[index].noteColor = colorCode;
+      isNewNote = false;
+      currentNoteId = notesList[index].noteId;
+      setState(() {});
+      syncNotes(notesList[index], '');
+    }
   }
 }
