@@ -20,6 +20,7 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
   const DesktopNotesScreen({Key? key}) : super(key: key);
@@ -328,7 +329,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                   )
                 : null,
             body: Visibility(
-              visible: isSelected,
+              visible: isSelected && notesList.isNotEmpty,
               replacement: EmptyWidget(
                   text: Language.get('select_note'),
                   width: MediaQuery.of(context).size.width * 0.5 * 0.8,
@@ -348,28 +349,36 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                 : Utility.formatDateTime(
                                     notesList[selectedIndex].noteDate),
                           ),
-                          Container(
-                            width: 15,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              color: NoteColor.getColor(
-                                  notesList[selectedIndex].noteColor, false),
-                              borderRadius: BorderRadius.circular(8),
+                          if (notesList.isNotEmpty)
+                            Container(
+                              width: 15,
+                              height: 15,
+                              decoration: BoxDecoration(
+                                color: NoteColor.getColor(
+                                    notesList[selectedIndex].noteColor, false),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          ),
                         ],
                       ),
+                      // Container(
+                      //   margin: const EdgeInsets.only(bottom: 60),
+                      //   child: SelectableText(
+                      //     notesList.isEmpty
+                      //         ? ''
+                      //         : notesList[selectedIndex].noteText,
+                      //     style: const TextStyle(
+                      //       fontSize: 14.0,
+                      //       height: 1.2,
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         margin: const EdgeInsets.only(bottom: 60),
-                        child: SelectableText(
-                          notesList.isEmpty
-                              ? ''
-                              : notesList[selectedIndex].noteText,
-                          style: const TextStyle(
-                            fontSize: 14.0,
-                            height: 1.2,
-                          ),
-                        ),
+                        child: MarkdownBody(
+                            data: notesList.isEmpty
+                                ? ''
+                                : notesList[selectedIndex].noteText),
                       ),
                     ],
                   ),
