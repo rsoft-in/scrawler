@@ -376,6 +376,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       Container(
                         margin: const EdgeInsets.only(bottom: 60),
                         child: MarkdownBody(
+                            selectable: true,
+                            softLineBreak: true,
                             data: notesList.isEmpty
                                 ? ''
                                 : notesList[selectedIndex].noteText),
@@ -500,6 +502,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
 
   void showEditDialog(BuildContext context) {
     showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return Dialog(
