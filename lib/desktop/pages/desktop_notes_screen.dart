@@ -332,7 +332,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
               visible: isSelected && notesList.isNotEmpty,
               replacement: EmptyWidget(
                   text: Language.get('select_note'),
-                  width: MediaQuery.of(context).size.width * 0.5 * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   asset: 'images/undraw_playful_cat.svg'),
               child: SingleChildScrollView(
                 child: Padding(
@@ -552,6 +552,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           ),
                           expands: true,
                           maxLines: null,
+                          spellCheckConfiguration:
+                              const SpellCheckConfiguration.disabled(),
                         ),
                       ),
                       kVSpace,
