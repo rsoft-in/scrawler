@@ -23,7 +23,7 @@ class EmptyWidget extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Text(
               text,
-              style: TextStyle(color: Colors.grey),
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
         ],

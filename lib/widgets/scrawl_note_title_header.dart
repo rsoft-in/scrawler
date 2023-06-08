@@ -10,7 +10,7 @@ class NoteTitleWidget extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 15.0),
       child: SelectableText(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
         ),

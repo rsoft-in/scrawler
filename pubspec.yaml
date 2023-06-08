@@ -53,6 +53,7 @@ dependencies:
   uuid: ^3.0.5
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
+  http: ^0.13.6
 
 flutter_icons:
   android: "ic_launcher"

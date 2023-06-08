@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bnotes/models/notes.dart';
 import 'package:http/http.dart' as http;
-import 'package:bnotes/common/globals.dart' as globals;
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class NotesApiProvider {
   static Future<NotesResult> fecthNotes(Map post) async {

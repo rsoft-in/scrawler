@@ -15,10 +15,10 @@ class ScrawlOtpTextField extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ScrawlOtpTextField> createState() => _ScrawlOtpTextFieldState();
+  State<ScrawlOtpTextField> createState() => ScrawlOtpTextFieldState();
 }
 
-class _ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
+class ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
   late List<TextEditingController?> _textControllers;
   late List<String> _otp;
   late List<FocusNode?> _focusNodes;
@@ -99,9 +99,9 @@ class _ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
 }
 
 class ScrawlOtpFieldController {
-  late _ScrawlOtpTextFieldState _scrawlOtpTextFieldState;
+  late ScrawlOtpTextFieldState _scrawlOtpTextFieldState;
 
-  void setOtpTextFieldState(_ScrawlOtpTextFieldState state) {
+  void setOtpTextFieldState(ScrawlOtpTextFieldState state) {
     _scrawlOtpTextFieldState = state;
   }
 

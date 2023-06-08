@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/constants.dart';
+import '../helpers/constants.dart';
 
 class ScrawlAlertButton extends StatefulWidget {
   final VoidCallback onPressed;
@@ -18,11 +18,10 @@ class _ScrawlAlertButtonState extends State<ScrawlAlertButton> {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => widget.onPressed,
-      child: Text(widget.label),
       style: ElevatedButton.styleFrom(
         backgroundColor: kAlertColor,
         padding: kButtonPadding,
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontFamily: 'Raleway',
           fontSize: 16.0,
         ),
@@ -30,6 +29,7 @@ class _ScrawlAlertButtonState extends State<ScrawlAlertButton> {
           borderRadius: BorderRadius.circular(kButtonBorderRadius),
         ),
       ),
+      child: Text(widget.label),
     );
   }
 }

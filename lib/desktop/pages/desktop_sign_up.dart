@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:bnotes/common/adaptive.dart';
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/globals.dart' as globals;
-import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
@@ -88,10 +88,12 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         prefs.setString('user_pwd', globals.user!.userPwd);
         prefs.setBool('user_enabled', globals.user!.userEnabled);
         setState(() {});
-        Navigator.of(context).pushAndRemoveUntil(
+        if (context.mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (BuildContext context) => const DesktopApp()),
             (route) => false);
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(value['error']),

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:bnotes/models/users_model.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:bnotes/common/globals.dart' as globals;
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class UserApiProvider {
   static Future<Map<String, dynamic>> checkUserCredential(Map post) async {

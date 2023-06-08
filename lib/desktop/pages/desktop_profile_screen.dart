@@ -1,4 +1,4 @@
-import 'package:bnotes/common/constants.dart';
+import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -94,10 +94,10 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   ),
                   Visibility(
                     visible: selectedTab == 0,
-                    child: Column(
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 40,
                           child: Icon(
                             Icons.person_outlined,
@@ -106,7 +106,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         ),
                         kVSpace,
                         Row(
-                          children: const [
+                          children: [
                             Expanded(
                               child: TextField(
                                 decoration:

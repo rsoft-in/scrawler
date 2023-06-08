@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../common/language.dart';
+import '../helpers/language.dart';
 
 class ScrawlConfirmDialog extends StatefulWidget {
   final VoidCallback onAcceptPressed;

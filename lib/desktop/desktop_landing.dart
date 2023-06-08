@@ -1,10 +1,10 @@
 import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/models/users_model.dart';
 import 'package:bnotes/providers/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bnotes/common/globals.dart' as globals;
 
 class DesktopLanding extends StatefulWidget {
   const DesktopLanding({Key? key}) : super(key: key);

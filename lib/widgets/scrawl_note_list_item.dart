@@ -1,6 +1,6 @@
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/note_color.dart';
-import 'package:bnotes/common/utility.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/note_color.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
 

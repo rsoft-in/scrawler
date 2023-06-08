@@ -1,4 +1,4 @@
-import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/string_values.dart';
 import 'package:flutter/material.dart';
 
 class DesktopTasksScreen extends StatefulWidget {

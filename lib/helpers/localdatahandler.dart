@@ -38,7 +38,6 @@ class LocalDataHandler {
       await file.writeAsString(jsonEncode(notes));
       return true;
     } on Exception catch (e) {
-      print(e.toString());
       return false;
     }
   }
@@ -49,7 +48,6 @@ class LocalDataHandler {
       await file.writeAsString(jsonEncode(labels));
       return true;
     } on Exception catch (e) {
-      print(e.toString());
       return false;
     }
   }

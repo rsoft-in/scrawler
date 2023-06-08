@@ -1,5 +1,5 @@
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/string_values.dart';
 import 'package:flutter/material.dart';
 
 class ScrawlTextField extends StatefulWidget {
@@ -38,7 +38,7 @@ class _ScrawlTextFieldState extends State<ScrawlTextField> {
         decoration: InputDecoration(
           hintText: widget.hint,
           fillColor: Colors.white,
-          border: OutlineInputBorder(
+          border: const OutlineInputBorder(
             borderSide: BorderSide.none,
           ),
           enabledBorder: OutlineInputBorder(

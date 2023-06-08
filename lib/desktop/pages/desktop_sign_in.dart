@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:bnotes/common/adaptive.dart';
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/globals.dart' as globals;
-import 'package:bnotes/common/language.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';

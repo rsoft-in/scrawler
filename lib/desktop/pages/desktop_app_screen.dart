@@ -1,10 +1,10 @@
-import 'package:bnotes/common/adaptive.dart';
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/globals.dart' as globals;
-import 'package:bnotes/common/string_values.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

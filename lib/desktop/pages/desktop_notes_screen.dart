@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:bnotes/common/adaptive.dart';
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/globals.dart' as globals;
-import 'package:bnotes/common/language.dart';
-import 'package:bnotes/common/note_color.dart';
-import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/common/utility.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/language.dart';
+import 'package:bnotes/helpers/note_color.dart';
+import 'package:bnotes/helpers/string_values.dart';
+import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/models/menu_item.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/models/sort_items.dart';
@@ -19,8 +19,8 @@ import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:uuid/uuid.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
   const DesktopNotesScreen({Key? key}) : super(key: key);

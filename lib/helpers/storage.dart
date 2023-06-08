@@ -8,21 +8,15 @@ class Storage {
   Future<String> get localPath async {
     if (Platform.isAndroid) {
       final dir = await getExternalStorageDirectory();
-      print(dir);
       return dir!.path;
-    } 
-    
-    else {
+    } else {
       final dir = await getApplicationDocumentsDirectory();
-      print(dir);
-      print('is');
       return dir.path;
     }
   }
 
   Future<File> get localFile async {
     final path = await localPath;
-    print(path);
     return File('$path/bnotes.backup');
   }
 
@@ -45,15 +39,14 @@ class Storage {
 
   Future<File> writeData(String data) async {
     final file = await localFile;
-    
-    
-  
-      return file.writeAsString(data);
-    
+
+    return file.writeAsString(data);
   }
-  Future<void> writeiOSData(String data) async{final file = await localFile;
-if (UniversalPlatform.isIOS){
-      await Share.shareFiles(['$file']);
+
+  Future<void> writeiOSData(String data) async {
+    final file = await localFile;
+    if (UniversalPlatform.isIOS) {
+      await Share.shareXFiles([XFile('$file')]);
       return;
     }
   }

@@ -1,22 +1,16 @@
-import 'package:bnotes/common/constants.dart';
-import 'package:bnotes/common/language.dart';
-import 'package:bnotes/common/theme.dart';
-import 'package:bnotes/common/utility.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/language.dart';
+import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/desktop/desktop_landing.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/mobile/pages/app.dart';
-import 'package:bnotes/mobile/pages/app_lock_page.dart';
-import 'package:bnotes/mobile/pages/introduction_page.dart';
 import 'package:bnotes/mobile/pages/mobile_start_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 import 'helpers/globals.dart' as globals;
-import 'mobile/pages/biometric_page.dart';
 
 late SharedPreferences prefs;
 void main() {
@@ -99,83 +93,6 @@ class _MyAppState extends State<MyApp> {
         '/mobilestart': (context) => const MobileStartPage()
       },
       initialRoute: '/',
-    );
-  }
-}
-
-class StartPage extends StatefulWidget {
-  const StartPage({Key? key}) : super(key: key);
-
-  @override
-  State<StartPage> createState() => _StartPageState();
-}
-
-class _StartPageState extends State<StartPage> {
-  bool isAppUnlocked = false;
-  bool isPinRequired = false;
-  bool useBiometric = false;
-  bool newUser = true;
-
-  getPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isAppUnlocked = prefs.getBool("is_app_unlocked") ?? false;
-      isPinRequired = prefs.getBool("is_pin_required") ?? false;
-      useBiometric = prefs.getBool('use_biometric') ?? false;
-      newUser = prefs.getBool('newUser') ?? true;
-
-      if (isPinRequired) {
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  const AppLockPage(appLockState: AppLockState.confirm),
-            ),
-            (Route<dynamic> route) => false);
-      } else if (useBiometric) {
-        confirmBiometrics();
-      } else {
-        if (newUser) {
-          // for Mobile Users
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (BuildContext context) => const IntroductionPage(),
-              ),
-              (Route<dynamic> route) => false);
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const ScrawlApp()),
-              (Route<dynamic> route) => false);
-        }
-      }
-    });
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  void confirmBiometrics() async {
-    bool res = await Navigator.of(context).push(CupertinoPageRoute(
-        builder: (BuildContext context) => const BiometricPage()));
-    if (res) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (BuildContext context) => const ScrawlApp(),
-          ),
-          (Route<dynamic> route) => false);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getPreferences();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
     );
   }
 }
