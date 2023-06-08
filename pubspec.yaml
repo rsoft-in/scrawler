@@ -13,47 +13,19 @@ dependencies:
     sdk: flutter
 
   adaptive_breakpoints: ^0.1.1
-  animations: ^2.0.2
-  another_flushbar: ^1.12.29
-
-  bitsdojo_window: ^0.1.1+1
   bootstrap_icons: ^1.9.1
-
   cupertino_icons: ^1.0.4
-
-  file_picker: ^5.2.5
-  flex_color_scheme: ^6.1.2
-  fluentui_icons: ^1.0.0
-  fluentui_system_icons: ^1.1.172
-  flutter_launcher_icons: ^0.11.0
   flutter_markdown: ^0.6.14
-  flutter_phoenix: ^1.0.0
-  flutter_staggered_grid_view: ^0.6.2
   flutter_svg: ^1.1.6
   flutter_widget_from_html: ^0.9.1
-
-  glassmorphism: ^3.0.0
-  
-  iconsax: ^0.0.8
+  http: ^0.13.6
   intl: ^0.18.0
-
   line_icons: ^2.0.1
-  local_auth: ^2.1.0
-
-  package_info_plus: ^3.0.2
-  package_info_plus_web: ^2.0.0
-  path_provider: ^2.0.9
-  
-  share_plus: ^6.3.0
-  share_plus_web: ^3.1.0
   shared_preferences: ^2.0.13
-  side_navigation: ^1.0.2
   sqflite: ^2.0.2
-
   uuid: ^3.0.5
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
-  http: ^0.13.6
 
 flutter_icons:
   android: "ic_launcher"
@@ -65,6 +37,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.1
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
 

@@ -1,9 +1,6 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
-
-const FlexScheme usedScheme = FlexScheme.jungle;
 
 ThemeData theme() {
   return ThemeData(
