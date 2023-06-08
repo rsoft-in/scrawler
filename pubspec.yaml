@@ -81,6 +81,7 @@ flutter:
     - images/google.png
     - images/undraw_playful_cat.svg
     - images/undraw_login.svg
+    - images/welcome.svg
     - res/apikey
     - res/apiserver
     - res/languages.json

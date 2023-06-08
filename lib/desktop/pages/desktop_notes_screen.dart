@@ -562,10 +562,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       kVSpace,
                       Row(
                         children: [
-                          const Icon(
-                            BootstrapIcons.palette,
-                            size: 16,
-                          ),
+                          // const Icon(
+                          //   BootstrapIcons.palette,
+                          //   size: 16,
+                          // ),
                           const Spacer(),
                           FilledButton.tonal(
                             onPressed: () {

@@ -1,5 +1,4 @@
 import 'package:bnotes/common/string_values.dart';
-import 'package:bnotes/widgets/scrawl_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class DesktopTasksScreen extends StatefulWidget {
@@ -13,9 +12,8 @@ class _DesktopTasksScreenState extends State<DesktopTasksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScrawlAppBar(
-        title: kLabels['notes']!,
-        onActionPressed: () {},
+      appBar: AppBar(
+        title: Text(kLabels['notes']!),
       ),
       body: const Center(
         child: Text('All Tasks'),

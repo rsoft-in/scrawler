@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-const kAppName = 'scrawl';
+const kAppName = 'scrawler';
 
-const kPrimaryColor = Color(0xFF18837c);
+const kPrimaryColor = Color(0xFF5EAAA8);
 const kAccentColor = Color(0xFFA3D2CA);
 const kSecondaryColor = Color(0xFFEB5E0B);
 const kSecondaryDark = Color(0xff1c1c1c);

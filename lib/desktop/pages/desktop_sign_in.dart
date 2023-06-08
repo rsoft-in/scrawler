@@ -9,6 +9,7 @@ import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopSignIn extends StatefulWidget {
@@ -83,153 +84,162 @@ class _DesktopSignInState extends State<DesktopSignIn> {
       resizeToAvoidBottomInset: false,
       body: Form(
         key: _formKey,
-        child: Row(
-          children: [
-            if (isDesktop)
-              const Expanded(
+        child: Container(
+          decoration: BoxDecoration(color: kPrimaryColor.withOpacity(0.6)),
+          child: Row(
+            children: [
+              if (isDesktop)
+                Expanded(
                   child: Center(
-                      child: FlutterLogo(
-                size: 300,
-              ))),
-            Expanded(
-              child: Center(
-                child: SizedBox(
-                  width: loginWidth,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 60),
-                      child: SingleChildScrollView(
-                        child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                child: Text(
-                                  kAppName,
-                                  style: TextStyle(
-                                      fontSize: 40.0,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              Text(
-                                Language.get('welcome_back'),
-                                style: const TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 25.0,
-                              ),
-                              Text(
-                                Language.get('email'),
-                                style: const TextStyle(),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 25.0, top: 10.0),
-                                child: TextFormField(
-                                  controller: _emailController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return Language.get('mandatory_field');
-                                    }
-                                    if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                                      return Language.get('invalid_email');
-                                    }
-                                    return null;
-                                  },
-                                  onFieldSubmitted: (value) {
-                                    focusNodePassword.requestFocus();
-                                  },
-                                ),
-                              ),
-                              Text(
-                                Language.get('password'),
-                                style: const TextStyle(),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    bottom: 25.0, top: 10.0),
-                                child: TextFormField(
-                                  focusNode: focusNodePassword,
-                                  controller: _pwdController,
-                                  obscureText: true,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return Language.get('mandatory_field');
-                                    }
-                                    return null;
-                                  },
-                                  onFieldSubmitted: (value) {
-                                    if (_formKey.currentState!.validate()) {
-                                      signIn();
-                                    }
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20.0,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: FilledButton(
-                                      onPressed: isSigningIn
-                                          ? null
-                                          : () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                signIn();
-                                              }
-                                            },
-                                      child: Text(Language.get('sign_in')),
-                                    ),
+                    child: SvgPicture.asset(
+                      'images/welcome.svg',
+                      width: 300,
+                      height: 300,
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: Center(
+                  child: SizedBox(
+                    width: loginWidth,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 60),
+                        child: SingleChildScrollView(
+                          child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: Text(
+                                    kAppName,
+                                    style: TextStyle(
+                                        fontSize: 40.0,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                ],
-                              ),
-                              kVSpace,
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextButton(
-                                      child:
-                                          Text(Language.get('forgot_password')),
-                                      onPressed: () {
-                                        if (_emailController.text.isNotEmpty) {}
-                                      },
-                                    ),
+                                ),
+                                Text(
+                                  Language.get('welcome_back'),
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
                                   ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 40.0,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(Language.get('dont_have_account')),
-                                  TextButton(
-                                      onPressed: () => Navigator.of(context)
-                                          .pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                  builder: (BuildContext
-                                                          context) =>
-                                                      const DesktopSignUp()),
-                                              (route) => false),
-                                      child:
-                                          Text(Language.get('register_now'))),
-                                ],
-                              ),
-                            ]),
+                                ),
+                                const SizedBox(
+                                  height: 25.0,
+                                ),
+                                Text(
+                                  Language.get('email'),
+                                  style: const TextStyle(),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 25.0, top: 10.0),
+                                  child: TextFormField(
+                                    controller: _emailController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return Language.get('mandatory_field');
+                                      }
+                                      if (!RegExp(kEmailRegEx)
+                                          .hasMatch(value)) {
+                                        return Language.get('invalid_email');
+                                      }
+                                      return null;
+                                    },
+                                    onFieldSubmitted: (value) {
+                                      focusNodePassword.requestFocus();
+                                    },
+                                  ),
+                                ),
+                                Text(
+                                  Language.get('password'),
+                                  style: const TextStyle(),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 25.0, top: 10.0),
+                                  child: TextFormField(
+                                    focusNode: focusNodePassword,
+                                    controller: _pwdController,
+                                    obscureText: true,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return Language.get('mandatory_field');
+                                      }
+                                      return null;
+                                    },
+                                    onFieldSubmitted: (value) {
+                                      if (_formKey.currentState!.validate()) {
+                                        signIn();
+                                      }
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20.0,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: FilledButton(
+                                        onPressed: isSigningIn
+                                            ? null
+                                            : () {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  signIn();
+                                                }
+                                              },
+                                        child: Text(Language.get('sign_in')),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                kVSpace,
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextButton(
+                                        child: Text(
+                                            Language.get('forgot_password')),
+                                        onPressed: () {
+                                          if (_emailController
+                                              .text.isNotEmpty) {}
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 40.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(Language.get('dont_have_account')),
+                                    TextButton(
+                                        onPressed: () => Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                                MaterialPageRoute(
+                                                    builder: (BuildContext
+                                                            context) =>
+                                                        const DesktopSignUp()),
+                                                (route) => false),
+                                        child:
+                                            Text(Language.get('register_now'))),
+                                  ],
+                                ),
+                              ]),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,8 +1,5 @@
-import 'package:bnotes/common/constants.dart';
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 
 class SAppBar extends StatefulWidget {
   final String title;
@@ -28,10 +25,6 @@ class SAppBar extends StatefulWidget {
 class _SAppBarState extends State<SAppBar> {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
     return AppBar(
       leading: Container(
         margin: const EdgeInsets.all(8.0),
@@ -44,12 +37,13 @@ class _SAppBarState extends State<SAppBar> {
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
           onTap: () {
-            if (widget.onTap == null)
+            if (widget.onTap == null) {
               Navigator.pop(context);
-            else
+            } else {
               widget.onTap!();
+            }
           },
-          child: Icon(
+          child: const Icon(
             Iconsax.arrow_left_2,
             size: 15,
             // color: Colors.white,

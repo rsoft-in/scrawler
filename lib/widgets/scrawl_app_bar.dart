@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ScrawlAppBar extends StatefulWidget with PreferredSizeWidget {
-  @override
+class ScrawlAppBar extends StatefulWidget {
   final Size preferredSize;
 
   final String title;
@@ -23,7 +22,7 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
         vertical: 8.0,
         horizontal: 15.0,
       ),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(width: 0.5, color: Colors.black12),
         ),
