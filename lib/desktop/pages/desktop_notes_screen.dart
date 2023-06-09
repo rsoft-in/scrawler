@@ -20,6 +20,7 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
@@ -288,22 +289,23 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               itemCount: notesList.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
-                                  onSecondaryTapDown: (details) =>
-                                      _getTapPosition(details),
-                                  onSecondaryTap: () {
+                                  onSecondaryTapDown: (details) {
+                                    _getTapPosition(details);
+                                    print('object');
+
+                                    _showContextMenu(context, notesList[index]);
                                     selectedIndex = index;
                                     setState(() {});
-                                    _showContextMenu(context, notesList[index]);
+                                  },
+                                  onTap: () {
+                                    setState(() {
+                                      selectedIndex = index;
+                                      isSelected = true;
+                                    });
                                   },
                                   child: NoteListItemWidget(
                                       note: notesList[index],
                                       selectedIndex: selectedIndex,
-                                      onTap: () {
-                                        setState(() {
-                                          selectedIndex = index;
-                                          isSelected = true;
-                                        });
-                                      },
                                       isSelected:
                                           index == selectedIndex && isSelected),
                                 );
@@ -361,23 +363,31 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                             ),
                         ],
                       ),
-                      // Container(
-                      //   margin: const EdgeInsets.only(bottom: 60),
-                      //   child: SelectableText(
-                      //     notesList.isEmpty
-                      //         ? ''
-                      //         : notesList[selectedIndex].noteText,
-                      //     style: const TextStyle(
-                      //       fontSize: 14.0,
-                      //       height: 1.2,
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
                         margin: const EdgeInsets.only(bottom: 60),
                         child: MarkdownBody(
                             selectable: true,
                             softLineBreak: true,
+                            onTapLink: (text, href, title) => _launchUrl(href),
+                            styleSheet: MarkdownStyleSheet(
+                                blockquote:
+                                    const TextStyle(color: Colors.black),
+                                blockquoteDecoration: const BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border(
+                                    left: BorderSide(
+                                        color: kPrimaryColor, width: 3),
+                                  ),
+                                ),
+                                code: const TextStyle(
+                                    backgroundColor: Colors.transparent),
+                                codeblockAlign: WrapAlignment.spaceAround,
+                                codeblockDecoration: BoxDecoration(
+                                    color: darkModeOn
+                                        ? Colors.white10
+                                        : Colors.black12),
+                                checkbox:
+                                    const TextStyle(color: kPrimaryColor)),
                             data: notesList.isEmpty
                                 ? ''
                                 : notesList[selectedIndex].noteText),
@@ -497,6 +507,12 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         break;
       default:
         break;
+    }
+  }
+
+  Future<void> _launchUrl(url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
     }
   }
 
