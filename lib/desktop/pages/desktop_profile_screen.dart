@@ -127,11 +127,11 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   ),
                   Visibility(
                     visible: selectedTab == 1,
-                    child: const Text('Password'),
+                    child: const Text('Coming soon'),
                   ),
                   Visibility(
                     visible: selectedTab == 2,
-                    child: const Text('Manage Plans'),
+                    child: const Text('Don\'t worry you are now a free user'),
                   ),
                 ],
               ),

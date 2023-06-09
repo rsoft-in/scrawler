@@ -13,10 +13,10 @@ class _DesktopTasksScreenState extends State<DesktopTasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(kLabels['notes']!),
+        title: Text(kLabels['tasks']!),
       ),
       body: const Center(
-        child: Text('All Tasks'),
+        child: Text('Coming Soon'),
       ),
     );
   }
