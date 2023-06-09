@@ -32,6 +32,7 @@ class DesktopNotesScreen extends StatefulWidget {
 
 class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   List<Notes> notesList = [];
+  List<Notes> filteredNotes = [];
   NoteSort currentSort = NoteSort.title;
   bool isNewNote = false;
   final int _pageNr = 0;
@@ -77,6 +78,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     NotesApiProvider.fecthNotes(post).then((value) {
       if (value.error.isEmpty) {
         notesList = value.notes;
+        filteredNotes = notesList;
         isBusy = false;
         setState(() {});
         sortList(currentSort);
@@ -92,26 +94,36 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   void sortList(NoteSort sort) {
     switch (sort) {
       case NoteSort.title:
-        notesList
+        filteredNotes
             .sort((Notes a, Notes b) => a.noteTitle.compareTo(b.noteTitle));
         break;
       case NoteSort.titleDesc:
-        notesList
+        filteredNotes
             .sort((Notes a, Notes b) => b.noteTitle.compareTo(a.noteTitle));
-        // notesList = notesList.reversed.toList();
         break;
       case NoteSort.newest:
-        notesList.sort((Notes a, Notes b) => b.noteDate.compareTo(a.noteDate));
+        filteredNotes
+            .sort((Notes a, Notes b) => b.noteDate.compareTo(a.noteDate));
         break;
       case NoteSort.oldest:
-        notesList.sort((Notes a, Notes b) => a.noteDate.compareTo(b.noteDate));
-        // notesList = notesList.reversed.toList();
+        filteredNotes
+            .sort((Notes a, Notes b) => a.noteDate.compareTo(b.noteDate));
         break;
       default:
         break;
     }
     currentSort = sort;
     setState(() {});
+  }
+
+  void onSearch(String phrase) {
+    setState(() {
+      filteredNotes = notesList
+          .where((element) =>
+              element.noteTitle.toLowerCase().contains(phrase.toLowerCase()) ||
+              element.noteText.toLowerCase().contains(phrase.toLowerCase()))
+          .toList();
+    });
   }
 
   void saveNotes() async {
@@ -121,14 +133,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     if (isNewNote) {
       currentNote = Notes(newId, Utility.getDateString(),
           noteTitleController.text, noteTextController.text, '', false, 0, '');
-      notesList.add(currentNote);
+      filteredNotes.add(currentNote);
     } else {
-      int editIndex =
-          notesList.indexWhere((element) => element.noteId == currentNoteId);
-      notesList[editIndex].noteTitle = noteTitleController.text;
-      notesList[editIndex].noteText = noteTextController.text;
-      currentNote = notesList[editIndex];
+      int editIndex = filteredNotes
+          .indexWhere((element) => element.noteId == currentNoteId);
+      filteredNotes[editIndex].noteTitle = noteTitleController.text;
+      filteredNotes[editIndex].noteText = noteTextController.text;
+      currentNote = filteredNotes[editIndex];
     }
+    notesList = filteredNotes;
     setState(() {});
     sortList(currentSort);
     syncNotes(currentNote, newId);
@@ -167,13 +180,14 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   }
 
   void deleteNotes(String noteId) async {
-    notesList.removeWhere((element) => element.noteId == noteId);
+    filteredNotes.removeWhere((element) => element.noteId == noteId);
     if (selectedIndex > 0) {
       selectedIndex--;
     } else {
       selectedIndex = 0;
       isSelected = false;
     }
+    notesList = filteredNotes;
     setState(() {});
     Map<String, String> post = {
       'postdata': jsonEncode({
@@ -215,6 +229,19 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
               ],
             )))
         .toList();
+  }
+
+  void getAllLabels() async {
+    Map<String, String> post = {
+      'postdata': jsonEncode({
+        'api_key': globals.apiKey,
+        'uid': globals.user!.userId,
+        'qry': '',
+        'sort': 'label_name',
+        'page_no': 0,
+        'offset': 100
+      })
+    };
   }
 
   @override
@@ -265,6 +292,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               BootstrapIcons.search,
                             ),
                           ),
+                          onChanged: (value) => onSearch(value),
                         ),
                       ),
                       kHSpace,
@@ -283,17 +311,16 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       ? const Center(
                           child: CircularProgressIndicator.adaptive(),
                         )
-                      : (notesList.isNotEmpty
+                      : (filteredNotes.isNotEmpty
                           ? ListView.builder(
                               padding: kGlobalOuterPadding,
-                              itemCount: notesList.length,
+                              itemCount: filteredNotes.length,
                               itemBuilder: (context, index) {
                                 return GestureDetector(
                                   onSecondaryTapDown: (details) {
                                     _getTapPosition(details);
-                                    print('object');
-
-                                    _showContextMenu(context, notesList[index]);
+                                    _showContextMenu(
+                                        context, filteredNotes[index]);
                                     selectedIndex = index;
                                     setState(() {});
                                   },
@@ -304,7 +331,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                     });
                                   },
                                   child: NoteListItemWidget(
-                                      note: notesList[index],
+                                      note: filteredNotes[index],
                                       selectedIndex: selectedIndex,
                                       isSelected:
                                           index == selectedIndex && isSelected),
@@ -324,14 +351,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         ),
         Expanded(
           child: Scaffold(
-            appBar: isSelected && notesList[selectedIndex].noteTitle.isNotEmpty
-                ? AppBar(
-                    scrolledUnderElevation: 0,
-                    title: Text(notesList[selectedIndex].noteTitle),
-                  )
-                : null,
+            appBar:
+                isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
+                    ? AppBar(
+                        scrolledUnderElevation: 0,
+                        title: Text(filteredNotes[selectedIndex].noteTitle),
+                      )
+                    : null,
             body: Visibility(
-              visible: isSelected && notesList.isNotEmpty,
+              visible: isSelected && filteredNotes.isNotEmpty,
               replacement: EmptyWidget(
                   text: Language.get('select_note'),
                   width: MediaQuery.of(context).size.width * 0.4,
@@ -346,18 +374,19 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           NoteDateWidget(
-                            text: notesList.isEmpty
+                            text: filteredNotes.isEmpty
                                 ? ''
                                 : Utility.formatDateTime(
-                                    notesList[selectedIndex].noteDate),
+                                    filteredNotes[selectedIndex].noteDate),
                           ),
-                          if (notesList.isNotEmpty)
+                          if (filteredNotes.isNotEmpty)
                             Container(
                               width: 15,
                               height: 15,
                               decoration: BoxDecoration(
                                 color: NoteColor.getColor(
-                                    notesList[selectedIndex].noteColor, false),
+                                    filteredNotes[selectedIndex].noteColor,
+                                    false),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
@@ -388,9 +417,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                         : Colors.black12),
                                 checkbox:
                                     const TextStyle(color: kPrimaryColor)),
-                            data: notesList.isEmpty
+                            data: filteredNotes.isEmpty
                                 ? ''
-                                : notesList[selectedIndex].noteText),
+                                : filteredNotes[selectedIndex].noteText),
                       ),
                     ],
                   ),
@@ -411,7 +440,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         children: [
                           TextButton(
                               onPressed: () {
-                                assignFields(notesList[selectedIndex]);
+                                assignFields(filteredNotes[selectedIndex]);
                                 showEditDialog(context);
                               },
                               child: const Icon(
@@ -420,7 +449,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               )),
                           TextButton(
                               onPressed: () => selectColor(
-                                  context, notesList[selectedIndex].noteId),
+                                  context, filteredNotes[selectedIndex].noteId),
                               child: const Icon(
                                 BootstrapIcons.palette2,
                                 size: 18,
@@ -433,7 +462,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               )),
                           TextButton(
                               onPressed: () => confirmDelete(
-                                  context, notesList[selectedIndex].noteId),
+                                  context, filteredNotes[selectedIndex].noteId),
                               child: const Icon(
                                 BootstrapIcons.trash3,
                                 size: 18,
@@ -694,12 +723,13 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
           );
         });
     if (colorCode != null) {
-      int index = notesList.indexWhere((element) => element.noteId == noteId);
-      notesList[index].noteColor = colorCode;
+      int index =
+          filteredNotes.indexWhere((element) => element.noteId == noteId);
+      filteredNotes[index].noteColor = colorCode;
       isNewNote = false;
-      currentNoteId = notesList[index].noteId;
+      currentNoteId = filteredNotes[index].noteId;
       setState(() {});
-      syncNotes(notesList[index], '');
+      syncNotes(filteredNotes[index], '');
     }
   }
 }

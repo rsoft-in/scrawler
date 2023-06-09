@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bnotes/models/labels_model.dart';
+import 'package:bnotes/models/label.dart';
 import 'package:bnotes/models/notes.dart';
 
 class LocalDataHandler {
@@ -21,12 +21,12 @@ class LocalDataHandler {
     }
   }
 
-  static Future<List<Labels>> fetchLabels() async {
+  static Future<List<Label>> fetchLabels() async {
     try {
       final file = File('$path/data/labels.json');
       final content = await file.readAsString();
       final parsed = json.decode(content).cast<Map<String, dynamic>>();
-      return parsed.map<Labels>((json) => Labels.fromJson(json)).toList();
+      return parsed.map<Label>((json) => Label.fromJson(json)).toList();
     } on Exception {
       return [];
     }
@@ -42,7 +42,7 @@ class LocalDataHandler {
     }
   }
 
-  static Future<bool> storeLabels(List<Labels> labels) async {
+  static Future<bool> storeLabels(List<Label> labels) async {
     try {
       final file = File('$path/data/labels.json');
       await file.writeAsString(jsonEncode(labels));
