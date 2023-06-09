@@ -8,7 +8,7 @@ class Utility {
       if (i > 1) break;
       try {
         initials += aText[i].substring(0, 1);
-      } on Exception catch (e) {}
+      } on Exception {}
     }
     return initials;
   }

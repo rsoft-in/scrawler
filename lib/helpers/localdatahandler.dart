@@ -16,7 +16,7 @@ class LocalDataHandler {
       final content = await file.readAsString();
       final parsed = json.decode(content).cast<Map<String, dynamic>>();
       return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
-    } on Exception catch (e) {
+    } on Exception {
       return [];
     }
   }
@@ -27,7 +27,7 @@ class LocalDataHandler {
       final content = await file.readAsString();
       final parsed = json.decode(content).cast<Map<String, dynamic>>();
       return parsed.map<Labels>((json) => Labels.fromJson(json)).toList();
-    } on Exception catch (e) {
+    } on Exception {
       return [];
     }
   }
@@ -37,7 +37,7 @@ class LocalDataHandler {
       final file = File('$path/data/notes.json');
       await file.writeAsString(jsonEncode(notes));
       return true;
-    } on Exception catch (e) {
+    } on Exception {
       return false;
     }
   }
@@ -47,7 +47,7 @@ class LocalDataHandler {
       final file = File('$path/data/labels.json');
       await file.writeAsString(jsonEncode(labels));
       return true;
-    } on Exception catch (e) {
+    } on Exception {
       return false;
     }
   }
