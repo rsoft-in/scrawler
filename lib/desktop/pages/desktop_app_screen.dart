@@ -167,29 +167,15 @@ class _DesktopAppState extends State<DesktopApp> {
       destinations: <NavigationRailDestination>[
         ...List.generate(menu.length, (index) {
           return NavigationRailDestination(
-            icon: Container(
-              width: 35,
-              height: 35,
-              alignment: Alignment.center,
-              child: Icon(
-                menu[index]['icon'],
-                size: 20.0,
-                color: Color(menu[index]['color']),
-              ),
+            icon: Icon(
+              menu[index]['icon'],
+              size: 18.0,
+              color: Color(menu[index]['color']),
             ),
-            selectedIcon: Container(
-              width: 35,
-              height: 35,
-              alignment: Alignment.center,
-              // decoration: BoxDecoration(
-              //   color: Color(menu[index]['color']).withOpacity(0.2),
-              //   borderRadius: BorderRadius.circular(8.0),
-              // ),
-              child: Icon(
-                menu[index]['icon'],
-                size: 20.0,
-                color: Color(menu[index]['color']),
-              ),
+            selectedIcon: Icon(
+              menu[index]['icon'],
+              size: 20.0,
+              color: Color(menu[index]['color']),
             ),
             label: Text(menu[index]['text']),
           );
