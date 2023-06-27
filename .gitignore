@@ -43,7 +43,7 @@ app.*.map.json
 
 key.properties
 google-services.json
-scrawl_api_key.json
+scrawler_api_key.json
 apikey
 apiserver
 

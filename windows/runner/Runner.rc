@@ -92,10 +92,10 @@ BEGIN
             VALUE "CompanyName", "com.rsoft" "\0"
             VALUE "FileDescription", "A new Flutter project." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "bnotes" "\0"
+            VALUE "InternalName", "scrawler" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2021 com.rsoft. All rights reserved." "\0"
-            VALUE "OriginalFilename", "bnotes.exe" "\0"
-            VALUE "ProductName", "bnotes" "\0"
+            VALUE "OriginalFilename", "scrawler.exe" "\0"
+            VALUE "ProductName", "scrawler" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

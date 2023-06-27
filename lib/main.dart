@@ -22,7 +22,7 @@ void main() {
     //   appWindow.size = initialSize;
     //   appWindow.alignment = Alignment.center;
     //   appWindow.show();
-    //   appWindow.title = "scrawl";
+    //   appWindow.title = "scrawler";
     // });
   }
   runApp(const MyApp());

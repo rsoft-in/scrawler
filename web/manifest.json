@@ -1,6 +1,6 @@
 {
-    "name": "bnotes",
-    "short_name": "bnotes",
+    "name": "scrawler",
+    "short_name": "scrawler",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#5EAAA8",
