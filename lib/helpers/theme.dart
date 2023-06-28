@@ -5,7 +5,7 @@ import 'constants.dart';
 ThemeData theme() {
   return ThemeData(
     // useMaterial3: true,
-    // colorSchemeSeed: kPrimaryColor,
+    // colorSchemeSeed: Colors.black,
     inputDecorationTheme: inputDecorationTheme(),
     fontFamily: 'Raleway',
     scaffoldBackgroundColor: kLightScaffold,
@@ -171,7 +171,6 @@ InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     filled: true,
     fillColor: kLightPrimary,
-    // contentPadding: kPaddingLarge,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(5),
       borderSide: const BorderSide(color: kLightStroke, width: 2),

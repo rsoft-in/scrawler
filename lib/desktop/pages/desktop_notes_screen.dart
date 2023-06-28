@@ -21,6 +21,7 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -258,6 +259,38 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     darkModeOn = (globals.themeMode == ThemeMode.dark ||
         (globals.themeMode == ThemeMode.system &&
             brightness == Brightness.dark));
+
+    AppBar appBar = AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      title: Text(Language.get('notes'),
+          style: const TextStyle(color: Colors.black)),
+      actions: [
+        PopupMenuButton<NoteSort>(
+          itemBuilder: (_) => getSortItems(),
+          onSelected: (value) => sortList(value),
+          icon: const Icon(Icons.sort_by_alpha_outlined),
+          tooltip: Language.get('sort'),
+        ),
+      ],
+    );
+
+    Widget readerHead = Container(
+      alignment: Alignment.center,
+      height: 56,
+      decoration: const BoxDecoration(
+        color: kLightPrimary,
+        border: Border(
+          bottom: BorderSide(color: kLightStroke, width: 2),
+        ),
+      ),
+      child: Text(
+          isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
+              ? filteredNotes[selectedIndex].noteTitle
+              : '',
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+    );
+
     return Row(
       children: [
         SizedBox(
@@ -266,22 +299,11 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             backgroundColor: kLightSecondary,
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: MoveWindow(
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  title: Text(Language.get('notes'),
-                      style: const TextStyle(color: Colors.black)),
-                  actions: [
-                    PopupMenuButton<NoteSort>(
-                      itemBuilder: (_) => getSortItems(),
-                      onSelected: (value) => sortList(value),
-                      icon: const Icon(BootstrapIcons.sort_up),
-                      tooltip: Language.get('sort'),
+              child: UniversalPlatform.isWeb
+                  ? appBar
+                  : MoveWindow(
+                      child: appBar,
                     ),
-                  ],
-                ),
-              ),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -322,13 +344,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           showEditDialog(context);
                         },
                       ),
-                      // FloatingActionButton.small(
-                      //   onPressed: () {
-                      //     assignFields(Notes.empty());
-                      //     showEditDialog(context);
-                      //   },
-                      //   child: const Icon(BootstrapIcons.plus),
-                      // ),
                     ],
                   ),
                 ),
@@ -377,34 +392,13 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         ),
         Expanded(
           child: Scaffold(
-            // appBar: AppBar(
-            //   scrolledUnderElevation: 0,
-            //   title: Text(isSelected &&
-            //           filteredNotes[selectedIndex].noteTitle.isNotEmpty
-            //       ? filteredNotes[selectedIndex].noteTitle
-            //       : ''),
-            // ),
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: MoveWindow(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 56,
-                  decoration: const BoxDecoration(
-                    color: kLightPrimary,
-                    border: Border(
-                      bottom: BorderSide(color: kLightStroke, width: 2),
+              child: UniversalPlatform.isWeb
+                  ? readerHead
+                  : MoveWindow(
+                      child: readerHead,
                     ),
-                  ),
-                  child: Text(
-                      isSelected &&
-                              filteredNotes[selectedIndex].noteTitle.isNotEmpty
-                          ? filteredNotes[selectedIndex].noteTitle
-                          : '',
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-              ),
             ),
             body: Column(
               children: [
@@ -635,7 +629,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       TextField(
                         controller: noteTitleController,
                         style: const TextStyle(fontSize: 20.0),
-                        decoration: InputDecoration.collapsed(
+                        decoration: InputDecoration(
                           hintText: Language.get('enter_title'),
                         ),
                       ),
@@ -664,7 +658,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       Expanded(
                         child: TextField(
                           controller: noteTextController,
-                          decoration: InputDecoration.collapsed(
+                          decoration: InputDecoration(
                             hintText: Language.get('type_something'),
                           ),
                           expands: true,

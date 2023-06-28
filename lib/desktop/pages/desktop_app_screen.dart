@@ -155,57 +155,53 @@ class _DesktopAppState extends State<DesktopApp> {
       ),
     );
 
-    Widget navigationRail = NavigationRail(
-      labelType: labelType,
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (int index) {
-        setState(() {
-          _selectedIndex = index;
-          _onDrawerItemSelect(menu[index]['id']);
-        });
-      },
-      leading: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        child: Image.asset('images/bnotes-transparent.png'),
-      ),
-      destinations: <NavigationRailDestination>[
-        ...List.generate(menu.length, (index) {
-          return NavigationRailDestination(
-            icon: Icon(
-              menu[index]['icon'],
-              size: 18.0,
-              color: Color(menu[index]['color']),
-            ),
-            selectedIcon: Icon(
-              menu[index]['icon'],
-              size: 20.0,
-              color: Color(menu[index]['color']),
-            ),
-            label: Text(menu[index]['text']),
-          );
-        }),
-      ],
-      trailing: IconButton(
-        onPressed: () => showProfile(),
-        icon: const Icon(
-          BootstrapIcons.person,
-          color: kPrimaryColor,
-        ),
-      ),
-    );
+    // Widget navigationRail = NavigationRail(
+    //   labelType: labelType,
+    //   selectedIndex: _selectedIndex,
+    //   onDestinationSelected: (int index) {
+    //     setState(() {
+    //       _selectedIndex = index;
+    //       _onDrawerItemSelect(menu[index]['id']);
+    //     });
+    //   },
+    //   leading: CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     child: Image.asset('images/bnotes-transparent.png'),
+    //   ),
+    //   destinations: <NavigationRailDestination>[
+    //     ...List.generate(menu.length, (index) {
+    //       return NavigationRailDestination(
+    //         icon: Icon(
+    //           menu[index]['icon'],
+    //           size: 18.0,
+    //           color: Color(menu[index]['color']),
+    //         ),
+    //         selectedIcon: Icon(
+    //           menu[index]['icon'],
+    //           size: 20.0,
+    //           color: Color(menu[index]['color']),
+    //         ),
+    //         label: Text(menu[index]['text']),
+    //       );
+    //     }),
+    //   ],
+    //   trailing: IconButton(
+    //     onPressed: () => showProfile(),
+    //     icon: const Icon(
+    //       BootstrapIcons.person,
+    //       color: kPrimaryColor,
+    //     ),
+    //   ),
+    // );
 
     return Scaffold(
       key: _desktopKey,
       drawer: drawer,
+      backgroundColor: kLightSecondary,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // if (isDesktop) drawer else navigationRail,
-          // // const VerticalDivider(
-          // //   width: 0.5,
-          // // ),
           Container(
-            // width: 70,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
                 color: kLightPrimary,
@@ -222,28 +218,30 @@ class _DesktopAppState extends State<DesktopApp> {
                 ),
                 kVSpace,
                 ...List.generate(menu.length, (index) {
-                  //label: Text(menu[index]['text']
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedIndex = index;
-                        _onDrawerItemSelect(menu[index]['id']);
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 15),
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                          color:
-                              _selectedIndex == index ? kLightSelected : null,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Icon(
-                        menu[index]['icon'],
-                        size: 22.0,
-                        // color: Color(menu[index]['color']),
+                  return Tooltip(
+                    message: menu[index]['text'],
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index;
+                          _onDrawerItemSelect(menu[index]['id']);
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 15),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                            color:
+                                _selectedIndex == index ? kLightSelected : null,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Icon(
+                          menu[index]['icon'],
+                          size: 22.0,
+                          // color: Color(menu[index]['color']),
+                        ),
+                        // isSelected: _selectedIndex == index,
                       ),
-                      // isSelected: _selectedIndex == index,
                     ),
                   );
                 }),
