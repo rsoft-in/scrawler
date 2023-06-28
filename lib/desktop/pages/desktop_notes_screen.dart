@@ -409,77 +409,82 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             body: Column(
               children: [
                 Expanded(
-                  child: Visibility(
-                    visible: isSelected && filteredNotes.isNotEmpty,
-                    replacement: EmptyWidget(
-                        text: Language.get('select_note'),
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        asset: 'images/undraw_playful_cat.svg'),
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: kGlobalOuterPadding * 2,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: isSelected && filteredNotes.isNotEmpty
+                      ? SingleChildScrollView(
+                          child: Padding(
+                            padding: kGlobalOuterPadding * 2,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                NoteDateWidget(
-                                  text: filteredNotes.isEmpty
-                                      ? ''
-                                      : Utility.formatDateTime(
-                                          filteredNotes[selectedIndex]
-                                              .noteDate),
-                                ),
-                                if (filteredNotes.isNotEmpty)
-                                  Container(
-                                    width: 15,
-                                    height: 15,
-                                    decoration: BoxDecoration(
-                                      color: NoteColor.getColor(
-                                          filteredNotes[selectedIndex]
-                                              .noteColor,
-                                          false),
-                                      borderRadius: BorderRadius.circular(8),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    NoteDateWidget(
+                                      text: filteredNotes.isEmpty
+                                          ? ''
+                                          : Utility.formatDateTime(
+                                              filteredNotes[selectedIndex]
+                                                  .noteDate),
                                     ),
-                                  ),
-                              ],
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 60),
-                              child: MarkdownBody(
-                                  selectable: true,
-                                  softLineBreak: true,
-                                  onTapLink: (text, href, title) =>
-                                      _launchUrl(href),
-                                  styleSheet: MarkdownStyleSheet(
-                                      blockquote:
-                                          const TextStyle(color: Colors.black),
-                                      blockquoteDecoration: const BoxDecoration(
-                                        color: Colors.transparent,
-                                        border: Border(
-                                          left: BorderSide(
-                                              color: kPrimaryColor, width: 3),
+                                    if (filteredNotes.isNotEmpty)
+                                      Container(
+                                        width: 15,
+                                        height: 15,
+                                        decoration: BoxDecoration(
+                                          color: NoteColor.getColor(
+                                              filteredNotes[selectedIndex]
+                                                  .noteColor,
+                                              false),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
-                                      code: const TextStyle(
-                                          backgroundColor: Colors.transparent),
-                                      codeblockAlign: WrapAlignment.spaceAround,
-                                      codeblockDecoration: BoxDecoration(
-                                          color: darkModeOn
-                                              ? Colors.white10
-                                              : Colors.black12),
-                                      checkbox: const TextStyle(
-                                          color: kPrimaryColor)),
-                                  data: filteredNotes.isEmpty
-                                      ? ''
-                                      : filteredNotes[selectedIndex].noteText),
+                                  ],
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 60),
+                                  child: MarkdownBody(
+                                      selectable: true,
+                                      softLineBreak: true,
+                                      onTapLink: (text, href, title) =>
+                                          _launchUrl(href),
+                                      styleSheet: MarkdownStyleSheet(
+                                          blockquote: const TextStyle(
+                                              color: Colors.black),
+                                          blockquoteDecoration:
+                                              const BoxDecoration(
+                                            color: Colors.transparent,
+                                            border: Border(
+                                              left: BorderSide(
+                                                  color: kPrimaryColor,
+                                                  width: 3),
+                                            ),
+                                          ),
+                                          code: const TextStyle(
+                                              backgroundColor:
+                                                  Colors.transparent),
+                                          codeblockAlign:
+                                              WrapAlignment.spaceAround,
+                                          codeblockDecoration: BoxDecoration(
+                                              color: darkModeOn
+                                                  ? Colors.white10
+                                                  : Colors.black12),
+                                          checkbox: const TextStyle(
+                                              color: kPrimaryColor)),
+                                      data: filteredNotes.isEmpty
+                                          ? ''
+                                          : filteredNotes[selectedIndex]
+                                              .noteText),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                          ),
+                        )
+                      : EmptyWidget(
+                          text: Language.get('select_note'),
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          asset: 'images/undraw_playful_cat.svg'),
                 ),
               ],
             ),

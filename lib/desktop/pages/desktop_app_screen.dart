@@ -9,6 +9,7 @@ import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -117,7 +118,6 @@ class _DesktopAppState extends State<DesktopApp> {
                             child: Icon(
                               menu[index]['icon'],
                               size: 16.0,
-                              
                             ),
                           ),
                           title: Text(menu[index]['text']),
@@ -253,58 +253,61 @@ class _DesktopAppState extends State<DesktopApp> {
           Expanded(
             child: Stack(children: [
               _getDrawerItemWidget(_selectedDrawerIndex),
-              Positioned(
-                right: 0,
-                child: Container(
-                  // decoration: BoxDecoration(
-                  //     color: kLightSecondary,
-                  //     borderRadius: BorderRadius.circular(10)),
-                  padding: const EdgeInsets.all(4),
-                  margin: const EdgeInsets.all(10),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: kLightSecondary,
-                                // border: Border.all(color: kLightStroke),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: const Icon(
-                              Icons.minimize,
-                              size: 12,
-                            )),
-                        onTap: () => appWindow.minimize(),
-                      ),
-                      kHSpace,
-                      InkWell(
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: kLightSecondary,
-                                // border: Border.all(color: kLightStroke),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: const Icon(
-                              Icons.check_box_outline_blank_outlined,
-                              size: 12,
-                            )),
-                        onTap: () => appWindow.maximizeOrRestore(),
-                      ),
-                      kHSpace,
-                      InkWell(
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: kLightSecondary,
-                                // border: Border.all(color: kLightStroke),
-                                borderRadius: BorderRadius.circular(15)),
-                            child: const Icon(
-                              Icons.close,
-                              size: 12,
-                            )),
-                        onTap: () => appWindow.close(),
-                      ),
-                    ],
+              Visibility(
+                visible: UniversalPlatform.isDesktop,
+                child: Positioned(
+                  right: 0,
+                  child: Container(
+                    // decoration: BoxDecoration(
+                    //     color: kLightSecondary,
+                    //     borderRadius: BorderRadius.circular(10)),
+                    padding: const EdgeInsets.all(4),
+                    margin: const EdgeInsets.all(10),
+                    child: Row(
+                      children: [
+                        InkWell(
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: kLightSecondary,
+                                  // border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: const Icon(
+                                Icons.minimize,
+                                size: 12,
+                              )),
+                          onTap: () => appWindow.minimize(),
+                        ),
+                        kHSpace,
+                        InkWell(
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: kLightSecondary,
+                                  // border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: const Icon(
+                                Icons.check_box_outline_blank_outlined,
+                                size: 12,
+                              )),
+                          onTap: () => appWindow.maximizeOrRestore(),
+                        ),
+                        kHSpace,
+                        InkWell(
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: kLightSecondary,
+                                  // border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(15)),
+                              child: const Icon(
+                                Icons.close,
+                                size: 12,
+                              )),
+                          onTap: () => appWindow.close(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )
