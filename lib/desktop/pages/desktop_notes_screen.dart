@@ -287,7 +287,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
           isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
               ? filteredNotes[selectedIndex].noteTitle
               : '',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          style: const TextStyle(fontSize: 20)),
     );
 
     return Row(
