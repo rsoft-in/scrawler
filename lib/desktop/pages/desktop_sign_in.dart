@@ -184,7 +184,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: ScrawlButtonFilled(
+                                  child: ScrawlFilledButton(
                                     onPressed: isSigningIn
                                         ? null
                                         : () {
