@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/language.dart';
@@ -262,16 +263,25 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         SizedBox(
           width: 350,
           child: Scaffold(
-            appBar: AppBar(
-              title: Text(Language.get('notes')),
-              actions: [
-                PopupMenuButton<NoteSort>(
-                  itemBuilder: (_) => getSortItems(),
-                  onSelected: (value) => sortList(value),
-                  icon: const Icon(BootstrapIcons.sort_up),
-                  tooltip: Language.get('sort'),
+            backgroundColor: kLightSecondary,
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(56),
+              child: MoveWindow(
+                child: AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  title: Text(Language.get('notes'),
+                      style: const TextStyle(color: Colors.black)),
+                  actions: [
+                    PopupMenuButton<NoteSort>(
+                      itemBuilder: (_) => getSortItems(),
+                      onSelected: (value) => sortList(value),
+                      icon: const Icon(BootstrapIcons.sort_up),
+                      tooltip: Language.get('sort'),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,13 +306,29 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       kHSpace,
-                      FloatingActionButton.small(
-                        onPressed: () {
+                      InkWell(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kLightPrimary,
+                            border: Border.all(color: kLightStroke, width: 2),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          padding: const EdgeInsets.all(7),
+                          child: const Icon(BootstrapIcons.plus),
+                        ),
+                        onTap: () {
                           assignFields(Notes.empty());
                           showEditDialog(context);
                         },
-                        child: const Icon(BootstrapIcons.plus),
                       ),
+                      // FloatingActionButton.small(
+                      //   onPressed: () {
+                      //     assignFields(Notes.empty());
+                      //     showEditDialog(context);
+                      //   },
+                      //   child: const Icon(BootstrapIcons.plus),
+                      // ),
                     ],
                   ),
                 ),
@@ -351,87 +377,125 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         ),
         Expanded(
           child: Scaffold(
-            appBar:
-                isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
-                    ? AppBar(
-                        scrolledUnderElevation: 0,
-                        title: Text(filteredNotes[selectedIndex].noteTitle),
-                      )
-                    : null,
-            body: Visibility(
-              visible: isSelected && filteredNotes.isNotEmpty,
-              replacement: EmptyWidget(
-                  text: Language.get('select_note'),
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  asset: 'images/undraw_playful_cat.svg'),
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: kGlobalOuterPadding * 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          NoteDateWidget(
-                            text: filteredNotes.isEmpty
-                                ? ''
-                                : Utility.formatDateTime(
-                                    filteredNotes[selectedIndex].noteDate),
-                          ),
-                          if (filteredNotes.isNotEmpty)
-                            Container(
-                              width: 15,
-                              height: 15,
-                              decoration: BoxDecoration(
-                                color: NoteColor.getColor(
-                                    filteredNotes[selectedIndex].noteColor,
-                                    false),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 60),
-                        child: MarkdownBody(
-                            selectable: true,
-                            softLineBreak: true,
-                            onTapLink: (text, href, title) => _launchUrl(href),
-                            styleSheet: MarkdownStyleSheet(
-                                blockquote:
-                                    const TextStyle(color: Colors.black),
-                                blockquoteDecoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border(
-                                    left: BorderSide(
-                                        color: kPrimaryColor, width: 3),
-                                  ),
-                                ),
-                                code: const TextStyle(
-                                    backgroundColor: Colors.transparent),
-                                codeblockAlign: WrapAlignment.spaceAround,
-                                codeblockDecoration: BoxDecoration(
-                                    color: darkModeOn
-                                        ? Colors.white10
-                                        : Colors.black12),
-                                checkbox:
-                                    const TextStyle(color: kPrimaryColor)),
-                            data: filteredNotes.isEmpty
-                                ? ''
-                                : filteredNotes[selectedIndex].noteText),
-                      ),
-                    ],
+            // appBar: AppBar(
+            //   scrolledUnderElevation: 0,
+            //   title: Text(isSelected &&
+            //           filteredNotes[selectedIndex].noteTitle.isNotEmpty
+            //       ? filteredNotes[selectedIndex].noteTitle
+            //       : ''),
+            // ),
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(56),
+              child: MoveWindow(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 56,
+                  decoration: const BoxDecoration(
+                    color: kLightPrimary,
+                    border: Border(
+                      bottom: BorderSide(color: kLightStroke, width: 2),
+                    ),
                   ),
+                  child: Text(
+                      isSelected &&
+                              filteredNotes[selectedIndex].noteTitle.isNotEmpty
+                          ? filteredNotes[selectedIndex].noteTitle
+                          : '',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
-            floatingActionButton: Visibility(
+            body: Column(
+              children: [
+                Expanded(
+                  child: Visibility(
+                    visible: isSelected && filteredNotes.isNotEmpty,
+                    replacement: EmptyWidget(
+                        text: Language.get('select_note'),
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        asset: 'images/undraw_playful_cat.svg'),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: kGlobalOuterPadding * 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                NoteDateWidget(
+                                  text: filteredNotes.isEmpty
+                                      ? ''
+                                      : Utility.formatDateTime(
+                                          filteredNotes[selectedIndex]
+                                              .noteDate),
+                                ),
+                                if (filteredNotes.isNotEmpty)
+                                  Container(
+                                    width: 15,
+                                    height: 15,
+                                    decoration: BoxDecoration(
+                                      color: NoteColor.getColor(
+                                          filteredNotes[selectedIndex]
+                                              .noteColor,
+                                          false),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 60),
+                              child: MarkdownBody(
+                                  selectable: true,
+                                  softLineBreak: true,
+                                  onTapLink: (text, href, title) =>
+                                      _launchUrl(href),
+                                  styleSheet: MarkdownStyleSheet(
+                                      blockquote:
+                                          const TextStyle(color: Colors.black),
+                                      blockquoteDecoration: const BoxDecoration(
+                                        color: Colors.transparent,
+                                        border: Border(
+                                          left: BorderSide(
+                                              color: kPrimaryColor, width: 3),
+                                        ),
+                                      ),
+                                      code: const TextStyle(
+                                          backgroundColor: Colors.transparent),
+                                      codeblockAlign: WrapAlignment.spaceAround,
+                                      codeblockDecoration: BoxDecoration(
+                                          color: darkModeOn
+                                              ? Colors.white10
+                                              : Colors.black12),
+                                      checkbox: const TextStyle(
+                                          color: kPrimaryColor)),
+                                  data: filteredNotes.isEmpty
+                                      ? ''
+                                      : filteredNotes[selectedIndex].noteText),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            bottomNavigationBar: Visibility(
               visible: isSelected,
               replacement: Container(),
-              child: Card(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: kLightPrimary,
+                  border: Border(
+                    top: BorderSide(color: kLightStroke, width: 2),
+                  ),
+                ),
                 child: Row(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Container(
                       margin: const EdgeInsets.symmetric(

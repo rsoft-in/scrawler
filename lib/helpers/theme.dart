@@ -4,10 +4,11 @@ import 'constants.dart';
 
 ThemeData theme() {
   return ThemeData(
-    useMaterial3: true,
-    colorSchemeSeed: kPrimaryColor,
+    // useMaterial3: true,
+    // colorSchemeSeed: kPrimaryColor,
     inputDecorationTheme: inputDecorationTheme(),
     fontFamily: 'Raleway',
+    scaffoldBackgroundColor: kLightScaffold,
     // textTheme: const TextTheme(
     //   titleSmall: TextStyle(fontSize: 12.0),
     //   titleMedium: TextStyle(fontSize: 14.0),
@@ -81,8 +82,8 @@ ThemeData theme() {
 
 ThemeData themeDark() {
   return ThemeData(
-    colorSchemeSeed: kPrimaryColor,
-    useMaterial3: true,
+    // colorSchemeSeed: kPrimaryColor,
+    // useMaterial3: true,
     fontFamily: 'Raleway',
     brightness: Brightness.dark,
     inputDecorationTheme: inputDecorationTheme(),
@@ -169,14 +170,19 @@ ThemeData themeDark() {
 InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     filled: true,
+    fillColor: kLightPrimary,
     // contentPadding: kPaddingLarge,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(color: kLightStroke, width: 2),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     isDense: true,
     contentPadding: const EdgeInsets.all(15),

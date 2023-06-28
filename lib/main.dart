@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/helpers/theme.dart';
@@ -16,14 +17,14 @@ late SharedPreferences prefs;
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isDesktop) {
-    // doWhenWindowReady(() {
-    //   final initialSize = Size(1000, 650);
-    //   appWindow.minSize = initialSize;
-    //   appWindow.size = initialSize;
-    //   appWindow.alignment = Alignment.center;
-    //   appWindow.show();
-    //   appWindow.title = "scrawler";
-    // });
+    doWhenWindowReady(() {
+      const initialSize = Size(1000, 650);
+      appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+      appWindow.title = "scrawler";
+    });
   }
   runApp(const MyApp());
 }
@@ -80,8 +81,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: kAppName,
       debugShowCheckedModeBanner: false,
-      themeMode: themeMode,
-      // themeMode: ThemeMode.light,
+      // themeMode: themeMode,
+      themeMode: ThemeMode.light,
       theme: theme(),
       darkTheme: themeDark(),
       routes: {

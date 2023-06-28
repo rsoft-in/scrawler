@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/string_values.dart';
@@ -17,6 +18,8 @@ class DesktopApp extends StatefulWidget {
 }
 
 class _DesktopAppState extends State<DesktopApp> {
+  final GlobalKey<ScaffoldState> _desktopKey = GlobalKey();
+
   late SharedPreferences prefs;
   bool isDesktop = false;
   List<Map<String, dynamic>> menu = [];
@@ -71,6 +74,7 @@ class _DesktopAppState extends State<DesktopApp> {
     Widget drawer = SizedBox(
       width: 250,
       child: Drawer(
+        // key: _desktopKey,
         // elevation: 0,
         // backgroundColor: Colors.white,
         child: Column(
@@ -97,9 +101,9 @@ class _DesktopAppState extends State<DesktopApp> {
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 15.0),
-                          selectedTileColor: kPrimaryColor.withOpacity(0.2),
+                          selectedTileColor: kLightSelected,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(5),
                           ),
                           leading: Container(
                             width: 35,
@@ -113,7 +117,7 @@ class _DesktopAppState extends State<DesktopApp> {
                             child: Icon(
                               menu[index]['icon'],
                               size: 16.0,
-                              color: Color(menu[index]['color']),
+                              
                             ),
                           ),
                           title: Text(menu[index]['text']),
@@ -191,15 +195,120 @@ class _DesktopAppState extends State<DesktopApp> {
     );
 
     return Scaffold(
+      key: _desktopKey,
+      drawer: drawer,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (isDesktop) drawer else navigationRail,
-          // const VerticalDivider(
-          //   width: 0.5,
-          // ),
+          // if (isDesktop) drawer else navigationRail,
+          // // const VerticalDivider(
+          // //   width: 0.5,
+          // // ),
+          Container(
+            // width: 70,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            decoration: BoxDecoration(
+                color: kLightPrimary,
+                border: Border.all(color: kLightStroke, width: 1),
+                borderRadius:
+                    const BorderRadius.only(topRight: Radius.circular(10))),
+            child: Column(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    _desktopKey.currentState!.openDrawer();
+                  },
+                  icon: const Icon(Icons.menu),
+                ),
+                kVSpace,
+                ...List.generate(menu.length, (index) {
+                  //label: Text(menu[index]['text']
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = index;
+                        _onDrawerItemSelect(menu[index]['id']);
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 15),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                          color:
+                              _selectedIndex == index ? kLightSelected : null,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Icon(
+                        menu[index]['icon'],
+                        size: 22.0,
+                        // color: Color(menu[index]['color']),
+                      ),
+                      // isSelected: _selectedIndex == index,
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
           Expanded(
-            child: _getDrawerItemWidget(_selectedDrawerIndex),
+            child: Stack(children: [
+              _getDrawerItemWidget(_selectedDrawerIndex),
+              Positioned(
+                right: 0,
+                child: Container(
+                  // decoration: BoxDecoration(
+                  //     color: kLightSecondary,
+                  //     borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.all(4),
+                  margin: const EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: kLightSecondary,
+                                // border: Border.all(color: kLightStroke),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: const Icon(
+                              Icons.minimize,
+                              size: 12,
+                            )),
+                        onTap: () => appWindow.minimize(),
+                      ),
+                      kHSpace,
+                      InkWell(
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: kLightSecondary,
+                                // border: Border.all(color: kLightStroke),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: const Icon(
+                              Icons.check_box_outline_blank_outlined,
+                              size: 12,
+                            )),
+                        onTap: () => appWindow.maximizeOrRestore(),
+                      ),
+                      kHSpace,
+                      InkWell(
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: kLightSecondary,
+                                // border: Border.all(color: kLightStroke),
+                                borderRadius: BorderRadius.circular(15)),
+                            child: const Icon(
+                              Icons.close,
+                              size: 12,
+                            )),
+                        onTap: () => appWindow.close(),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ]),
           ),
         ],
       ),
