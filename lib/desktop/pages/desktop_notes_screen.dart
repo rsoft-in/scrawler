@@ -35,7 +35,7 @@ class DesktopNotesScreen extends StatefulWidget {
 class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   List<Notes> notesList = [];
   List<Notes> filteredNotes = [];
-  NoteSort currentSort = NoteSort.title;
+  NoteSort currentSort = NoteSort.newest;
   bool isNewNote = false;
   final int _pageNr = 0;
   bool isBusy = false;
@@ -53,10 +53,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     MenuItem('tags', Language.get('tag'), '')
   ];
   List<SortItem> sortItems = [
-    SortItem(NoteSort.title, 'A-Z'),
-    SortItem(NoteSort.titleDesc, 'Z-A'),
     SortItem(NoteSort.newest, Language.get('latest')),
-    SortItem(NoteSort.oldest, Language.get('oldest'))
+    SortItem(NoteSort.oldest, Language.get('oldest')),
+    SortItem(NoteSort.title, 'A-Z'),
+    SortItem(NoteSort.titleDesc, 'Z-A')
   ];
 
   TextEditingController noteTitleController = TextEditingController();
@@ -261,10 +261,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             brightness == Brightness.dark));
 
     AppBar appBar = AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      title: Text(Language.get('notes'),
-          style: const TextStyle(color: Colors.black)),
+      title: Text(
+        Language.get('notes'),
+      ),
       actions: [
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),

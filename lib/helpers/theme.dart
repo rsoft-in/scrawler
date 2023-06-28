@@ -7,24 +7,25 @@ ThemeData theme() {
     // useMaterial3: true,
     // colorSchemeSeed: Colors.black,
     inputDecorationTheme: inputDecorationTheme(),
-    fontFamily: 'Raleway',
+    fontFamily: 'Inter',
     scaffoldBackgroundColor: kLightScaffold,
     // textTheme: const TextTheme(
     //   titleSmall: TextStyle(fontSize: 12.0),
     //   titleMedium: TextStyle(fontSize: 14.0),
     //   titleLarge: TextStyle(fontSize: 16.0),
     // ),
-    // appBarTheme: const AppBarTheme(
-    //   color: Colors.white,
-    //   elevation: 1,
-    //   iconTheme: IconThemeData(color: Colors.black),
-    //   titleTextStyle: TextStyle(
-    //     fontSize: 20.0,
-    //     fontFamily: 'Raleway',
-    //     color: Colors.black,
-    //     fontWeight: FontWeight.w400,
-    //   ),
-    // ),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: false,
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.black),
+      titleTextStyle: TextStyle(
+        fontSize: 20.0,
+        fontFamily: 'Inter',
+        color: Colors.black,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
     // cardTheme: CardTheme(
     //     shape: RoundedRectangleBorder(
     //   borderRadius: BorderRadius.circular(kGlobalBorderRadius),
@@ -84,7 +85,7 @@ ThemeData themeDark() {
   return ThemeData(
     // colorSchemeSeed: kPrimaryColor,
     // useMaterial3: true,
-    fontFamily: 'Raleway',
+    fontFamily: 'Inter',
     brightness: Brightness.dark,
     inputDecorationTheme: inputDecorationTheme(),
     // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
@@ -97,17 +98,18 @@ ThemeData themeDark() {
     //   titleMedium: TextStyle(fontSize: 14.0),
     //   titleLarge: TextStyle(fontSize: 16.0),
     // ),
-    // appBarTheme: const AppBarTheme(
-    //   color: Colors.black,
-    //   elevation: 1,
-    //   iconTheme: IconThemeData(color: Colors.black),
-    //   titleTextStyle: TextStyle(
-    //     fontSize: 20.0,
-    //     fontFamily: 'Raleway',
-    //     color: Colors.white,
-    //     fontWeight: FontWeight.w400,
-    //   ),
-    // ),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      centerTitle: false,
+      backgroundColor: Colors.transparent,
+      iconTheme: IconThemeData(color: Colors.white),
+      titleTextStyle: TextStyle(
+        fontSize: 20.0,
+        fontFamily: 'Inter',
+        color: Colors.black,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
     // cardTheme: CardTheme(
     //     shape: RoundedRectangleBorder(
     //   borderRadius: BorderRadius.circular(kGlobalBorderRadius),

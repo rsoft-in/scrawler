@@ -56,10 +56,11 @@ flutter:
   uses-material-design: true
 
   fonts:
-    - family: Raleway
+    - family: Inter
       fonts:
-      - asset: res/Raleway-Regular.ttf
-      - asset: res/Raleway-Light.ttf
+      - asset: res/Inter-Bold.ttf
+      - asset: res/Inter-Light.ttf
+      - asset: res/Inter-Regular.ttf
 
   assets:
     - images/bnotes.png
