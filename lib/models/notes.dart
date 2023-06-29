@@ -11,7 +11,7 @@ class Notes {
   Notes(this.noteId, this.noteDate, this.noteTitle, this.noteText,
       this.noteLabel, this.noteArchived, this.noteColor, this.noteList);
 
-  Notes.empty() : this('', '', '', '', '', false, 0, '');
+  Notes.empty() : this('', '', 'Untitled', '', '', false, 0, '');
 
   Notes.fromJson(Map<String, dynamic> json)
       : noteId = json['note_id'],

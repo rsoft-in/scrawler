@@ -42,68 +42,40 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                 : Border.all(color: Colors.transparent),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
                         widget.note.noteTitle,
                         style: const TextStyle(
                           fontSize: 14.0,
                         ),
                       ),
-                    ),
-                    Container(
-                      width: 15,
-                      height: 15,
-                      decoration: BoxDecoration(
-                        color: NoteColor.getColor(widget.note.noteColor, false),
-                        borderRadius: BorderRadius.circular(8),
+                      kVSpace,
+                      Text(
+                        Utility.formatDateTime(widget.note.noteDate),
+                        style: const TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                child: Text(
-                  widget.note.noteText,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.grey,
+                    ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(widget.note.noteLabel),
-                    ),
-                    Text(
-                      Utility.formatDateTime(widget.note.noteDate),
-                      style: const TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
+              Text(widget.note.noteLabel),
+              Container(
+                width: 5,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: NoteColor.getColor(widget.note.noteColor, false),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ],
