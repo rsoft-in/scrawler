@@ -10,6 +10,7 @@ import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -45,6 +46,13 @@ class _DesktopAppState extends State<DesktopApp> {
 
   @override
   void initState() {
+    doWhenWindowReady(() {
+      const initialSize = Size(1000, 650);
+      appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
     super.initState();
 
     // Menu Items
@@ -52,18 +60,18 @@ class _DesktopAppState extends State<DesktopApp> {
       {
         'id': 'all_notes',
         'index': 0,
-        'icon': BootstrapIcons.justify_left,
-        'icon_filled': BootstrapIcons.justify_left,
+        'icon': YaruIcons.document,
+        'icon_filled': YaruIcons.document,
         'text': kLabels['notes']!,
-        'color': 0xFF5EAAA8
+        // 'color': 0xFF5EAAA8
       },
       {
         'id': 'all_tasks',
         'index': 1,
-        'icon': BootstrapIcons.check_square,
-        'icon_filled': BootstrapIcons.check_square,
+        'icon': YaruIcons.unordered_list,
+        'icon_filled': YaruIcons.unordered_list,
         'text': kLabels['tasks']!,
-        'color': 0xFFFBABAB
+        // 'color': 0xFFFBABAB
       },
     ];
   }
@@ -214,7 +222,7 @@ class _DesktopAppState extends State<DesktopApp> {
                   onPressed: () {
                     _desktopKey.currentState!.openDrawer();
                   },
-                  icon: const Icon(Icons.menu),
+                  icon: const Icon(YaruIcons.menu),
                 ),
                 kVSpace,
                 ...List.generate(menu.length, (index) {
@@ -267,12 +275,12 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSecondary,
-                                  // border: Border.all(color: kLightStroke),
-                                  borderRadius: BorderRadius.circular(15)),
+                                  color: kLightSelected,
+                                  border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                Icons.minimize,
-                                size: 12,
+                                YaruIcons.window_minimize,
+                                size: 14,
                               )),
                           onTap: () => appWindow.minimize(),
                         ),
@@ -281,12 +289,12 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSecondary,
-                                  // border: Border.all(color: kLightStroke),
-                                  borderRadius: BorderRadius.circular(15)),
+                                  color: kLightSelected,
+                                  border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                Icons.check_box_outline_blank_outlined,
-                                size: 12,
+                                YaruIcons.window_maximize,
+                                size: 14,
                               )),
                           onTap: () => appWindow.maximizeOrRestore(),
                         ),
@@ -295,12 +303,12 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSecondary,
-                                  // border: Border.all(color: kLightStroke),
-                                  borderRadius: BorderRadius.circular(15)),
+                                  color: kLightSelected,
+                                  border: Border.all(color: kLightStroke),
+                                  borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                Icons.close,
-                                size: 12,
+                                YaruIcons.window_close,
+                                size: 14,
                               )),
                           onTap: () => appWindow.close(),
                         ),

@@ -24,6 +24,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
   const DesktopNotesScreen({Key? key}) : super(key: key);
@@ -268,14 +269,14 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),
           onSelected: (value) => sortList(value),
-          icon: const Icon(Icons.sort_by_alpha_outlined),
+          icon: const Icon(YaruIcons.sort_descending),
           tooltip: Language.get('sort'),
         ),
       ],
     );
 
     Widget readerHead = Container(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       height: 56,
       decoration: const BoxDecoration(
         color: kLightPrimary,
@@ -283,11 +284,12 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
           bottom: BorderSide(color: kLightStroke, width: 2),
         ),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 18),
       child: Text(
           isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
               ? filteredNotes[selectedIndex].noteTitle
               : '',
-          style: const TextStyle(fontSize: 20)),
+          style: const TextStyle(fontSize: 18)),
     );
 
     return Row(
@@ -526,7 +528,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               onPressed: () => confirmDelete(
                                   context, filteredNotes[selectedIndex].noteId),
                               child: const Icon(
-                                BootstrapIcons.trash3,
+                                YaruIcons.trash,
                                 size: 18,
                               )),
                         ],

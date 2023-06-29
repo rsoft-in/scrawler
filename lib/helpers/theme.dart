@@ -173,6 +173,7 @@ InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     filled: true,
     fillColor: kLightPrimary,
+    suffixIconColor: kPrimaryColor,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(5),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
