@@ -14,6 +14,8 @@ import 'package:bnotes/models/sort_items.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
+import 'package:bnotes/widgets/scrawl_button_filled.dart';
+import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
@@ -502,32 +504,32 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           vertical: 8.0, horizontal: 6),
                       child: Row(
                         children: [
-                          TextButton(
+                          IconButton(
                               onPressed: () {
                                 assignFields(filteredNotes[selectedIndex]);
                                 showEditDialog(context);
                               },
-                              child: const Icon(
-                                BootstrapIcons.pencil,
+                              icon: const Icon(
+                                YaruIcons.pen,
                                 size: 18,
                               )),
-                          TextButton(
+                          IconButton(
                               onPressed: () => selectColor(
                                   context, filteredNotes[selectedIndex].noteId),
-                              child: const Icon(
-                                BootstrapIcons.palette2,
+                              icon: const Icon(
+                                YaruIcons.color_select,
                                 size: 18,
                               )),
-                          TextButton(
+                          IconButton(
                               onPressed: () {},
-                              child: const Icon(
-                                BootstrapIcons.tags,
+                              icon: const Icon(
+                                YaruIcons.tag,
                                 size: 18,
                               )),
-                          TextButton(
+                          IconButton(
                               onPressed: () => confirmDelete(
                                   context, filteredNotes[selectedIndex].noteId),
-                              child: const Icon(
+                              icon: const Icon(
                                 YaruIcons.trash,
                                 size: 18,
                               )),
@@ -615,11 +617,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         context: context,
         builder: (context) {
           return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
-            ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 74),
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
               child: Container(
                 padding: kGlobalOuterPadding,
                 child: ConstrainedBox(
@@ -662,10 +661,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           decoration: InputDecoration(
                             hintText: Language.get('type_something'),
                           ),
+                          textAlignVertical: TextAlignVertical.top,
                           expands: true,
                           maxLines: null,
-                          spellCheckConfiguration:
-                              const SpellCheckConfiguration.disabled(),
                         ),
                       ),
                       kVSpace,
@@ -676,19 +674,19 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           //   size: 16,
                           // ),
                           const Spacer(),
-                          FilledButton.tonal(
+                          ScrawlFilledButton(
                             onPressed: () {
                               if (noteTextController.text.isNotEmpty) {
                                 saveNotes();
                               }
                               Navigator.pop(context);
                             },
-                            child: Text(Language.get('save')),
+                            label: Language.get('save'),
                           ),
                           kHSpace,
-                          TextButton(
+                          ScrawlOutlinedButton(
                             onPressed: () => Navigator.pop(context),
-                            child: Text(Language.get('cancel')),
+                            label: Language.get('cancel'),
                           ),
                         ],
                       )

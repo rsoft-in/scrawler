@@ -47,7 +47,7 @@ class _DesktopAppState extends State<DesktopApp> {
   @override
   void initState() {
     doWhenWindowReady(() {
-      const initialSize = Size(1000, 650);
+      const initialSize = Size(1100, 700);
       appWindow.minSize = initialSize;
       appWindow.size = initialSize;
       appWindow.alignment = Alignment.center;
@@ -225,34 +225,68 @@ class _DesktopAppState extends State<DesktopApp> {
                   icon: const Icon(YaruIcons.menu),
                 ),
                 kVSpace,
-                ...List.generate(menu.length, (index) {
-                  return Tooltip(
-                    message: menu[index]['text'],
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _selectedIndex = index;
-                          _onDrawerItemSelect(menu[index]['id']);
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 15),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                            color:
-                                _selectedIndex == index ? kLightSelected : null,
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Icon(
-                          menu[index]['icon'],
-                          size: 22.0,
-                          // color: Color(menu[index]['color']),
+                ...List.generate(
+                  menu.length,
+                  (index) {
+                    return Tooltip(
+                      message: menu[index]['text'],
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _selectedIndex = index;
+                            _onDrawerItemSelect(menu[index]['id']);
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 15),
+                          margin: const EdgeInsets.only(bottom: 8),
+                          decoration: BoxDecoration(
+                              color: _selectedIndex == index
+                                  ? kLightSelected
+                                  : null,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Icon(
+                            menu[index]['icon'],
+                            size: 22.0,
+                            // color: Color(menu[index]['color']),
+                          ),
+                          // isSelected: _selectedIndex == index,
                         ),
-                        // isSelected: _selectedIndex == index,
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  },
+                ),
+                Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Tooltip(
+                          message: globals.user!.userName,
+                          child: InkWell(
+                            onTap: () {
+                              showProfile();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 15),
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                  // color: _selectedIndex == index
+                                  //     ? kLightSelected
+                                  //     : null,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: const Icon(
+                                YaruIcons.user,
+                                size: 22.0,
+                                // color: Color(menu[index]['color']),
+                              ),
+                              // isSelected: _selectedIndex == index,
+                            ),
+                          ),
+                        )
+                      ]),
+                ),
               ],
             ),
           ),

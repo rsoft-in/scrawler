@@ -1,4 +1,5 @@
 import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,12 +30,9 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                     child: ListView(
                       children: [
                         ListTile(
-                          selectedTileColor:
-                              Theme.of(context).colorScheme.surfaceVariant,
+                          // selectedTileColor:
+                          //     Theme.of(context).colorScheme.surfaceVariant,
                           selected: selectedTab == 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kGlobalBorderRadius)),
                           title: const Text('Profile Settings'),
                           onTap: () => setState(() {
                             selectedTab = 0;
@@ -42,9 +40,6 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         ),
                         ListTile(
                           selected: selectedTab == 1,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kGlobalBorderRadius)),
                           title: const Text('Password'),
                           onTap: () => setState(() {
                             selectedTab = 1;
@@ -52,9 +47,6 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         ),
                         ListTile(
                           selected: selectedTab == 2,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(kGlobalBorderRadius)),
                           title: const Text('Manage Plans'),
                           onTap: () => setState(() {
                             selectedTab = 2;
@@ -66,9 +58,8 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   Row(
                     children: [
                       Expanded(
-                          child: FilledButton(
-                              onPressed: signOut,
-                              child: const Text('Sign Out'))),
+                          child: ScrawlFilledButton(
+                              onPressed: signOut, label: 'Sign Out')),
                     ],
                   ),
                 ],
