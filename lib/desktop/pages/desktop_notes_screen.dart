@@ -280,10 +280,11 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     Widget readerHead = Container(
       alignment: Alignment.centerLeft,
       height: 56,
-      decoration: const BoxDecoration(
-        color: kLightPrimary,
+      decoration: BoxDecoration(
+        color: darkModeOn ? kDarkPrimary : kLightPrimary,
         border: Border(
-          bottom: BorderSide(color: kLightStroke, width: 2),
+          bottom: BorderSide(
+              color: darkModeOn ? kDarkStroke : kLightStroke, width: 2),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -299,7 +300,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         SizedBox(
           width: 350,
           child: Scaffold(
-            backgroundColor: kLightSecondary,
+            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               child: UniversalPlatform.isWeb
@@ -331,12 +332,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       kHSpace,
+                      //Icon Button
                       InkWell(
                         borderRadius: BorderRadius.circular(5),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: kLightPrimary,
-                            border: Border.all(color: kLightStroke, width: 2),
+                            color: darkModeOn ? kDarkPrimary : kLightPrimary,
+                            border: Border.all(
+                                color: darkModeOn ? kDarkStroke : kLightStroke,
+                                width: 2),
                             borderRadius: BorderRadius.circular(5),
                           ),
                           padding: const EdgeInsets.all(7),
@@ -489,10 +493,12 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
               visible: isSelected,
               replacement: Container(),
               child: Container(
-                decoration: const BoxDecoration(
-                  color: kLightPrimary,
+                decoration: BoxDecoration(
+                  color: darkModeOn ? kDarkPrimary : kLightPrimary,
                   border: Border(
-                    top: BorderSide(color: kLightStroke, width: 2),
+                    top: BorderSide(
+                        color: darkModeOn ? kDarkStroke : kLightStroke,
+                        width: 2),
                   ),
                 ),
                 child: Row(

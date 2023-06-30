@@ -11,6 +11,12 @@ const kLightStroke = Color(0xFFDBDBDB);
 const kLightScaffold = Color(0xFFFFFFFF);
 const kLightSelected = Color(0xFFEFEFEF);
 
+const kDarkPrimary = Color(0xFF262626);
+const kDarkSecondary = Color(0xFF1D1D1D);
+const kDarkStroke = Color(0xFF363636);
+const kDarkScaffold = Color(0xFF191919);
+const kDarkSelected = Color(0xFFF4F4F4);
+
 const kGlobalBorderRadius = 15.0;
 const kButtonBorderRadius = 15.0;
 const kPaddingLarge = EdgeInsets.all(15.0);

@@ -6,7 +6,6 @@ import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -79,6 +78,10 @@ class _DesktopAppState extends State<DesktopApp> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
 
     Widget drawer = SizedBox(
       width: 250,
@@ -110,7 +113,9 @@ class _DesktopAppState extends State<DesktopApp> {
                         child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 15.0),
-                          selectedTileColor: kLightSelected,
+                          selectedTileColor:
+                              darkModeOn ? kDarkSelected : kLightSelected,
+                          selectedColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -118,14 +123,8 @@ class _DesktopAppState extends State<DesktopApp> {
                             width: 35,
                             height: 35,
                             alignment: Alignment.center,
-                            // decoration: BoxDecoration(
-                            //   color:
-                            //       Color(menu[index]['color']).withOpacity(0.2),
-                            //   borderRadius: BorderRadius.circular(8.0),
-                            // ),
                             child: Icon(
                               menu[index]['icon'],
-                              size: 16.0,
                             ),
                           ),
                           title: Text(menu[index]['text']),
@@ -146,13 +145,13 @@ class _DesktopAppState extends State<DesktopApp> {
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               child: ListTile(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: const CircleAvatar(
                   // backgroundColor: Colors.black87,
-                  child: Icon(BootstrapIcons.person),
+                  child: Icon(YaruIcons.user),
                 ),
                 title: Text(globals.user!.userName),
                 onTap: () => showProfile(),
@@ -205,17 +204,21 @@ class _DesktopAppState extends State<DesktopApp> {
     return Scaffold(
       key: _desktopKey,
       drawer: drawer,
-      backgroundColor: kLightSecondary,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             decoration: BoxDecoration(
-                color: kLightPrimary,
-                border: Border.all(color: kLightStroke, width: 1),
-                borderRadius:
-                    const BorderRadius.only(topRight: Radius.circular(10))),
+              color: darkModeOn ? kDarkPrimary : kLightPrimary,
+              border: Border.all(
+                color: darkModeOn ? kDarkStroke : kLightStroke,
+                width: 2,
+              ),
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(10),
+              ),
+            ),
             child: Column(
               children: [
                 IconButton(
@@ -243,13 +246,21 @@ class _DesktopAppState extends State<DesktopApp> {
                           margin: const EdgeInsets.only(bottom: 8),
                           decoration: BoxDecoration(
                               color: _selectedIndex == index
-                                  ? kLightSelected
+                                  ? darkModeOn
+                                      ? kDarkSelected
+                                      : kLightSelected
                                   : null,
                               borderRadius: BorderRadius.circular(5)),
                           child: Icon(
                             menu[index]['icon'],
                             size: 22.0,
-                            // color: Color(menu[index]['color']),
+                            color: _selectedIndex == index
+                                ? darkModeOn
+                                    ? kDarkPrimary
+                                    : Colors.black
+                                : darkModeOn
+                                    ? Colors.white
+                                    : Colors.black,
                           ),
                           // isSelected: _selectedIndex == index,
                         ),
@@ -309,8 +320,13 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSelected,
-                                  border: Border.all(color: kLightStroke),
+                                  color: darkModeOn
+                                      ? kDarkSecondary
+                                      : kLightSelected,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
                                 YaruIcons.window_minimize,
@@ -323,8 +339,13 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSelected,
-                                  border: Border.all(color: kLightStroke),
+                                  color: darkModeOn
+                                      ? kDarkSecondary
+                                      : kLightSelected,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
                                 YaruIcons.window_maximize,
@@ -337,8 +358,13 @@ class _DesktopAppState extends State<DesktopApp> {
                           child: Container(
                               padding: const EdgeInsets.all(8),
                               decoration: BoxDecoration(
-                                  color: kLightSelected,
-                                  border: Border.all(color: kLightStroke),
+                                  color: darkModeOn
+                                      ? kDarkSecondary
+                                      : kLightSelected,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
                                 YaruIcons.window_close,

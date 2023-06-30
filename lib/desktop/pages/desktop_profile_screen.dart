@@ -2,6 +2,8 @@ import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yaru_icons/yaru_icons.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 
 class DesktopProfileScreen extends StatefulWidget {
   const DesktopProfileScreen({Key? key}) : super(key: key);
@@ -16,6 +18,10 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Container(
       padding: kGlobalOuterPadding * 2,
       child: Row(
@@ -77,8 +83,21 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                 children: [
                   Container(
                     alignment: Alignment.centerRight,
-                    child: CloseButton(
-                      onPressed: () {
+                    child: //Icon Button
+                        InkWell(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: darkModeOn ? kDarkPrimary : kLightPrimary,
+                          border: Border.all(
+                              color: darkModeOn ? kDarkStroke : kLightStroke,
+                              width: 2),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        padding: const EdgeInsets.all(7),
+                        child: const Icon(YaruIcons.window_close),
+                      ),
+                      onTap: () {
                         Navigator.pop(context);
                       },
                     ),
@@ -91,7 +110,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         CircleAvatar(
                           radius: 40,
                           child: Icon(
-                            Icons.person_outlined,
+                            YaruIcons.user,
                             size: 40,
                           ),
                         ),
@@ -122,7 +141,11 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   ),
                   Visibility(
                     visible: selectedTab == 2,
-                    child: const Text('Don\'t worry you are now a free user'),
+                    child: const Center(
+                        child: Text(
+                      'Don\'t worry you are now a free user',
+                      style: TextStyle(fontSize: 24),
+                    )),
                   ),
                 ],
               ),

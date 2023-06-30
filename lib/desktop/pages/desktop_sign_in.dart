@@ -93,6 +93,10 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
 
     Widget loginContent = SingleChildScrollView(
       child: Form(
@@ -266,12 +270,17 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                         child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                                color: kLightSecondary,
-                                // border: Border.all(color: kLightStroke),
-                                borderRadius: BorderRadius.circular(15)),
+                                color: darkModeOn
+                                    ? kDarkSecondary
+                                    : kLightSelected,
+                                border: Border.all(
+                                    color: darkModeOn
+                                        ? kDarkStroke
+                                        : kLightStroke),
+                                borderRadius: BorderRadius.circular(20)),
                             child: const Icon(
-                              Icons.minimize,
-                              size: 12,
+                              YaruIcons.window_minimize,
+                              size: 14,
                             )),
                         onTap: () => appWindow.minimize(),
                       ),
@@ -281,12 +290,17 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                         child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                                color: kLightSecondary,
-                                // border: Border.all(color: kLightStroke),
-                                borderRadius: BorderRadius.circular(15)),
+                                color: darkModeOn
+                                    ? kDarkSecondary
+                                    : kLightSelected,
+                                border: Border.all(
+                                    color: darkModeOn
+                                        ? kDarkStroke
+                                        : kLightStroke),
+                                borderRadius: BorderRadius.circular(20)),
                             child: const Icon(
-                              Icons.close,
-                              size: 12,
+                              YaruIcons.window_close,
+                              size: 14,
                             )),
                         onTap: () => appWindow.close(),
                       ),
@@ -305,10 +319,12 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               ),
             ),
             bottomSheet: Container(
-              decoration: const BoxDecoration(
-                  color: kLightSecondary,
-                  border:
-                      Border(top: BorderSide(color: kLightStroke, width: 2))),
+              decoration: BoxDecoration(
+                  color: darkModeOn ? kDarkSecondary : kLightSecondary,
+                  border: Border(
+                      top: BorderSide(
+                          color: darkModeOn ? kDarkStroke : kLightStroke,
+                          width: 2))),
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 70, vertical: 30),
