@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/string_values.dart';
@@ -7,11 +8,16 @@ import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/providers/user_api_provider.dart';
+import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:bnotes/widgets/scrawl_otp_textfield.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSignUp extends StatefulWidget {
   const DesktopSignUp({Key? key}) : super(key: key);
@@ -23,6 +29,7 @@ class DesktopSignUp extends StatefulWidget {
 class _DesktopSignUpState extends State<DesktopSignUp> {
   bool isDesktop = false;
   late SharedPreferences prefs;
+  double signupWidth = 400;
 
   TextEditingController emailController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
@@ -90,9 +97,9 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         setState(() {});
         if (context.mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (BuildContext context) => const DesktopApp()),
-            (route) => false);
+              MaterialPageRoute(
+                  builder: (BuildContext context) => const DesktopApp()),
+              (route) => false);
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -104,7 +111,23 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
   }
 
   @override
+  void initState() {
+    doWhenWindowReady(() {
+      const initialSize = Size(450, 720);
+      appWindow.minSize = initialSize;
+      appWindow.size = initialSize;
+      appWindow.alignment = Alignment.center;
+      appWindow.show();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     isDesktop = isDisplayDesktop(context);
     Widget signUpItems = Form(
       key: _signUpFormKey,
@@ -217,8 +240,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           Row(
             children: [
               Expanded(
-                child: FilledButton.tonal(
-                  child: Text(kLabels['continue']!),
+                child: ScrawlFilledButton(
+                  label: kLabels['continue']!,
                   onPressed: () {
                     if (_signUpFormKey.currentState!.validate()) {
                       signUp();
@@ -280,124 +303,209 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
       ),
       Row(
         children: [
-          FilledButton.tonal(
-            onPressed: () {
+          InkWell(
+            borderRadius: BorderRadius.circular(5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: darkModeOn ? kDarkPrimary : kLightPrimary,
+                border: Border.all(
+                    color: darkModeOn ? kDarkStroke : kLightStroke, width: 2),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              padding: const EdgeInsets.all(7),
+              child: const Icon(YaruIcons.arrow_left_outlined),
+            ),
+            onTap: () {
               setState(() {
                 showIndex = 0;
                 otpSent = false;
               });
             },
-            child: const Icon(Icons.arrow_back),
           ),
           kHSpace,
           Expanded(
-            child: FilledButton(
+            child: ScrawlFilledButton(
               onPressed: otp.length == 6
                   ? () {
                       otpVerification();
                     }
                   : null,
-              child: Text(kLabels['continue']!),
+              label: kLabels['continue']!,
             ),
           ),
         ],
       ),
     ]);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        // decoration: kBackGroundGradient,
-        decoration: const BoxDecoration(color: kPrimaryColor),
-        child: Row(
+    Widget signupContent = SingleChildScrollView(
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Visibility(
-                visible: isDesktop,
-                child: const Expanded(
-                    child: Center(
-                  child: FlutterLogo(
-                    size: 300,
+            const Text(
+              kAppName,
+              style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+            ),
+            kVSpace,
+            if (showIndex == 0) signUpItems,
+            if (showIndex == 1 && otpSent) otpItems,
+            const SizedBox(
+              height: 40.0,
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: kLabels['already_have_account'],
+                    style: TextStyle(
+                      color: darkModeOn ? Colors.white : Colors.black,
+                    ),
                   ),
-                ))),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.all(30),
-                alignment: isDesktop ? Alignment.centerRight : Alignment.center,
-                child: SizedBox(
-                  width: 500,
-                  child: Card(
-                    child: Container(
-                        // width: isDesktop
-                        //     ? 500
-                        //     : MediaQuery.of(context).size.width * 0.9,
-                        // height: MediaQuery.of(context).size.height * 0.95,
-                        // height: 600,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                            // color: Colors.white.withOpacity(0.8),
-                            ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 30),
-                          child: SingleChildScrollView(
-                            child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.only(bottom: 10.0),
-                                    child: Text(
-                                      kAppName,
-                                      style: TextStyle(
-                                          fontSize: 40.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                  if (showIndex == 0) signUpItems,
-                                  if (showIndex == 1 && otpSent) otpItems,
-                                  const SizedBox(
-                                    height: 40.0,
-                                  ),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: RichText(
-                                      text: TextSpan(children: [
-                                        TextSpan(
-                                          text: kLabels['already_have_account'],
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontFamily: 'Raleway',
-                                          ),
-                                        ),
-                                        TextSpan(
-                                            text: kLabels['login'],
-                                            style: const TextStyle(
-                                              color: kLinkColor,
-                                              fontFamily: 'Raleway',
-                                            ),
-                                            recognizer: TapGestureRecognizer()
-                                              ..onTap = () {
-                                                Navigator.of(context)
-                                                    .pushAndRemoveUntil(
-                                                        MaterialPageRoute(
-                                                            builder: (BuildContext
-                                                                    context) =>
-                                                                const DesktopSignIn()),
-                                                        (route) => false);
-                                              }),
-                                      ]),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                        )),
+                  TextSpan(
+                      text: kLabels['login'],
+                      style: const TextStyle(
+                        color: kLinkColor,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const DesktopSignIn()),
+                              (route) => false);
+                        }),
+                ]),
+              ),
+            ),
+          ]),
+    );
+    return kIsWeb
+        ? Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
+            body: Row(
+              children: [
+                if (isDesktop)
+                  Expanded(
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'images/welcome.svg',
+                        width: 300,
+                        height: 300,
+                      ),
+                    ),
+                  ),
+                Expanded(
+                  child: Center(
+                    child: SizedBox(
+                      width: signupWidth,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 30, vertical: 50),
+                        decoration: BoxDecoration(
+                            color: darkModeOn ? kDarkPrimary : kLightPrimary,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                                color: darkModeOn ? kDarkStroke : kLightStroke,
+                                width: 2)),
+                        child: signupContent,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(56),
+              child: MoveWindow(
+                child: Container(
+                  // color: Colors.amber,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: UniversalPlatform.isMacOS
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.end,
+                    children: [
+                      // const Expanded(
+                      //   child: Padding(
+                      //     padding:
+                      //         EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      //     child: Text(
+                      //       kAppName,
+                      //       style: TextStyle(
+                      //           fontSize: 24.0, fontWeight: FontWeight.w200),
+                      //     ),
+                      //   ),
+                      // ),
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: darkModeOn
+                                    ? kDarkSecondary
+                                    : kLightSelected,
+                                border: Border.all(
+                                    color: darkModeOn
+                                        ? kDarkStroke
+                                        : kLightStroke),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: const Icon(
+                              YaruIcons.window_minimize,
+                              size: 14,
+                            )),
+                        onTap: () => appWindow.minimize(),
+                      ),
+                      kHSpace,
+                      InkWell(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: darkModeOn
+                                    ? kDarkSecondary
+                                    : kLightSelected,
+                                border: Border.all(
+                                    color: darkModeOn
+                                        ? kDarkStroke
+                                        : kLightStroke),
+                                borderRadius: BorderRadius.circular(20)),
+                            child: const Icon(
+                              YaruIcons.window_close,
+                              size: 14,
+                            )),
+                        onTap: () => appWindow.close(),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-    );
+            // body: Container(
+            //   // padding: const EdgeInsets.symmetric(vertical: 10),
+            //   margin: const EdgeInsets.only(top: 25),
+            //   alignment: Alignment.topCenter,
+            //   child: const Text(
+            //     kAppName,
+            //     style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+            //   ),
+            // ),
+            bottomSheet: Container(
+              decoration: BoxDecoration(
+                  color: darkModeOn ? kDarkSecondary : kLightSecondary,
+                  border: Border(
+                      top: BorderSide(
+                          color: darkModeOn ? kDarkStroke : kLightStroke,
+                          width: 2))),
+              child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 70, vertical: 30),
+                  child: signupContent),
+            ),
+          );
   }
 }

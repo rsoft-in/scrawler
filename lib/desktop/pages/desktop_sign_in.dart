@@ -220,7 +220,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
     return kIsWeb
         ? Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: kLightSecondary,
+            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             body: Row(
               children: [
                 if (isDesktop)
@@ -241,10 +241,12 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 50),
                           decoration: BoxDecoration(
-                              color: kLightPrimary,
+                              color: darkModeOn ? kDarkPrimary : kLightPrimary,
                               borderRadius: BorderRadius.circular(5),
-                              border:
-                                  Border.all(color: kLightStroke, width: 2)),
+                              border: Border.all(
+                                  color:
+                                      darkModeOn ? kDarkStroke : kLightStroke,
+                                  width: 2)),
                           child: loginContent),
                     ),
                   ),
