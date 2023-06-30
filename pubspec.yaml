@@ -30,20 +30,20 @@ dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "images/bnotes-transparent.png"
+  image_path: "images/scrawler.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "images/bnotes-transparent.png"
+    image_path: "images/scrawler.png"
     background_color: "#5EAAA8"
     theme_color: "#5EAAA8"
   windows:
     generate: true
-    image_path: "images/bnotes-transparent.png"
+    image_path: "images/scrawler-desktop.png"
     icon_size: 256 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "images/bnotes-transparent.png"
+    image_path: "images/scrawler-desktop.png"
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +66,8 @@ flutter:
   assets:
     - images/bnotes.png
     - images/bnotes-transparent.png
+    - images/scrawler.png
+    - images/scrawler-desktop.png
     - images/google.png
     - images/undraw_playful_cat.svg
     - images/undraw_login.svg
