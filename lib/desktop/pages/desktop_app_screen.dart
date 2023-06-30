@@ -47,7 +47,7 @@ class _DesktopAppState extends State<DesktopApp> {
   void initState() {
     doWhenWindowReady(() {
       const initialSize = Size(1100, 700);
-      appWindow.minSize = initialSize;
+      appWindow.minSize = const Size(800, 700);
       appWindow.size = initialSize;
       appWindow.alignment = Alignment.center;
       appWindow.show();
