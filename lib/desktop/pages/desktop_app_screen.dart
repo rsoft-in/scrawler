@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/string_values.dart';
@@ -273,6 +274,30 @@ class _DesktopAppState extends State<DesktopApp> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Tooltip(
+                          message: 'Settings',
+                          child: InkWell(
+                            onTap: () {
+                              showSettings();
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 15),
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                  // color: _selectedIndex == index
+                                  //     ? kLightSelected
+                                  //     : null,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: const Icon(
+                                YaruIcons.settings,
+                                size: 22.0,
+                                // color: Color(menu[index]['color']),
+                              ),
+                              // isSelected: _selectedIndex == index,
+                            ),
+                          ),
+                        ),
+                        Tooltip(
                           message: globals.user!.userName,
                           child: InkWell(
                             onTap: () {
@@ -295,7 +320,7 @@ class _DesktopAppState extends State<DesktopApp> {
                               // isSelected: _selectedIndex == index,
                             ),
                           ),
-                        )
+                        ),
                       ]),
                 ),
               ],
@@ -393,6 +418,19 @@ class _DesktopAppState extends State<DesktopApp> {
                 constraints:
                     const BoxConstraints(maxWidth: 1000, maxHeight: 800),
                 child: const DesktopProfileScreen()),
+          );
+        });
+  }
+
+  void showSettings() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: ConstrainedBox(
+                constraints:
+                    const BoxConstraints(maxWidth: 1000, maxHeight: 800),
+                child: const DesktopSettingsScreen()),
           );
         });
   }

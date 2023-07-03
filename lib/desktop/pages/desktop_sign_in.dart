@@ -313,11 +313,23 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             ),
             body: Container(
               // padding: const EdgeInsets.symmetric(vertical: 10),
-              margin: const EdgeInsets.only(top: 25),
+              margin: const EdgeInsets.only(top: 56),
               alignment: Alignment.topCenter,
-              child: const Text(
-                kAppName,
-                style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+              child: Column(
+                children: [
+                  Image.asset(
+                    'images/scrawler-desktop.png',
+                    // fit: BoxFit.fitHeight,
+                    width: 50,
+                    height: 50,
+                  ),
+                  kVSpace,
+                  const Text(
+                    kAppName,
+                    style:
+                        TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+                  ),
+                ],
               ),
             ),
             bottomSheet: Container(
