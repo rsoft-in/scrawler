@@ -1,8 +1,8 @@
 import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSettingsScreen extends StatefulWidget {
@@ -127,25 +127,25 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                           Card(
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Center(
-                                child: Image.asset(
-                                  'images/scrawler-desktop.png',
-                                  height: 100,
-                                  fit: BoxFit.fitWidth,
-                                ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'images/scrawler-desktop.png',
+                                    height: 100,
+                                    fit: BoxFit.fitWidth,
+                                  ),
+                                  const SizedBox(
+                                    width: 12.0,
+                                  ),
+                                  const Text(
+                                    kAppName,
+                                    style: TextStyle(fontSize: 32.0),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           kVSpace,
-                          ListTile(
-                            title: const Text(
-                              kAppName,
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                            onTap: () {},
-                          ),
                           ListTile(
                             title: const Text(
                               'Website',
@@ -153,8 +153,9 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                                 fontSize: 18,
                               ),
                             ),
-                            subtitle: const Text('scrawler.net'),
-                            onTap: () {},
+                            subtitle:
+                                Text(kWebsiteUrl.replaceAll('https://', '')),
+                            onTap: () => _launchUrl(kWebsiteUrl),
                           ),
                         ],
                       ),
@@ -167,5 +168,11 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _launchUrl(url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
