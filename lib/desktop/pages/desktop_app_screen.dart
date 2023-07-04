@@ -8,6 +8,7 @@ import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/widgets/scrawl_navrail.dart';
+import 'package:bnotes/widgets/window_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -267,66 +268,7 @@ class _DesktopAppState extends State<DesktopApp> {
                     //     borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.all(4),
                     margin: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        InkWell(
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                YaruIcons.window_minimize,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.minimize(),
-                        ),
-                        kHSpace,
-                        InkWell(
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                YaruIcons.window_maximize,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.maximizeOrRestore(),
-                        ),
-                        kHSpace,
-                        InkWell(
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                YaruIcons.window_close,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.close(),
-                        ),
-                      ],
-                    ),
+                    child: const WindowControls(),
                   ),
                 ),
               )
