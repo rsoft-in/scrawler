@@ -7,6 +7,7 @@ import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/widgets/scrawl_navrail.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -63,7 +64,6 @@ class _DesktopAppState extends State<DesktopApp> {
         'icon': YaruIcons.document,
         'icon_filled': YaruIcons.document,
         'text': kLabels['notes']!,
-        // 'color': 0xFF5EAAA8
       },
       {
         'id': 'all_tasks',
@@ -71,7 +71,6 @@ class _DesktopAppState extends State<DesktopApp> {
         'icon': YaruIcons.unordered_list,
         'icon_filled': YaruIcons.unordered_list,
         'text': kLabels['tasks']!,
-        // 'color': 0xFFFBABAB
       },
     ];
   }
@@ -87,9 +86,6 @@ class _DesktopAppState extends State<DesktopApp> {
     Widget drawer = SizedBox(
       width: 250,
       child: Drawer(
-        // key: _desktopKey,
-        // elevation: 0,
-        // backgroundColor: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -112,14 +108,9 @@ class _DesktopAppState extends State<DesktopApp> {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 5.0),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 5.0, horizontal: 15.0),
                           selectedTileColor:
                               darkModeOn ? kDarkSelected : kLightSelected,
                           selectedColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
                           leading: Container(
                             width: 35,
                             height: 35,
@@ -145,13 +136,9 @@ class _DesktopAppState extends State<DesktopApp> {
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
               child: ListTile(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: const CircleAvatar(
-                  // backgroundColor: Colors.black87,
                   child: Icon(YaruIcons.user),
                 ),
                 title: Text(globals.user!.userName),
@@ -232,40 +219,15 @@ class _DesktopAppState extends State<DesktopApp> {
                 ...List.generate(
                   menu.length,
                   (index) {
-                    return Tooltip(
-                      message: menu[index]['text'],
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _selectedIndex = index;
-                            _onDrawerItemSelect(menu[index]['id']);
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 15),
-                          margin: const EdgeInsets.only(bottom: 8),
-                          decoration: BoxDecoration(
-                              color: _selectedIndex == index
-                                  ? darkModeOn
-                                      ? kDarkSelected
-                                      : kLightSelected
-                                  : null,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Icon(
-                            menu[index]['icon'],
-                            size: 22.0,
-                            color: _selectedIndex == index
-                                ? darkModeOn
-                                    ? kDarkPrimary
-                                    : Colors.black
-                                : darkModeOn
-                                    ? Colors.white
-                                    : Colors.black,
-                          ),
-                          // isSelected: _selectedIndex == index,
-                        ),
-                      ),
+                    return ScrawlNavRailItem(
+                      index: index,
+                      tooltip: menu[index]['text'],
+                      icon: menu[index]['icon'],
+                      selectedIndex: _selectedIndex,
+                      onTap: () => setState(() {
+                        _selectedIndex = index;
+                        _onDrawerItemSelect(menu[index]['id']);
+                      }),
                     );
                   },
                 ),
@@ -273,53 +235,19 @@ class _DesktopAppState extends State<DesktopApp> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Tooltip(
-                          message: 'Settings',
-                          child: InkWell(
-                            onTap: () {
-                              showSettings();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 15),
-                              margin: const EdgeInsets.only(bottom: 8),
-                              decoration: BoxDecoration(
-                                  // color: _selectedIndex == index
-                                  //     ? kLightSelected
-                                  //     : null,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: const Icon(
-                                YaruIcons.settings,
-                                size: 22.0,
-                                // color: Color(menu[index]['color']),
-                              ),
-                              // isSelected: _selectedIndex == index,
-                            ),
-                          ),
+                        ScrawlNavRailItem(
+                          index: 9,
+                          tooltip: 'Settings',
+                          selectedIndex: _selectedIndex,
+                          icon: YaruIcons.settings,
+                          onTap: () => showSettings(),
                         ),
-                        Tooltip(
-                          message: globals.user!.userName,
-                          child: InkWell(
-                            onTap: () {
-                              showProfile();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 15),
-                              margin: const EdgeInsets.only(bottom: 8),
-                              decoration: BoxDecoration(
-                                  // color: _selectedIndex == index
-                                  //     ? kLightSelected
-                                  //     : null,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: const Icon(
-                                YaruIcons.user,
-                                size: 22.0,
-                                // color: Color(menu[index]['color']),
-                              ),
-                              // isSelected: _selectedIndex == index,
-                            ),
-                          ),
+                        ScrawlNavRailItem(
+                          index: 10,
+                          tooltip: globals.user!.userName,
+                          selectedIndex: _selectedIndex,
+                          icon: YaruIcons.user,
+                          onTap: () => showProfile(),
                         ),
                       ]),
                 ),

@@ -47,7 +47,7 @@ ThemeData theme() {
     listTileTheme: ListTileThemeData(
       selectedColor: Colors.black,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
     ),
     dialogTheme: DialogTheme(
@@ -182,7 +182,7 @@ ThemeData themeDark() {
     listTileTheme: ListTileThemeData(
       selectedColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
       ),
     ),
     dialogTheme: DialogTheme(
