@@ -193,6 +193,7 @@ class _DesktopAppState extends State<DesktopApp> {
     return Scaffold(
       key: _desktopKey,
       drawer: drawer,
+      backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -208,6 +209,9 @@ class _DesktopAppState extends State<DesktopApp> {
                 topRight: Radius.circular(10),
               ),
             ),
+            margin: UniversalPlatform.isMacOS
+                ? const EdgeInsets.only(top: 30)
+                : EdgeInsets.zero,
             child: Column(
               children: [
                 IconButton(
@@ -259,7 +263,7 @@ class _DesktopAppState extends State<DesktopApp> {
             child: Stack(children: [
               _getDrawerItemWidget(_selectedDrawerIndex),
               Visibility(
-                visible: UniversalPlatform.isDesktop,
+                visible: !UniversalPlatform.isMacOS && !UniversalPlatform.isWeb,
                 child: Positioned(
                   right: 0,
                   child: Container(

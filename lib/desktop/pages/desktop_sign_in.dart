@@ -261,52 +261,53 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 child: Container(
                   // color: Colors.amber,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: UniversalPlatform.isMacOS
-                        ? MainAxisAlignment.start
-                        : MainAxisAlignment.end,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: darkModeOn
-                                    ? kDarkSecondary
-                                    : kLightSelected,
-                                border: Border.all(
-                                    color: darkModeOn
-                                        ? kDarkStroke
-                                        : kLightStroke),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: const Icon(
-                              YaruIcons.window_minimize,
-                              size: 14,
-                            )),
-                        onTap: () => appWindow.minimize(),
-                      ),
-                      kHSpace,
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: darkModeOn
-                                    ? kDarkSecondary
-                                    : kLightSelected,
-                                border: Border.all(
-                                    color: darkModeOn
-                                        ? kDarkStroke
-                                        : kLightStroke),
-                                borderRadius: BorderRadius.circular(20)),
-                            child: const Icon(
-                              YaruIcons.window_close,
-                              size: 14,
-                            )),
-                        onTap: () => appWindow.close(),
-                      ),
-                    ],
+                  child: Visibility(
+                    visible: !UniversalPlatform.isMacOS,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: darkModeOn
+                                      ? kDarkSecondary
+                                      : kLightSelected,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: const Icon(
+                                YaruIcons.window_minimize,
+                                size: 14,
+                              )),
+                          onTap: () => appWindow.minimize(),
+                        ),
+                        kHSpace,
+                        InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: darkModeOn
+                                      ? kDarkSecondary
+                                      : kLightSelected,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: const Icon(
+                                YaruIcons.window_close,
+                                size: 14,
+                              )),
+                          onTap: () => appWindow.close(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
