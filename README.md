@@ -1,33 +1,41 @@
-# scrawl
 
-<img src="https://raw.githubusercontent.com/rsoft-in/scrawl/main/images/scrawl-playstore.png"/>
 
-A simple notes app with offline and online backup. Uses Nextcloud to store your backup. Assign labels, set colours for notes. Search your notes easily. You can even archive your notes.
+<img src="images/scrawler-desktop.png" alt="scrawler logo" width="80"/>
+
+# scrawler
+
+A Simple Note Taking App
+
+---
 
 ## Features
-- Supports Android/iOS (iOS not published yet but works fine)
+- Supports Markdown
+- Supports Windows/macOS/Linux (Android & iOS coming soon)
 - Search notes
-- List/grid view for notes
-- Labels for notes
-- Archive notes
-- Local backup/restore
-- Nextcloud backup/restore
+- Labels for notes (coming soon)
+- Color tags (coming soon)
+- Tasks (coming soon)
+- Local user (Optional)
+- 'scrawler' cloud sync
 - Smooth UI
-- AppLock ``` yes, both fingerprint and FaceID works```
+- Web portal
 
-## To-do
-- [ ] 'scrawl' Cloud Sync
-- [ ] Desktop Support
-- [ ] Web Support
+---
+
+## Downloads
+### [scrawler.net](http://scrawler.net/#/downloads)
+
+---
 
 ## Platform
- - Android
- - iOS ```not published```
- - Desktop ```work in progress```
- - Web ```maybe in the future```
+ - [ ] Android ```coming soon```
+ - [ ] iOS ```coming soon```
+ - [x] Windows ```work in progress```
+ - [x] macOS ```work in progress```
+ - [x] Linux(Ubuntu/Debian) ```work in progress```
+ - [x] Web ```maybe in the future```
 
-### Android 
-<a href='https://play.google.com/store/apps/details?id=com.rsoft.bnotes'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a>
+---
 
 ## Compiling the app
 Before anything, be sure to have a working flutter sdk setup.If not installed, go to [Install - Flutter](https://docs.flutter.dev/get-started/install).
@@ -50,13 +58,11 @@ $ flutter pub get
 $ flutter run
 ```
 ```
-$ flutter build apk
+$ flutter build platform-name
 ```
+
+---
 
 ## Contributing
 
 Feel free to open a PR to suggest fixes, features or whatever you want, just remember that PRs are subjected to manual review so you gotta wait for actual people to look at your contributions.
-
-## Donate Us
-
-### <a href= "paypal.me/nandanrmenon">PayPal Me!</a>
