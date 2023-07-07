@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/models/menu_item.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/models/sort_items.dart';
@@ -20,13 +20,12 @@ import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
-import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
   const DesktopNotesScreen({Key? key}) : super(key: key);
@@ -228,7 +227,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                 ),
                 if (item.sortBy == currentSort)
                   const Icon(
-                    BootstrapIcons.check,
+                    Iconsax.check,
                     size: 16.0,
                   )
               ],
@@ -271,7 +270,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),
           onSelected: (value) => sortList(value),
-          icon: const Icon(YaruIcons.sort_descending),
+          icon: const Icon(Iconsax.sort),
           tooltip: Language.get('sort'),
         ),
       ],
@@ -325,7 +324,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           decoration: InputDecoration(
                             hintText: kLabels['search'],
                             prefixIcon: const Icon(
-                              BootstrapIcons.search,
+                              Iconsax.search_normal,
                             ),
                           ),
                           onChanged: (value) => onSearch(value),
@@ -344,7 +343,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           padding: const EdgeInsets.all(7),
-                          child: const Icon(BootstrapIcons.plus),
+                          child: const Icon(Iconsax.add),
                         ),
                         onTap: () {
                           assignFields(Notes.empty());
@@ -516,27 +515,27 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                 showEditDialog(context);
                               },
                               icon: const Icon(
-                                YaruIcons.pen,
+                                Iconsax.edit,
                                 size: 18,
                               )),
                           IconButton(
                               onPressed: () => selectColor(
                                   context, filteredNotes[selectedIndex].noteId),
                               icon: const Icon(
-                                YaruIcons.color_select,
+                                Iconsax.color_swatch,
                                 size: 18,
                               )),
                           IconButton(
                               onPressed: () {},
                               icon: const Icon(
-                                YaruIcons.tag,
+                                Iconsax.tag,
                                 size: 18,
                               )),
                           IconButton(
                               onPressed: () => confirmDelete(
                                   context, filteredNotes[selectedIndex].noteId),
                               icon: const Icon(
-                                YaruIcons.trash,
+                                Iconsax.trash,
                                 size: 18,
                               )),
                         ],
@@ -650,13 +649,13 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       Row(
                         children: [
                           const Icon(
-                            BootstrapIcons.tag,
+                            Iconsax.tag,
                             size: 16,
                           ),
                           const VerticalDivider(color: Colors.black),
                           IconButton(
                             onPressed: () {},
-                            icon: const Icon(BootstrapIcons.plus),
+                            icon: const Icon(Iconsax.add),
                           ),
                         ],
                       ),

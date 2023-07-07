@@ -1,8 +1,8 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
 class DesktopProfileScreen extends StatefulWidget {
@@ -95,7 +95,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         padding: const EdgeInsets.all(7),
-                        child: const Icon(YaruIcons.window_close),
+                        child: const Icon(Icons.close_outlined),
                       ),
                       onTap: () {
                         Navigator.pop(context);
@@ -110,7 +110,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         CircleAvatar(
                           radius: 40,
                           child: Icon(
-                            YaruIcons.user,
+                            Iconsax.user,
                             size: 40,
                           ),
                         ),

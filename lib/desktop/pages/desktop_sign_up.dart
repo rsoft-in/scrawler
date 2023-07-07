@@ -15,9 +15,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSignUp extends StatefulWidget {
   const DesktopSignUp({Key? key}) : super(key: key);
@@ -313,7 +313,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                 borderRadius: BorderRadius.circular(5),
               ),
               padding: const EdgeInsets.all(7),
-              child: const Icon(YaruIcons.arrow_left_outlined),
+              child: const Icon(Iconsax.arrow_left_2),
             ),
             onTap: () {
               setState(() {
@@ -457,7 +457,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                           : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                YaruIcons.window_minimize,
+                                Iconsax.minus,
                                 size: 14,
                               )),
                           onTap: () => appWindow.minimize(),
@@ -477,7 +477,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                                           : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                YaruIcons.window_close,
+                                Icons.close_outlined,
                                 size: 14,
                               )),
                           onTap: () => appWindow.close(),

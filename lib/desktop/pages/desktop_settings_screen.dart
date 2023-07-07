@@ -3,7 +3,6 @@ import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSettingsScreen extends StatefulWidget {
   const DesktopSettingsScreen({Key? key}) : super(key: key);
@@ -89,7 +88,7 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         padding: const EdgeInsets.all(7),
-                        child: const Icon(YaruIcons.window_close),
+                        child: const Icon(Icons.close_outlined),
                       ),
                       onTap: () {
                         Navigator.pop(context);

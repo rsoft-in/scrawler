@@ -14,9 +14,9 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSignIn extends StatefulWidget {
   const DesktopSignIn({Key? key}) : super(key: key);
@@ -128,7 +128,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: Language.get('email'),
-                    suffixIcon: const Icon(YaruIcons.mail),
+                    suffixIcon: const Icon(Iconsax.sms),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -152,7 +152,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: Language.get('password'),
-                    suffixIcon: const Icon(YaruIcons.fingerprint),
+                    suffixIcon: const Icon(Iconsax.password_check),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -281,7 +281,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                           : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                YaruIcons.window_minimize,
+                                Iconsax.minus,
                                 size: 14,
                               )),
                           onTap: () => appWindow.minimize(),
@@ -301,7 +301,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                           : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                YaruIcons.window_close,
+                                Icons.close_outlined,
                                 size: 14,
                               )),
                           onTap: () => appWindow.close(),

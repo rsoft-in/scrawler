@@ -13,19 +13,18 @@ dependencies:
     sdk: flutter
 
   adaptive_breakpoints: ^0.1.1
-  bootstrap_icons: ^1.9.1
   bitsdojo_window: ^0.1.5
   cupertino_icons: ^1.0.4
   flutter_markdown: ^0.6.14
   flutter_svg: ^1.1.6
   http: ^0.13.6
+  iconsax: ^0.0.8
   intl: ^0.18.0
   shared_preferences: ^2.0.13
   sqflite: ^2.0.2
   uuid: ^3.0.5
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
-  yaru_icons: ^1.0.4
 
 flutter_launcher_icons:
   android: "launcher_icon"

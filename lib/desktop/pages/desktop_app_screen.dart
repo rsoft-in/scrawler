@@ -10,9 +10,9 @@ import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/widgets/scrawl_navrail.dart';
 import 'package:bnotes/widgets/window_controls.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -62,15 +62,15 @@ class _DesktopAppState extends State<DesktopApp> {
       {
         'id': 'all_notes',
         'index': 0,
-        'icon': YaruIcons.document,
-        'icon_filled': YaruIcons.document,
+        'icon': Iconsax.note_2,
+        'icon_filled': Iconsax.note_2,
         'text': kLabels['notes']!,
       },
       {
         'id': 'all_tasks',
         'index': 1,
-        'icon': YaruIcons.unordered_list,
-        'icon_filled': YaruIcons.unordered_list,
+        'icon': Iconsax.task,
+        'icon_filled': Iconsax.task,
         'text': kLabels['tasks']!,
       },
     ];
@@ -140,7 +140,7 @@ class _DesktopAppState extends State<DesktopApp> {
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: const CircleAvatar(
-                  child: Icon(YaruIcons.user),
+                  child: Icon(Iconsax.user),
                 ),
                 title: Text(globals.user!.userName),
                 onTap: () => showProfile(),
@@ -218,7 +218,7 @@ class _DesktopAppState extends State<DesktopApp> {
                   onPressed: () {
                     _desktopKey.currentState!.openDrawer();
                   },
-                  icon: const Icon(YaruIcons.menu),
+                  icon: const Icon(Iconsax.menu_1),
                 ),
                 kVSpace,
                 ...List.generate(
@@ -244,14 +244,14 @@ class _DesktopAppState extends State<DesktopApp> {
                           index: 9,
                           tooltip: 'Settings',
                           selectedIndex: _selectedIndex,
-                          icon: YaruIcons.settings,
+                          icon: Iconsax.setting_2,
                           onTap: () => showSettings(),
                         ),
                         ScrawlNavRailItem(
                           index: 10,
                           tooltip: globals.user!.userName,
                           selectedIndex: _selectedIndex,
-                          icon: YaruIcons.user,
+                          icon: Iconsax.user,
                           onTap: () => showProfile(),
                         ),
                       ]),

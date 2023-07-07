@@ -81,14 +81,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  bootstrap_icons:
-    dependency: "direct main"
-    description:
-      name: bootstrap_icons
-      sha256: "28e6799bf951680110e4ce0790f2e55f849a786b7873f42b456d78bf6d130e96"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.10.5+2"
   characters:
     dependency: transitive
     description:
@@ -240,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  iconsax:
+    dependency: "direct main"
+    description:
+      name: iconsax
+      sha256: fb0144c61f41f3f8a385fadc27783ea9f5359670be885ed7f35cef32565d5228
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.8"
   image:
     dependency: transitive
     description:
@@ -661,14 +661,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
-  yaru_icons:
-    dependency: "direct main"
-    description:
-      name: yaru_icons
-      sha256: "8ddd40522c882de898a493094f2f41687f7a0faaf3434b9c854a7605a53a2477"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.4"
 sdks:
   dart: ">=3.0.0 <4.0.0"
   flutter: ">=3.10.0"

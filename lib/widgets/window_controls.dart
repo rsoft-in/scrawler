@@ -2,7 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:yaru_icons/yaru_icons.dart';
+import 'package:iconsax/iconsax.dart';
 
 class WindowControls extends StatelessWidget {
   const WindowControls({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class WindowControls extends StatelessWidget {
                       color: darkModeOn ? kDarkStroke : kLightStroke),
                   borderRadius: BorderRadius.circular(20)),
               child: const Icon(
-                YaruIcons.window_minimize,
+                Iconsax.minus,
                 size: 14,
               )),
           onTap: () => appWindow.minimize(),
@@ -39,7 +39,7 @@ class WindowControls extends StatelessWidget {
                       color: darkModeOn ? kDarkStroke : kLightStroke),
                   borderRadius: BorderRadius.circular(20)),
               child: const Icon(
-                YaruIcons.window_maximize,
+                Iconsax.maximize,
                 size: 14,
               )),
           onTap: () => appWindow.maximizeOrRestore(),
@@ -54,7 +54,7 @@ class WindowControls extends StatelessWidget {
                       color: darkModeOn ? kDarkStroke : kLightStroke),
                   borderRadius: BorderRadius.circular(20)),
               child: const Icon(
-                YaruIcons.window_close,
+                Icons.close_outlined,
                 size: 14,
               )),
           onTap: () => appWindow.close(),
