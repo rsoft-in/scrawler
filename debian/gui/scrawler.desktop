@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.5.0
+Name=scrawler
+GenericName=scrawler
+Comment=A simple note taking app
+Icon=/usr/local/lib/scrawler/data/flutter_assets/images/scrawler-desktop.png
+Terminal=false
+Type=Application
+Categories=Utility
+Keywords=Flutter;notes;task;
