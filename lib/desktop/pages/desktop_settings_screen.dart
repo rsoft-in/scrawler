@@ -1,5 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,26 +76,11 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    alignment: Alignment.centerRight,
-                    child: //Icon Button
-                        InkWell(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                          border: Border.all(
-                              color: darkModeOn ? kDarkStroke : kLightStroke,
-                              width: 2),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        padding: const EdgeInsets.all(7),
-                        child: const Icon(Icons.close_outlined),
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      alignment: Alignment.centerRight,
+                      child: //Icon Button
+                          ScrawlOutlinedIconButton(
+                              icon: Icons.close_outlined,
+                              onPressed: () => Navigator.pop(context))),
                   Visibility(
                     visible: selectedTab == 0,
                     child: const Expanded(
