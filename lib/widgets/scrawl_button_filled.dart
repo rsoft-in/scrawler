@@ -24,7 +24,7 @@ class ScrawlFilledButton extends StatelessWidget {
             side: BorderSide(
                 color: darkModeOn ? kLightStroke : kDarkStroke, width: 2),
           ),
-          padding: const EdgeInsets.all(20.0)),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
       onPressed: onPressed,
       child: Text(label),
     );

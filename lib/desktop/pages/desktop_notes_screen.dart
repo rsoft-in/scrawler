@@ -17,6 +17,7 @@ import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
+import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
@@ -47,6 +48,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   int selectedIndex = 0;
   bool isSelected = false;
   bool darkModeOn = false;
+  bool editMode = false;
+
+  // Context Menu Related
   Offset _tapPosition = Offset.zero;
   List<MenuItem> contextMenuItems = [
     MenuItem('edit', Language.get('edit'), ''),
@@ -64,6 +68,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
   String currentNoteId = "";
+  String currentNoteTitle = "";
 
   void getNotes() async {
     Map<String, String> post = {
@@ -287,15 +292,34 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Text(
-          isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
-              ? filteredNotes[selectedIndex].noteTitle
-              : '',
-          style: const TextStyle(fontSize: 18)),
+      child: editMode
+          ? InkWell(
+              onTap: () => titleDialog(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    currentNoteTitle,
+                    style: const TextStyle(fontSize: 20.0),
+                  ),
+                  kHSpace,
+                  const Icon(
+                    Iconsax.edit,
+                    size: 18,
+                  ),
+                ],
+              ),
+            )
+          : Text(
+              (isSelected && filteredNotes[selectedIndex].noteTitle.isNotEmpty
+                  ? filteredNotes[selectedIndex].noteTitle
+                  : ''),
+              style: const TextStyle(fontSize: 18)),
     );
 
     return Row(
       children: [
+        // List Panel
         SizedBox(
           width: 350,
           child: Scaffold(
@@ -332,24 +356,16 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       ),
                       kHSpace,
                       //Icon Button
-                      InkWell(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                            border: Border.all(
-                                color: darkModeOn ? kDarkStroke : kLightStroke,
-                                width: 2),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          padding: const EdgeInsets.all(7),
-                          child: const Icon(Iconsax.add),
-                        ),
-                        onTap: () {
-                          assignFields(Notes.empty());
-                          showEditDialog(context);
-                        },
-                      ),
+                      ScrawlOutlinedIconButton(
+                          icon: Iconsax.add,
+                          onPressed: () {
+                            assignFields(Notes.empty());
+                            // showEditDialog(context);
+                            setState(() {
+                              editMode = true;
+                              isSelected = false;
+                            });
+                          })
                     ],
                   ),
                 ),
@@ -374,14 +390,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                   onTap: () {
                                     setState(() {
                                       selectedIndex = index;
+                                      editMode = false;
                                       isSelected = true;
                                     });
                                   },
                                   child: NoteListItemWidget(
                                       note: filteredNotes[index],
                                       selectedIndex: selectedIndex,
-                                      isSelected:
-                                          index == selectedIndex && isSelected),
+                                      isSelected: (index == selectedIndex) &&
+                                          isSelected),
                                 );
                               },
                             )
@@ -406,15 +423,62 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       child: readerHead,
                     ),
             ),
-            body: Column(
-              children: [
-                Expanded(
-                  child: isSelected && filteredNotes.isNotEmpty
-                      ? SingleChildScrollView(
+            body: editMode
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: noteTextController,
+                          decoration: InputDecoration(
+                              hintText: Language.get('type_something'),
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none),
+                          textAlignVertical: TextAlignVertical.top,
+                          expands: true,
+                          maxLines: null,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ScrawlFilledButton(
+                              onPressed: () {
+                                if (noteTextController.text.isNotEmpty) {
+                                  saveNotes();
+                                  setState(() {
+                                    editMode = false;
+                                  });
+                                }
+                              },
+                              label: Language.get('save'),
+                            ),
+                            kHSpace,
+                            ScrawlOutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  editMode = false;
+                                });
+                              },
+                              label: Language.get('cancel'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : (isSelected && filteredNotes.isNotEmpty
+                    ? Scaffold(
+                        body: SingleChildScrollView(
                           child: Padding(
                             padding: kGlobalOuterPadding * 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
                               children: [
                                 Row(
                                   mainAxisAlignment:
@@ -480,75 +544,110 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               ],
                             ),
                           ),
-                        )
-                      : EmptyWidget(
-                          text: Language.get('select_note'),
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          asset: 'images/undraw_playful_cat.svg'),
-                ),
-              ],
-            ),
-            bottomNavigationBar: Visibility(
-              visible: isSelected,
-              replacement: Container(),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                  border: Border(
-                    top: BorderSide(
-                        color: darkModeOn ? kDarkStroke : kLightStroke,
-                        width: 2),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 6),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                assignFields(filteredNotes[selectedIndex]);
-                                showEditDialog(context);
-                              },
-                              icon: const Icon(
-                                Iconsax.edit,
-                                size: 18,
-                              )),
-                          IconButton(
-                              onPressed: () => selectColor(
-                                  context, filteredNotes[selectedIndex].noteId),
-                              icon: const Icon(
-                                Iconsax.color_swatch,
-                                size: 18,
-                              )),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Iconsax.tag,
-                                size: 18,
-                              )),
-                          IconButton(
-                              onPressed: () => confirmDelete(
-                                  context, filteredNotes[selectedIndex].noteId),
-                              icon: const Icon(
-                                Iconsax.trash,
-                                size: 18,
-                              )),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+                        ),
+                        bottomNavigationBar: Visibility(
+                          visible: isSelected && !editMode,
+                          replacement: Container(),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: darkModeOn ? kDarkPrimary : kLightPrimary,
+                              border: Border(
+                                top: BorderSide(
+                                    color:
+                                        darkModeOn ? kDarkStroke : kLightStroke,
+                                    width: 2),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 6),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () {
+                                            assignFields(
+                                                filteredNotes[selectedIndex]);
+                                            // showEditDialog(context);
+                                            setState(() {
+                                              editMode = true;
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            Iconsax.edit,
+                                            size: 18,
+                                          )),
+                                      IconButton(
+                                          onPressed: () => selectColor(
+                                              context,
+                                              filteredNotes[selectedIndex]
+                                                  .noteId),
+                                          icon: const Icon(
+                                            Iconsax.color_swatch,
+                                            size: 18,
+                                          )),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                            Iconsax.tag,
+                                            size: 18,
+                                          )),
+                                      IconButton(
+                                          onPressed: () => confirmDelete(
+                                              context,
+                                              filteredNotes[selectedIndex]
+                                                  .noteId),
+                                          icon: const Icon(
+                                            Iconsax.trash,
+                                            size: 18,
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : EmptyWidget(
+                        text: Language.get('select_note'),
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        asset: 'images/undraw_playful_cat.svg')),
           ),
         ),
       ],
     );
+  }
+
+  void titleDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: TextField(
+              controller: noteTitleController,
+              decoration: const InputDecoration(
+                hintText: 'Enter title here',
+              ),
+            ),
+            actions: [
+              ScrawlFilledButton(
+                label: 'Ok',
+                onPressed: () => setState(() {
+                  currentNoteTitle = noteTitleController.text;
+                  Navigator.pop(context);
+                }),
+              ),
+              ScrawlOutlinedButton(
+                label: 'Cancel',
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          );
+        });
   }
 
   void assignFields(Notes note) {
@@ -557,6 +656,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
       currentNoteId = note.noteId;
       noteTitleController.text = note.noteTitle;
       noteTextController.text = note.noteText;
+      currentNoteTitle = note.noteTitle;
     });
   }
 
@@ -595,9 +695,12 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     switch (result) {
       case 'edit':
         assignFields(note);
-        if (context.mounted) {
-          showEditDialog(context);
-        }
+        // if (context.mounted) {
+        //   showEditDialog(context);
+        // }
+        setState(() {
+          editMode = true;
+        });
         break;
       case 'delete':
         if (context.mounted) confirmDelete(context, note.noteId);

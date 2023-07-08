@@ -26,7 +26,7 @@ class ScrawlOutlinedButton extends StatelessWidget {
               width: 2,
             ),
           ),
-          padding: const EdgeInsets.all(20.0)),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
       onPressed: onPressed,
       child: Text(label),
     );
