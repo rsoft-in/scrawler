@@ -45,6 +45,24 @@ class UserApiProvider {
     }
   }
 
+  static Future<Map<String, dynamic>> forgotPasswordVerification(
+      Map post) async {
+    String result = '';
+    try {
+      var response = await http.Client().post(
+          Uri.parse('${globals.apiServer}/users/forgotPasswordVerification'),
+          body: post);
+      result = response.body;
+      if (response.statusCode == 200 && result.contains('SUCCESS')) {
+        return {'status': true, 'error': ''};
+      } else {
+        return {'status': false, 'error': result};
+      }
+    } catch (e) {
+      return {'status': false, 'error': e.toString()};
+    }
+  }
+
   static Future<Map<String, dynamic>> verifyOtp(Map post) async {
     String result = '';
     try {
@@ -60,6 +78,39 @@ class UserApiProvider {
       }
     } catch (e) {
       return {'user': null, 'error': e.toString()};
+    }
+  }
+
+  static Future<Map<String, dynamic>> verifyRecoveryOtp(Map post) async {
+    String result = '';
+    try {
+      var response = await http.Client()
+          .post(Uri.parse('${globals.apiServer}/users/verifyOtp'), body: post);
+      result = response.body;
+      if (response.statusCode == 200 && result.contains('SUCCESS')) {
+        return {'response': true, 'error': ''};
+      } else {
+        return {'response': false, 'error': 'ERROR: $result'};
+      }
+    } catch (e) {
+      return {'response': false, 'error': 'ERROR: $e'};
+    }
+  }
+
+  static Future<Map<String, dynamic>> updatePassword(Map post) async {
+    String result = '';
+    try {
+      var response = await http.Client().post(
+          Uri.parse('${globals.apiServer}/users/updatePassword'),
+          body: post);
+      result = response.body;
+      if (response.statusCode == 200 && result.contains('SUCCESS')) {
+        return {'response': true, 'error': ''};
+      } else {
+        return {'response': false, 'error': 'ERROR: $result'};
+      }
+    } catch (e) {
+      return {'response': false, 'error': 'ERROR: $e'};
     }
   }
 }

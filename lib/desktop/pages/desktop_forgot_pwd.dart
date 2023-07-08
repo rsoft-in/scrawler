@@ -1,101 +1,87 @@
 import 'dart:convert';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/desktop/pages/desktop_forgot_pwd.dart';
+import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/language.dart';
-import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
-import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_button_filled.dart';
-import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-class DesktopSignIn extends StatefulWidget {
-  const DesktopSignIn({Key? key}) : super(key: key);
+class DesktopForgotPassword extends StatefulWidget {
+  final String email;
+  const DesktopForgotPassword({Key? key, required this.email})
+      : super(key: key);
 
   @override
-  State<DesktopSignIn> createState() => _DesktopSignInState();
+  State<DesktopForgotPassword> createState() => _DesktopForgotPasswordState();
 }
 
-class _DesktopSignInState extends State<DesktopSignIn> {
-  late SharedPreferences prefs;
+class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
+  bool isDesktop = false;
   final _formKey = GlobalKey<FormState>();
-  late FocusNode focusNodePassword;
-  double loginWidth = 400;
-  bool isSigningIn = false;
-  bool isDesktop = true;
+  bool otpVerified = false;
+  final loginWidth = 400.0;
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _pwdController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
-  void signIn() async {
+  void verifyOtp() async {
+    if (otpController.text.isEmpty) return;
     Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
-        'email': _emailController.text,
-        'pwd': _pwdController.text
+        'email': widget.email,
+        'otp': otpController.text,
+        'type': 'fpwd'
       })
     };
     ScaffoldMessenger.of(context)
-        .showSnackBar(ScrawlSnackBar.show(context, 'Signing In...'));
-    isSigningIn = true;
-    setState(() {});
-    UserApiProvider.checkUserCredential(post).then((value) async {
-      if (value['error'].toString().isEmpty) {
-        globals.user = value['user'];
-        prefs = await SharedPreferences.getInstance();
-        prefs.setBool('is_signed_in', true);
-        prefs.setString('user_id', globals.user!.userId);
-        prefs.setString('user_email', globals.user!.userEmail);
-        prefs.setString('user_name', globals.user!.userName);
-        prefs.setString('user_otp', globals.user!.userOtp);
-        prefs.setString('user_pwd', globals.user!.userPwd);
-        prefs.setBool('user_enabled', globals.user!.userEnabled);
-        if (context.mounted) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => const DesktopApp()),
-              (route) => false);
-        }
-      } else {
+        .showSnackBar(ScrawlSnackBar.show(context, 'Verifying OTP...'));
+    final result = await UserApiProvider.verifyRecoveryOtp(post);
+    if (result['error'].toString().isEmpty) {
+      setState(() {
+        otpVerified = true;
+      });
+    } else {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
           context,
-          value['error'],
+          result['error'],
           duration: const Duration(seconds: 2),
         ));
       }
-      isSigningIn = false;
-      setState(() {});
-    });
+    }
   }
 
-  void sendOtp() async {
+  void updatePassword() async {
+    if (newPasswordController.text.compareTo(confirmPasswordController.text) !=
+        0) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(ScrawlSnackBar.show(context, 'Password mismatch!'));
+      return;
+    }
     Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
-        'email': _emailController.text,
+        'user_email': widget.email,
+        'user_pwd': newPasswordController.text
       })
     };
-    ScaffoldMessenger.of(context)
-        .showSnackBar(ScrawlSnackBar.show(context, 'Sending OTP...'));
-    final result = await UserApiProvider.forgotPasswordVerification(post);
+    final result = await UserApiProvider.updatePassword(post);
     if (result['error'].toString().isEmpty) {
       if (context.mounted) {
         Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(
-                builder: (context) => DesktopForgotPassword(
-                      email: _emailController.text,
-                    )),
+            MaterialPageRoute(builder: (context) => const DesktopSignIn()),
             (route) => false);
       }
     } else {
@@ -111,14 +97,6 @@ class _DesktopSignInState extends State<DesktopSignIn> {
 
   @override
   void initState() {
-    doWhenWindowReady(() {
-      const initialSize = Size(450, 650);
-      appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
-    focusNodePassword = FocusNode();
     super.initState();
   }
 
@@ -145,112 +123,98 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 ),
               ),
               const Visibility(visible: kIsWeb, child: kVSpace),
-              Text(
-                Language.get('welcome_back'),
-                style: const TextStyle(
+              const Text(
+                'Forgot Password',
+                style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
               const SizedBox(
                 height: 25.0,
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-                child: TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: Language.get('email'),
-                    suffixIcon: const Icon(Iconsax.sms),
+              Visibility(
+                visible: !otpVerified,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
+                  child: TextFormField(
+                    controller: otpController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter OTP here',
+                    ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Language.get('mandatory_field');
-                    }
-                    if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                      return Language.get('invalid_email');
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) {
-                    focusNodePassword.requestFocus();
-                  },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-                child: TextFormField(
-                  focusNode: focusNodePassword,
-                  controller: _pwdController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: Language.get('password'),
-                    suffixIcon: const Icon(Iconsax.password_check),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Language.get('mandatory_field');
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) {
-                    if (_formKey.currentState!.validate()) {
-                      signIn();
-                    }
-                  },
+              Visibility(
+                visible: !otpVerified,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ScrawlFilledButton(
+                        onPressed: () => verifyOtp(),
+                        label: 'Submit',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    child: Text(Language.get('forgot_password')),
-                    onTap: () {
-                      if (_emailController.text.isNotEmpty) {
-                        sendOtp();
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            ScrawlSnackBar.show(
-                                context, 'Enter Email address!'));
+              Visibility(
+                visible: otpVerified,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
+                  child: TextFormField(
+                    controller: newPasswordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter New Password',
+                      suffixIcon: Icon(Iconsax.password_check),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return Language.get('mandatory_field');
                       }
+                      return null;
                     },
+                    onFieldSubmitted: (value) {},
                   ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ScrawlFilledButton(
-                      onPressed: isSigningIn
-                          ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                signIn();
-                              }
-                            },
-                      label: Language.get('sign_in'),
+              Visibility(
+                visible: otpVerified,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
+                  child: TextFormField(
+                    controller: confirmPasswordController,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      hintText: 'Confirm Password',
+                      suffixIcon: Icon(Iconsax.password_check),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return Language.get('mandatory_field');
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (value) {},
                   ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: ScrawlOutlinedButton(
-                      onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const DesktopSignUp()),
-                          (route) => false),
-                      label: Language.get('register_now'),
+              Visibility(
+                visible: otpVerified,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: ScrawlFilledButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            updatePassword();
+                          }
+                        },
+                        label: 'Submit',
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ]),
       ),
