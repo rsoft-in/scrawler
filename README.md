@@ -2,11 +2,10 @@
 
 <img src="images/scrawler-desktop.png" alt="scrawler logo" width="80"/>
 
-# scrawler
+# scrawler - A Simple Note Taking App
 
-A Simple Note Taking App
+<img src="images/scrawler-banner.png" alt="scrawler banner"/>
 
----
 
 ## Features
 - Supports Markdown
@@ -30,10 +29,10 @@ A Simple Note Taking App
 ## Platform
  - [ ] Android ```coming soon```
  - [ ] iOS ```coming soon```
- - [x] Windows ```work in progress```
- - [x] macOS ```work in progress```
- - [x] Linux(Ubuntu/Debian) ```work in progress```
- - [x] Web ```maybe in the future```
+ - [x] Windows
+ - [x] macOS
+ - [x] Linux (Ubuntu/Debian)
+ - [x] Web
 
 ---
 
