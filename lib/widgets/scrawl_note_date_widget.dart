@@ -6,14 +6,11 @@ class NoteDateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 15.0),
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 12,
-          color: Colors.grey,
-        ),
+    return Text(
+      text,
+      style: const TextStyle(
+        fontSize: 12,
+        color: Colors.grey,
       ),
     );
   }

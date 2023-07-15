@@ -18,8 +18,8 @@ const kDarkStroke = Color(0xFF363636);
 const kDarkScaffold = Color(0xFF191919);
 const kDarkSelected = Color(0xFFF4F4F4);
 
-const kGlobalBorderRadius = 15.0;
-const kButtonBorderRadius = 15.0;
+const kBorderRadius = 10.0;
+const kBorderRadiusSmall = 5.0;
 const kPaddingLarge = EdgeInsets.all(15.0);
 const kGlobalOuterPadding = EdgeInsets.all(10.0);
 const kGlobalCardPadding = EdgeInsets.all(5.0);

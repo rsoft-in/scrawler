@@ -26,7 +26,7 @@ ThemeData theme() {
       shape: RoundedRectangleBorder(
         side: BorderSide(color: kLightStroke, width: 2),
         borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+          Radius.circular(kBorderRadius),
         ),
       ),
     ),
@@ -35,13 +35,13 @@ ThemeData theme() {
       elevation: 0,
       surfaceTintColor: kLightSelected,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
     listTileTheme: ListTileThemeData(
       selectedColor: Colors.black,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
     dialogTheme: DialogTheme(
@@ -49,7 +49,7 @@ ThemeData theme() {
       backgroundColor: kLightSecondary,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: kLightStroke, width: 2),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(kBorderRadius),
       ),
     ),
     tooltipTheme: TooltipThemeData(
@@ -58,7 +58,7 @@ ThemeData theme() {
         border: Border.all(
           color: kLightStroke,
         ),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
       textStyle: const TextStyle(color: Colors.black),
     ),
@@ -67,7 +67,7 @@ ThemeData theme() {
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: kLightStroke, width: 2),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
   );
@@ -96,7 +96,7 @@ ThemeData themeDark() {
       elevation: 0,
       surfaceTintColor: kDarkSelected,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
     popupMenuTheme: const PopupMenuThemeData(
@@ -105,14 +105,14 @@ ThemeData themeDark() {
       shape: RoundedRectangleBorder(
         side: BorderSide(color: kDarkStroke, width: 2),
         borderRadius: BorderRadius.all(
-          Radius.circular(10.0),
+          Radius.circular(kBorderRadius),
         ),
       ),
     ),
     listTileTheme: ListTileThemeData(
       selectedColor: Colors.white,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
     dialogTheme: DialogTheme(
@@ -120,7 +120,7 @@ ThemeData themeDark() {
       backgroundColor: kDarkSecondary,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: kDarkStroke, width: 2),
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(kBorderRadius),
       ),
     ),
     tooltipTheme: TooltipThemeData(
@@ -129,7 +129,7 @@ ThemeData themeDark() {
         border: Border.all(
           color: kDarkStroke,
         ),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
       textStyle: const TextStyle(color: Colors.white),
     ),
@@ -138,7 +138,7 @@ ThemeData themeDark() {
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: kDarkStroke, width: 2),
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
   );
@@ -150,19 +150,19 @@ InputDecorationTheme inputDecorationTheme() {
     fillColor: kLightPrimary,
     suffixIconColor: kDarkPrimary,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     isDense: true,
-    contentPadding: const EdgeInsets.all(15),
+    contentPadding: kPaddingLarge,
     prefixIconColor: kDarkPrimary,
   );
 }
@@ -173,19 +173,19 @@ InputDecorationTheme inputDecorationDarkTheme() {
     fillColor: kDarkPrimary,
     suffixIconColor: kLightPrimary,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     isDense: true,
-    contentPadding: const EdgeInsets.all(15),
+    contentPadding: kPaddingLarge,
     prefixIconColor: kLightPrimary,
   );
 }

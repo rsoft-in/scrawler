@@ -26,7 +26,7 @@ class _ScrawlAlertButtonState extends State<ScrawlAlertButton> {
           fontSize: 16.0,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kButtonBorderRadius),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
       ),
       child: Text(widget.label),

@@ -20,6 +20,7 @@ import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
+import 'package:bnotes/widgets/scrawl_label_chip.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
@@ -312,9 +313,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             brightness == Brightness.dark));
 
     AppBar appBar = AppBar(
-      title: Text(
-        Language.get('notes'),
-      ),
+      title: Text(Language.get('notes')),
       actions: [
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),
@@ -526,6 +525,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     NoteDateWidget(
                                       text: filteredNotes.isEmpty
@@ -533,6 +533,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                           : Utility.formatDateTime(
                                               filteredNotes[selectedIndex]
                                                   .noteDate),
+                                    ),
+                                    kHSpace,
+                                    Expanded(
+                                      child: SizedBox(
+                                        height: 40,
+                                        child: ScrawlLabelChip(
+                                            label: filteredNotes[selectedIndex]
+                                                .noteLabel),
+                                      ),
                                     ),
                                     if (filteredNotes.isNotEmpty)
                                       Container(
@@ -614,7 +623,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                           onPressed: () {
                                             assignFields(
                                                 filteredNotes[selectedIndex]);
-                                            // showEditDialog(context);
                                             setState(() {
                                               editMode = true;
                                             });
