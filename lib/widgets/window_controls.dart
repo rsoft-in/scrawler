@@ -39,7 +39,7 @@ class WindowControls extends StatelessWidget {
                       color: darkModeOn ? kDarkStroke : kLightStroke),
                   borderRadius: BorderRadius.circular(20)),
               child: const Icon(
-                Iconsax.maximize,
+                Iconsax.maximize_3,
                 size: 14,
               )),
           onTap: () => appWindow.maximizeOrRestore(),

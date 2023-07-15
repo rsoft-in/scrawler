@@ -4,8 +4,8 @@ import 'package:bnotes/models/label.dart';
 import 'package:http/http.dart' as http;
 import 'package:bnotes/helpers/globals.dart' as globals;
 
-class NotesApiProvider {
-  static Future<LabelsData> fecthNotes(Map post) async {
+class LabelsApiProvider {
+  static Future<LabelsData> fecthLabels(Map post) async {
     String result = "";
     try {
       var response = await http.Client()
@@ -16,10 +16,10 @@ class NotesApiProvider {
         if (parsed['error'] != null) {
           return LabelsData([], parsed['records'], parsed['error']);
         } else {
-          var notes = parsed['labels']
+          var labels = parsed['labels']
               .map<Label>((json) => Label.fromJson(json))
               .toList();
-          return LabelsData(notes, parsed['records'], '');
+          return LabelsData(labels, parsed['records'], '');
         }
       } else {
         return LabelsData([], 0, 'ERROR: $result');

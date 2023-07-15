@@ -8,9 +8,11 @@ import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/models/label.dart';
 import 'package:bnotes/models/menu_item.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/models/sort_items.dart';
+import 'package:bnotes/providers/labels_api_provider.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
@@ -38,6 +40,7 @@ class DesktopNotesScreen extends StatefulWidget {
 class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   List<Notes> notesList = [];
   List<Notes> filteredNotes = [];
+  List<Label> labelsList = [];
   NoteSort currentSort = NoteSort.newest;
   bool isNewNote = false;
   final int _pageNr = 0;
@@ -69,6 +72,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   TextEditingController noteTextController = TextEditingController();
   String currentNoteId = "";
   String currentNoteTitle = "";
+
+  TextEditingController newLabelController = TextEditingController();
 
   void getNotes() async {
     Map<String, String> post = {
@@ -135,7 +140,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     });
   }
 
-  void saveNotes() async {
+  void saveNotes() {
     var uuid = const Uuid();
     var newId = uuid.v1();
     late Notes currentNote;
@@ -232,7 +237,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                 ),
                 if (item.sortBy == currentSort)
                   const Icon(
-                    Iconsax.check,
+                    Icons.check_outlined,
                     size: 16.0,
                   )
               ],
@@ -251,11 +256,50 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         'offset': 100
       })
     };
+    LabelsApiProvider.fecthLabels(post).then((value) {
+      setState(() {
+        if (value.error.isEmpty) {
+          labelsList = value.labels;
+        }
+      });
+    });
+  }
+
+  void saveLabel(String labelName) {
+    var uuid = const Uuid();
+    var newId = uuid.v1();
+    Label newLabel = Label(newId, labelName, true);
+    syncLabel(newLabel, true);
+    labelsList.add(newLabel);
+    newLabelController.text = "";
+  }
+
+  void syncLabel(Label label, bool isNewLabel) async {
+    Map<String, String> post = {
+      'postdata': jsonEncode({
+        'new': isNewLabel,
+        'api_key': globals.apiKey,
+        'label_id': label.labelId,
+        'label_user_id': globals.user!.userId,
+        'label_name': label.labelName
+      })
+    };
+    LabelsApiProvider.updateLabels(post).then((value) {
+      if (!value['status']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(value['error']),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    });
   }
 
   @override
   void initState() {
     getNotes();
+    getAllLabels();
     super.initState();
   }
 
@@ -360,7 +404,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           icon: Iconsax.add,
                           onPressed: () {
                             assignFields(Notes.empty());
-                            // showEditDialog(context);
                             setState(() {
                               editMode = true;
                               isSelected = false;
@@ -590,7 +633,11 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                             size: 18,
                                           )),
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () => selectTag(
+                                              filteredNotes[selectedIndex]
+                                                  .noteId,
+                                              filteredNotes[selectedIndex]
+                                                  .noteLabel),
                                           icon: const Icon(
                                             Iconsax.tag,
                                             size: 18,
@@ -695,9 +742,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     switch (result) {
       case 'edit':
         assignFields(note);
-        // if (context.mounted) {
-        //   showEditDialog(context);
-        // }
         setState(() {
           editMode = true;
         });
@@ -707,6 +751,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         break;
       case 'color':
         if (context.mounted) selectColor(context, note.noteId);
+        break;
+      case 'tags':
+        selectTag(note.noteId, note.noteLabel);
         break;
       default:
         break;
@@ -896,6 +943,84 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
       int index =
           filteredNotes.indexWhere((element) => element.noteId == noteId);
       filteredNotes[index].noteColor = colorCode;
+      isNewNote = false;
+      currentNoteId = filteredNotes[index].noteId;
+      setState(() {});
+      syncNotes(filteredNotes[index], '');
+    }
+  }
+
+  void selectTag(String noteId, String noteLabel) async {
+    setState(() {
+      newLabelController.text = "";
+      for (var i = 0; i < labelsList.length; i++) {
+        labelsList[i].selected = noteLabel.contains(labelsList[i].labelName);
+      }
+    });
+    final tags = await showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                content: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.75,
+                    minHeight: 200,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: newLabelController,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter New...',
+                        ),
+                        onSubmitted: (value) =>
+                            setState(() => saveLabel(value)),
+                      ),
+                      ...List.generate(
+                        labelsList.length,
+                        (index) => CheckboxListTile(
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 5),
+                          value: labelsList[index].selected,
+                          onChanged: (value) {
+                            setState(() {
+                              labelsList[index].selected =
+                                  !labelsList[index].selected;
+                            });
+                          },
+                          title: Text(labelsList[index].labelName),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                actions: [
+                  ScrawlOutlinedButton(
+                      label: 'Ok',
+                      onPressed: () {
+                        var selectedLabels = [];
+                        for (var element in labelsList) {
+                          if (element.selected) {
+                            selectedLabels.add(element.labelName);
+                          }
+                        }
+                        Navigator.pop(context, selectedLabels.join(','));
+                      }),
+                  ScrawlOutlinedButton(
+                      label: 'Cancel',
+                      onPressed: () => Navigator.pop(context, null))
+                ],
+              );
+            },
+          );
+        });
+    if (tags != null) {
+      int index =
+          filteredNotes.indexWhere((element) => element.noteId == noteId);
+      filteredNotes[index].noteLabel = tags;
       isNewNote = false;
       currentNoteId = filteredNotes[index].noteId;
       setState(() {});

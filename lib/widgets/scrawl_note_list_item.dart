@@ -76,7 +76,14 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                   ),
                 ),
               ),
-              Text(widget.note.noteLabel),
+              if (widget.note.noteLabel.isNotEmpty)
+                Chip(
+                  label: Text(
+                    (widget.note.noteLabel).split(',')[0],
+                    style: const TextStyle(fontSize: 10.0),
+                  ),
+                ),
+              kHSpace,
               Container(
                 width: 5,
                 height: 50,

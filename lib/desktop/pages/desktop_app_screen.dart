@@ -123,6 +123,7 @@ class _DesktopAppState extends State<DesktopApp> {
                           title: Text(menu[index]['text']),
                           selected: menu[index]['id'] == _selectedDrawerIndex,
                           onTap: () {
+                            _selectedIndex = index;
                             setState(() {});
                             _onDrawerItemSelect(menu[index]['id']);
                           },
