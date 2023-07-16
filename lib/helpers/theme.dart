@@ -70,6 +70,13 @@ ThemeData theme() {
         borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(kDarkPrimary),
+      checkColor: MaterialStateProperty.all(kLightPrimary),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      ),
+    ),
   );
 }
 
@@ -138,6 +145,13 @@ ThemeData themeDark() {
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: const BorderSide(color: kDarkStroke, width: 2),
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      ),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.all(kLightPrimary),
+      checkColor: MaterialStateProperty.all(kDarkPrimary),
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),

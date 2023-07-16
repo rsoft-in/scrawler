@@ -6,7 +6,8 @@ class ScrawlLabelChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> labels = label.split(',');
+    List<String> labels = label.split(',').reversed.toList();
+
     return label.isNotEmpty
         ? ListView.builder(
             scrollDirection: Axis.horizontal,

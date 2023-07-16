@@ -133,6 +133,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
 
   void onSearch(String phrase) {
     setState(() {
+      editMode = false;
+      isSelected = false;
+      selectedIndex = 0;
       filteredNotes = notesList
           .where((element) =>
               element.noteTitle.toLowerCase().contains(phrase.toLowerCase()) ||
@@ -398,7 +401,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       kHSpace,
-                      //Icon Button
                       ScrawlOutlinedIconButton(
                           icon: Iconsax.add,
                           onPressed: () {
@@ -586,8 +588,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                               color: darkModeOn
                                                   ? Colors.white10
                                                   : Colors.black12),
-                                          checkbox: const TextStyle(
-                                              color: kPrimaryColor)),
+                                          checkbox: TextStyle(
+                                              color: darkModeOn
+                                                  ? kLightPrimary
+                                                  : kDarkPrimary)),
                                       data: filteredNotes.isEmpty
                                           ? ''
                                           : filteredNotes[selectedIndex]
@@ -600,69 +604,50 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         bottomNavigationBar: Visibility(
                           visible: isSelected && !editMode,
                           replacement: Container(),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                              border: Border(
-                                top: BorderSide(
-                                    color:
-                                        darkModeOn ? kDarkStroke : kLightStroke,
-                                    width: 2),
+                          child: BottomAppBar(
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 8.0, horizontal: 6),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  IconButton(
+                                      onPressed: () {
+                                        assignFields(
+                                            filteredNotes[selectedIndex]);
+                                        setState(() {
+                                          editMode = true;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Iconsax.edit,
+                                        size: 18,
+                                      )),
+                                  IconButton(
+                                      onPressed: () => selectColor(context,
+                                          filteredNotes[selectedIndex].noteId),
+                                      icon: const Icon(
+                                        Iconsax.color_swatch,
+                                        size: 18,
+                                      )),
+                                  IconButton(
+                                      onPressed: () => selectTag(
+                                          filteredNotes[selectedIndex].noteId,
+                                          filteredNotes[selectedIndex]
+                                              .noteLabel),
+                                      icon: const Icon(
+                                        Iconsax.tag,
+                                        size: 18,
+                                      )),
+                                  IconButton(
+                                      onPressed: () => confirmDelete(context,
+                                          filteredNotes[selectedIndex].noteId),
+                                      icon: const Icon(
+                                        Iconsax.trash,
+                                        size: 18,
+                                      )),
+                                ],
                               ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 6),
-                                  child: Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {
-                                            assignFields(
-                                                filteredNotes[selectedIndex]);
-                                            setState(() {
-                                              editMode = true;
-                                            });
-                                          },
-                                          icon: const Icon(
-                                            Iconsax.edit,
-                                            size: 18,
-                                          )),
-                                      IconButton(
-                                          onPressed: () => selectColor(
-                                              context,
-                                              filteredNotes[selectedIndex]
-                                                  .noteId),
-                                          icon: const Icon(
-                                            Iconsax.color_swatch,
-                                            size: 18,
-                                          )),
-                                      IconButton(
-                                          onPressed: () => selectTag(
-                                              filteredNotes[selectedIndex]
-                                                  .noteId,
-                                              filteredNotes[selectedIndex]
-                                                  .noteLabel),
-                                          icon: const Icon(
-                                            Iconsax.tag,
-                                            size: 18,
-                                          )),
-                                      IconButton(
-                                          onPressed: () => confirmDelete(
-                                              context,
-                                              filteredNotes[selectedIndex]
-                                                  .noteId),
-                                          icon: const Icon(
-                                            Iconsax.trash,
-                                            size: 18,
-                                          )),
-                                    ],
-                                  ),
-                                )
-                              ],
                             ),
                           ),
                         ),
@@ -966,61 +951,83 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
       }
     });
     final tags = await showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return StatefulBuilder(
             builder: (context, setState) {
-              return AlertDialog(
-                content: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.75,
-                    minHeight: 200,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: newLabelController,
-                        decoration: const InputDecoration(
-                          hintText: 'Enter New...',
+              return Dialog(
+                child: Padding(
+                  padding: kGlobalOuterPadding,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    width: 300,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        TextField(
+                          controller: newLabelController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter New...',
+                          ),
+                          onSubmitted: (value) =>
+                              setState(() => saveLabel(value)),
                         ),
-                        onSubmitted: (value) =>
-                            setState(() => saveLabel(value)),
-                      ),
-                      ...List.generate(
-                        labelsList.length,
-                        (index) => CheckboxListTile(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 5),
-                          value: labelsList[index].selected,
-                          onChanged: (value) {
-                            setState(() {
-                              labelsList[index].selected =
-                                  !labelsList[index].selected;
-                            });
-                          },
-                          title: Text(labelsList[index].labelName),
+                        Expanded(
+                          child: ReorderableListView.builder(
+                            itemCount: labelsList.length,
+                            itemBuilder: (context, index) => CheckboxListTile(
+                              key: Key('$index'),
+                              controlAffinity: ListTileControlAffinity.leading,
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              value: labelsList[index].selected,
+                              onChanged: (value) {
+                                setState(() {
+                                  labelsList[index].selected =
+                                      !labelsList[index].selected;
+                                });
+                              },
+                              title: Text(labelsList[index].labelName),
+                            ),
+                            onReorder: (int oldIndex, int newIndex) {
+                              setState(() {
+                                if (oldIndex < newIndex) {
+                                  newIndex -= 1;
+                                }
+                                final Label item =
+                                    labelsList.removeAt(oldIndex);
+                                labelsList.insert(newIndex, item);
+                              });
+                            },
+                          ),
                         ),
-                      )
-                    ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ScrawlOutlinedButton(
+                              label: 'Ok',
+                              onPressed: () {
+                                var selectedLabels = [];
+                                for (var element in labelsList) {
+                                  if (element.selected) {
+                                    selectedLabels.add(element.labelName);
+                                  }
+                                }
+                                Navigator.pop(
+                                    context, selectedLabels.join(','));
+                              },
+                            ),
+                            kHSpace,
+                            ScrawlOutlinedButton(
+                                label: 'Cancel',
+                                onPressed: () => Navigator.pop(context, null)),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                actions: [
-                  ScrawlOutlinedButton(
-                      label: 'Ok',
-                      onPressed: () {
-                        var selectedLabels = [];
-                        for (var element in labelsList) {
-                          if (element.selected) {
-                            selectedLabels.add(element.labelName);
-                          }
-                        }
-                        Navigator.pop(context, selectedLabels.join(','));
-                      }),
-                  ScrawlOutlinedButton(
-                      label: 'Cancel',
-                      onPressed: () => Navigator.pop(context, null))
-                ],
               );
             },
           );
