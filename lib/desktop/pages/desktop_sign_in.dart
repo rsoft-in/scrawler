@@ -241,13 +241,13 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               Row(
                 children: [
                   Expanded(
-                    child: ScrawlOutlinedButton(
+                    child: OutlinedButton(
                       onPressed: () => Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
                                   const DesktopSignUp()),
                           (route) => false),
-                      label: Language.get('register_now'),
+                      child: Text(Language.get('register_now')),
                     ),
                   ),
                 ],

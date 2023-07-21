@@ -7,10 +7,11 @@ ThemeData theme() {
     inputDecorationTheme: inputDecorationTheme(),
     fontFamily: 'Inter',
     scaffoldBackgroundColor: kLightScaffold,
-    iconTheme: const IconThemeData(color: kDarkPrimary),
+    useMaterial3: true,
     appBarTheme: const AppBarTheme(
       elevation: 0,
       centerTitle: false,
+      scrolledUnderElevation: 0,
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.black),
       titleTextStyle: TextStyle(
@@ -20,6 +21,33 @@ ThemeData theme() {
         fontWeight: FontWeight.w400,
       ),
     ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+          backgroundColor: kDarkPrimary,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+            side: const BorderSide(
+              color: kDarkStroke,
+              width: 2,
+            ),
+          ),
+          elevation: 0),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: kLightSecondary,
+        foregroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+        ),
+        side: const BorderSide(
+          color: kLightStroke,
+          width: 2,
+        ),
+        elevation: 0,
+      ),
+    ),
     popupMenuTheme: const PopupMenuThemeData(
       elevation: 0,
       color: kLightSecondary,
@@ -27,6 +55,18 @@ ThemeData theme() {
         side: BorderSide(color: kLightStroke, width: 2),
         borderRadius: BorderRadius.all(
           Radius.circular(kBorderRadius),
+        ),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: kDarkPrimary,
+      elevation: 0,
+      foregroundColor: kLightPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+        side: const BorderSide(
+          color: kDarkStroke,
+          width: 2,
         ),
       ),
     ),
@@ -84,7 +124,9 @@ ThemeData themeDark() {
   return ThemeData(
     fontFamily: 'Inter',
     brightness: Brightness.dark,
+    useMaterial3: true,
     iconTheme: const IconThemeData(color: kLightPrimary),
+    scaffoldBackgroundColor: kDarkScaffold,
     inputDecorationTheme: inputDecorationDarkTheme(),
     appBarTheme: const AppBarTheme(
       elevation: 0,
@@ -96,6 +138,33 @@ ThemeData themeDark() {
         fontFamily: 'Inter',
         color: Colors.white,
         fontWeight: FontWeight.w400,
+      ),
+    ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+          backgroundColor: kLightPrimary,
+          foregroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+            side: const BorderSide(
+              color: kLightStroke,
+              width: 2,
+            ),
+          ),
+          elevation: 0),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: kDarkSecondary,
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+        ),
+        side: const BorderSide(
+          color: kDarkStroke,
+          width: 2,
+        ),
+        elevation: 0,
       ),
     ),
     drawerTheme: DrawerThemeData(
@@ -113,6 +182,18 @@ ThemeData themeDark() {
         side: BorderSide(color: kDarkStroke, width: 2),
         borderRadius: BorderRadius.all(
           Radius.circular(kBorderRadius),
+        ),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: kLightPrimary,
+      elevation: 0,
+      foregroundColor: kDarkPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+        side: const BorderSide(
+          color: kLightStroke,
+          width: 2,
         ),
       ),
     ),

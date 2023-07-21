@@ -1,5 +1,3 @@
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
-import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/language.dart';
@@ -61,13 +59,13 @@ class _ScrawlConfirmDialogState extends State<ScrawlConfirmDialog> {
     return AlertDialog(
       title: Text(widget.content!),
       actions: [
-        ScrawlFilledButton(
+        FilledButton(
           onPressed: () => widget.onAcceptPressed(),
-          label: Language.get('yes'),
+          child: Text(Language.get('yes')),
         ),
-        ScrawlOutlinedButton(
+        OutlinedButton(
           onPressed: () => Navigator.pop(context),
-          label: Language.get('no'),
+          child: Text(Language.get('no')),
         ),
       ],
     );

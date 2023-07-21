@@ -1,6 +1,7 @@
 import 'package:bnotes/helpers/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class ScrawlOutlinedButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -15,20 +16,21 @@ class ScrawlOutlinedButton extends StatelessWidget {
     bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-          backgroundColor: darkModeOn ? kDarkPrimary : kLightPrimary,
-          foregroundColor: darkModeOn ? Colors.white : Colors.black,
-          shape: RoundedRectangleBorder(
+
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(
+            vertical: UniversalPlatform.isDesktopOrWeb ? 15 : 10,
+            horizontal: 20),
+        decoration: BoxDecoration(
+            color: darkModeOn ? kDarkPrimary : kLightPrimary,
             borderRadius: BorderRadius.circular(5.0),
-            side: BorderSide(
-              color: darkModeOn ? kDarkStroke : kLightStroke,
-              width: 2,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20)),
-      onPressed: onPressed,
-      child: Text(label),
+            border: Border.all(
+                color: darkModeOn ? kDarkStroke : kLightStroke, width: 2)),
+        child: Text(label),
+      ),
     );
   }
 }

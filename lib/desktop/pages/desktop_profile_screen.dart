@@ -65,8 +65,8 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   Row(
                     children: [
                       Expanded(
-                          child: ScrawlFilledButton(
-                              onPressed: signOut, label: 'Sign Out')),
+                          child: FilledButton(
+                              onPressed: signOut, child: Text('Sign Out'))),
                     ],
                   ),
                 ],
@@ -85,8 +85,8 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   Container(
                     alignment: Alignment.centerRight,
                     child: //Icon Button
-                        ScrawlOutlinedIconButton(
-                            icon: Icons.close_outlined,
+                        OutlinedButton(
+                            child: Icon(Icons.close_outlined),
                             onPressed: () => Navigator.pop(context)),
                   ),
                   Visibility(

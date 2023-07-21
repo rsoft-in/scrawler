@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 
 const kAppName = 'scrawler';
 const kWebsiteUrl = 'https://scrawler.net';
@@ -17,6 +18,7 @@ const kDarkSecondary = Color(0xFF1D1D1D);
 const kDarkStroke = Color(0xFF363636);
 const kDarkScaffold = Color(0xFF191919);
 const kDarkSelected = Color(0xFFF4F4F4);
+const kDarkBody = Color(0xFF1A1A1A);
 
 const kBorderRadius = 10.0;
 const kBorderRadiusSmall = 5.0;
@@ -29,3 +31,45 @@ const kHSpace = SizedBox(width: 10.0);
 const kButtonPadding = EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0);
 const kEmailRegEx =
     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+
+// Menu Items
+const kMenu = [
+  {
+    'id': 'all_notes',
+    'index': 0,
+    'icon': Iconsax.note_2,
+    'icon_filled': Iconsax.note_2,
+    'text': 'notes',
+  },
+  {
+    'id': 'all_tasks',
+    'index': 1,
+    'icon': Iconsax.task,
+    'icon_filled': Iconsax.task,
+    'text': 'tasks',
+  },
+];
+
+const kMenuMobile = [
+  {
+    'id': 'all_notes',
+    'index': 0,
+    'icon': Iconsax.note_2,
+    'icon_filled': Iconsax.note_2,
+    'text': 'notes',
+  },
+  {
+    'id': 'all_tasks',
+    'index': 1,
+    'icon': Iconsax.task,
+    'icon_filled': Iconsax.task,
+    'text': 'tasks',
+  },
+  {
+    'id': 'settings',
+    'index': 2,
+    'icon': Iconsax.setting,
+    'icon_filled': Iconsax.setting,
+    'text': 'settings',
+  },
+];

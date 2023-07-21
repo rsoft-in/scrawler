@@ -78,8 +78,8 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                   Container(
                       alignment: Alignment.centerRight,
                       child: //Icon Button
-                          ScrawlOutlinedIconButton(
-                              icon: Icons.close_outlined,
+                          OutlinedButton(
+                              child: Icon(Icons.close_outlined),
                               onPressed: () => Navigator.pop(context))),
                   Visibility(
                     visible: selectedTab == 0,

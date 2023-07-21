@@ -56,24 +56,7 @@ class _DesktopAppState extends State<DesktopApp> {
       appWindow.show();
     });
     super.initState();
-
-    // Menu Items
-    menu = [
-      {
-        'id': 'all_notes',
-        'index': 0,
-        'icon': Iconsax.note_2,
-        'icon_filled': Iconsax.note_2,
-        'text': kLabels['notes']!,
-      },
-      {
-        'id': 'all_tasks',
-        'index': 1,
-        'icon': Iconsax.task,
-        'icon_filled': Iconsax.task,
-        'text': kLabels['tasks']!,
-      },
-    ];
+    menu = kMenu;
   }
 
   @override
@@ -120,7 +103,7 @@ class _DesktopAppState extends State<DesktopApp> {
                               menu[index]['icon'],
                             ),
                           ),
-                          title: Text(menu[index]['text']),
+                          title: Text(kLabels[menu[index]['text']]!),
                           selected: menu[index]['id'] == _selectedDrawerIndex,
                           onTap: () {
                             _selectedIndex = index;

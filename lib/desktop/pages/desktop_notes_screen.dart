@@ -401,8 +401,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       kHSpace,
-                      ScrawlOutlinedIconButton(
-                          icon: Iconsax.add,
+                      OutlinedButton(
+                          child: const Icon(Iconsax.add),
                           onPressed: () {
                             assignFields(Notes.empty());
                             setState(() {
@@ -490,7 +490,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ScrawlFilledButton(
+                            FilledButton(
                               onPressed: () {
                                 if (noteTextController.text.isNotEmpty) {
                                   saveNotes();
@@ -499,16 +499,16 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                   });
                                 }
                               },
-                              label: Language.get('save'),
+                              child: Text(Language.get('save')),
                             ),
                             kHSpace,
-                            ScrawlOutlinedButton(
+                            OutlinedButton(
                               onPressed: () {
                                 setState(() {
                                   editMode = false;
                                 });
                               },
-                              label: Language.get('cancel'),
+                              child: Text(Language.get('cancel')),
                             ),
                           ],
                         ),
@@ -604,10 +604,11 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         bottomNavigationBar: Visibility(
                           visible: isSelected && !editMode,
                           replacement: Container(),
-                          child: BottomAppBar(
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 6),
+                          child: Material(
+                            color:
+                                darkModeOn ? kDarkSecondary : kLightSecondary,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
                               child: Row(
                                 children: [
                                   const Spacer(),
@@ -674,17 +675,17 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
               ),
             ),
             actions: [
-              ScrawlFilledButton(
-                label: 'Ok',
+              FilledButton(
+                child: const Text('Ok'),
                 onPressed: () => setState(() {
                   currentNoteTitle = noteTitleController.text;
                   Navigator.pop(context);
                 }),
               ),
-              ScrawlOutlinedButton(
-                label: 'Cancel',
+              OutlinedButton(
+                child: const Text('Cancel'),
                 onPressed: () => Navigator.pop(context),
-              )
+              ),
             ],
           );
         });
@@ -759,93 +760,93 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     }
   }
 
-  void showEditDialog(BuildContext context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
-              child: Container(
-                padding: kGlobalOuterPadding,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1000),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextField(
-                        controller: noteTitleController,
-                        style: const TextStyle(fontSize: 20.0),
-                        decoration: InputDecoration(
-                          hintText: Language.get('enter_title'),
-                        ),
-                      ),
-                      kVSpace,
-                      Text(
-                        '1 ${Language.get('min_ago')}',
-                        style: const TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      kVSpace,
-                      Row(
-                        children: [
-                          const Icon(
-                            Iconsax.tag,
-                            size: 16,
-                          ),
-                          const VerticalDivider(color: Colors.black),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Iconsax.add),
-                          ),
-                        ],
-                      ),
-                      kVSpace,
-                      Expanded(
-                        child: TextField(
-                          controller: noteTextController,
-                          decoration: InputDecoration(
-                            hintText: Language.get('type_something'),
-                          ),
-                          textAlignVertical: TextAlignVertical.top,
-                          expands: true,
-                          maxLines: null,
-                        ),
-                      ),
-                      kVSpace,
-                      Row(
-                        children: [
-                          // const Icon(
-                          //   BootstrapIcons.palette,
-                          //   size: 16,
-                          // ),
-                          const Spacer(),
-                          ScrawlFilledButton(
-                            onPressed: () {
-                              if (noteTextController.text.isNotEmpty) {
-                                saveNotes();
-                              }
-                              Navigator.pop(context);
-                            },
-                            label: Language.get('save'),
-                          ),
-                          kHSpace,
-                          ScrawlOutlinedButton(
-                            onPressed: () => Navigator.pop(context),
-                            label: Language.get('cancel'),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        });
-  }
+  // void showEditDialog(BuildContext context) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         return Dialog(
+  //           child: Padding(
+  //             padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+  //             child: Container(
+  //               padding: kGlobalOuterPadding,
+  //               child: ConstrainedBox(
+  //                 constraints: const BoxConstraints(maxWidth: 1000),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     TextField(
+  //                       controller: noteTitleController,
+  //                       style: const TextStyle(fontSize: 20.0),
+  //                       decoration: InputDecoration(
+  //                         hintText: Language.get('enter_title'),
+  //                       ),
+  //                     ),
+  //                     kVSpace,
+  //                     Text(
+  //                       '1 ${Language.get('min_ago')}',
+  //                       style: const TextStyle(
+  //                         color: Colors.grey,
+  //                       ),
+  //                     ),
+  //                     kVSpace,
+  //                     Row(
+  //                       children: [
+  //                         const Icon(
+  //                           Iconsax.tag,
+  //                           size: 16,
+  //                         ),
+  //                         const VerticalDivider(color: Colors.black),
+  //                         IconButton(
+  //                           onPressed: () {},
+  //                           icon: const Icon(Iconsax.add),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     kVSpace,
+  //                     Expanded(
+  //                       child: TextField(
+  //                         controller: noteTextController,
+  //                         decoration: InputDecoration(
+  //                           hintText: Language.get('type_something'),
+  //                         ),
+  //                         textAlignVertical: TextAlignVertical.top,
+  //                         expands: true,
+  //                         maxLines: null,
+  //                       ),
+  //                     ),
+  //                     kVSpace,
+  //                     Row(
+  //                       children: [
+  //                         // const Icon(
+  //                         //   BootstrapIcons.palette,
+  //                         //   size: 16,
+  //                         // ),
+  //                         const Spacer(),
+  //                         ScrawlFilledButton(
+  //                           onPressed: () {
+  //                             if (noteTextController.text.isNotEmpty) {
+  //                               saveNotes();
+  //                             }
+  //                             Navigator.pop(context);
+  //                           },
+  //                           label: Language.get('save'),
+  //                         ),
+  //                         kHSpace,
+  //                         ScrawlOutlinedButton(
+  //                           onPressed: () => Navigator.pop(context),
+  //                           label: Language.get('cancel'),
+  //                         ),
+  //                       ],
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         );
+  //       });
+  // }
 
   void confirmDelete(BuildContext context, String noteId) {
     showDialog(
@@ -1005,8 +1006,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ScrawlOutlinedButton(
-                              label: 'Ok',
+                            FilledButton(
+                              child: const Text('Ok'),
                               onPressed: () {
                                 var selectedLabels = [];
                                 for (var element in labelsList) {
@@ -1019,8 +1020,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                               },
                             ),
                             kHSpace,
-                            ScrawlOutlinedButton(
-                                label: 'Cancel',
+                            OutlinedButton(
+                                child: const Text('Cancel'),
                                 onPressed: () => Navigator.pop(context, null)),
                           ],
                         )

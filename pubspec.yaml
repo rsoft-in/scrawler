@@ -21,10 +21,11 @@ dependencies:
   iconsax: ^0.0.8
   intl: ^0.18.0
   shared_preferences: ^2.0.13
-  sqflite: ^2.0.2
+  sqflite: ^2.2.8+4
   uuid: ^3.0.5
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
+  path: ^1.8.3
 
 flutter_launcher_icons:
   android: "launcher_icon"

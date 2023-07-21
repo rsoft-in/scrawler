@@ -240,8 +240,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           Row(
             children: [
               Expanded(
-                child: ScrawlFilledButton(
-                  label: kLabels['continue']!,
+                child: FilledButton(
+                  child: Text(kLabels['continue']!),
                   onPressed: () {
                     if (_signUpFormKey.currentState!.validate()) {
                       signUp();
@@ -324,13 +324,13 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
           ),
           kHSpace,
           Expanded(
-            child: ScrawlFilledButton(
+            child: FilledButton(
               onPressed: otp.length == 6
                   ? () {
                       otpVerification();
                     }
                   : null,
-              label: kLabels['continue']!,
+              child: Text(kLabels['continue']!),
             ),
           ),
         ],

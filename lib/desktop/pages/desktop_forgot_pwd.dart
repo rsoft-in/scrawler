@@ -149,9 +149,9 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: ScrawlFilledButton(
+                      child: FilledButton(
                         onPressed: () => verifyOtp(),
-                        label: 'Submit',
+                        child: Text('Submit'),
                       ),
                     ),
                   ],
@@ -204,13 +204,13 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: ScrawlFilledButton(
+                      child: FilledButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             updatePassword();
                           }
                         },
-                        label: 'Submit',
+                        child: Text('Submit'),
                       ),
                     ),
                   ],
