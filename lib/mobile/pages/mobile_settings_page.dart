@@ -1,6 +1,4 @@
-import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-
 import 'package:flutter/material.dart';
 
 class MobileSettingsPage extends StatefulWidget {

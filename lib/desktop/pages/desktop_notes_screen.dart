@@ -16,20 +16,19 @@ import 'package:bnotes/providers/labels_api_provider.dart';
 import 'package:bnotes/providers/notes_api_provider.dart';
 import 'package:bnotes/widgets/color_palette_button.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
-import 'package:bnotes/widgets/scrawl_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_label_chip.dart';
 import 'package:bnotes/widgets/scrawl_note_date_widget.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
+import 'package:yaru_icons/yaru_icons.dart';
+
+import '../../widgets/scrawl_circular_progress.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
   const DesktopNotesScreen({Key? key}) : super(key: key);
@@ -321,7 +320,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),
           onSelected: (value) => sortList(value),
-          icon: const Icon(Iconsax.sort),
+          icon: const Icon(YaruIcons.sort_descending),
           tooltip: Language.get('sort'),
         ),
       ],
@@ -350,7 +349,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                   ),
                   kHSpace,
                   const Icon(
-                    Iconsax.edit,
+                    YaruIcons.pen,
                     size: 18,
                   ),
                 ],
@@ -394,15 +393,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           decoration: InputDecoration(
                             hintText: kLabels['search'],
                             prefixIcon: const Icon(
-                              Iconsax.search_normal,
+                              YaruIcons.search,
                             ),
                           ),
                           onChanged: (value) => onSearch(value),
                         ),
                       ),
                       kHSpace,
-                      OutlinedButton(
-                          child: const Icon(Iconsax.add),
+                      IconButton(
+                          icon: const Icon(YaruIcons.plus),
                           onPressed: () {
                             assignFields(Notes.empty());
                             setState(() {
@@ -416,7 +415,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                 Expanded(
                   child: isBusy
                       ? const Center(
-                          child: CircularProgressIndicator.adaptive(),
+                          child: ScrawlCircularProgressIndicator(),
                         )
                       : (filteredNotes.isNotEmpty
                           ? ListView.builder(
@@ -621,14 +620,14 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                         });
                                       },
                                       icon: const Icon(
-                                        Iconsax.edit,
+                                        YaruIcons.pen,
                                         size: 18,
                                       )),
                                   IconButton(
                                       onPressed: () => selectColor(context,
                                           filteredNotes[selectedIndex].noteId),
                                       icon: const Icon(
-                                        Iconsax.color_swatch,
+                                        YaruIcons.colors,
                                         size: 18,
                                       )),
                                   IconButton(
@@ -637,14 +636,14 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                           filteredNotes[selectedIndex]
                                               .noteLabel),
                                       icon: const Icon(
-                                        Iconsax.tag,
+                                        YaruIcons.tag,
                                         size: 18,
                                       )),
                                   IconButton(
                                       onPressed: () => confirmDelete(context,
                                           filteredNotes[selectedIndex].noteId),
                                       icon: const Icon(
-                                        Iconsax.trash,
+                                        YaruIcons.trash,
                                         size: 18,
                                       )),
                                 ],
@@ -793,7 +792,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   //                     Row(
   //                       children: [
   //                         const Icon(
-  //                           Iconsax.tag,
+  //                           YaruIcons.tag,
   //                           size: 16,
   //                         ),
   //                         const VerticalDivider(color: Colors.black),

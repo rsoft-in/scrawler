@@ -1,9 +1,9 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopSettingsScreen extends StatefulWidget {
   const DesktopSettingsScreen({Key? key}) : super(key: key);
@@ -78,8 +78,8 @@ class D_SettingsStatePage extends State<DesktopSettingsScreen> {
                   Container(
                       alignment: Alignment.centerRight,
                       child: //Icon Button
-                          OutlinedButton(
-                              child: Icon(Icons.close_outlined),
+                          IconButton(
+                              icon: const Icon(YaruIcons.window_close),
                               onPressed: () => Navigator.pop(context))),
                   Visibility(
                     visible: selectedTab == 0,

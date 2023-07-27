@@ -1,10 +1,8 @@
 import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
-import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopProfileScreen extends StatefulWidget {
   const DesktopProfileScreen({Key? key}) : super(key: key);
@@ -66,7 +64,8 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                     children: [
                       Expanded(
                           child: FilledButton(
-                              onPressed: signOut, child: Text('Sign Out'))),
+                              onPressed: signOut,
+                              child: const Text('Sign Out'))),
                     ],
                   ),
                 ],
@@ -85,8 +84,8 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                   Container(
                     alignment: Alignment.centerRight,
                     child: //Icon Button
-                        OutlinedButton(
-                            child: Icon(Icons.close_outlined),
+                        IconButton(
+                            icon: const Icon(YaruIcons.window_close),
                             onPressed: () => Navigator.pop(context)),
                   ),
                   Visibility(
@@ -97,7 +96,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         CircleAvatar(
                           radius: 40,
                           child: Icon(
-                            Iconsax.user,
+                            YaruIcons.user,
                             size: 40,
                           ),
                         ),

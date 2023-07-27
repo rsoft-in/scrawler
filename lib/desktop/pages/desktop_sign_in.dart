@@ -1,23 +1,24 @@
 import 'dart:convert';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/desktop/pages/desktop_forgot_pwd.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/language.dart';
-import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
-import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/providers/user_api_provider.dart';
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
-import 'package:bnotes/widgets/scrawl_button_outlined.dart';
-import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru_icons/yaru_icons.dart';
+
+import '../../desktop/pages/desktop_app_screen.dart';
+import '../../desktop/pages/desktop_forgot_pwd.dart';
+import '../../desktop/pages/desktop_sign_up.dart';
+import '../../helpers/adaptive.dart';
+import '../../helpers/constants.dart';
+import '../../helpers/globals.dart' as globals;
+import '../../helpers/language.dart';
+import '../../providers/user_api_provider.dart';
+import '../../widgets/scrawl_button_filled.dart';
+import '../../widgets/scrawl_snackbar.dart';
+import '../../widgets/window_controls.dart';
 
 class DesktopSignIn extends StatefulWidget {
   const DesktopSignIn({Key? key}) : super(key: key);
@@ -160,7 +161,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: Language.get('email'),
-                    suffixIcon: const Icon(Iconsax.sms),
+                    suffixIcon: const Icon(YaruIcons.mail),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -184,7 +185,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   obscureText: true,
                   decoration: InputDecoration(
                     hintText: Language.get('password'),
-                    suffixIcon: const Icon(Iconsax.password_check),
+                    suffixIcon: const Icon(YaruIcons.key),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -297,61 +298,15 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               preferredSize: const Size.fromHeight(56),
               child: MoveWindow(
                 child: Container(
-                  // color: Colors.amber,
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Visibility(
                     visible: !UniversalPlatform.isMacOS,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                Iconsax.minus,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.minimize(),
-                        ),
-                        kHSpace,
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                Icons.close_outlined,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.close(),
-                        ),
-                      ],
-                    ),
+                    child: const WindowControls(showMaxButton: false),
                   ),
                 ),
               ),
             ),
             body: Container(
-              // padding: const EdgeInsets.symmetric(vertical: 10),
               margin: const EdgeInsets.only(top: 56),
               alignment: Alignment.topCenter,
               child: Column(

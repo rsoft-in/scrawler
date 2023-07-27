@@ -1,18 +1,18 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
+import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/widgets/scrawl_navrail.dart';
 import 'package:bnotes/widgets/window_controls.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -124,7 +124,7 @@ class _DesktopAppState extends State<DesktopApp> {
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
                 leading: const CircleAvatar(
-                  child: Icon(Iconsax.user),
+                  child: Icon(YaruIcons.user),
                 ),
                 title: Text(globals.user!.userName),
                 onTap: () => showProfile(),
@@ -202,7 +202,7 @@ class _DesktopAppState extends State<DesktopApp> {
                   onPressed: () {
                     _desktopKey.currentState!.openDrawer();
                   },
-                  icon: const Icon(Iconsax.menu_1),
+                  icon: const Icon(YaruIcons.menu),
                 ),
                 kVSpace,
                 ...List.generate(
@@ -228,14 +228,14 @@ class _DesktopAppState extends State<DesktopApp> {
                           index: 9,
                           tooltip: 'Settings',
                           selectedIndex: _selectedIndex,
-                          icon: Iconsax.setting_2,
+                          icon: YaruIcons.settings,
                           onTap: () => showSettings(),
                         ),
                         ScrawlNavRailItem(
                           index: 10,
                           tooltip: globals.user!.userName,
                           selectedIndex: _selectedIndex,
-                          icon: Iconsax.user,
+                          icon: YaruIcons.user,
                           onTap: () => showProfile(),
                         ),
                       ]),
@@ -251,9 +251,6 @@ class _DesktopAppState extends State<DesktopApp> {
                 child: Positioned(
                   right: 0,
                   child: Container(
-                    // decoration: BoxDecoration(
-                    //     color: kLightSecondary,
-                    //     borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.all(4),
                     margin: const EdgeInsets.all(10),
                     child: const WindowControls(),

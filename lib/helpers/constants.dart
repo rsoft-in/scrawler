@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 const kAppName = 'scrawler';
 const kWebsiteUrl = 'https://scrawler.net';
@@ -37,15 +37,15 @@ const kMenu = [
   {
     'id': 'all_notes',
     'index': 0,
-    'icon': Iconsax.note_2,
-    'icon_filled': Iconsax.note_2,
+    'icon': YaruIcons.text_editor,
+    'icon_filled': YaruIcons.text_editor,
     'text': 'notes',
   },
   {
     'id': 'all_tasks',
     'index': 1,
-    'icon': Iconsax.task,
-    'icon_filled': Iconsax.task,
+    'icon': YaruIcons.unordered_list,
+    'icon_filled': YaruIcons.unordered_list,
     'text': 'tasks',
   },
 ];
@@ -54,22 +54,22 @@ const kMenuMobile = [
   {
     'id': 'all_notes',
     'index': 0,
-    'icon': Iconsax.note_2,
-    'icon_filled': Iconsax.note_2,
+    'icon': YaruIcons.text_editor,
+    'icon_filled': YaruIcons.text_editor,
     'text': 'notes',
   },
   {
     'id': 'all_tasks',
     'index': 1,
-    'icon': Iconsax.task,
-    'icon_filled': Iconsax.task,
+    'icon': YaruIcons.unordered_list,
+    'icon_filled': YaruIcons.unordered_list,
     'text': 'tasks',
   },
   {
     'id': 'settings',
     'index': 2,
-    'icon': Iconsax.setting,
-    'icon_filled': Iconsax.setting,
+    'icon': YaruIcons.settings,
+    'icon_filled': YaruIcons.settings,
     'text': 'settings',
   },
 ];

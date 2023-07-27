@@ -12,7 +12,7 @@ class _MobileTasksPageState extends State<MobileTasksPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Tasks'),
+        child: CircularProgressIndicator(),
       ),
     );
   }

@@ -4,16 +4,15 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
-import 'package:bnotes/widgets/scrawl_button_filled.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopForgotPassword extends StatefulWidget {
   final String email;
@@ -151,7 +150,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     Expanded(
                       child: FilledButton(
                         onPressed: () => verifyOtp(),
-                        child: Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ),
                   ],
@@ -166,7 +165,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Enter New Password',
-                      suffixIcon: Icon(Iconsax.password_check),
+                      suffixIcon: Icon(YaruIcons.key),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -187,7 +186,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Confirm Password',
-                      suffixIcon: Icon(Iconsax.password_check),
+                      suffixIcon: Icon(YaruIcons.key),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -210,7 +209,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                             updatePassword();
                           }
                         },
-                        child: Text('Submit'),
+                        child: const Text('Submit'),
                       ),
                     ),
                   ],
@@ -283,7 +282,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                                           : kLightStroke),
                                   borderRadius: BorderRadius.circular(20)),
                               child: const Icon(
-                                Iconsax.minus,
+                                YaruIcons.window_minimize,
                                 size: 14,
                               )),
                           onTap: () => appWindow.minimize(),

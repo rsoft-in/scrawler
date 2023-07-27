@@ -4,10 +4,9 @@ import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
-import 'package:bnotes/widgets/scrawl_floating_action_button.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class MobileNotesPage extends StatefulWidget {
   const MobileNotesPage({Key? key}) : super(key: key);
@@ -58,7 +57,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
               },
             ),
       // floatingActionButton: ScrawlFloatingActionButton(
-      //   icon: Iconsax.add,
+      //   icon: YaruIcons.plus,
       // onPressed: () => Navigator.push(
       //   context,
       //   MaterialPageRoute(
@@ -77,7 +76,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
             ),
           ),
         ),
-        child: const Icon(Iconsax.add),
+        child: const Icon(YaruIcons.plus),
       ),
     );
   }
