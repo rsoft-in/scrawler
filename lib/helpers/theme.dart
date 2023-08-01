@@ -117,6 +117,10 @@ ThemeData theme() {
         borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
+    chipTheme: const ChipThemeData(
+      backgroundColor: kLightSelected,
+      side: BorderSide.none,
+    ),
   );
 }
 
@@ -236,6 +240,10 @@ ThemeData themeDark() {
         borderRadius: BorderRadius.circular(kBorderRadiusSmall),
       ),
     ),
+    chipTheme: const ChipThemeData(
+      backgroundColor: kDarkScaffold,
+      side: BorderSide.none,
+    ),
   );
 }
 
@@ -245,15 +253,15 @@ InputDecorationTheme inputDecorationTheme() {
     fillColor: kLightPrimary,
     suffixIconColor: kDarkPrimary,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kLightStroke, width: 2),
     ),
     isDense: true,
@@ -268,15 +276,15 @@ InputDecorationTheme inputDecorationDarkTheme() {
     fillColor: kDarkPrimary,
     suffixIconColor: kLightPrimary,
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(kBorderRadiusSmall),
+      borderRadius: BorderRadius.circular(kBorderRadius),
       borderSide: const BorderSide(color: kDarkStroke, width: 2),
     ),
     isDense: true,

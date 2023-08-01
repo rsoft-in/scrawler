@@ -79,7 +79,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
               if (widget.note.noteLabel.isNotEmpty)
                 Chip(
                   label: Text(
-                    '${(widget.note.noteLabel).split(',')[0]} ${widget.note.noteLabel.contains(',') ? '...' : ''}',
+                    '${(widget.note.noteLabel).split(',')[0]}${widget.note.noteLabel.contains(',') ? '...' : ''}',
                     style: const TextStyle(fontSize: 10.0),
                   ),
                 ),

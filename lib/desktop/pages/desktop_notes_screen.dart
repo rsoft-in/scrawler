@@ -28,6 +28,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
+import '../../widgets/scrawl_add_button.dart';
 import '../../widgets/scrawl_circular_progress.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
@@ -400,15 +401,15 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       kHSpace,
-                      IconButton(
-                          icon: const Icon(YaruIcons.plus),
-                          onPressed: () {
-                            assignFields(Notes.empty());
-                            setState(() {
-                              editMode = true;
-                              isSelected = false;
-                            });
-                          })
+                      ScrawlAddButton(
+                        onTap: () {
+                          assignFields(Notes.empty());
+                          setState(() {
+                            editMode = true;
+                            isSelected = false;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -484,8 +485,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           maxLines: null,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      Container(
+                        color: darkModeOn ? kDarkSecondary : kLightSecondary,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 15.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
