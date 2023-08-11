@@ -7,7 +7,7 @@ class DBHelper {
   late Database db;
   static const _databaseName = 'bnotes.s3db';
   static const _databaseVersion = 2;
-  static const _databaseOldVersion = 1;
+  // static const _databaseOldVersion = 1;
   Database? _database;
 
   DBHelper._privateConstructor();
@@ -59,7 +59,6 @@ class DBHelper {
         orderBy: sortBy,
         where:
             'note_archived = 0 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
-    print(parsed);
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
@@ -129,7 +128,6 @@ class DBHelper {
   Future<List<Label>> getLabelsAll() async {
     Database? db = await instance.database;
     var parsed = await db!.query('labels', orderBy: 'label_name');
-    print(parsed);
     return parsed.map<Label>((json) => Label.fromJson(json)).toList();
   }
 

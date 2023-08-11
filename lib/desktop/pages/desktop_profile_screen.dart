@@ -1,5 +1,5 @@
 import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
+// import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yaru_icons/yaru_icons.dart';
@@ -17,10 +17,10 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
+    // var brightness = MediaQuery.of(context).platformBrightness;
+    // bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+    //     (brightness == Brightness.dark &&
+    //         globals.themeMode == ThemeMode.system));
     return Container(
       padding: kGlobalOuterPadding * 2,
       child: Row(

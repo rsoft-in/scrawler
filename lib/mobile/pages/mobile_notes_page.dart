@@ -1,5 +1,5 @@
 import 'package:bnotes/helpers/dbhelper.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
+// import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/models/notes.dart';
@@ -27,10 +27,10 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
+    // var brightness = MediaQuery.of(context).platformBrightness;
+    // bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+    //     (brightness == Brightness.dark &&
+    //         globals.themeMode == ThemeMode.system));
     return Scaffold(
       body: notes.isEmpty
           ? EmptyWidget(

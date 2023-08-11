@@ -6,6 +6,7 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 class WindowControls extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final showMaxButton;
   const WindowControls({Key? key, this.showMaxButton = true}) : super(key: key);
 

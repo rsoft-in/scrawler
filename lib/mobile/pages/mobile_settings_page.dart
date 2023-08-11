@@ -1,4 +1,4 @@
-import 'package:bnotes/helpers/globals.dart' as globals;
+// import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 
 class MobileSettingsPage extends StatefulWidget {
@@ -11,10 +11,10 @@ class MobileSettingsPage extends StatefulWidget {
 class _MobileSettingsPageState extends State<MobileSettingsPage> {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
+    // var brightness = MediaQuery.of(context).platformBrightness;
+    // bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+    //     (brightness == Brightness.dark &&
+    //         globals.themeMode == ThemeMode.system));
     return const Scaffold(
       body: FlutterLogo(),
     );

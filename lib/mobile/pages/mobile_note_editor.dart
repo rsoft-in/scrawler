@@ -83,10 +83,12 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                   leading: GestureDetector(
                       onTap: () async {
                         final res = await saveNote();
-                        if (res) {
-                          Navigator.pop(context, true);
-                        } else {
-                          Navigator.pop(context, false);
+                        if (context.mounted) {
+                          if (res) {
+                            Navigator.pop(context, true);
+                          } else {
+                            Navigator.pop(context, false);
+                          }
                         }
                       },
                       child: const Icon(YaruIcons.pan_start)),
@@ -228,7 +230,6 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       note.noteDate = DateTime.now().toIso8601String();
       note.noteText = noteTextController.text;
       final result = await dbHelper.insertNotes(note);
-      print(result);
       if (!result) {
         if (context.mounted) {
           ScaffoldMessenger.of(context)
