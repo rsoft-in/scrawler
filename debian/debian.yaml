@@ -5,7 +5,7 @@ flutter_app:
 
 control:
   Package: scrawler
-  Version: 1.5.0
+  Version: 1.5.1
   Architecture: amd64
   Essential: no
   Priority: optional

@@ -6,10 +6,10 @@ class Notes {
   String noteLabel;
   bool noteArchived;
   int noteColor;
-  String noteList;
+  String noteImage;
 
   Notes(this.noteId, this.noteDate, this.noteTitle, this.noteText,
-      this.noteLabel, this.noteArchived, this.noteColor, this.noteList);
+      this.noteLabel, this.noteArchived, this.noteColor, this.noteImage);
 
   Notes.empty() : this('', '', 'Untitled', '', '', false, 0, '');
 
@@ -19,9 +19,9 @@ class Notes {
         noteTitle = json['note_title'],
         noteText = json['note_text'],
         noteLabel = json['note_label'],
-        noteArchived = json['note_archived'] == '1',
-        noteColor = int.parse(json['note_color']),
-        noteList = json['note_list'] ?? '';
+        noteArchived = json['note_archived'] == 1,
+        noteColor = json['note_color'],
+        noteImage = json['note_image'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'note_id': noteId,
@@ -31,7 +31,7 @@ class Notes {
         'note_label': noteLabel,
         'note_archived': noteArchived,
         'note_color': noteColor,
-        'note_list': noteList
+        'note_image': noteImage
       };
 }
 

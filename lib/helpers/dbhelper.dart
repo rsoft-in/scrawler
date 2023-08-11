@@ -59,6 +59,7 @@ class DBHelper {
         orderBy: sortBy,
         where:
             'note_archived = 0 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
+    print(parsed);
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 

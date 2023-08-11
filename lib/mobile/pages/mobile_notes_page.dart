@@ -19,14 +19,6 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   final dbHelper = DBHelper.instance;
   List<Notes> notes = [];
 
-  Future<void> loadNotes() async {
-    dbHelper.getNotesAll('', 'note_date desc').then((value) {
-      setState(() {
-        notes = value;
-      });
-    });
-  }
-
   @override
   void initState() {
     loadNotes();
@@ -56,28 +48,28 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                 );
               },
             ),
-      // floatingActionButton: ScrawlFloatingActionButton(
-      //   icon: YaruIcons.plus,
-      // onPressed: () => Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => MobileNoteEditor(
-      //       note: Notes.empty(),
-      //     ),
-      //   ),
-      //   ),
-      // ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MobileNoteEditor(
-              note: Notes.empty(),
-            ),
-          ),
-        ),
+        onPressed: () => editNote(Notes.empty()),
         child: const Icon(YaruIcons.plus),
       ),
     );
+  }
+
+  Future<void> loadNotes() async {
+    dbHelper.getNotesAll('', 'note_date desc').then((value) {
+      setState(() {
+        notes = value;
+      });
+    });
+  }
+
+  void editNote(Notes note) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MobileNoteEditor(note: note)),
+    );
+    if (result) {
+      loadNotes();
+    }
   }
 }
