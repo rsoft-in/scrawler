@@ -69,7 +69,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     return WillPopScope(
       onWillPop: () async {
         final res = await saveNote();
-        return res;
+        return true;
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -205,6 +205,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         noteTextController.selection.textInside(noteTextController.text);
     var startIndex = noteTextController.selection.baseOffset;
     var endIndex = noteTextController.selection.extentOffset;
+    if (selectedText.isEmpty) return;
     switch (tool) {
       case EditorTools.bold:
         noteTextController.text =
