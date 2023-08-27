@@ -11,12 +11,14 @@ class NoteListItemWidget extends StatefulWidget {
   int selectedIndex;
   bool isSelected = false;
   VoidCallback? onTap;
+  VoidCallback? onLongPress;
   NoteListItemWidget(
       {Key? key,
       required this.note,
       required this.selectedIndex,
       required this.isSelected,
-      this.onTap})
+      this.onTap,
+      this.onLongPress})
       : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
         onTap: widget.onTap,
+        onLongPress: widget.onLongPress,
         child: Container(
           padding: kGlobalCardPadding * 2,
           decoration: BoxDecoration(

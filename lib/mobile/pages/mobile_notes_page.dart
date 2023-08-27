@@ -1,3 +1,4 @@
+import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
 // import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
@@ -9,6 +10,8 @@ import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
+import '../../models/menu_item.dart';
+
 class MobileNotesPage extends StatefulWidget {
   const MobileNotesPage({Key? key}) : super(key: key);
 
@@ -19,6 +22,12 @@ class MobileNotesPage extends StatefulWidget {
 class _MobileNotesPageState extends State<MobileNotesPage> {
   final dbHelper = DBHelper.instance;
   List<Notes> notes = [];
+  List<MenuItem> contextMenuItems = [
+    MenuItem('edit', Language.get('edit'), '', YaruIcons.pen),
+    MenuItem('delete', Language.get('delete'), '', YaruIcons.trash),
+    MenuItem('color', Language.get('color'), '', YaruIcons.colors),
+    MenuItem('tags', Language.get('tag'), '', YaruIcons.tag)
+  ];
 
   @override
   void initState() {
@@ -50,6 +59,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                       MaterialPageRoute(
                           builder: (context) =>
                               MobileNoteReader(note: notes[index]))),
+                  onLongPress: () => showOptions(context, notes[index]),
                 );
               },
             ),
@@ -76,5 +86,45 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     if (result) {
       loadNotes();
     }
+  }
+
+  void showOptions(BuildContext context, Notes note) {
+    showModalBottomSheet(
+        showDragHandle: true,
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: kGlobalOuterPadding,
+            child: ListView.builder(
+                itemCount: contextMenuItems.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () =>
+                        onContextSelected(contextMenuItems[index].value, note),
+                    borderRadius: BorderRadius.circular(kBorderRadius),
+                    child: Padding(
+                      padding: kGlobalOuterPadding,
+                      child: Row(
+                        children: [
+                          Icon(
+                            contextMenuItems[index].icon,
+                            size: 18,
+                          ),
+                          kHSpace,
+                          Expanded(
+                            child: Text(contextMenuItems[index].caption),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          );
+        });
+  }
+
+  void onContextSelected(String action, Notes note) {
+    Navigator.pop(context);
+    print(action);
   }
 }

@@ -163,6 +163,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                 ),
               ],
             ),
+            kVSpace,
           ],
         ),
       ),

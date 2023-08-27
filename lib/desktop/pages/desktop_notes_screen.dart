@@ -57,10 +57,10 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   // Context Menu Related
   Offset _tapPosition = Offset.zero;
   List<MenuItem> contextMenuItems = [
-    MenuItem('edit', Language.get('edit'), ''),
-    MenuItem('delete', Language.get('delete'), ''),
-    MenuItem('color', Language.get('color'), ''),
-    MenuItem('tags', Language.get('tag'), '')
+    MenuItem('edit', Language.get('edit'), '', null),
+    MenuItem('delete', Language.get('delete'), '', null),
+    MenuItem('color', Language.get('color'), '', null),
+    MenuItem('tags', Language.get('tag'), '', null)
   ];
   List<SortItem> sortItems = [
     SortItem(NoteSort.newest, Language.get('latest')),
