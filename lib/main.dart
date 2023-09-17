@@ -85,25 +85,20 @@ class _MyAppState extends State<MyApp> {
     _screenSize = getScreenSize(context);
     if ((_screenSize == ScreenSize.large && UniversalPlatform.isWeb) ||
         UniversalPlatform.isDesktop) isDesktop = true;
-
-    return YaruTheme(
-        data: const YaruThemeData(variant: YaruVariant.prussianGreen),
-        builder: (context, yaru, child) {
-          return MaterialApp(
-            title: kAppName,
-            debugShowCheckedModeBanner: false,
-            themeMode: themeMode,
-            theme: yaru.theme,
-            darkTheme: yaru.darkTheme,
-            routes: {
-              '/': (context) =>
-                  isDesktop ? const DesktopLanding() : const MobileStartPage(),
-              '/dsignin': (context) => const DesktopSignIn(),
-              '/dsignup': (context) => const DesktopSignUp(),
-              '/mobilestart': (context) => const MobileStartPage()
-            },
-            initialRoute: '/',
-          );
-        });
+    return MaterialApp(
+      title: kAppName,
+      debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
+      theme: theme(),
+      darkTheme: themeDark(),
+      routes: {
+        '/': (context) =>
+            isDesktop ? const DesktopLanding() : const MobileStartPage(),
+        '/dsignin': (context) => const DesktopSignIn(),
+        '/dsignup': (context) => const DesktopSignUp(),
+        '/mobilestart': (context) => const MobileStartPage()
+      },
+      initialRoute: '/',
+    );
   }
 }
