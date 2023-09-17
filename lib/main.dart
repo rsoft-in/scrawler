@@ -1,15 +1,17 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/language.dart';
-import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/desktop/desktop_landing.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
 import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/helpers/language.dart';
+import 'package:bnotes/helpers/theme.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/pages/mobile_start_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:yaru/yaru.dart';
 
 import 'helpers/globals.dart' as globals;
 
@@ -39,6 +41,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   int themeID = 3;
+  bool isDesktop = false;
+  ScreenSize _screenSize = ScreenSize.large;
 
   @override
   void initState() {
@@ -78,22 +82,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: kAppName,
-      debugShowCheckedModeBanner: false,
-      themeMode: themeMode,
-      // themeMode: ThemeMode.light,
-      theme: theme(),
-      darkTheme: themeDark(),
-      routes: {
-        '/': (context) => UniversalPlatform.isDesktopOrWeb || kIsWeb
-            ? const DesktopLanding()
-            : const MobileStartPage(),
-        '/dsignin': (context) => const DesktopSignIn(),
-        '/dsignup': (context) => const DesktopSignUp(),
-        '/mobilestart': (context) => const MobileStartPage()
-      },
-      initialRoute: '/',
-    );
+    _screenSize = getScreenSize(context);
+    if ((_screenSize == ScreenSize.large && UniversalPlatform.isWeb) ||
+        UniversalPlatform.isDesktop) isDesktop = true;
+
+    return YaruTheme(
+        data: const YaruThemeData(variant: YaruVariant.prussianGreen),
+        builder: (context, yaru, child) {
+          return MaterialApp(
+            title: kAppName,
+            debugShowCheckedModeBanner: false,
+            themeMode: themeMode,
+            theme: yaru.theme,
+            darkTheme: yaru.darkTheme,
+            routes: {
+              '/': (context) =>
+                  isDesktop ? const DesktopLanding() : const MobileStartPage(),
+              '/dsignin': (context) => const DesktopSignIn(),
+              '/dsignup': (context) => const DesktopSignUp(),
+              '/mobilestart': (context) => const MobileStartPage()
+            },
+            initialRoute: '/',
+          );
+        });
   }
 }

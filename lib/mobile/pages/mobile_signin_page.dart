@@ -1,3 +1,4 @@
+import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
 
 class MobileSignIn extends StatefulWidget {
@@ -10,8 +11,10 @@ class MobileSignIn extends StatefulWidget {
 class _MobileSignInState extends State<MobileSignIn> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(),
+    return const Scaffold(
+      body: Center(
+        child: Text('Sign-In'),
+      ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:uuid/uuid.dart';
 import 'package:yaru_icons/yaru_icons.dart';
+import 'package:yaru_widgets/yaru_widgets.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
@@ -54,6 +55,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     });
     setState(() {
       note = widget.note;
+      noteTextController.text = widget.note.noteText;
     });
   }
 
@@ -126,44 +128,75 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                PopupMenuButton(
+                    icon: const Text(
+                      'H',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 'h1',
+                            onTap: () => onToolbarClick(EditorTools.h1),
+                            child: const Text('Heading 1'),
+                          ),
+                          PopupMenuItem(
+                            value: 'h2',
+                            onTap: () => onToolbarClick(EditorTools.h2),
+                            child: const Text('Heading 2'),
+                          ),
+                          PopupMenuItem(
+                            value: 'h3',
+                            onTap: () => onToolbarClick(EditorTools.h3),
+                            child: const Text('Heading 3'),
+                          ),
+                          PopupMenuItem(
+                            value: 'h4',
+                            onTap: () => onToolbarClick(EditorTools.h4),
+                            child: const Text('Heading 4'),
+                          ),
+                        ]),
                 IconButton(
                   onPressed: () => onToolbarClick(EditorTools.bold),
-                  icon: const Text(
-                    'H',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                    ),
+                  icon: const Icon(
+                    YaruIcons.bold,
+                    size: 18,
                   ),
                 ),
                 IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.bold),
-                  icon: const Icon(YaruIcons.bold),
-                ),
-                IconButton(
                   onPressed: () => onToolbarClick(EditorTools.italic),
-                  icon: const Icon(YaruIcons.italic),
+                  icon: const Icon(
+                    YaruIcons.italic,
+                    size: 18,
+                  ),
                 ),
                 IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.underline),
-                  icon: const Icon(YaruIcons.underline),
+                  onPressed: () => addLink(),
+                  icon: const Icon(
+                    YaruIcons.insert_link,
+                    size: 18,
+                  ),
                 ),
                 IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.link),
-                  icon: const Icon(YaruIcons.insert_link),
-                ),
-                IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.image),
-                  icon: const Icon(YaruIcons.image),
+                  onPressed: () => addImage(),
+                  icon: const Icon(
+                    YaruIcons.image,
+                    size: 18,
+                  ),
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: const Icon(YaruIcons.view_more),
+                  icon: const Icon(
+                    YaruIcons.unordered_list,
+                    size: 18,
+                  ),
                 ),
               ],
             ),
-            kVSpace,
           ],
         ),
       ),
@@ -178,6 +211,11 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         context: context,
         builder: (context) {
           return AlertDialog(
+            titlePadding: EdgeInsets.zero,
+            title: const YaruDialogTitleBar(
+              title: Text('Edit'),
+              isClosable: true,
+            ),
             content: TextField(
               controller: noteTitleController,
               decoration: const InputDecoration(
@@ -202,19 +240,29 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   }
 
   void onToolbarClick(EditorTools tool) {
+    if (!noteTextController.selection.isValid) {
+      return;
+    }
     var selectedText =
         noteTextController.selection.textInside(noteTextController.text);
     var startIndex = noteTextController.selection.baseOffset;
     var endIndex = noteTextController.selection.extentOffset;
     if (selectedText.isEmpty) return;
     switch (tool) {
+      case EditorTools.h1:
+      case EditorTools.h2:
+      case EditorTools.h3:
+      case EditorTools.h4:
+        noteTextController.text =
+            '${noteTextController.text.substring(0, startIndex)}${getHeaderElement(tool)} $selectedText ${noteTextController.text.substring(endIndex)}';
+        break;
       case EditorTools.bold:
         noteTextController.text =
             '${noteTextController.text.substring(0, startIndex)}**$selectedText**${noteTextController.text.substring(endIndex)}';
         break;
       case EditorTools.italic:
         noteTextController.text =
-            '${noteTextController.text.substring(0, startIndex)}__${selectedText}__${noteTextController.text.substring(endIndex)}';
+            '${noteTextController.text.substring(0, startIndex)}_${selectedText}_${noteTextController.text.substring(endIndex)}';
         break;
 
       default:
@@ -222,24 +270,135 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     setState(() {});
   }
 
+  String getHeaderElement(EditorTools tool) {
+    switch (tool) {
+      case EditorTools.h1:
+        return '#';
+      case EditorTools.h2:
+        return '##';
+      case EditorTools.h3:
+        return '###';
+      case EditorTools.h4:
+        return '####';
+      default:
+        return '#';
+    }
+  }
+
+  void addLink() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: kGlobalOuterPadding,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Add a link'),
+                ),
+                kVSpace,
+                const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Description',
+                  ),
+                ),
+                kVSpace,
+                const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Enter Link',
+                  ),
+                ),
+                kVSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilledButton(
+                      onPressed: () {},
+                      child: const Text('Ok'),
+                    ),
+                    kHSpace,
+                    OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void addImage() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: kGlobalOuterPadding,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('Add an Image'),
+                ),
+                kVSpace,
+                const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Description',
+                  ),
+                ),
+                kVSpace,
+                const TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Enter Image Link',
+                  ),
+                ),
+                kVSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilledButton(
+                      onPressed: () {},
+                      child: const Text('Ok'),
+                    ),
+                    kHSpace,
+                    OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    )
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   Future<bool> saveNote() async {
     if (note.noteTitle.toLowerCase() == 'untitled' && note.noteText.isEmpty) {
       return false;
     }
+    bool result = false;
+    note.noteDate = DateTime.now().toIso8601String();
+    note.noteText = noteTextController.text;
     if (note.noteId.isEmpty) {
       var uid = const Uuid();
       note.noteId = uid.v1();
-      note.noteDate = DateTime.now().toIso8601String();
-      note.noteText = noteTextController.text;
-      final result = await dbHelper.insertNotes(note);
-      if (!result) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(ScrawlSnackBar.show(context, 'Failed to save!'));
-        }
-      }
-      return result;
+      result = await dbHelper.insertNotes(note);
+    } else {
+      result = await dbHelper.updateNotes(note);
     }
-    return false;
+    if (!result) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to save!'));
+      }
+    }
+    return result;
   }
 }

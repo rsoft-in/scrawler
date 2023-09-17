@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -194,10 +202,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_markdown
-      sha256: "2b206d397dd7836ea60035b2d43825c8a303a76a5098e66f42d55a753e18d431"
+      sha256: "7c4e42e66fb24bc912b64860c69806ef5cc0ad1480772aa2201ede568125a379"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.17+1"
+    version: "0.6.9+1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -216,6 +224,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  gtk:
+    dependency: transitive
+    description:
+      name: gtk
+      sha256: e8ce9ca4b1df106e4d72dad201d345ea1a036cc12c360f1a7d5a758f78ffa42c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   http:
     dependency: "direct main"
     description:
@@ -284,10 +300,10 @@ packages:
     dependency: transitive
     description:
       name: markdown
-      sha256: acf35edccc0463a9d7384e437c015a3535772e09714cf60e07eeef3a15870dcd
+      sha256: "01512006c8429f604eb10f9848717baeaedf99e991d14a50d540d9beff08e5c6"
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.1"
+    version: "4.0.1"
   matcher:
     dependency: transitive
     description:
@@ -392,6 +408,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.3"
+  screen_retriever:
+    dependency: transitive
+    description:
+      name: screen_retriever
+      sha256: "6ee02c8a1158e6dae7ca430da79436e3b1c9563c8cf02f524af997c201ac2b90"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.9"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -637,6 +661,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.4"
+  window_manager:
+    dependency: transitive
+    description:
+      name: window_manager
+      sha256: "6ee795be9124f90660ea9d05e581a466de19e1c89ee74fc4bf528f60c8600edd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.6"
   xdg_directories:
     dependency: transitive
     description:
@@ -661,6 +693,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  yaru:
+    dependency: "direct main"
+    description:
+      name: yaru
+      sha256: "24047f0de452784840a326874192d26cb5ebd8cf5eac7864086e5bc9272a28db"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   yaru_icons:
     dependency: "direct main"
     description:
@@ -669,6 +709,54 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  yaru_widgets:
+    dependency: "direct main"
+    description:
+      name: yaru_widgets
+      sha256: "482a71ef5566c6cb4135272f0041bf8a9c35729bf9079b0d304eedfa2fa0cc0c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
+  yaru_window:
+    dependency: transitive
+    description:
+      name: yaru_window
+      sha256: "55c8f039d13aaa1b211a8cf0b7731ae2fdcac9b1be1e0994eb14ad1d17fecaf7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3"
+  yaru_window_linux:
+    dependency: transitive
+    description:
+      name: yaru_window_linux
+      sha256: c45606cf75880ae6427bbe176dc5313356f16c876c7013a19aeee782882c40c2
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3"
+  yaru_window_manager:
+    dependency: transitive
+    description:
+      name: yaru_window_manager
+      sha256: "2d358263d19ae6598df21d6d8c0d25e75c79a82f459b63b0013a13e395c48b23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  yaru_window_platform_interface:
+    dependency: transitive
+    description:
+      name: yaru_window_platform_interface
+      sha256: e9f8cd34e207d7f7b771ae70dee347ed974cee06b981819c4181b3e474e52254
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2"
+  yaru_window_web:
+    dependency: transitive
+    description:
+      name: yaru_window_web
+      sha256: "3ff30758a330d7626d54643df0cca6c179782f401aba7752da9cc0d60c9a6f74"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
 sdks:
   dart: ">=3.1.0-185.0.dev <4.0.0"
   flutter: ">=3.10.0"

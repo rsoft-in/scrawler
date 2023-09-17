@@ -2,6 +2,9 @@ import 'package:bnotes/mobile/pages/mobile_home_page.dart';
 import 'package:bnotes/mobile/pages/mobile_signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
+
+import '../../helpers/constants.dart';
 
 class MobileStartPage extends StatefulWidget {
   const MobileStartPage({Key? key}) : super(key: key);
@@ -19,18 +22,19 @@ class _MobileStartPageState extends State<MobileStartPage> {
     prefs = await SharedPreferences.getInstance();
     isVerifiedUser = prefs.getBool("is_verified_user") ?? false;
     isUserSignedIn = prefs.getBool("is_used_signedin") ?? false;
-    if (isVerifiedUser) {
+    if (isVerifiedUser || UniversalPlatform.isWeb) {
       if (isUserSignedIn) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const MobileHomePage()),
             (route) => false);
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const MobileSignIn()),
-            (route) => false);
       }
+      // else {
+      //   Navigator.pushAndRemoveUntil(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => const MobileSignIn()),
+      //       (route) => false);
+      // }
     } else {
       Navigator.pushAndRemoveUntil(
           context,
@@ -50,16 +54,42 @@ class _MobileStartPageState extends State<MobileStartPage> {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisSize: MainAxisSize.max,
           children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: Image.asset(
-                  'images/bnotes.png',
-                  width: 120,
-                )),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 150),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: Image.asset(
+                    'images/scrawler.png',
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
+      ),
+      bottomSheet: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 15),
+            child: Center(
+              child: Text(
+                kAppName,
+                style: TextStyle(fontSize: 22),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 200,
+            child: FilledButton(onPressed: () {}, child: const Text('Login')),
+          ),
+          kVSpace,
+        ],
       ),
     );
   }

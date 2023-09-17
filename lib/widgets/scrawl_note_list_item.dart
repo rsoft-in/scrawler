@@ -64,7 +64,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                       Text(
                         widget.note.noteTitle,
                         style: const TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 16.0,
                         ),
                       ),
                       kVSpace,

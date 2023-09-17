@@ -59,3 +59,5 @@ enum SupportState {
   supported,
   unsupported,
 }
+
+enum ScreenSize { small, medium, large }

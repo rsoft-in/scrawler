@@ -72,7 +72,7 @@ class _MobileHomePageState extends State<MobileHomePage> {
                       color: darkModeOn ? Colors.white : Colors.black,
                       fontSize: index == selectedTab ? 22.0 : 18.0,
                       fontWeight: index == selectedTab
-                          ? FontWeight.w500
+                          ? FontWeight.w800
                           : FontWeight.w300,
                     ),
                     child: Text(
