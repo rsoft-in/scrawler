@@ -69,10 +69,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        final res = await saveNote();
-        return true;
-      },
+      onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: PreferredSize(
@@ -83,16 +80,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
               duration: const Duration(milliseconds: 200),
               child: AppBar(
                   leading: GestureDetector(
-                      onTap: () async {
-                        final res = await saveNote();
-                        if (context.mounted) {
-                          if (res) {
-                            Navigator.pop(context, true);
-                          } else {
-                            Navigator.pop(context, false);
-                          }
-                        }
-                      },
+                      onTap: onBackPressed,
                       child: const Icon(YaruIcons.pan_start)),
                   title: GestureDetector(
                     onTap: () => titleDialog(),
@@ -201,6 +189,18 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         ),
       ),
     );
+  }
+
+  Future<bool> onBackPressed() async {
+    final res = await saveNote();
+    if (context.mounted) {
+      if (res) {
+        Navigator.pop(context, true);
+      } else {
+        Navigator.pop(context, false);
+      }
+    }
+    return false;
   }
 
   void titleDialog() {
@@ -380,12 +380,12 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   }
 
   Future<bool> saveNote() async {
-    if (note.noteTitle.toLowerCase() == 'untitled' && note.noteText.isEmpty) {
+    note.noteDate = DateTime.now().toIso8601String();
+    note.noteText = noteTextController.text;
+    if (note.noteText.isEmpty) {
       return false;
     }
     bool result = false;
-    note.noteDate = DateTime.now().toIso8601String();
-    note.noteText = noteTextController.text;
     if (note.noteId.isEmpty) {
       var uid = const Uuid();
       note.noteId = uid.v1();
