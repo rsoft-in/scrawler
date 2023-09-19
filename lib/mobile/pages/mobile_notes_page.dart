@@ -1,6 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
-// import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
@@ -42,27 +42,74 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
+        (brightness == Brightness.dark &&
+            globals.themeMode == ThemeMode.system));
     return Scaffold(
       body: notes.isEmpty
           ? EmptyWidget(
               text: Language.get('select_note'),
               width: MediaQuery.of(context).size.width * 0.8,
               asset: 'images/undraw_playful_cat.svg')
-          : ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                return NoteListItemWidget(
-                  isSelected: false,
-                  note: notes[index],
-                  selectedIndex: 0,
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              MobileNoteReader(note: notes[index]))),
-                  onLongPress: () => showOptions(context, notes[index]),
-                );
-              },
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          Visibility(
+                            visible: index == 0,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 22.0, vertical: 10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: TextField()),
+                                  kHSpace,
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(5),
+                                    onTap: () {},
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: darkModeOn
+                                            ? kDarkPrimary
+                                            : kLightPrimary,
+                                        border: Border.all(
+                                            color: darkModeOn
+                                                ? kDarkStroke
+                                                : kLightStroke,
+                                            width: 2),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      padding: const EdgeInsets.all(12),
+                                      child: const Icon(Icons.sort),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          NoteListItemWidget(
+                            isSelected: false,
+                            note: notes[index],
+                            selectedIndex: 0,
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MobileNoteReader(note: notes[index]))),
+                            onLongPress: () =>
+                                showOptions(context, notes[index]),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => editNote(Notes.empty()),

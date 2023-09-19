@@ -1,3 +1,5 @@
+import 'package:bnotes/widgets/scrawl_appbar.dart';
+import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -72,29 +74,40 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       onWillPop: onBackPressed,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
+        // appBar: AppBar(
+        //     leading: ScrawlOutlinedIconButton(
+        //       icon: Icons.arrow_back_ios,
+        //       onPressed: onBackPressed,
+        //     ),
+        //     // leading: GestureDetector(
+        //     //     onTap: onBackPressed,
+        //     //     child: const Icon(YaruIcons.pan_start)),
+        //     title: GestureDetector(
+        //       onTap: () => titleDialog(),
+        //       child: Row(
+        //         children: [
+        //           Text(note.noteTitle),
+        //           kHSpace,
+        //           const Icon(
+        //             YaruIcons.pen,
+        //             size: 18,
+        //           ),
+        //         ],
+        //       ),
+        //     )),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
+          preferredSize: Size.fromHeight(84),
           child: SafeArea(
-            child: AnimatedContainer(
-              height: _showAppbar ? 56.0 : 0.0,
-              duration: const Duration(milliseconds: 200),
-              child: AppBar(
-                  leading: GestureDetector(
-                      onTap: onBackPressed,
-                      child: const Icon(YaruIcons.pan_start)),
-                  title: GestureDetector(
-                    onTap: () => titleDialog(),
-                    child: Row(
-                      children: [
-                        Text(note.noteTitle),
-                        kHSpace,
-                        const Icon(
-                          YaruIcons.pen,
-                          size: 18,
-                        ),
-                      ],
-                    ),
-                  )),
+            child: ScrawlAppBar(
+              title: widget.note.noteTitle,
+              onPressed: () => Navigator.pop(context, true),
+              titleEdit: GestureDetector(
+                onTap: () => titleDialog(),
+                child: const Icon(
+                  YaruIcons.pen,
+                  size: 18,
+                ),
+              ),
             ),
           ),
         ),

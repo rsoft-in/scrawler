@@ -35,8 +35,8 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
 
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: 10.0,
+        vertical: 8.0,
+        horizontal: 24.0,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),

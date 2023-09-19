@@ -1,4 +1,6 @@
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/widgets/scrawl_appbar.dart';
+import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -55,42 +57,57 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
             brightness == Brightness.dark));
 
     return Scaffold(
+      // backgroundColor: kDarkPrimary,
+      // appBar: PreferredSize(
+      //   preferredSize: const Size.fromHeight(56),
+      //   child: SafeArea(
+      //     child: AnimatedContainer(
+      //       height: _showAppbar ? 56.0 : 0.0,
+      //       duration: const Duration(milliseconds: 200),
+      //       child: AppBar(
+      //         leading: GestureDetector(
+      //             onTap: () => Navigator.pop(context, true),
+      //             child: const Icon(YaruIcons.pan_start)),
+      //         title: Text(widget.note.noteTitle),
+      //       ),
+      //     ),
+      //   ),
+      // ),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(80),
         child: SafeArea(
-          child: AnimatedContainer(
-            height: _showAppbar ? 56.0 : 0.0,
-            duration: const Duration(milliseconds: 200),
-            child: AppBar(
-              leading: GestureDetector(
-                  onTap: () => Navigator.pop(context, true),
-                  child: const Icon(YaruIcons.pan_start)),
-              title: Text(widget.note.noteTitle),
+          child: Container(
+            alignment: Alignment.centerLeft,
+            child: ScrawlAppBar(
+              title: widget.note.noteTitle,
+              onPressed: () => Navigator.pop(context, true),
             ),
           ),
         ),
       ),
       body: Padding(
         padding: kPaddingLarge,
-        child: MarkdownBody(
-            selectable: true,
-            softLineBreak: true,
-            onTapLink: (text, href, title) => _launchUrl(href),
-            styleSheet: MarkdownStyleSheet(
-                blockquote: const TextStyle(color: Colors.black),
-                blockquoteDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  border: Border(
-                    left: BorderSide(color: kPrimaryColor, width: 3),
+        child: SingleChildScrollView(
+          child: MarkdownBody(
+              selectable: true,
+              softLineBreak: true,
+              onTapLink: (text, href, title) => _launchUrl(href),
+              styleSheet: MarkdownStyleSheet(
+                  blockquote: const TextStyle(color: Colors.black),
+                  blockquoteDecoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border(
+                      left: BorderSide(color: kPrimaryColor, width: 3),
+                    ),
                   ),
-                ),
-                code: const TextStyle(backgroundColor: Colors.transparent),
-                codeblockAlign: WrapAlignment.spaceAround,
-                codeblockDecoration: BoxDecoration(
-                    color: darkModeOn ? Colors.white10 : Colors.black12),
-                checkbox: TextStyle(
-                    color: darkModeOn ? kLightPrimary : kDarkPrimary)),
-            data: widget.note.noteText),
+                  code: const TextStyle(backgroundColor: Colors.transparent),
+                  codeblockAlign: WrapAlignment.spaceAround,
+                  codeblockDecoration: BoxDecoration(
+                      color: darkModeOn ? Colors.white10 : Colors.black12),
+                  checkbox: TextStyle(
+                      color: darkModeOn ? kLightPrimary : kDarkPrimary)),
+              data: widget.note.noteText),
+        ),
       ),
     );
   }

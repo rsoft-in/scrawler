@@ -53,9 +53,11 @@ class _MobileHomePageState extends State<MobileHomePage> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
+        preferredSize: const Size.fromHeight(80),
         child: SafeArea(
           child: Container(
+            decoration:
+                BoxDecoration(color: darkModeOn ? kDarkPrimary : kLightPrimary),
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -65,15 +67,15 @@ class _MobileHomePageState extends State<MobileHomePage> {
                 child: Container(
                   alignment: Alignment.center,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
                   child: AnimatedDefaultTextStyle(
                     duration: const Duration(milliseconds: 50),
                     style: TextStyle(
                       color: darkModeOn ? Colors.white : Colors.black,
-                      fontSize: index == selectedTab ? 22.0 : 18.0,
+                      fontSize: index == selectedTab ? 28.0 : 26.0,
                       fontWeight: index == selectedTab
-                          ? FontWeight.w800
-                          : FontWeight.w300,
+                          ? FontWeight.w400
+                          : FontWeight.w200,
                     ),
                     child: Text(
                       kLabels[kMenuMobile[index]['text']]!,

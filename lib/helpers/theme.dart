@@ -6,7 +6,7 @@ ThemeData theme() {
   return ThemeData(
     inputDecorationTheme: inputDecorationTheme(),
     fontFamily: 'Inter',
-    scaffoldBackgroundColor: kLightScaffold,
+    scaffoldBackgroundColor: kLightSecondary,
     useMaterial3: true,
     appBarTheme: const AppBarTheme(
       elevation: 0,
