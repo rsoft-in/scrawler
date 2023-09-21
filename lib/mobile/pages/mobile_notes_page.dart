@@ -183,22 +183,24 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   }
 
   void showOptions(BuildContext context, Notes note) {
-    showModalBottomSheet(
-        showDragHandle: true,
+    showDialog(
         context: context,
         builder: (context) {
-          return Container(
-            padding: kGlobalOuterPadding,
-            child: ListView.builder(
-                itemCount: contextMenuItems.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () =>
-                        onContextSelected(contextMenuItems[index].value, note),
-                    leading: Icon(contextMenuItems[index].icon),
-                    title: Text(contextMenuItems[index].caption),
-                  );
-                }),
+          return Dialog(
+            child: Container(
+              padding: kGlobalOuterPadding,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: contextMenuItems.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () => onContextSelected(
+                          contextMenuItems[index].value, note),
+                      leading: Icon(contextMenuItems[index].icon),
+                      title: Text(contextMenuItems[index].caption),
+                    );
+                  }),
+            ),
           );
         });
   }
@@ -240,10 +242,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                 onPressed: () => Navigator.pop(context),
               )
             ],
-            titlePadding: EdgeInsets.zero,
-            title: const YaruDialogTitleBar(
-              title: Text('Confirm'),
-            ),
+            title: const Text('Confirm'),
             content: const Text('Are you sure you want to delete?'),
           );
         });
