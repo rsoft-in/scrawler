@@ -16,13 +16,13 @@ dependencies:
   bitsdojo_window: ^0.1.5
   cupertino_icons: ^1.0.4
   flutter_markdown: ^0.6.9+1
-  flutter_svg: ^1.1.6
-  http: ^0.13.6
+  flutter_svg: ^2.0.7
+  http: ^1.1.0
   iconsax: ^0.0.8
   intl: ^0.18.0
   shared_preferences: ^2.0.13
   sqflite: ^2.2.8+4
-  uuid: ^3.0.5
+  uuid: ^4.0.0
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
   path: ^1.8.3
@@ -31,7 +31,6 @@ dependencies:
   yaru_widgets: ^3.1.0
 
 flutter_launcher_icons:
-  android: "launcher_icon"
   ios: true
   image_path: "images/scrawler.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
