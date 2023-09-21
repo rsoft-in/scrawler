@@ -121,6 +121,10 @@ ThemeData theme() {
       backgroundColor: kLightSelected,
       side: BorderSide.none,
     ),
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: kLightSelected,
+      elevation: 0,
+    ),
   );
 }
 
@@ -243,6 +247,10 @@ ThemeData themeDark() {
     chipTheme: const ChipThemeData(
       backgroundColor: kDarkScaffold,
       side: BorderSide.none,
+    ),
+    bottomAppBarTheme: const BottomAppBarTheme(
+      color: kDarkBody,
+      elevation: 0,
     ),
   );
 }

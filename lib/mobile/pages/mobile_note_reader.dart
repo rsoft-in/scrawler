@@ -1,4 +1,5 @@
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/widgets/scrawl_appbar.dart';
 import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
@@ -57,22 +58,7 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
             brightness == Brightness.dark));
 
     return Scaffold(
-      // backgroundColor: kDarkPrimary,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size.fromHeight(56),
-      //   child: SafeArea(
-      //     child: AnimatedContainer(
-      //       height: _showAppbar ? 56.0 : 0.0,
-      //       duration: const Duration(milliseconds: 200),
-      //       child: AppBar(
-      //         leading: GestureDetector(
-      //             onTap: () => Navigator.pop(context, true),
-      //             child: const Icon(YaruIcons.pan_start)),
-      //         title: Text(widget.note.noteTitle),
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      backgroundColor: darkModeOn ? kDarkPrimary : kLightPrimary,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: SafeArea(
@@ -85,9 +71,10 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
           ),
         ),
       ),
-      body: Padding(
-        padding: kPaddingLarge,
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 18),
         child: SingleChildScrollView(
+          controller: _scrollViewController,
           child: MarkdownBody(
               selectable: true,
               softLineBreak: true,
@@ -107,6 +94,37 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
                   checkbox: TextStyle(
                       color: darkModeOn ? kLightPrimary : kDarkPrimary)),
               data: widget.note.noteText),
+        ),
+      ),
+      bottomNavigationBar: AnimatedContainer(
+        height: _showAppbar ? 80.0 : 0.0,
+        duration: const Duration(milliseconds: 200),
+        child: BottomAppBar(
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              itemExtent: 80,
+              scrollDirection: Axis.horizontal,
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(YaruIcons.pen),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(YaruIcons.trash),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(YaruIcons.colors),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(YaruIcons.tag),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
