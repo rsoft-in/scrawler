@@ -111,94 +111,89 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             ),
           ),
         ),
-        body: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: TextField(
-                scrollController: _scrollViewController,
-                controller: noteTextController,
-                decoration: InputDecoration(
-                    hintText: Language.get('type_something'),
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none),
-                textAlignVertical: TextAlignVertical.top,
-                expands: true,
-                maxLines: null,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PopupMenuButton(
-                    icon: const Text(
-                      'H',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+        body: TextField(
+          scrollController: _scrollViewController,
+          controller: noteTextController,
+          decoration: InputDecoration(
+              hintText: Language.get('type_something'),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none),
+          textAlignVertical: TextAlignVertical.top,
+          expands: true,
+          maxLines: null,
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              PopupMenuButton(
+                  icon: const Text(
+                    'H',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 'h1',
-                            onTap: () => onToolbarClick(EditorTools.h1),
-                            child: const Text('Heading 1'),
-                          ),
-                          PopupMenuItem(
-                            value: 'h2',
-                            onTap: () => onToolbarClick(EditorTools.h2),
-                            child: const Text('Heading 2'),
-                          ),
-                          PopupMenuItem(
-                            value: 'h3',
-                            onTap: () => onToolbarClick(EditorTools.h3),
-                            child: const Text('Heading 3'),
-                          ),
-                          PopupMenuItem(
-                            value: 'h4',
-                            onTap: () => onToolbarClick(EditorTools.h4),
-                            child: const Text('Heading 4'),
-                          ),
-                        ]),
-                IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.bold),
-                  icon: const Icon(
-                    YaruIcons.bold,
-                    size: 18,
                   ),
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 'h1',
+                          onTap: () => onToolbarClick(EditorTools.h1),
+                          child: const Text('Heading 1'),
+                        ),
+                        PopupMenuItem(
+                          value: 'h2',
+                          onTap: () => onToolbarClick(EditorTools.h2),
+                          child: const Text('Heading 2'),
+                        ),
+                        PopupMenuItem(
+                          value: 'h3',
+                          onTap: () => onToolbarClick(EditorTools.h3),
+                          child: const Text('Heading 3'),
+                        ),
+                        PopupMenuItem(
+                          value: 'h4',
+                          onTap: () => onToolbarClick(EditorTools.h4),
+                          child: const Text('Heading 4'),
+                        ),
+                      ]),
+              IconButton(
+                onPressed: () => onToolbarClick(EditorTools.bold),
+                icon: const Icon(
+                  YaruIcons.bold,
+                  size: 18,
                 ),
-                IconButton(
-                  onPressed: () => onToolbarClick(EditorTools.italic),
-                  icon: const Icon(
-                    YaruIcons.italic,
-                    size: 18,
-                  ),
+              ),
+              IconButton(
+                onPressed: () => onToolbarClick(EditorTools.italic),
+                icon: const Icon(
+                  YaruIcons.italic,
+                  size: 18,
                 ),
-                IconButton(
-                  onPressed: () => addLink(),
-                  icon: const Icon(
-                    YaruIcons.insert_link,
-                    size: 18,
-                  ),
+              ),
+              IconButton(
+                onPressed: () => addLink(),
+                icon: const Icon(
+                  YaruIcons.insert_link,
+                  size: 18,
                 ),
-                IconButton(
-                  onPressed: () => addImage(),
-                  icon: const Icon(
-                    YaruIcons.image,
-                    size: 18,
-                  ),
+              ),
+              IconButton(
+                onPressed: () => addImage(),
+                icon: const Icon(
+                  YaruIcons.image,
+                  size: 18,
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    YaruIcons.unordered_list,
-                    size: 18,
-                  ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  YaruIcons.unordered_list,
+                  size: 18,
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
