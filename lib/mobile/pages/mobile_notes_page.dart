@@ -8,6 +8,7 @@ import 'package:bnotes/mobile/pages/mobile_note_reader.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
+import 'package:bnotes/widgets/scrawl_search.dart';
 import 'package:flutter/material.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -33,6 +34,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     MenuItem('color', Language.get('color'), '', YaruIcons.colors),
     MenuItem('tags', Language.get('tag'), '', YaruIcons.tag)
   ];
+
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
@@ -67,7 +70,13 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                                   horizontal: 22.0, vertical: 10),
                               child: Row(
                                 children: [
-                                  const Expanded(child: TextField()),
+                                  Expanded(
+                                    child: ScrawlSearch(
+                                      controller: searchController,
+                                      onSearch: () {},
+                                      onClearSearch: () {},
+                                    ),
+                                  ),
                                   kHSpace,
                                   InkWell(
                                     borderRadius: BorderRadius.circular(5),
