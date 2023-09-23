@@ -1,5 +1,4 @@
 import 'package:bnotes/widgets/scrawl_appbar.dart';
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -96,11 +95,14 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         //       ),
         //     )),
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(84),
+          preferredSize: const Size.fromHeight(84),
           child: SafeArea(
             child: ScrawlAppBar(
               title: widget.note.noteTitle,
-              onPressed: () => Navigator.pop(context, true),
+              onPressed: () {
+                saveNote();
+                Navigator.pop(context, true);
+              },
               titleEdit: GestureDetector(
                 onTap: () => titleDialog(),
                 child: const Icon(

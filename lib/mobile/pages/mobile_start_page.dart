@@ -71,25 +71,28 @@ class _MobileStartPageState extends State<MobileStartPage> {
           ],
         ),
       ),
-      bottomSheet: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Center(
-              child: Text(
-                kAppName,
-                style: TextStyle(fontSize: 22),
+      bottomSheet: Visibility(
+        visible: isVerifiedUser,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              child: Center(
+                child: Text(
+                  kAppName,
+                  style: TextStyle(fontSize: 22),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            width: 200,
-            child: FilledButton(onPressed: () {}, child: const Text('Login')),
-          ),
-          kVSpace,
-        ],
+            SizedBox(
+              width: 200,
+              child: FilledButton(onPressed: () {}, child: const Text('Login')),
+            ),
+            kVSpace,
+          ],
+        ),
       ),
     );
   }

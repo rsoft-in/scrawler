@@ -1,7 +1,5 @@
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/widgets/scrawl_appbar.dart';
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';

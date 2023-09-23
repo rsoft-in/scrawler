@@ -20,20 +20,20 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
     return Scaffold(
       body: ListView(
         children: [
-          ListTile(
-            onTap: () {},
-            leading: const Icon(CupertinoIcons.person),
-            title: const Text('Account'),
-          ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(CupertinoIcons.shield),
-            title: const Text('Security'),
-          ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(CupertinoIcons.person),
+          //   title: const Text('Account'),
+          // ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(CupertinoIcons.shield),
+          //   title: const Text('Security'),
+          // ),
           ListTile(
             onTap: () {},
             leading: const Icon(CupertinoIcons.cloud),
-            title: const Text('Backup'),
+            title: const Text('Backup & Restore'),
           ),
           ListTile(
             onTap: appearance,
@@ -41,11 +41,11 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
             title: const Text('Appearance'),
             subtitle: Text(globals.themeMode.name),
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(CupertinoIcons.bell),
-            title: const Text('Notifications'),
-          ),
+          // ListTile(
+          //   onTap: () {},
+          //   leading: const Icon(CupertinoIcons.bell),
+          //   title: const Text('Notifications'),
+          // ),
           ListTile(
             onTap: () {},
             leading: const Icon(CupertinoIcons.info),

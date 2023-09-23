@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:yaru_icons/yaru_icons.dart';
@@ -7,7 +5,6 @@ import 'package:yaru_icons/yaru_icons.dart';
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
 import '../../models/label.dart';
-import '../../helpers/globals.dart' as globals;
 
 class MobileLabelsPage extends StatefulWidget {
   final String preselect;

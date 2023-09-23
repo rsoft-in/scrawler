@@ -11,7 +11,6 @@ import 'package:bnotes/mobile/pages/mobile_start_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru/yaru.dart';
 
 import 'helpers/globals.dart' as globals;
 
