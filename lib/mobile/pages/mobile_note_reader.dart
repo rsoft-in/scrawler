@@ -8,6 +8,7 @@ import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/notes.dart';
+import 'mobile_note_editor.dart';
 
 class MobileNoteReader extends StatefulWidget {
   final Notes note;
@@ -102,7 +103,9 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pop(context, 'edit');
+                },
                 icon: const Icon(YaruIcons.pen),
               ),
               IconButton(

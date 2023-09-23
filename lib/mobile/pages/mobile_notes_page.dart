@@ -104,11 +104,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                             isSelected: false,
                             note: notes[index],
                             selectedIndex: 0,
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        MobileNoteReader(note: notes[index]))),
+                            onTap: () => openReader(notes[index]),
                             onLongPress: () =>
                                 showOptions(context, notes[index]),
                           ),
@@ -132,6 +128,17 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
         notes = value;
       });
     });
+  }
+
+  void openReader(Notes note) async {
+    final result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MobileNoteReader(note: note)));
+    if (result is bool) {
+      return;
+    }
+    if (result.contains('edit')) {
+      editNote(note);
+    }
   }
 
   void editNote(Notes note) async {
