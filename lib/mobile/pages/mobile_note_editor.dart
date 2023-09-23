@@ -221,11 +221,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            titlePadding: EdgeInsets.zero,
-            title: const YaruDialogTitleBar(
-              title: Text('Edit'),
-              isClosable: true,
-            ),
+            title: const Text('Edit'),
             content: TextField(
               controller: noteTitleController,
               decoration: const InputDecoration(
