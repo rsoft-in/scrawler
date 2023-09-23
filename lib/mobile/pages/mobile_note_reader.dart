@@ -103,13 +103,11 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                onPressed: () {
-                  Navigator.pop(context, 'edit');
-                },
+                onPressed: () => Navigator.pop(context, 'edit'),
                 icon: const Icon(YaruIcons.pen),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.pop(context, 'delete'),
                 icon: const Icon(YaruIcons.trash),
               ),
               IconButton(

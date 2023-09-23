@@ -139,6 +139,9 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     if (result.contains('edit')) {
       editNote(note);
     }
+    if (result.contains('delete')) {
+      confirmDelete(note);
+    }
   }
 
   void editNote(Notes note) async {
