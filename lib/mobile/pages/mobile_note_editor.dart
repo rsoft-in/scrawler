@@ -296,94 +296,108 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   }
 
   void addLink() {
-    showModalBottomSheet(
+    showDialog(
         context: context,
         builder: (context) {
-          return Padding(
-            padding: kGlobalOuterPadding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Add a link'),
-                ),
-                kVSpace,
-                const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                  ),
-                ),
-                kVSpace,
-                const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Enter Link',
-                  ),
-                ),
-                kVSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilledButton(
-                      onPressed: () {},
-                      child: const Text('Ok'),
+          return Dialog(
+            child: Padding(
+              padding: kPaddingLarge,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Add a link',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w200),
                     ),
-                    kHSpace,
-                    OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  kVSpace,
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                    ),
+                  ),
+                  kVSpace,
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter Link',
+                    ),
+                  ),
+                  kVSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FilledButton(
+                        onPressed: () {},
+                        child: const Text('Ok'),
+                      ),
+                      kHSpace,
+                      OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         });
   }
 
   void addImage() {
-    showModalBottomSheet(
+    showDialog(
         context: context,
         builder: (context) {
-          return Padding(
-            padding: kGlobalOuterPadding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('Add an Image'),
-                ),
-                kVSpace,
-                const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Description',
-                  ),
-                ),
-                kVSpace,
-                const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Enter Image Link',
-                  ),
-                ),
-                kVSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FilledButton(
-                      onPressed: () {},
-                      child: const Text('Ok'),
+          return Dialog(
+            child: Padding(
+              padding: kPaddingLarge,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Add an Image',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w200,
+                      ),
                     ),
-                    kHSpace,
-                    OutlinedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    )
-                  ],
-                ),
-              ],
+                  ),
+                  kVSpace,
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Description',
+                    ),
+                  ),
+                  kVSpace,
+                  const TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Enter Image Link',
+                    ),
+                  ),
+                  kVSpace,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      FilledButton(
+                        onPressed: () {},
+                        child: const Text('Ok'),
+                      ),
+                      kHSpace,
+                      OutlinedButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         });
