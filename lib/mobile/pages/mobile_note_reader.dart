@@ -70,7 +70,7 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
         ),
       ),
       body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18),
+        padding: kPaddingLarge,
         child: SingleChildScrollView(
           controller: _scrollViewController,
           child: MarkdownBody(
@@ -95,33 +95,29 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
         ),
       ),
       bottomNavigationBar: AnimatedContainer(
-        height: _showAppbar ? 80.0 : 0.0,
+        height: _showAppbar ? 100.0 : 0.0,
         duration: const Duration(milliseconds: 200),
         child: BottomAppBar(
-          child: Center(
-            child: ListView(
-              shrinkWrap: true,
-              itemExtent: 80,
-              scrollDirection: Axis.horizontal,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(YaruIcons.pen),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(YaruIcons.trash),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(YaruIcons.colors),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(YaruIcons.tag),
-                ),
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(YaruIcons.pen),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(YaruIcons.trash),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(YaruIcons.colors),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(YaruIcons.tag),
+              ),
+            ],
           ),
         ),
       ),
