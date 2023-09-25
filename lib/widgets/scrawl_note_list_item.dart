@@ -36,7 +36,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
-        horizontal: 24.0,
+        horizontal: 10.0,
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
@@ -64,14 +64,14 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                       Text(
                         widget.note.noteTitle,
                         style: const TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                         ),
                       ),
                       kVSpace,
                       Text(
                         Utility.formatDateTime(widget.note.noteDate),
                         style: const TextStyle(
-                          fontSize: 12.0,
+                          fontSize: 10.0,
                           color: Colors.grey,
                         ),
                       ),

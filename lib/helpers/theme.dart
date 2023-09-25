@@ -138,6 +138,7 @@ ThemeData themeDark() {
     inputDecorationTheme: inputDecorationDarkTheme(),
     appBarTheme: const AppBarTheme(
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: false,
       backgroundColor: Colors.transparent,
       iconTheme: IconThemeData(color: Colors.white),
