@@ -20,7 +20,7 @@ class Notes {
         noteText = json['note_text'],
         noteLabel = json['note_label'],
         noteArchived = json['note_archived'] == 1,
-        noteColor = int.parse(json['note_color']),
+        noteColor = int.parse('${json['note_color']}'),
         noteImage = json['note_image'] ?? '';
 
   Map<String, dynamic> toJson() => {
