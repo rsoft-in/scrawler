@@ -65,8 +65,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                           Visibility(
                             visible: index == 0,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 22.0, vertical: 10),
+                              padding: const EdgeInsets.all(10),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -131,14 +130,19 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   }
 
   void openReader(Notes note) async {
-    final result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MobileNoteReader(note: note)));
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MobileNoteEditor(
+                  note: note,
+                  editMode: false,
+                )));
     if (result is bool) {
       return;
     }
-    if (result.contains('edit')) {
-      editNote(note);
-    }
+    // if (result.contains('edit')) {
+    //   editNote(note);
+    // }
     if (result.contains('delete')) {
       confirmDelete(note);
     }
@@ -147,7 +151,11 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   void editNote(Notes note) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MobileNoteEditor(note: note)),
+      MaterialPageRoute(
+          builder: (context) => MobileNoteEditor(
+                note: note,
+                editMode: true,
+              )),
     );
     if (result) {
       loadNotes();

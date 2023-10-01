@@ -8,7 +8,6 @@ import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/notes.dart';
-import 'mobile_note_editor.dart';
 
 class MobileNoteReader extends StatefulWidget {
   final Notes note;
