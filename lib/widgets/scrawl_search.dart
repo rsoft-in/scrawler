@@ -23,6 +23,7 @@ class _ScrawlSearchState extends State<ScrawlSearch> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      autofocus: false,
       decoration: InputDecoration(
         hintText: 'Search',
         prefixIcon: const Icon(Icons.search_outlined),

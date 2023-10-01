@@ -87,23 +87,21 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         resizeToAvoidBottomInset: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(84),
-          child: SafeArea(
-            child: ScrawlAppBar(
-              title: widget.note.noteTitle,
-              onPressed: () {
-                saveNote();
-                Navigator.pop(context, true);
-              },
-              titleEdit: isEditMode
-                  ? GestureDetector(
-                      onTap: () => titleDialog(),
-                      child: const Icon(
-                        YaruIcons.pen,
-                        size: 18,
-                      ),
-                    )
-                  : null,
-            ),
+          child: ScrawlAppBar(
+            title: widget.note.noteTitle,
+            onPressed: () {
+              saveNote();
+              Navigator.pop(context, true);
+            },
+            titleEdit: isEditMode
+                ? GestureDetector(
+                    onTap: () => titleDialog(),
+                    child: const Icon(
+                      YaruIcons.pen,
+                      size: 18,
+                    ),
+                  )
+                : null,
           ),
         ),
         body: isEditMode
@@ -148,80 +146,83 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                 ),
               ),
         bottomNavigationBar: isEditMode
-            ? BottomAppBar(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PopupMenuButton(
-                        icon: const Text(
-                          'H',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+            ? SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PopupMenuButton(
+                          icon: const Text(
+                            'H',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: 'h1',
+                                  onTap: () => onToolbarClick(EditorTools.h1),
+                                  child: const Text('Heading 1'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h2',
+                                  onTap: () => onToolbarClick(EditorTools.h2),
+                                  child: const Text('Heading 2'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h3',
+                                  onTap: () => onToolbarClick(EditorTools.h3),
+                                  child: const Text('Heading 3'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h4',
+                                  onTap: () => onToolbarClick(EditorTools.h4),
+                                  child: const Text('Heading 4'),
+                                ),
+                              ]),
+                      IconButton(
+                        onPressed: () => onToolbarClick(EditorTools.bold),
+                        icon: const Icon(
+                          YaruIcons.bold,
+                          size: 18,
                         ),
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 'h1',
-                                onTap: () => onToolbarClick(EditorTools.h1),
-                                child: const Text('Heading 1'),
-                              ),
-                              PopupMenuItem(
-                                value: 'h2',
-                                onTap: () => onToolbarClick(EditorTools.h2),
-                                child: const Text('Heading 2'),
-                              ),
-                              PopupMenuItem(
-                                value: 'h3',
-                                onTap: () => onToolbarClick(EditorTools.h3),
-                                child: const Text('Heading 3'),
-                              ),
-                              PopupMenuItem(
-                                value: 'h4',
-                                onTap: () => onToolbarClick(EditorTools.h4),
-                                child: const Text('Heading 4'),
-                              ),
-                            ]),
-                    IconButton(
-                      onPressed: () => onToolbarClick(EditorTools.bold),
-                      icon: const Icon(
-                        YaruIcons.bold,
-                        size: 18,
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => onToolbarClick(EditorTools.italic),
-                      icon: const Icon(
-                        YaruIcons.italic,
-                        size: 18,
+                      IconButton(
+                        onPressed: () => onToolbarClick(EditorTools.italic),
+                        icon: const Icon(
+                          YaruIcons.italic,
+                          size: 18,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => addLink(),
-                      icon: const Icon(
-                        YaruIcons.insert_link,
-                        size: 18,
+                      IconButton(
+                        onPressed: () => addLink(),
+                        icon: const Icon(
+                          YaruIcons.insert_link,
+                          size: 18,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => addImage(),
-                      icon: const Icon(
-                        YaruIcons.image,
-                        size: 18,
+                      IconButton(
+                        onPressed: () => addImage(),
+                        icon: const Icon(
+                          YaruIcons.image,
+                          size: 18,
+                        ),
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        YaruIcons.unordered_list,
-                        size: 18,
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          YaruIcons.unordered_list,
+                          size: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               )
             : AnimatedContainer(
-                height: _showAppbar ? 80.0 : 0.0,
+                height: _showAppbar ? 100.0 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: BottomAppBar(
                   child: Row(

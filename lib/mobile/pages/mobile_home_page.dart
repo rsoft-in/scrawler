@@ -54,11 +54,12 @@ class _MobileHomePageState extends State<MobileHomePage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: SafeArea(
-          child: Container(
-            decoration:
-                BoxDecoration(color: darkModeOn ? kDarkPrimary : kLightPrimary),
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          decoration:
+              BoxDecoration(color: darkModeOn ? kDarkPrimary : kLightPrimary),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: SafeArea(
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: kMenuMobile.length,

@@ -124,7 +124,6 @@ ThemeData theme() {
     bottomAppBarTheme: const BottomAppBarTheme(
       color: kLightSelected,
       elevation: 0,
-      height: 80,
     ),
   );
 }

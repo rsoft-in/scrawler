@@ -28,19 +28,21 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
       ),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ScrawlOutlinedIconButton(
-              icon: Icons.arrow_back_ios_new,
-              onPressed: () => widget.onPressed()),
-          kHSpace,
-          Text(widget.title,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-          kHSpace,
-          if (widget.titleEdit != null) widget.titleEdit!,
-        ],
+      child: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ScrawlOutlinedIconButton(
+                icon: Icons.arrow_back_ios_new,
+                onPressed: () => widget.onPressed()),
+            kHSpace,
+            Text(widget.title,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+            kHSpace,
+            if (widget.titleEdit != null) widget.titleEdit!,
+          ],
+        ),
       ),
     );
   }

@@ -39,7 +39,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
             onTap: appearance,
             leading: const Icon(CupertinoIcons.brightness),
             title: const Text('Appearance'),
-            subtitle: Text(globals.themeMode.name),
+            subtitle: Text(globals.themeMode.name.toUpperCase()),
           ),
           // ListTile(
           //   onTap: () {},
