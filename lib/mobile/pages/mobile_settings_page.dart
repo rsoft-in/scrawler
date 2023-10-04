@@ -1,5 +1,6 @@
 // import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/mobile/pages/mobile_about_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
@@ -19,6 +20,10 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
+        padding: EdgeInsets.symmetric(
+          vertical: 8.0,
+          horizontal: 10.0,
+        ),
         children: [
           // ListTile(
           //   onTap: () {},
@@ -47,7 +52,12 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
           //   title: const Text('Notifications'),
           // ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const MobileAboutPage()),
+              );
+            },
             leading: const Icon(CupertinoIcons.info),
             title: const Text('About'),
           ),

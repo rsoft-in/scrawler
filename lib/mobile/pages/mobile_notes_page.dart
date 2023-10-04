@@ -4,7 +4,6 @@ import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
-import 'package:bnotes/mobile/pages/mobile_note_reader.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';

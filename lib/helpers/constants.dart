@@ -3,6 +3,7 @@ import 'package:yaru_icons/yaru_icons.dart';
 
 const kAppName = 'scrawler';
 const kWebsiteUrl = 'https://scrawler.net';
+const kGithubUrl = 'https://github.com/rsoft-in/scrawler';
 
 const kPrimaryColor = Color(0xFF5EAAA8);
 const kAlertColor = Color(0xFFD12A4C);
