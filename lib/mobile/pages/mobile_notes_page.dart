@@ -50,7 +50,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     return Scaffold(
       body: notes.isEmpty
           ? EmptyWidget(
-              text: Language.get('select_note'),
+              text: Language.get('create_note'),
               width: MediaQuery.of(context).size.width * 0.8,
               asset: 'images/undraw_playful_cat.svg')
           : Column(

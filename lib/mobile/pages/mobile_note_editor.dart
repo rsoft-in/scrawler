@@ -104,152 +104,162 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                 : null,
           ),
         ),
-        body: isEditMode
-            ? TextField(
-                scrollController: _scrollViewController,
-                controller: noteTextController,
-                decoration: InputDecoration(
-                    hintText: Language.get('type_something'),
-                    border: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none),
-                textAlignVertical: TextAlignVertical.top,
-                expands: true,
-                maxLines: null,
-              )
-            : Container(
-                padding: kPaddingLarge,
-                child: SingleChildScrollView(
-                  controller: _scrollViewController,
-                  child: MarkdownBody(
-                      selectable: true,
-                      softLineBreak: true,
-                      onTapLink: (text, href, title) => _launchUrl(href),
-                      styleSheet: MarkdownStyleSheet(
-                          blockquote: const TextStyle(color: Colors.black),
-                          blockquoteDecoration: const BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border(
-                              left: BorderSide(color: kPrimaryColor, width: 3),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: isEditMode
+                  ? TextField(
+                      scrollController: _scrollViewController,
+                      controller: noteTextController,
+                      decoration: InputDecoration(
+                          hintText: Language.get('type_something'),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none),
+                      textAlignVertical: TextAlignVertical.top,
+                      expands: true,
+                      maxLines: null,
+                    )
+                  : Container(
+                      padding: kPaddingLarge,
+                      child: SingleChildScrollView(
+                        controller: _scrollViewController,
+                        child: MarkdownBody(
+                            selectable: true,
+                            softLineBreak: true,
+                            onTapLink: (text, href, title) => _launchUrl(href),
+                            styleSheet: MarkdownStyleSheet(
+                                blockquote:
+                                    const TextStyle(color: Colors.black),
+                                blockquoteDecoration: const BoxDecoration(
+                                  color: Colors.transparent,
+                                  border: Border(
+                                    left: BorderSide(
+                                        color: kPrimaryColor, width: 3),
+                                  ),
+                                ),
+                                code: const TextStyle(
+                                    backgroundColor: Colors.transparent),
+                                codeblockAlign: WrapAlignment.spaceAround,
+                                codeblockDecoration: BoxDecoration(
+                                    color: darkModeOn
+                                        ? Colors.white10
+                                        : Colors.black12),
+                                checkbox: TextStyle(
+                                    color: darkModeOn
+                                        ? kLightPrimary
+                                        : kDarkPrimary)),
+                            data: widget.note.noteText),
+                      ),
+                    ),
+            ),
+            isEditMode
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        PopupMenuButton(
+                            icon: const Text(
+                              'H',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                            itemBuilder: (context) => [
+                                  PopupMenuItem(
+                                    value: 'h1',
+                                    onTap: () => onToolbarClick(EditorTools.h1),
+                                    child: const Text('Heading 1'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'h2',
+                                    onTap: () => onToolbarClick(EditorTools.h2),
+                                    child: const Text('Heading 2'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'h3',
+                                    onTap: () => onToolbarClick(EditorTools.h3),
+                                    child: const Text('Heading 3'),
+                                  ),
+                                  PopupMenuItem(
+                                    value: 'h4',
+                                    onTap: () => onToolbarClick(EditorTools.h4),
+                                    child: const Text('Heading 4'),
+                                  ),
+                                ]),
+                        IconButton(
+                          onPressed: () => onToolbarClick(EditorTools.bold),
+                          icon: const Icon(
+                            YaruIcons.bold,
+                            size: 18,
                           ),
-                          code: const TextStyle(
-                              backgroundColor: Colors.transparent),
-                          codeblockAlign: WrapAlignment.spaceAround,
-                          codeblockDecoration: BoxDecoration(
-                              color:
-                                  darkModeOn ? Colors.white10 : Colors.black12),
-                          checkbox: TextStyle(
-                              color:
-                                  darkModeOn ? kLightPrimary : kDarkPrimary)),
-                      data: widget.note.noteText),
-                ),
-              ),
-        bottomNavigationBar: isEditMode
-            ? SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      PopupMenuButton(
-                          icon: const Text(
-                            'H',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+                        IconButton(
+                          onPressed: () => onToolbarClick(EditorTools.italic),
+                          icon: const Icon(
+                            YaruIcons.italic,
+                            size: 18,
                           ),
-                          itemBuilder: (context) => [
-                                PopupMenuItem(
-                                  value: 'h1',
-                                  onTap: () => onToolbarClick(EditorTools.h1),
-                                  child: const Text('Heading 1'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'h2',
-                                  onTap: () => onToolbarClick(EditorTools.h2),
-                                  child: const Text('Heading 2'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'h3',
-                                  onTap: () => onToolbarClick(EditorTools.h3),
-                                  child: const Text('Heading 3'),
-                                ),
-                                PopupMenuItem(
-                                  value: 'h4',
-                                  onTap: () => onToolbarClick(EditorTools.h4),
-                                  child: const Text('Heading 4'),
-                                ),
-                              ]),
-                      IconButton(
-                        onPressed: () => onToolbarClick(EditorTools.bold),
-                        icon: const Icon(
-                          YaruIcons.bold,
-                          size: 18,
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () => onToolbarClick(EditorTools.italic),
-                        icon: const Icon(
-                          YaruIcons.italic,
-                          size: 18,
+                        IconButton(
+                          onPressed: () => addLink(),
+                          icon: const Icon(
+                            YaruIcons.insert_link,
+                            size: 18,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () => addLink(),
-                        icon: const Icon(
-                          YaruIcons.insert_link,
-                          size: 18,
+                        IconButton(
+                          onPressed: () => addImage(),
+                          icon: const Icon(
+                            YaruIcons.image,
+                            size: 18,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () => addImage(),
-                        icon: const Icon(
-                          YaruIcons.image,
-                          size: 18,
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            YaruIcons.unordered_list,
+                            size: 18,
+                          ),
                         ),
+                      ],
+                    ),
+                  )
+                : AnimatedContainer(
+                    height: _showAppbar ? 100.0 : 0.0,
+                    duration: const Duration(milliseconds: 200),
+                    child: BottomAppBar(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          IconButton(
+                            onPressed: () => setState(() {
+                              isEditMode = true;
+                            }),
+                            icon: const Icon(YaruIcons.pen),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.pop(context, 'delete'),
+                            icon: const Icon(YaruIcons.trash),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(YaruIcons.colors),
+                          ),
+                          IconButton(
+                            onPressed: () {},
+                            icon: const Icon(YaruIcons.tag),
+                          ),
+                        ],
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          YaruIcons.unordered_list,
-                          size: 18,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              )
-            : AnimatedContainer(
-                height: _showAppbar ? 100.0 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: BottomAppBar(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: () => setState(() {
-                          isEditMode = true;
-                        }),
-                        icon: const Icon(YaruIcons.pen),
-                      ),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context, 'delete'),
-                        icon: const Icon(YaruIcons.trash),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(YaruIcons.colors),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(YaruIcons.tag),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+          ],
+        ),
       ),
     );
   }

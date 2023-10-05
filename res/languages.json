@@ -31,5 +31,6 @@
     "changes_saved": "All changes saved",
     "latest": "Latest",
     "oldest": "Oldest",
-    "sort": "Sort"
+    "sort": "Sort",
+    "create_note": "Create a new Note"
 }
