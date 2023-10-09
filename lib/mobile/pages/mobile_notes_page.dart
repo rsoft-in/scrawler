@@ -139,11 +139,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     if (result is bool) {
       return;
     }
-    // if (result.contains('edit')) {
-    //   editNote(note);
-    // }
     if (result.contains('delete')) {
-      confirmDelete(note);
+      deleteNote(note);
     }
   }
 

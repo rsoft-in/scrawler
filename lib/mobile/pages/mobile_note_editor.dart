@@ -243,7 +243,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                             icon: const Icon(YaruIcons.pen),
                           ),
                           IconButton(
-                            onPressed: () => Navigator.pop(context, 'delete'),
+                            onPressed: () => confirmDelete(note),
                             icon: const Icon(YaruIcons.trash),
                           ),
                           IconButton(
@@ -358,6 +358,30 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       default:
         return '#';
     }
+  }
+
+  void confirmDelete(Notes note) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              FilledButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, 'delete');
+                },
+              ),
+              OutlinedButton(
+                child: const Text('No'),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+            title: const Text('Confirm'),
+            content: const Text('Are you sure you want to delete?'),
+          );
+        });
   }
 
   void addLink() {
