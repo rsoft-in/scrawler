@@ -5,15 +5,15 @@ import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/models/notes.dart';
+import 'package:bnotes/widgets/scrawl_color_picker.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
-import '../../helpers/note_color.dart';
 import '../../models/menu_item.dart';
-import '../../widgets/color_palette_button.dart';
 import '../../widgets/scrawl_snackbar.dart';
 
 class MobileNotesPage extends StatefulWidget {
@@ -25,7 +25,10 @@ class MobileNotesPage extends StatefulWidget {
 
 class _MobileNotesPageState extends State<MobileNotesPage> {
   final dbHelper = DBHelper.instance;
+  bool isLoading = true;
+  bool showSearchBar = true;
   List<Notes> notes = [];
+  List<Notes> notesUnfiltered = [];
   List<MenuItem> contextMenuItems = [
     MenuItem('edit', Language.get('edit'), '', YaruIcons.pen),
     MenuItem('delete', Language.get('delete'), '', YaruIcons.trash),
@@ -48,71 +51,93 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
     return Scaffold(
-      body: notes.isEmpty
-          ? EmptyWidget(
-              text: Language.get('create_note'),
-              width: MediaQuery.of(context).size.width * 0.8,
-              asset: 'images/undraw_playful_cat.svg')
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: notes.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Visibility(
-                            visible: index == 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: ScrawlSearch(
-                                      controller: searchController,
-                                      onSearch: () {},
-                                      onClearSearch: () {},
-                                    ),
-                                  ),
-                                  kHSpace,
-                                  InkWell(
-                                    borderRadius: BorderRadius.circular(5),
-                                    onTap: () {},
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: darkModeOn
-                                            ? kDarkPrimary
-                                            : kLightPrimary,
-                                        border: Border.all(
-                                            color: darkModeOn
-                                                ? kDarkStroke
-                                                : kLightStroke,
-                                            width: 2),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      padding: const EdgeInsets.all(12),
-                                      child: const Icon(Icons.sort),
-                                    ),
-                                  )
-                                ],
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator.adaptive(),
+            )
+          : (notes.isEmpty
+              ? EmptyWidget(
+                  text: Language.get('create_note'),
+                  width: 250,
+                  asset: 'images/undraw_playful_cat.svg')
+              : Column(
+                  children: [
+                    Visibility(
+                      visible: showSearchBar,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: ScrawlSearch(
+                                controller: searchController,
+                                onSearch: () => onSearch(),
+                                onClearSearch: () {
+                                  searchController.clear();
+                                  onSearch();
+                                },
                               ),
                             ),
-                          ),
-                          NoteListItemWidget(
-                            isSelected: false,
-                            note: notes[index],
-                            selectedIndex: 0,
-                            onTap: () => openReader(notes[index]),
-                            onLongPress: () =>
-                                showOptions(context, notes[index]),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+                            kHSpace,
+                            InkWell(
+                              borderRadius: BorderRadius.circular(5),
+                              onTap: () {},
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      darkModeOn ? kDarkPrimary : kLightPrimary,
+                                  border: Border.all(
+                                      color: darkModeOn
+                                          ? kDarkStroke
+                                          : kLightStroke,
+                                      width: 2),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                child: const Icon(Icons.sort),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: NotificationListener<UserScrollNotification>(
+                        onNotification: (notification) {
+                          if (notification.direction ==
+                              ScrollDirection.reverse) {
+                            if (showSearchBar) {
+                              setState(() {
+                                showSearchBar = false;
+                              });
+                            }
+                          } else if (notification.direction ==
+                              ScrollDirection.forward) {
+                            if (!showSearchBar) {
+                              setState(() {
+                                showSearchBar = true;
+                              });
+                            }
+                          }
+                          return true;
+                        },
+                        child: ListView.builder(
+                          itemCount: notes.length,
+                          itemBuilder: (context, index) {
+                            return NoteListItemWidget(
+                              isSelected: false,
+                              note: notes[index],
+                              selectedIndex: 0,
+                              onTap: () => openReader(notes[index]),
+                              onLongPress: () =>
+                                  showOptions(context, notes[index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )),
       floatingActionButton: FloatingActionButton(
         onPressed: () => editNote(Notes.empty()),
         child: const Icon(YaruIcons.plus),
@@ -120,10 +145,23 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     );
   }
 
+  void onSearch() {
+    var phrase = searchController.text;
+    setState(() {
+      notes = notesUnfiltered
+          .where((element) =>
+              element.noteTitle.toLowerCase().contains(phrase.toLowerCase()) ||
+              element.noteText.toLowerCase().contains(phrase.toLowerCase()))
+          .toList();
+    });
+  }
+
   Future<void> loadNotes() async {
     dbHelper.getNotesAll('', 'note_date desc').then((value) {
       setState(() {
-        notes = value;
+        notesUnfiltered = value;
+        notes = notesUnfiltered;
+        isLoading = false;
       });
     });
   }
@@ -265,70 +303,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     final colorCode = await showDialog(
         context: context,
         builder: (context) {
-          return Dialog(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 160),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text('Select Color'),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 1),
-                            color: NoteColor.getColor(1, false),
-                            isSelected: false),
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 2),
-                            color: NoteColor.getColor(2, false),
-                            isSelected: false),
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 3),
-                            color: NoteColor.getColor(3, false),
-                            isSelected: false),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 4),
-                            color: NoteColor.getColor(4, false),
-                            isSelected: false),
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 5),
-                            color: NoteColor.getColor(5, false),
-                            isSelected: false),
-                        ColorPaletteButton(
-                            onTap: () => Navigator.pop(context, 6),
-                            color: NoteColor.getColor(6, false),
-                            isSelected: false),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context, 0),
-                      child: Container(
-                        margin: const EdgeInsets.all(8.0),
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          border: Border.all(color: Colors.grey),
-                        ),
-                        child: const Icon(Icons.block),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+          return const ScrawlColorPicker();
         });
     if (colorCode != null) {
       int index = notes.indexWhere((el) => el.noteId == note.noteId);

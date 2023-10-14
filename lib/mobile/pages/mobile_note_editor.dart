@@ -1,4 +1,5 @@
 import 'package:bnotes/widgets/scrawl_appbar.dart';
+import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,9 +11,10 @@ import 'package:yaru_icons/yaru_icons.dart';
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
 import '../../helpers/enums.dart';
+import '../../helpers/globals.dart' as globals;
 import '../../helpers/language.dart';
 import '../../models/notes.dart';
-import '../../helpers/globals.dart' as globals;
+import '../../widgets/scrawl_label_chip.dart';
 
 class MobileNoteEditor extends StatefulWidget {
   final Notes note;
@@ -63,7 +65,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     setState(() {
       note = widget.note;
       isEditMode = widget.editMode ?? false;
-      noteTextController.text = widget.note.noteText;
+      noteTextController.text = note.noteText;
     });
   }
 
@@ -88,7 +90,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(84),
           child: ScrawlAppBar(
-            title: widget.note.noteTitle,
+            title: note.noteTitle,
             onPressed: () {
               saveNote();
               Navigator.pop(context, true);
@@ -96,12 +98,16 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             titleEdit: isEditMode
                 ? GestureDetector(
                     onTap: () => titleDialog(),
-                    child: const Icon(
-                      YaruIcons.pen,
-                      size: 18,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        YaruIcons.pen,
+                        size: 18,
+                      ),
                     ),
                   )
                 : null,
+            trailing: ScrawlColorDot(colorCode: note.noteColor),
           ),
         ),
         body: Column(
@@ -126,140 +132,153 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                       padding: kPaddingLarge,
                       child: SingleChildScrollView(
                         controller: _scrollViewController,
-                        child: MarkdownBody(
-                            selectable: true,
-                            softLineBreak: true,
-                            onTapLink: (text, href, title) => _launchUrl(href),
-                            styleSheet: MarkdownStyleSheet(
-                                blockquote:
-                                    const TextStyle(color: Colors.black),
-                                blockquoteDecoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border(
-                                    left: BorderSide(
-                                        color: kPrimaryColor, width: 3),
-                                  ),
-                                ),
-                                code: const TextStyle(
-                                    backgroundColor: Colors.transparent),
-                                codeblockAlign: WrapAlignment.spaceAround,
-                                codeblockDecoration: BoxDecoration(
-                                    color: darkModeOn
-                                        ? Colors.white10
-                                        : Colors.black12),
-                                checkbox: TextStyle(
-                                    color: darkModeOn
-                                        ? kLightPrimary
-                                        : kDarkPrimary)),
-                            data: widget.note.noteText),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (note.noteLabel.isNotEmpty)
+                              SizedBox(
+                                height: 40,
+                                child: ScrawlLabelChip(label: note.noteLabel),
+                              ),
+                            MarkdownBody(
+                                selectable: true,
+                                softLineBreak: true,
+                                onTapLink: (text, href, title) =>
+                                    _launchUrl(href),
+                                styleSheet: MarkdownStyleSheet(
+                                    blockquote:
+                                        const TextStyle(color: Colors.black),
+                                    blockquoteDecoration: const BoxDecoration(
+                                      color: Colors.transparent,
+                                      border: Border(
+                                        left: BorderSide(
+                                            color: kPrimaryColor, width: 3),
+                                      ),
+                                    ),
+                                    code: const TextStyle(
+                                        backgroundColor: Colors.transparent),
+                                    codeblockAlign: WrapAlignment.spaceAround,
+                                    codeblockDecoration: BoxDecoration(
+                                        color: darkModeOn
+                                            ? Colors.white10
+                                            : Colors.black12),
+                                    checkbox: TextStyle(
+                                        color: darkModeOn
+                                            ? kLightPrimary
+                                            : kDarkPrimary)),
+                                data: note.noteText),
+                          ],
+                        ),
                       ),
                     ),
             ),
-            isEditMode
-                ? Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        PopupMenuButton(
-                            icon: const Text(
-                              'H',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+            if (isEditMode)
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    PopupMenuButton(
+                        icon: const Text(
+                          'H',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        itemBuilder: (context) => [
+                              PopupMenuItem(
+                                value: 'h1',
+                                onTap: () => onToolbarClick(EditorTools.h1),
+                                child: const Text('Heading 1'),
                               ),
-                            ),
-                            itemBuilder: (context) => [
-                                  PopupMenuItem(
-                                    value: 'h1',
-                                    onTap: () => onToolbarClick(EditorTools.h1),
-                                    child: const Text('Heading 1'),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'h2',
-                                    onTap: () => onToolbarClick(EditorTools.h2),
-                                    child: const Text('Heading 2'),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'h3',
-                                    onTap: () => onToolbarClick(EditorTools.h3),
-                                    child: const Text('Heading 3'),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 'h4',
-                                    onTap: () => onToolbarClick(EditorTools.h4),
-                                    child: const Text('Heading 4'),
-                                  ),
-                                ]),
-                        IconButton(
-                          onPressed: () => onToolbarClick(EditorTools.bold),
-                          icon: const Icon(
-                            YaruIcons.bold,
-                            size: 18,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => onToolbarClick(EditorTools.italic),
-                          icon: const Icon(
-                            YaruIcons.italic,
-                            size: 18,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => addLink(),
-                          icon: const Icon(
-                            YaruIcons.insert_link,
-                            size: 18,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () => addImage(),
-                          icon: const Icon(
-                            YaruIcons.image,
-                            size: 18,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            YaruIcons.unordered_list,
-                            size: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : AnimatedContainer(
-                    height: _showAppbar ? 100.0 : 0.0,
-                    duration: const Duration(milliseconds: 200),
-                    child: BottomAppBar(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          IconButton(
-                            onPressed: () => setState(() {
-                              isEditMode = true;
-                            }),
-                            icon: const Icon(YaruIcons.pen),
-                          ),
-                          IconButton(
-                            onPressed: () => confirmDelete(note),
-                            icon: const Icon(YaruIcons.trash),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(YaruIcons.colors),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(YaruIcons.tag),
-                          ),
-                        ],
+                              PopupMenuItem(
+                                value: 'h2',
+                                onTap: () => onToolbarClick(EditorTools.h2),
+                                child: const Text('Heading 2'),
+                              ),
+                              PopupMenuItem(
+                                value: 'h3',
+                                onTap: () => onToolbarClick(EditorTools.h3),
+                                child: const Text('Heading 3'),
+                              ),
+                              PopupMenuItem(
+                                value: 'h4',
+                                onTap: () => onToolbarClick(EditorTools.h4),
+                                child: const Text('Heading 4'),
+                              ),
+                            ]),
+                    IconButton(
+                      onPressed: () => onToolbarClick(EditorTools.bold),
+                      icon: const Icon(
+                        YaruIcons.bold,
+                        size: 18,
                       ),
                     ),
-                  ),
+                    IconButton(
+                      onPressed: () => onToolbarClick(EditorTools.italic),
+                      icon: const Icon(
+                        YaruIcons.italic,
+                        size: 18,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => addLink(),
+                      icon: const Icon(
+                        YaruIcons.insert_link,
+                        size: 18,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => addImage(),
+                      icon: const Icon(
+                        YaruIcons.image,
+                        size: 18,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        YaruIcons.unordered_list,
+                        size: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
+        bottomNavigationBar: isEditMode
+            ? null
+            : AnimatedContainer(
+                height: _showAppbar ? 80.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: BottomAppBar(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: () => setState(() {
+                          isEditMode = true;
+                        }),
+                        icon: const Icon(YaruIcons.pen),
+                      ),
+                      IconButton(
+                        onPressed: () => confirmDelete(note),
+                        icon: const Icon(YaruIcons.trash),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(YaruIcons.colors),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(YaruIcons.tag),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }

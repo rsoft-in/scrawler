@@ -1,4 +1,3 @@
-// import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/mobile/pages/mobile_about_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,7 +19,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: 8.0,
           horizontal: 10.0,
         ),

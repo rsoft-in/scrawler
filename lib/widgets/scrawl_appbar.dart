@@ -7,8 +7,13 @@ class ScrawlAppBar extends StatefulWidget {
   final String title;
   final Function onPressed;
   final Widget? titleEdit;
+  final Widget? trailing;
   const ScrawlAppBar(
-      {Key? key, required this.title, required this.onPressed, this.titleEdit})
+      {Key? key,
+      required this.title,
+      required this.onPressed,
+      this.titleEdit,
+      this.trailing})
       : super(key: key);
 
   @override
@@ -41,6 +46,8 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
             kHSpace,
             if (widget.titleEdit != null) widget.titleEdit!,
+            const Spacer(),
+            if (widget.trailing != null) widget.trailing!,
           ],
         ),
       ),
