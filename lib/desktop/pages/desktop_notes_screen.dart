@@ -230,7 +230,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
 
   List<PopupMenuItem<NoteSort>> getSortItems() {
     return sortItems
-        .map<PopupMenuItem<NoteSort>>((item) => PopupMenuItem(
+        .map<PopupMenuItem<NoteSort>>(
+          (item) => PopupMenuItem(
             value: item.sortBy,
             child: Row(
               children: [
@@ -245,7 +246,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                     size: 16.0,
                   )
               ],
-            )))
+            ),
+          ),
+        )
         .toList();
   }
 

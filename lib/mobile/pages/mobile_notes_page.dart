@@ -14,6 +14,7 @@ import 'package:flutter/rendering.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../models/menu_item.dart';
+import '../../models/sort_items.dart';
 import '../../widgets/scrawl_snackbar.dart';
 
 class MobileNotesPage extends StatefulWidget {
@@ -35,6 +36,13 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     MenuItem('color', Language.get('color'), '', YaruIcons.colors),
     MenuItem('tags', Language.get('tag'), '', YaruIcons.tag)
   ];
+  List<SortItem> sortItems = [
+    SortItem(NoteSort.newest, Language.get('latest')),
+    SortItem(NoteSort.oldest, Language.get('oldest')),
+    SortItem(NoteSort.title, 'A-Z'),
+    SortItem(NoteSort.titleDesc, 'Z-A')
+  ];
+  NoteSort currentSort = NoteSort.newest;
 
   TextEditingController searchController = TextEditingController();
 
@@ -79,23 +87,55 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                               ),
                             ),
                             kHSpace,
-                            InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      darkModeOn ? kDarkPrimary : kLightPrimary,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke,
-                                      width: 2),
+                            MenuAnchor(
+                              builder: (context, controller, child) {
+                                return InkWell(
                                   borderRadius: BorderRadius.circular(5),
-                                ),
-                                padding: const EdgeInsets.all(12),
-                                child: const Icon(Icons.sort),
-                              ),
+                                  onTap: () {
+                                    if (controller.isOpen) {
+                                      controller.close();
+                                    } else {
+                                      controller.open();
+                                    }
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: darkModeOn
+                                          ? kDarkPrimary
+                                          : kLightPrimary,
+                                      border: Border.all(
+                                          color: darkModeOn
+                                              ? kDarkStroke
+                                              : kLightStroke,
+                                          width: 2),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    padding: const EdgeInsets.all(12),
+                                    child: const Icon(Icons.sort),
+                                  ),
+                                );
+                              },
+                              menuChildren:
+                                  List.generate(sortItems.length, (index) {
+                                return MenuItemButton(
+                                  onPressed: () =>
+                                      sortList(sortItems[index].sortBy),
+                                  leadingIcon:
+                                      (sortItems[index].sortBy == currentSort)
+                                          ? const Icon(
+                                              Icons.check_outlined,
+                                              size: 16.0,
+                                            )
+                                          : const Icon(
+                                              Icons.check_outlined,
+                                              size: 16.0,
+                                              color: Colors.transparent,
+                                            ),
+                                  child: Text(
+                                    sortItems[index].caption,
+                                  ),
+                                );
+                              }),
                             )
                           ],
                         ),
@@ -154,6 +194,27 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
               element.noteText.toLowerCase().contains(phrase.toLowerCase()))
           .toList();
     });
+  }
+
+  void sortList(NoteSort sort) {
+    switch (sort) {
+      case NoteSort.title:
+        notes.sort((Notes a, Notes b) => a.noteTitle.compareTo(b.noteTitle));
+        break;
+      case NoteSort.titleDesc:
+        notes.sort((Notes a, Notes b) => b.noteTitle.compareTo(a.noteTitle));
+        break;
+      case NoteSort.newest:
+        notes.sort((Notes a, Notes b) => b.noteDate.compareTo(a.noteDate));
+        break;
+      case NoteSort.oldest:
+        notes.sort((Notes a, Notes b) => a.noteDate.compareTo(b.noteDate));
+        break;
+      default:
+        break;
+    }
+    currentSort = sort;
+    setState(() {});
   }
 
   Future<void> loadNotes() async {
