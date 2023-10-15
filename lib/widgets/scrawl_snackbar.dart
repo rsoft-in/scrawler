@@ -11,21 +11,9 @@ class ScrawlSnackBar {
             globals.themeMode == ThemeMode.system));
     return SnackBar(
       elevation: 0,
-      backgroundColor: Colors.transparent,
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-                color: darkModeOn ? Colors.white70 : Colors.black87,
-                borderRadius: BorderRadius.circular(15.0)),
-            child: Text(
-              content,
-              style: TextStyle(color: darkModeOn ? Colors.black : Colors.white),
-            ),
-          ),
-        ],
+      content: Text(
+        content,
+        style: TextStyle(color: darkModeOn ? Colors.black : Colors.white),
       ),
       duration: duration,
       behavior: SnackBarBehavior.floating,

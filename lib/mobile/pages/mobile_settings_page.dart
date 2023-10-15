@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/mobile/pages/mobile_about_page.dart';
+import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../helpers/dbhelper.dart';
 
 class MobileSettingsPage extends StatefulWidget {
   const MobileSettingsPage({Key? key}) : super(key: key);
@@ -37,7 +43,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
           //   title: const Text('Security'),
           // ),
           ListTile(
-            onTap: () => backupRestore(),
+            onTap: () => onBackRestore(),
             leading: const Icon(CupertinoIcons.cloud),
             title: const Text('Backup & Restore'),
           ),
@@ -67,10 +73,53 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
     );
   }
 
-  void backupRestore() {
+  void onBackRestore() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: const Text('Select'),
+            children: [
+              ListTile(
+                title: const Text('Backup Notes'),
+                onTap: () {
+                  backupData(context);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: const Text('Restore from Backup'),
+                onTap: () {},
+              ),
+            ],
+          );
+        });
+  }
+
+  void backupData(BuildContext context) async {
+    var notesList = await getNotes();
+    final file = await _localFile;
+    file.writeAsString(notesList.toString());
+    // ignore: use_build_context_synchronously
     ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-        context, 'On its way!',
+        context, 'Backup stored at ${file.path}',
         duration: const Duration(seconds: 2)));
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getDownloadsDirectory();
+    return directory!.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/scrawler.backup');
+  }
+
+  Future<List<Notes>> getNotes() async {
+    final dbHelper = DBHelper.instance;
+    var result = await dbHelper.getNotesAll('', 'note_id');
+    return result;
   }
 
   void appearance() {
