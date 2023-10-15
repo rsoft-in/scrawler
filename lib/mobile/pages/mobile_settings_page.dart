@@ -1,5 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/mobile/pages/mobile_about_page.dart';
+import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
@@ -36,7 +37,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
           //   title: const Text('Security'),
           // ),
           ListTile(
-            onTap: () {},
+            onTap: () => backupRestore(),
             leading: const Icon(CupertinoIcons.cloud),
             title: const Text('Backup & Restore'),
           ),
@@ -64,6 +65,12 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
         ],
       ),
     );
+  }
+
+  void backupRestore() {
+    ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
+        context, 'On its way!',
+        duration: const Duration(seconds: 2)));
   }
 
   void appearance() {
