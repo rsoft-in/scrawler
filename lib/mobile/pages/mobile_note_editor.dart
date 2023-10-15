@@ -14,6 +14,7 @@ import '../../helpers/enums.dart';
 import '../../helpers/globals.dart' as globals;
 import '../../helpers/language.dart';
 import '../../models/notes.dart';
+import '../../widgets/scrawl_color_picker.dart';
 import '../../widgets/scrawl_label_chip.dart';
 
 class MobileNoteEditor extends StatefulWidget {
@@ -30,6 +31,7 @@ class MobileNoteEditor extends StatefulWidget {
 class _MobileNoteEditorState extends State<MobileNoteEditor> {
   late ScrollController _scrollViewController;
   bool isEditMode = false;
+  bool noteUpdated = false;
   bool darkModeOn = false;
   bool _showAppbar = true;
   bool isScrollingDown = false;
@@ -268,7 +270,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         icon: const Icon(YaruIcons.trash),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => pickColor(note),
                         icon: const Icon(YaruIcons.colors),
                       ),
                       IconButton(
@@ -295,7 +297,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       if (res) {
         Navigator.pop(context, true);
       } else {
-        Navigator.pop(context, false);
+        Navigator.pop(context, noteUpdated);
       }
     }
     return false;
@@ -401,6 +403,20 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             content: const Text('Are you sure you want to delete?'),
           );
         });
+  }
+
+  void pickColor(Notes note) async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return const ScrawlColorPicker();
+        });
+    if (colorCode != null) {
+      note.noteColor = colorCode;
+      noteUpdated = true;
+      setState(() {});
+      updateNoteColor(note, colorCode);
+    }
   }
 
   void addLink() {
@@ -532,5 +548,15 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       }
     }
     return result;
+  }
+
+  void updateNoteColor(Notes note, int colorCode) async {
+    final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
+    if (!result) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+      }
+    }
   }
 }

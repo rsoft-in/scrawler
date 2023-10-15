@@ -236,6 +236,9 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                   editMode: false,
                 )));
     if (result is bool) {
+      if (result) {
+        loadNotes();
+      }
       return;
     }
     if (result.contains('delete')) {
