@@ -9,6 +9,7 @@ import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/pages/mobile_start_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -27,7 +28,7 @@ void main() {
       appWindow.title = "scrawler";
     });
   }
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

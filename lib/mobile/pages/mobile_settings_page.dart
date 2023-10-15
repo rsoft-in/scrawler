@@ -3,6 +3,7 @@ import 'package:bnotes/mobile/pages/mobile_about_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MobileSettingsPage extends StatefulWidget {
@@ -122,6 +123,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
           break;
       }
       prefs.setInt('themeMode', themeCode);
+      Phoenix.rebirth(context);
     });
     if (context.mounted) {
       Navigator.pop(context);
