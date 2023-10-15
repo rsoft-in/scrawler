@@ -16,6 +16,7 @@ import '../../helpers/language.dart';
 import '../../models/notes.dart';
 import '../../widgets/scrawl_color_picker.dart';
 import '../../widgets/scrawl_label_chip.dart';
+import 'mobile_labels_page.dart';
 
 class MobileNoteEditor extends StatefulWidget {
   final Notes note;
@@ -274,7 +275,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         icon: const Icon(YaruIcons.colors),
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => selectTag(note),
                         icon: const Icon(YaruIcons.tag),
                       ),
                     ],
@@ -292,6 +293,8 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   }
 
   Future<bool> onBackPressed() async {
+    // Note: if the reader is closed without any changes,
+    // it would still save the note updating its modified time.
     final res = await saveNote();
     if (context.mounted) {
       if (res) {
@@ -301,6 +304,57 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       }
     }
     return false;
+  }
+
+  void confirmDelete(Notes note) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            actions: [
+              FilledButton(
+                child: const Text('Yes'),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context, 'delete');
+                },
+              ),
+              OutlinedButton(
+                child: const Text('No'),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+            title: const Text('Confirm'),
+            content: const Text('Are you sure you want to delete?'),
+          );
+        });
+  }
+
+  void pickColor(Notes note) async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return const ScrawlColorPicker();
+        });
+    if (colorCode != null) {
+      note.noteColor = colorCode;
+      noteUpdated = true;
+      setState(() {});
+      updateNoteColor(note, colorCode);
+    }
+  }
+
+  void selectTag(Notes note) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MobileLabelsPage(preselect: note.noteLabel)));
+    if (result != null) {
+      note.noteLabel = result;
+      noteUpdated = true;
+      setState(() {});
+      updateNoteLabel(note, result);
+    }
   }
 
   void titleDialog() {
@@ -378,44 +432,6 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         return '####';
       default:
         return '#';
-    }
-  }
-
-  void confirmDelete(Notes note) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            actions: [
-              FilledButton(
-                child: const Text('Yes'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context, 'delete');
-                },
-              ),
-              OutlinedButton(
-                child: const Text('No'),
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-            title: const Text('Confirm'),
-            content: const Text('Are you sure you want to delete?'),
-          );
-        });
-  }
-
-  void pickColor(Notes note) async {
-    final colorCode = await showDialog(
-        context: context,
-        builder: (context) {
-          return const ScrawlColorPicker();
-        });
-    if (colorCode != null) {
-      note.noteColor = colorCode;
-      noteUpdated = true;
-      setState(() {});
-      updateNoteColor(note, colorCode);
     }
   }
 
@@ -552,6 +568,16 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
 
   void updateNoteColor(Notes note, int colorCode) async {
     final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
+    if (!result) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+      }
+    }
+  }
+
+  void updateNoteLabel(Notes note, String label) async {
+    final result = await dbHelper.updateNoteLabel(note.noteId, label);
     if (!result) {
       if (context.mounted) {
         ScaffoldMessenger.of(context)

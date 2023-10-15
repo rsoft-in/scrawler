@@ -4,7 +4,7 @@ class NoteColor {
   static Color getColor(int code, bool isDark) {
     switch (code) {
       case 1:
-        return const Color(0xFFFFDAA9);
+        return const Color(0xFFBCD4B6);
       case 2:
         return const Color(0xFFFFC7B3);
       case 3:
@@ -25,7 +25,7 @@ class NoteColor {
   static int getCode(Color color) {
     if (color == Colors.transparent) {
       return 0;
-    } else if (color == const Color(0xFFFFDAA9)) {
+    } else if (color == const Color(0xFFBCD4B6)) {
       return 1;
     } else if (color == const Color(0xFFFFC7B3)) {
       return 2;
