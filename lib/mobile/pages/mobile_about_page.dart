@@ -16,21 +16,14 @@ class _MobileAboutPageState extends State<MobileAboutPage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
-        child: SafeArea(
-          child: Container(
-            alignment: Alignment.centerLeft,
-            child: ScrawlAppBar(
-              title: 'About',
-              onPressed: () => Navigator.pop(context),
-            ),
-          ),
+        child: ScrawlAppBar(
+          title: 'About',
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Center(
         child: Column(
-          // mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-
           children: [
             Image.asset(
               'images/scrawler-desktop.png',
@@ -38,23 +31,15 @@ class _MobileAboutPageState extends State<MobileAboutPage> {
               fit: BoxFit.fitWidth,
             ),
             const SizedBox(
-              height: 30.0,
+              height: 20.0,
             ),
             const Text(
               kAppName,
               style: TextStyle(fontSize: 32.0),
             ),
             const Text(
-              'v.1.0.1',
+              'v.1.5.1 (tomato)',
               style: TextStyle(fontSize: 14.0),
-            ),
-            const SizedBox(
-              height: 30.0,
-            ),
-            const Divider(
-              indent: 80,
-              endIndent: 80,
-              thickness: 2,
             ),
             const SizedBox(
               height: 30.0,
