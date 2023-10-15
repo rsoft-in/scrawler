@@ -39,8 +39,9 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   Notes note = Notes.empty();
   final dbHelper = DBHelper.instance;
 
-  TextEditingController noteTextController = TextEditingController();
   TextEditingController noteTitleController = TextEditingController();
+  TextEditingController noteTextController = TextEditingController();
+  UndoHistoryController undoHistoryController = UndoHistoryController();
 
   @override
   void initState() {
@@ -122,6 +123,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                   ? TextField(
                       scrollController: _scrollViewController,
                       controller: noteTextController,
+                      undoController: undoHistoryController,
                       decoration: InputDecoration(
                           hintText: Language.get('type_something'),
                           border: InputBorder.none,
@@ -178,75 +180,104 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             if (isEditMode)
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    PopupMenuButton(
-                        icon: const Text(
-                          'H',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      PopupMenuButton(
+                          icon: const Text(
+                            'H',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  value: 'h1',
+                                  onTap: () => onToolbarClick(EditorTools.h1),
+                                  child: const Text('Heading 1'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h2',
+                                  onTap: () => onToolbarClick(EditorTools.h2),
+                                  child: const Text('Heading 2'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h3',
+                                  onTap: () => onToolbarClick(EditorTools.h3),
+                                  child: const Text('Heading 3'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'h4',
+                                  onTap: () => onToolbarClick(EditorTools.h4),
+                                  child: const Text('Heading 4'),
+                                ),
+                              ]),
+                      IconButton(
+                        onPressed: () => onToolbarClick(EditorTools.bold),
+                        icon: const Icon(
+                          YaruIcons.bold,
+                          size: 18,
                         ),
-                        itemBuilder: (context) => [
-                              PopupMenuItem(
-                                value: 'h1',
-                                onTap: () => onToolbarClick(EditorTools.h1),
-                                child: const Text('Heading 1'),
+                      ),
+                      IconButton(
+                        onPressed: () => onToolbarClick(EditorTools.italic),
+                        icon: const Icon(
+                          YaruIcons.italic,
+                          size: 18,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => addLink(),
+                        icon: const Icon(
+                          YaruIcons.insert_link,
+                          size: 18,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => addImage(),
+                        icon: const Icon(
+                          YaruIcons.image,
+                          size: 18,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          YaruIcons.unordered_list,
+                          size: 18,
+                        ),
+                      ),
+                      ValueListenableBuilder<UndoHistoryValue>(
+                        valueListenable: undoHistoryController,
+                        builder: (context, value, child) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                onPressed: value.canUndo
+                                    ? () {
+                                        undoHistoryController.undo();
+                                      }
+                                    : null,
+                                icon: const Icon(YaruIcons.undo),
                               ),
-                              PopupMenuItem(
-                                value: 'h2',
-                                onTap: () => onToolbarClick(EditorTools.h2),
-                                child: const Text('Heading 2'),
+                              IconButton(
+                                onPressed: value.canRedo
+                                    ? () {
+                                        undoHistoryController.redo();
+                                      }
+                                    : null,
+                                icon: const Icon(YaruIcons.redo),
                               ),
-                              PopupMenuItem(
-                                value: 'h3',
-                                onTap: () => onToolbarClick(EditorTools.h3),
-                                child: const Text('Heading 3'),
-                              ),
-                              PopupMenuItem(
-                                value: 'h4',
-                                onTap: () => onToolbarClick(EditorTools.h4),
-                                child: const Text('Heading 4'),
-                              ),
-                            ]),
-                    IconButton(
-                      onPressed: () => onToolbarClick(EditorTools.bold),
-                      icon: const Icon(
-                        YaruIcons.bold,
-                        size: 18,
+                            ],
+                          );
+                        },
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () => onToolbarClick(EditorTools.italic),
-                      icon: const Icon(
-                        YaruIcons.italic,
-                        size: 18,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => addLink(),
-                      icon: const Icon(
-                        YaruIcons.insert_link,
-                        size: 18,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => addImage(),
-                      icon: const Icon(
-                        YaruIcons.image,
-                        size: 18,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        YaruIcons.unordered_list,
-                        size: 18,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
           ],
