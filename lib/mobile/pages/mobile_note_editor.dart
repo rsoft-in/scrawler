@@ -1,6 +1,3 @@
-import 'package:bnotes/widgets/scrawl_appbar.dart';
-import 'package:bnotes/widgets/scrawl_color_dot.dart';
-import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -14,8 +11,11 @@ import '../../helpers/enums.dart';
 import '../../helpers/globals.dart' as globals;
 import '../../helpers/language.dart';
 import '../../models/notes.dart';
+import '../../widgets/scrawl_appbar.dart';
+import '../../widgets/scrawl_color_dot.dart';
 import '../../widgets/scrawl_color_picker.dart';
 import '../../widgets/scrawl_label_chip.dart';
+import '../../widgets/scrawl_snackbar.dart';
 import 'mobile_labels_page.dart';
 
 class MobileNoteEditor extends StatefulWidget {
@@ -42,6 +42,8 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   TextEditingController noteTitleController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
   UndoHistoryController undoHistoryController = UndoHistoryController();
+  TextEditingController linkDescController = TextEditingController();
+  TextEditingController linkController = TextEditingController();
 
   @override
   void initState() {
@@ -196,48 +198,55 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                           itemBuilder: (context) => [
                                 PopupMenuItem(
                                   value: 'h1',
-                                  onTap: () => onToolbarClick(EditorTools.h1),
+                                  onTap: () =>
+                                      onToolbarClick(EditorTools.h1, true),
                                   child: const Text('Heading 1'),
                                 ),
                                 PopupMenuItem(
                                   value: 'h2',
-                                  onTap: () => onToolbarClick(EditorTools.h2),
+                                  onTap: () =>
+                                      onToolbarClick(EditorTools.h2, true),
                                   child: const Text('Heading 2'),
                                 ),
                                 PopupMenuItem(
                                   value: 'h3',
-                                  onTap: () => onToolbarClick(EditorTools.h3),
+                                  onTap: () =>
+                                      onToolbarClick(EditorTools.h3, true),
                                   child: const Text('Heading 3'),
                                 ),
                                 PopupMenuItem(
                                   value: 'h4',
-                                  onTap: () => onToolbarClick(EditorTools.h4),
+                                  onTap: () =>
+                                      onToolbarClick(EditorTools.h4, true),
                                   child: const Text('Heading 4'),
                                 ),
                               ]),
                       IconButton(
-                        onPressed: () => onToolbarClick(EditorTools.bold),
+                        onPressed: () => onToolbarClick(EditorTools.bold, true),
                         icon: const Icon(
                           YaruIcons.bold,
                           size: 18,
                         ),
                       ),
                       IconButton(
-                        onPressed: () => onToolbarClick(EditorTools.italic),
+                        onPressed: () =>
+                            onToolbarClick(EditorTools.italic, true),
                         icon: const Icon(
                           YaruIcons.italic,
                           size: 18,
                         ),
                       ),
                       IconButton(
-                        onPressed: () => addLink(),
+                        onPressed: () =>
+                            onToolbarClick(EditorTools.link, false),
                         icon: const Icon(
                           YaruIcons.insert_link,
                           size: 18,
                         ),
                       ),
                       IconButton(
-                        onPressed: () => addImage(),
+                        onPressed: () =>
+                            onToolbarClick(EditorTools.image, false),
                         icon: const Icon(
                           YaruIcons.image,
                           size: 18,
@@ -420,33 +429,39 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         });
   }
 
-  void onToolbarClick(EditorTools tool) {
+  Future<void> onToolbarClick(EditorTools tool, bool needSelection) async {
     if (!noteTextController.selection.isValid) {
       return;
     }
-    var selectedText =
-        noteTextController.selection.textInside(noteTextController.text);
     var startIndex = noteTextController.selection.baseOffset;
     var endIndex = noteTextController.selection.extentOffset;
-    if (selectedText.isEmpty) return;
+    var selectedText =
+        noteTextController.selection.textInside(noteTextController.text);
+    var textBefore = noteTextController.text.substring(0, startIndex);
+    var textAfter = noteTextController.text.substring(endIndex);
+
+    if (selectedText.isEmpty && needSelection) return;
     switch (tool) {
       case EditorTools.h1:
       case EditorTools.h2:
       case EditorTools.h3:
       case EditorTools.h4:
         noteTextController.text =
-            '${noteTextController.text.substring(0, startIndex)}${getHeaderElement(tool)} $selectedText ${noteTextController.text.substring(endIndex)}';
+            '$textBefore${getHeaderElement(tool)} $selectedText $textAfter';
         break;
       case EditorTools.bold:
-        noteTextController.text =
-            '${noteTextController.text.substring(0, startIndex)}**$selectedText**${noteTextController.text.substring(endIndex)}';
+        noteTextController.text = '$textBefore**$selectedText**$textAfter';
         break;
       case EditorTools.italic:
-        noteTextController.text =
-            '${noteTextController.text.substring(0, startIndex)}_${selectedText}_${noteTextController.text.substring(endIndex)}';
+        noteTextController.text = '${textBefore}_${selectedText}_$textAfter';
         break;
-
+      case EditorTools.link:
+      case EditorTools.image:
+        var linkCode = await addLink(tool);
+        noteTextController.text = '$textBefore$linkCode$textAfter';
+        break;
       default:
+        break;
     }
     setState(() {});
   }
@@ -466,8 +481,8 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     }
   }
 
-  void addLink() {
-    showDialog(
+  Future<String> addLink(EditorTools tool) async {
+    final result = await showDialog(
         context: context,
         builder: (context) {
           return Dialog(
@@ -480,20 +495,22 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                   const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      'Add a link',
+                      'Add a Link or Image',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w200),
                     ),
                   ),
                   kVSpace,
-                  const TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Description',
+                  TextField(
+                    controller: linkDescController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Description',
                     ),
                   ),
                   kVSpace,
-                  const TextField(
-                    decoration: InputDecoration(
+                  TextField(
+                    controller: linkController,
+                    decoration: const InputDecoration(
                       hintText: 'Enter Link',
                     ),
                   ),
@@ -502,12 +519,12 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       FilledButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.pop(context, true),
                         child: const Text('Ok'),
                       ),
                       kHSpace,
                       OutlinedButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () => Navigator.pop(context, false),
                         child: const Text('Cancel'),
                       )
                     ],
@@ -517,61 +534,15 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             ),
           );
         });
-  }
-
-  void addImage() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog(
-            child: Padding(
-              padding: kPaddingLarge,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Add an Image',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                  ),
-                  kVSpace,
-                  const TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                    ),
-                  ),
-                  kVSpace,
-                  const TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Enter Image Link',
-                    ),
-                  ),
-                  kVSpace,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      FilledButton(
-                        onPressed: () {},
-                        child: const Text('Ok'),
-                      ),
-                      kHSpace,
-                      OutlinedButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancel'),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
+    if (result) {
+      if (tool == EditorTools.link) {
+        return '[${linkDescController.text}](${linkController.text})';
+      } else {
+        return '![${linkDescController.text}](${linkController.text})';
+      }
+    } else {
+      return '';
+    }
   }
 
   Future<bool> saveNote() async {
