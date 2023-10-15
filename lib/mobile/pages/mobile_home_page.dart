@@ -3,7 +3,7 @@ import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/mobile/pages/mobile_notes_page.dart';
 import 'package:bnotes/mobile/pages/mobile_settings_page.dart';
-import 'package:bnotes/mobile/pages/mobile_tasks_page.dart';
+// import 'package:bnotes/mobile/pages/mobile_tasks_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
@@ -93,7 +93,7 @@ class _MobileHomePageState extends State<MobileHomePage> {
         onPageChanged: pageChanged,
         children: const [
           MobileNotesPage(),
-          MobileTasksPage(),
+          // MobileTasksPage(),
           MobileSettingsPage()
         ],
       ),

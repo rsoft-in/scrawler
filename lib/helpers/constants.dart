@@ -60,17 +60,17 @@ const kMenuMobile = [
     'text': 'notes',
   },
   {
-    'id': 'all_tasks',
-    'index': 1,
-    'icon': YaruIcons.unordered_list,
-    'icon_filled': YaruIcons.unordered_list,
-    'text': 'tasks',
-  },
-  {
     'id': 'settings',
-    'index': 2,
+    'index': 1,
     'icon': YaruIcons.settings,
     'icon_filled': YaruIcons.settings,
     'text': 'settings',
   },
 ];
+  // {
+  //   'id': 'all_tasks',
+  //   'index': 1,
+  //   'icon': YaruIcons.unordered_list,
+  //   'icon_filled': YaruIcons.unordered_list,
+  //   'text': 'tasks',
+  // },
