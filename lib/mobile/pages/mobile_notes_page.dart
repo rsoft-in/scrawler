@@ -241,7 +241,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
       }
       return;
     }
-    if (result.contains('delete')) {
+
+    if ((result ?? '').contains('delete')) {
       deleteNote(note);
     }
   }
