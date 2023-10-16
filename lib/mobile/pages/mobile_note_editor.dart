@@ -72,6 +72,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
       note = widget.note;
       isEditMode = widget.editMode ?? false;
       noteTextController.text = note.noteText;
+      noteTitleController.text = note.noteTitle;
     });
   }
 
@@ -96,23 +97,25 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(84),
           child: ScrawlAppBar(
-            title: note.noteTitle,
+            middle: isEditMode
+                ? TextField(
+                    controller: noteTitleController,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter title here',
+                    ),
+                    onEditingComplete: () => setState(() {
+                      note.noteTitle = noteTitleController.text;
+                    }),
+                  )
+                : Text(
+                    note.noteTitle,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
+                  ),
             onPressed: () {
               saveNote();
               Navigator.pop(context, true);
             },
-            titleEdit: isEditMode
-                ? GestureDetector(
-                    onTap: () => titleDialog(),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        YaruIcons.pen,
-                        size: 18,
-                      ),
-                    ),
-                  )
-                : null,
             trailing: ScrawlColorDot(colorCode: note.noteColor),
           ),
         ),
@@ -181,7 +184,8 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             ),
             if (isEditMode)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 15.0, horizontal: 10.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -548,6 +552,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   Future<bool> saveNote() async {
     note.noteDate = DateTime.now().toIso8601String();
     note.noteText = noteTextController.text;
+    note.noteTitle = noteTitleController.text;
     if (note.noteText.isEmpty) {
       return false;
     }

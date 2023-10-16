@@ -43,7 +43,7 @@ class _MobileLabelsPageState extends State<MobileLabelsPage> {
             TextField(
               controller: newLabelController,
               decoration: const InputDecoration(
-                hintText: 'Enter New...',
+                hintText: 'Enter New Label...',
               ),
               onSubmitted: (value) => setState(() => saveLabel(value)),
             ),
@@ -76,8 +76,7 @@ class _MobileLabelsPageState extends State<MobileLabelsPage> {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
+      bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

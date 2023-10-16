@@ -63,7 +63,7 @@ class _MobileNoteReaderState extends State<MobileNoteReader> {
           child: Container(
             alignment: Alignment.centerLeft,
             child: ScrawlAppBar(
-              title: widget.note.noteTitle,
+              middle: Text(widget.note.noteTitle),
               onPressed: () => Navigator.pop(context, true),
             ),
           ),

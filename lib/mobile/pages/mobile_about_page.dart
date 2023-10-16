@@ -17,7 +17,10 @@ class _MobileAboutPageState extends State<MobileAboutPage> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
         child: ScrawlAppBar(
-          title: 'About',
+          middle: const Text(
+            'About',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),

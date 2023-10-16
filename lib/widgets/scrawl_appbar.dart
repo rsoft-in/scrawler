@@ -4,16 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ScrawlAppBar extends StatefulWidget {
-  final String title;
+  final Widget middle;
   final Function onPressed;
-  final Widget? titleEdit;
+
   final Widget? trailing;
   const ScrawlAppBar(
-      {Key? key,
-      required this.title,
-      required this.onPressed,
-      this.titleEdit,
-      this.trailing})
+      {Key? key, required this.middle, required this.onPressed, this.trailing})
       : super(key: key);
 
   @override
@@ -41,12 +37,8 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
                 icon: Icons.arrow_back_ios_new,
                 onPressed: () => widget.onPressed()),
             kHSpace,
-            Text(widget.title,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+            Expanded(child: widget.middle),
             kHSpace,
-            if (widget.titleEdit != null) widget.titleEdit!,
-            const Spacer(),
             if (widget.trailing != null) widget.trailing!,
           ],
         ),
