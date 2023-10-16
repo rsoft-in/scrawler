@@ -181,7 +181,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
             ),
             if (isEditMode)
               Padding(
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
