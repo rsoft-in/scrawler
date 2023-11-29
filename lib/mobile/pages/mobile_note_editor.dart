@@ -183,9 +183,9 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                     ),
             ),
             if (isEditMode)
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 15.0, horizontal: 10.0),
+              Container(
+                padding: const EdgeInsets.only(
+                    bottom: 30, left: 20, right: 20, top: 10),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -298,7 +298,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         bottomNavigationBar: isEditMode
             ? null
             : AnimatedContainer(
-                height: _showAppbar ? 80.0 : 0.0,
+                height: _showAppbar ? 90.0 : 0.0,
                 duration: const Duration(milliseconds: 200),
                 child: BottomAppBar(
                   child: Row(

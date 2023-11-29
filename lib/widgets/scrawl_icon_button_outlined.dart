@@ -24,9 +24,9 @@ class ScrawlOutlinedIconButton extends StatelessWidget {
           color: darkModeOn ? kDarkPrimary : kLightPrimary,
           border: Border.all(
               color: darkModeOn ? kDarkStroke : kLightStroke, width: 2),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(kBorderRadius),
         ),
-        padding: const EdgeInsets.all(7),
+        padding: const EdgeInsets.all(10),
         child: Icon(icon),
       ),
     );

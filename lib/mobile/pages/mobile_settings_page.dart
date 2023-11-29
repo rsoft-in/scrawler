@@ -123,15 +123,16 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
   }
 
   void appearance() {
-    showDialog(
+    showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Dialog(
+          return SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.all(18.0),
                   child: Text(
                     'Choose Appearance',
                     style: TextStyle(
@@ -142,14 +143,17 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
                 ),
                 ListTile(
                   onTap: () => onAppearanceChanged(ThemeMode.light),
+                  leading: const Icon(CupertinoIcons.lightbulb),
                   title: const Text('Light'),
                 ),
                 ListTile(
                   onTap: () => onAppearanceChanged(ThemeMode.dark),
+                  leading: const Icon(CupertinoIcons.sun_dust),
                   title: const Text('Dark'),
                 ),
                 ListTile(
                   onTap: () => onAppearanceChanged(ThemeMode.system),
+                  leading: const Icon(CupertinoIcons.command),
                   title: const Text('System'),
                 ),
                 kVSpace,

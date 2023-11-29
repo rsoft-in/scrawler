@@ -125,6 +125,14 @@ ThemeData theme() {
       color: kLightSelected,
       elevation: 0,
     ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: kLightSecondary,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: kLightStroke, width: 2),
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
+    ),
   );
 }
 
@@ -252,6 +260,14 @@ ThemeData themeDark() {
     bottomAppBarTheme: const BottomAppBarTheme(
       color: kDarkBody,
       elevation: 0,
+    ),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: kDarkSecondary,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(color: kDarkStroke, width: 2),
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
     ),
   );
 }

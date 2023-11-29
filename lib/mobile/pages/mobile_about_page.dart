@@ -15,7 +15,7 @@ class _MobileAboutPageState extends State<MobileAboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(80),
+        preferredSize: const Size.fromHeight(84),
         child: ScrawlAppBar(
           middle: const Text(
             'About',

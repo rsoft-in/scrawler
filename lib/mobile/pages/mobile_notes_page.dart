@@ -90,7 +90,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                             MenuAnchor(
                               builder: (context, controller, child) {
                                 return InkWell(
-                                  borderRadius: BorderRadius.circular(5),
+                                  borderRadius:
+                                      BorderRadius.circular(kBorderRadius),
                                   onTap: () {
                                     if (controller.isOpen) {
                                       controller.close();
@@ -108,7 +109,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                                               ? kDarkStroke
                                               : kLightStroke,
                                           width: 2),
-                                      borderRadius: BorderRadius.circular(5),
+                                      borderRadius:
+                                          BorderRadius.circular(kBorderRadius),
                                     ),
                                     padding: const EdgeInsets.all(12),
                                     child: const Icon(Icons.sort),
@@ -299,24 +301,22 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   }
 
   void showOptions(BuildContext context, Notes note) {
-    showDialog(
+    showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Dialog(
-            child: Container(
-              padding: kGlobalOuterPadding,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: contextMenuItems.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () => onContextSelected(
-                          contextMenuItems[index].value, note),
-                      leading: Icon(contextMenuItems[index].icon),
-                      title: Text(contextMenuItems[index].caption),
-                    );
-                  }),
-            ),
+          return Container(
+            padding: kGlobalOuterPadding,
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: contextMenuItems.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () =>
+                        onContextSelected(contextMenuItems[index].value, note),
+                    leading: Icon(contextMenuItems[index].icon),
+                    title: Text(contextMenuItems[index].caption),
+                  );
+                }),
           );
         });
   }
