@@ -22,7 +22,7 @@ class _DesktopLandingState extends State<DesktopLanding> {
     isSignedIn = prefs.getBool('is_signed_in') ?? false;
     globals.apiKey = await ApiProvider.fetchAPIKey();
     globals.apiServer = await ApiProvider.fetchAPIServer();
-    User user = User('', '', '', '', '', false);
+    User user = User.empty();
     user.userId = prefs.getString('user_id') ?? '';
     user.userEmail = prefs.getString('user_email') ?? '';
     user.userName = prefs.getString('user_name') ?? '';

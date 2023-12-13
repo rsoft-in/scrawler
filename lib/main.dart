@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
             themeMode = ThemeMode.system;
             break;
           default:
-            themeMode = ThemeMode.light;
+            themeMode = ThemeMode.dark;
             break;
         }
       } else {
@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: kAppName,
       debugShowCheckedModeBanner: false,
-      themeMode: themeMode,
+      themeMode: ThemeMode.light,
       theme: theme(),
       darkTheme: themeDark(),
       routes: {

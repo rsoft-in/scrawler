@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:bnotes/widgets/rs_icon.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../desktop/pages/desktop_app_screen.dart';
 import '../../desktop/pages/desktop_forgot_pwd.dart';
@@ -16,7 +17,6 @@ import '../../helpers/constants.dart';
 import '../../helpers/globals.dart' as globals;
 import '../../helpers/language.dart';
 import '../../providers/user_api_provider.dart';
-import '../../widgets/scrawl_button_filled.dart';
 import '../../widgets/scrawl_snackbar.dart';
 import '../../widgets/window_controls.dart';
 
@@ -34,6 +34,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   double loginWidth = 400;
   bool isSigningIn = false;
   bool isDesktop = true;
+  bool hidePassword = true;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
@@ -161,7 +162,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   controller: _emailController,
                   decoration: InputDecoration(
                     hintText: Language.get('email'),
-                    suffixIcon: const Icon(YaruIcons.mail),
+                    prefixIcon: const RSIcon(icon: Symbols.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -182,11 +183,20 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 child: TextFormField(
                   focusNode: focusNodePassword,
                   controller: _pwdController,
-                  obscureText: true,
+                  obscureText: hidePassword,
                   decoration: InputDecoration(
-                    hintText: Language.get('password'),
-                    suffixIcon: const Icon(YaruIcons.key),
-                  ),
+                      hintText: Language.get('password'),
+                      prefixIcon: const RSIcon(icon: Symbols.password),
+                      suffixIcon: IconButton(
+                        icon: hidePassword
+                            ? const RSIcon(icon: Symbols.visibility)
+                            : const RSIcon(icon: Symbols.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            hidePassword = !hidePassword;
+                          });
+                        },
+                      )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return Language.get('mandatory_field');
@@ -223,7 +233,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               Row(
                 children: [
                   Expanded(
-                    child: ScrawlFilledButton(
+                    child: FilledButton(
                       onPressed: isSigningIn
                           ? null
                           : () {
@@ -231,7 +241,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                 signIn();
                               }
                             },
-                      label: Language.get('sign_in'),
+                      child: Text(Language.get('sign_in')),
                     ),
                   ),
                 ],
@@ -259,7 +269,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
     return kIsWeb
         ? Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
+            // backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             body: Row(
               children: [
                 if (isDesktop)
@@ -276,17 +286,17 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   child: Center(
                     child: SizedBox(
                       width: loginWidth,
-                      child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 50),
-                          decoration: BoxDecoration(
-                              color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  color:
-                                      darkModeOn ? kDarkStroke : kLightStroke,
-                                  width: 2)),
-                          child: loginContent),
+                      child: Card(
+                        child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 50),
+                            // decoration: BoxDecoration(
+                            //     border: Border.all(
+                            //         color:
+                            //             darkModeOn ? kDarkStroke : kLightStroke,
+                            //         width: 1)),
+                            child: loginContent),
+                      ),
                     ),
                   ),
                 ),

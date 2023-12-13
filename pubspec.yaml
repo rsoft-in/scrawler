@@ -19,8 +19,8 @@ dependencies:
   flutter_phoenix: ^1.1.1
   flutter_svg: ^2.0.7
   http: ^1.1.0
-  iconsax: ^0.0.8
   intl: ^0.18.0
+  material_symbols_icons: ^4.2713.0
   shared_preferences: ^2.0.13
   sqflite: ^2.2.8+4
   uuid: ^4.0.0
