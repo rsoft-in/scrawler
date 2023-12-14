@@ -5,6 +5,7 @@ import 'package:bnotes/widgets/rs_icon.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -137,13 +138,13 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         key: _formKey,
         child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Visibility(
+              Visibility(
                 visible: kIsWeb,
                 child: Text(
                   kAppName,
-                  style: TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+                  style: GoogleFonts.raleway(fontSize: 36),
                 ),
               ),
               const Visibility(visible: kIsWeb, child: kVSpace),
@@ -153,9 +154,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   fontSize: 18.0,
                 ),
               ),
-              const SizedBox(
-                height: 25.0,
-              ),
+              kVSpace,
               Padding(
                 padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
                 child: TextFormField(
@@ -268,8 +267,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
     );
     return kIsWeb
         ? Scaffold(
+            backgroundColor: const Color(0xFFd9eff3),
             resizeToAvoidBottomInset: false,
-            // backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             body: Row(
               children: [
                 if (isDesktop)
@@ -290,11 +289,6 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                         child: Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 50),
-                            // decoration: BoxDecoration(
-                            //     border: Border.all(
-                            //         color:
-                            //             darkModeOn ? kDarkStroke : kLightStroke,
-                            //         width: 1)),
                             child: loginContent),
                       ),
                     ),
@@ -304,6 +298,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             ),
           )
         : Scaffold(
+            backgroundColor: const Color(0xffd9eff3),
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               child: MoveWindow(
