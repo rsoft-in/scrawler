@@ -158,55 +158,58 @@ class _DesktopAppState extends State<DesktopApp> {
                   ? const Center(
                       child: CircularProgressIndicator.adaptive(strokeWidth: 2),
                     )
-                  : Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ...List.generate(labelsList.length, (index) {
-                          final notes = notesList
-                              .where((el) => el.noteLabel
-                                  .contains(labelsList[index].labelName))
-                              .toList();
-                          return ExpansionTile(
-                            shape: const RoundedRectangleBorder(
-                                side: BorderSide.none),
-                            leading: const Icon(Symbols.folder),
-                            controlAffinity: ListTileControlAffinity.trailing,
-                            title: Text(
-                              labelsList[index].labelName,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            children: notes
-                                .map((note) => RSDrawerItem(
-                                      indent: true,
-                                      icon: const RSIcon(
-                                          icon: Symbols.description),
-                                      label: note.noteTitle,
-                                      trailing: Container(
-                                        width: 5,
-                                        height: 15,
-                                        decoration: BoxDecoration(
-                                          color: NoteColor.getColor(
-                                              note.noteColor, false),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                  : SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ...List.generate(labelsList.length, (index) {
+                            final notes = notesList
+                                .where((el) => el.noteLabel
+                                    .contains(labelsList[index].labelName))
+                                .toList();
+                            return ExpansionTile(
+                              shape: const RoundedRectangleBorder(
+                                  side: BorderSide.none),
+                              leading: const Icon(Symbols.folder),
+                              controlAffinity: ListTileControlAffinity.trailing,
+                              title: Text(
+                                labelsList[index].labelName,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              children: notes
+                                  .map((note) => RSDrawerItem(
+                                        indent: true,
+                                        icon: const RSIcon(
+                                            icon: Symbols.description),
+                                        label: note.noteTitle,
+                                        trailing: Container(
+                                          width: 5,
+                                          height: 15,
+                                          decoration: BoxDecoration(
+                                            color: NoteColor.getColor(
+                                                note.noteColor, false),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
                                         ),
-                                      ),
-                                      onTap: () {},
-                                    ))
-                                .toList(),
-                          );
-                        }),
-                        ...notesList
-                            .where((el) => el.noteLabel.isEmpty)
-                            .toList()
-                            .map((note) => RSDrawerItem(
-                                  onTap: () {},
-                                  icon: const RSIcon(icon: Symbols.description),
-                                  label: note.noteTitle,
-                                ))
-                            .toList(),
-                      ],
+                                        onTap: () {},
+                                      ))
+                                  .toList(),
+                            );
+                          }),
+                          ...notesList
+                              .where((el) => el.noteLabel.isEmpty)
+                              .toList()
+                              .map((note) => RSDrawerItem(
+                                    onTap: () {},
+                                    icon:
+                                        const RSIcon(icon: Symbols.description),
+                                    label: note.noteTitle,
+                                  ))
+                              .toList(),
+                        ],
+                      ),
                     ),
             ),
             RSDrawerItem(
