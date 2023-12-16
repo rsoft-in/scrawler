@@ -7,12 +7,14 @@ class RSDrawerItem extends StatefulWidget {
   final String label;
   final VoidCallback onTap;
   final Widget? trailing;
+  final bool indent;
   const RSDrawerItem(
       {Key? key,
       this.icon,
       required this.label,
       required this.onTap,
-      this.trailing})
+      this.trailing,
+      this.indent = false})
       : super(key: key);
 
   @override
@@ -36,6 +38,10 @@ class _RSDrawerItemState extends State<RSDrawerItem> {
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
             children: [
+              if (widget.indent)
+                const SizedBox(
+                  width: 10,
+                ),
               widget.icon ?? Container(),
               kHSpace,
               Expanded(

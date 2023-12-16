@@ -8,6 +8,7 @@ import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/models/label.dart';
 import 'package:bnotes/widgets/rs_drawer_item.dart';
 import 'package:bnotes/widgets/rs_icon.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/note_color.dart';
 import '../../models/notes.dart';
+import '../../providers/labels_api_provider.dart';
 import '../../providers/notes_api_provider.dart';
 
 class DesktopApp extends StatefulWidget {
@@ -33,6 +35,7 @@ class _DesktopAppState extends State<DesktopApp> {
   final int _pageNr = 0;
   bool isBusy = false;
   List<Notes> notesList = [];
+  List<Label> labelsList = [];
 
   List<Map<String, dynamic>> menu = [];
   String _selectedDrawerIndex = 'all_notes';
@@ -54,7 +57,27 @@ class _DesktopAppState extends State<DesktopApp> {
     }
   }
 
-  void getNotes() async {
+  Future<void> getLabels() async {
+    Map<String, String> post = {
+      'postdata': jsonEncode({
+        'api_key': globals.apiKey,
+        'uid': globals.user!.userId,
+        'qry': '',
+        'sort': 'label_name',
+        'page_no': 0,
+        'offset': 100
+      })
+    };
+    LabelsApiProvider.fecthLabels(post).then((value) {
+      setState(() {
+        if (value.error.isEmpty) {
+          labelsList = value.labels;
+        }
+      });
+    });
+  }
+
+  Future<void> getNotes() async {
     Map<String, String> post = {
       'postdata': jsonEncode({
         'api_key': globals.apiKey,
@@ -93,6 +116,7 @@ class _DesktopAppState extends State<DesktopApp> {
     });
     super.initState();
     menu = kMenu;
+    getLabels();
     getNotes();
   }
 
@@ -134,24 +158,56 @@ class _DesktopAppState extends State<DesktopApp> {
                   ? const Center(
                       child: CircularProgressIndicator.adaptive(strokeWidth: 2),
                     )
-                  : ListView.builder(
-                      itemCount: notesList.length,
-                      itemBuilder: (context, index) {
-                        return RSDrawerItem(
-                          icon: const RSIcon(icon: Symbols.description),
-                          label: notesList[index].noteTitle,
-                          trailing: Container(
-                            width: 5,
-                            height: 15,
-                            decoration: BoxDecoration(
-                              color: NoteColor.getColor(
-                                  notesList[index].noteColor, false),
-                              borderRadius: BorderRadius.circular(8),
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ...List.generate(labelsList.length, (index) {
+                          final notes = notesList
+                              .where((el) => el.noteLabel
+                                  .contains(labelsList[index].labelName))
+                              .toList();
+                          return ExpansionTile(
+                            shape: const RoundedRectangleBorder(
+                                side: BorderSide.none),
+                            leading: const Icon(Symbols.folder),
+                            controlAffinity: ListTileControlAffinity.trailing,
+                            title: Text(
+                              labelsList[index].labelName,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          onTap: () {},
-                        );
-                      }),
+                            children: notes
+                                .map((note) => RSDrawerItem(
+                                      indent: true,
+                                      icon: const RSIcon(
+                                          icon: Symbols.description),
+                                      label: note.noteTitle,
+                                      trailing: Container(
+                                        width: 5,
+                                        height: 15,
+                                        decoration: BoxDecoration(
+                                          color: NoteColor.getColor(
+                                              note.noteColor, false),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onTap: () {},
+                                    ))
+                                .toList(),
+                          );
+                        }),
+                        ...notesList
+                            .where((el) => el.noteLabel.isEmpty)
+                            .toList()
+                            .map((note) => RSDrawerItem(
+                                  onTap: () {},
+                                  icon: const RSIcon(icon: Symbols.description),
+                                  label: note.noteTitle,
+                                ))
+                            .toList(),
+                      ],
+                    ),
             ),
             RSDrawerItem(
               icon: const RSIcon(icon: Symbols.delete),

@@ -11,6 +11,8 @@ ThemeData theme() {
     useMaterial3: true,
     fontFamily: 'Inter',
     inputDecorationTheme: inputDecorationTheme(),
+    iconTheme: const IconThemeData(
+        color: Colors.black, fill: 0, weight: 300, opticalSize: 48),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
@@ -43,6 +45,8 @@ ThemeData themeDark() {
     useMaterial3: true,
     fontFamily: 'Inter',
     inputDecorationTheme: inputDecorationTheme(),
+    iconTheme: const IconThemeData(
+        color: Colors.black, fill: 0, weight: 300, opticalSize: 48),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(
