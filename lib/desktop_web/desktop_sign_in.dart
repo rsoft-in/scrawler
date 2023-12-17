@@ -10,16 +10,16 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import '../../desktop/pages/desktop_app_screen.dart';
-import '../../desktop/pages/desktop_forgot_pwd.dart';
-import '../../desktop/pages/desktop_sign_up.dart';
-import '../../helpers/adaptive.dart';
-import '../../helpers/constants.dart';
-import '../../helpers/globals.dart' as globals;
-import '../../helpers/language.dart';
-import '../../providers/user_api_provider.dart';
-import '../../widgets/scrawl_snackbar.dart';
-import '../../widgets/window_controls.dart';
+import 'desktop_app_screen.dart';
+import '../desktop/pages/desktop_forgot_pwd.dart';
+import 'desktop_sign_up.dart';
+import '../helpers/adaptive.dart';
+import '../helpers/constants.dart';
+import '../helpers/globals.dart' as globals;
+import '../helpers/language.dart';
+import '../providers/user_api_provider.dart';
+import '../widgets/scrawl_snackbar.dart';
+import '../widgets/window_controls.dart';
 
 class DesktopSignIn extends StatefulWidget {
   const DesktopSignIn({Key? key}) : super(key: key);

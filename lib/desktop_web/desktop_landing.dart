@@ -1,5 +1,5 @@
-import 'package:bnotes/desktop/pages/desktop_app_screen.dart';
-import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
+import 'package:bnotes/desktop_web/desktop_app_screen.dart';
+import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/models/users_model.dart';
 import 'package:bnotes/providers/api_provider.dart';

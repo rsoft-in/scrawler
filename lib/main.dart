@@ -1,7 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/desktop/desktop_landing.dart';
-import 'package:bnotes/desktop/pages/desktop_sign_in.dart';
-import 'package:bnotes/desktop/pages/desktop_sign_up.dart';
+import 'package:bnotes/desktop_web/desktop_landing.dart';
+import 'package:bnotes/desktop_web/desktop_sign_in.dart';
+import 'package:bnotes/desktop_web/desktop_sign_up.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/language.dart';
@@ -41,7 +41,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   int themeID = 3;
-  bool isDesktop = false;
+  bool isDesktopOrWeb = false;
   ScreenSize _screenSize = ScreenSize.large;
 
   @override
@@ -83,8 +83,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _screenSize = getScreenSize(context);
-    if ((_screenSize == ScreenSize.large && UniversalPlatform.isWeb) ||
-        UniversalPlatform.isDesktop) isDesktop = true;
+    if ((_screenSize == ScreenSize.large || UniversalPlatform.isWeb) ||
+        UniversalPlatform.isDesktop) isDesktopOrWeb = true;
     return MaterialApp(
       title: kAppName,
       debugShowCheckedModeBanner: false,
@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark(),
       routes: {
         '/': (context) =>
-            isDesktop ? const DesktopLanding() : const MobileStartPage(),
+            isDesktopOrWeb ? const DesktopLanding() : const MobileStartPage(),
         '/dsignin': (context) => const DesktopSignIn(),
         '/dsignup': (context) => const DesktopSignUp(),
         '/mobilestart': (context) => const MobileStartPage()

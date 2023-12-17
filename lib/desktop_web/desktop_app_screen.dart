@@ -5,9 +5,11 @@ import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
+import 'package:bnotes/desktop_web/desktop_note_widget.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/drawer_folder.dart';
 import 'package:bnotes/models/label.dart';
 import 'package:bnotes/widgets/rs_drawer_item.dart';
@@ -16,10 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../helpers/note_color.dart';
-import '../../models/notes.dart';
-import '../../providers/labels_api_provider.dart';
-import '../../providers/notes_api_provider.dart';
+import '../helpers/note_color.dart';
+import '../models/notes.dart';
+import '../providers/labels_api_provider.dart';
+import '../providers/notes_api_provider.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({Key? key}) : super(key: key);
@@ -32,7 +34,7 @@ class _DesktopAppState extends State<DesktopApp> {
   final GlobalKey<ScaffoldState> _desktopKey = GlobalKey();
 
   late SharedPreferences prefs;
-  bool isDesktop = false;
+  ScreenSize _screenSize = ScreenSize.large;
   final int _pageNr = 0;
   bool isBusy = false;
   List<Notes> notesList = [];
@@ -42,6 +44,7 @@ class _DesktopAppState extends State<DesktopApp> {
   List<Map<String, dynamic>> menu = [];
   String _selectedDrawerIndex = 'all_notes';
   final int _selectedIndex = 0;
+  Notes selectedNote = Notes.empty();
   NavigationRailLabelType labelType = NavigationRailLabelType.none;
 
   _onDrawerItemSelect(String menuId) {
@@ -109,6 +112,12 @@ class _DesktopAppState extends State<DesktopApp> {
     });
   }
 
+  void onNoteSelected(Notes note) {
+    setState(() {
+      selectedNote = note;
+    });
+  }
+
   @override
   void initState() {
     doWhenWindowReady(() {
@@ -126,7 +135,7 @@ class _DesktopAppState extends State<DesktopApp> {
 
   @override
   Widget build(BuildContext context) {
-    isDesktop = isDisplayDesktop(context);
+    _screenSize = getScreenSize(context);
     var brightness = MediaQuery.of(context).platformBrightness;
     bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
         (brightness == Brightness.dark &&
@@ -203,7 +212,7 @@ class _DesktopAppState extends State<DesktopApp> {
                                                 BorderRadius.circular(8),
                                           ),
                                         ),
-                                        onTap: () {},
+                                        onTap: () => onNoteSelected(note),
                                       ))
                                   .toList(),
                             );
@@ -212,7 +221,7 @@ class _DesktopAppState extends State<DesktopApp> {
                               .where((el) => el.noteLabel.isEmpty)
                               .toList()
                               .map((note) => RSDrawerItem(
-                                    onTap: () {},
+                                    onTap: () => onNoteSelected(note),
                                     icon:
                                         const RSIcon(icon: Symbols.description),
                                     label: note.noteTitle,
@@ -242,30 +251,47 @@ class _DesktopAppState extends State<DesktopApp> {
       ),
     );
 
-    return isDesktop
+    return _screenSize == ScreenSize.large
         ? Scaffold(
             body: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 drawer,
                 Expanded(
-                  child: Center(
-                    child: InkWell(
-                        onTap: () {},
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('Welcome'),
-                        )),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (selectedNote.noteId.isNotEmpty)
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: const BoxDecoration(
+                              border: Border(
+                                  bottom: BorderSide(color: kLightStroke))),
+                          child: Row(
+                            children: [
+                              const Icon(Symbols.description),
+                              kHSpace,
+                              Expanded(
+                                child: Text(
+                                  selectedNote.noteTitle,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Expanded(child: DesktopNoteWidget(selectedNote)),
+                    ],
                   ),
                 ),
               ],
             ),
           )
         : Scaffold(
-            drawer: drawer,
             appBar: AppBar(),
-            body: const Center(
-              child: Text('Welcome'),
-            ),
+            drawer: drawer,
+            body: DesktopNoteWidget(selectedNote),
           );
 
     // Widget drawer = SizedBox(
