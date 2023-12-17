@@ -26,7 +26,7 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
           ? EmptyWidget(
               text: 'Select a Note to preview',
               width: MediaQuery.of(context).size.width * 0.4,
-              asset: 'images/undraw_playful_cat.svg')
+              asset: 'images/nothing_to_do.svg')
           : Text(widget.note.noteText),
     );
   }

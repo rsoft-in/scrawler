@@ -21,10 +21,7 @@ class EmptyWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Text(
-              text,
-              style: const TextStyle(color: Colors.grey),
-            ),
+            child: Text(text),
           ),
         ],
       ),

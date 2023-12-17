@@ -5,6 +5,7 @@ import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
+import 'package:bnotes/desktop_web/desktop_note_toolbar.dart';
 import 'package:bnotes/desktop_web/desktop_note_widget.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
@@ -278,6 +279,7 @@ class _DesktopAppState extends State<DesktopApp> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
+                              DesktopNoteToolbar(selectedNote),
                             ],
                           ),
                         ),
