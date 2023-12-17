@@ -3,9 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  bitsdojo_window_linux
   gtk
+  irondash_engine_context
   screen_retriever
+  super_native_extensions
   url_launcher_linux
   window_manager
   yaru_window_linux

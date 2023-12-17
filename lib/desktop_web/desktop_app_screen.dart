@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/desktop_web/desktop_note_toolbar.dart';
@@ -118,13 +117,13 @@ class _DesktopAppState extends State<DesktopApp> {
 
   @override
   void initState() {
-    doWhenWindowReady(() {
-      const initialSize = Size(1100, 700);
-      appWindow.minSize = const Size(800, 700);
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
+    // doWhenWindowReady(() {
+    //   const initialSize = Size(1100, 700);
+    //   appWindow.minSize = const Size(800, 700);
+    //   appWindow.size = initialSize;
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.show();
+    // });
     super.initState();
     menu = kMenu;
     getLabels();
@@ -163,7 +162,7 @@ class _DesktopAppState extends State<DesktopApp> {
               label: 'Add Note',
               onTap: () {},
             ),
-            kHSpace,
+            kVSpace,
             Expanded(
               child: isBusy
                   ? const Center(
@@ -207,6 +206,7 @@ class _DesktopAppState extends State<DesktopApp> {
                                   .toList(),
                             );
                           }),
+                          kVSpace,
                           ...notesList
                               .where((el) => el.noteLabel.isEmpty)
                               .toList()

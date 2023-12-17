@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
@@ -374,11 +373,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: UniversalPlatform.isWeb
-                  ? appBar
-                  : MoveWindow(
-                      child: appBar,
-                    ),
+              child: appBar,
             ),
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -463,11 +458,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
           child: Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: UniversalPlatform.isWeb
-                  ? readerHead
-                  : MoveWindow(
-                      child: readerHead,
-                    ),
+              child: readerHead,
             ),
             body: editMode
                 ? Column(

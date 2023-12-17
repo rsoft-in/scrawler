@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../desktop/pages/desktop_forgot_pwd.dart';
 import '../helpers/adaptive.dart';
@@ -15,7 +13,6 @@ import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
 import '../providers/user_api_provider.dart';
 import '../widgets/scrawl_snackbar.dart';
-import '../widgets/window_controls.dart';
 import 'desktop_app_screen.dart';
 import 'desktop_sign_up.dart';
 
@@ -112,13 +109,13 @@ class _DesktopSignInState extends State<DesktopSignIn> {
 
   @override
   void initState() {
-    doWhenWindowReady(() {
-      const initialSize = Size(450, 650);
-      appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
+    // doWhenWindowReady(() {
+    //   const initialSize = Size(450, 650);
+    //   appWindow.minSize = initialSize;
+    //   appWindow.size = initialSize;
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.show();
+    // });
     focusNodePassword = FocusNode();
     super.initState();
   }
@@ -300,15 +297,16 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             backgroundColor: const Color(0xffd9eff3),
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: MoveWindow(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Visibility(
-                    visible: !UniversalPlatform.isMacOS,
-                    child: const WindowControls(showMaxButton: false),
-                  ),
-                ),
-              ),
+              child: Container(),
+              // child: MoveWindow(
+              //   child: Container(
+              //     padding: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: Visibility(
+              //       visible: !UniversalPlatform.isMacOS,
+              //       child: const WindowControls(showMaxButton: false),
+              //     ),
+              //   ),
+              // ),
             ),
             body: Container(
               margin: const EdgeInsets.only(top: 56),

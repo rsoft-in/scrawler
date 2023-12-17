@@ -1,4 +1,4 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
+// import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
@@ -34,7 +34,7 @@ class WindowControls extends StatelessWidget {
                 YaruIcons.window_minimize,
                 size: 14,
               )),
-          onTap: () => appWindow.minimize(),
+          // onTap: () => appWindow.minimize(),
         ),
         if (showMaxButton) kHSpace,
         if (showMaxButton)
@@ -51,7 +51,7 @@ class WindowControls extends StatelessWidget {
                   YaruIcons.window_maximize,
                   size: 14,
                 )),
-            onTap: () => appWindow.maximizeOrRestore(),
+            // onTap: () => appWindow.maximizeOrRestore(),
           ),
         kHSpace,
         InkWell(
@@ -67,7 +67,7 @@ class WindowControls extends StatelessWidget {
                 Icons.close_outlined,
                 size: 14,
               )),
-          onTap: () => appWindow.close(),
+          // onTap: () => appWindow.close(),
         ),
       ],
     );

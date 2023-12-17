@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
@@ -257,60 +255,61 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: MoveWindow(
-                child: Container(
-                  // color: Colors.amber,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Visibility(
-                    visible: !UniversalPlatform.isMacOS,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                YaruIcons.window_minimize,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.minimize(),
-                        ),
-                        kHSpace,
-                        InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: darkModeOn
-                                      ? kDarkSecondary
-                                      : kLightSelected,
-                                  border: Border.all(
-                                      color: darkModeOn
-                                          ? kDarkStroke
-                                          : kLightStroke),
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: const Icon(
-                                Icons.close_outlined,
-                                size: 14,
-                              )),
-                          onTap: () => appWindow.close(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              child: Container(),
+              // child: MoveWindow(
+              //   child: Container(
+              //     // color: Colors.amber,
+              //     padding: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: Visibility(
+              //       visible: !UniversalPlatform.isMacOS,
+              //       child: Row(
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         mainAxisAlignment: MainAxisAlignment.end,
+              //         children: [
+              //           InkWell(
+              //             borderRadius: BorderRadius.circular(15),
+              //             child: Container(
+              //                 padding: const EdgeInsets.all(8),
+              //                 decoration: BoxDecoration(
+              //                     color: darkModeOn
+              //                         ? kDarkSecondary
+              //                         : kLightSelected,
+              //                     border: Border.all(
+              //                         color: darkModeOn
+              //                             ? kDarkStroke
+              //                             : kLightStroke),
+              //                     borderRadius: BorderRadius.circular(20)),
+              //                 child: const Icon(
+              //                   YaruIcons.window_minimize,
+              //                   size: 14,
+              //                 )),
+              //             onTap: () => appWindow.minimize(),
+              //           ),
+              //           kHSpace,
+              //           InkWell(
+              //             borderRadius: BorderRadius.circular(15),
+              //             child: Container(
+              //                 padding: const EdgeInsets.all(8),
+              //                 decoration: BoxDecoration(
+              //                     color: darkModeOn
+              //                         ? kDarkSecondary
+              //                         : kLightSelected,
+              //                     border: Border.all(
+              //                         color: darkModeOn
+              //                             ? kDarkStroke
+              //                             : kLightStroke),
+              //                     borderRadius: BorderRadius.circular(20)),
+              //                 child: const Icon(
+              //                   Icons.close_outlined,
+              //                   size: 14,
+              //                 )),
+              //             onTap: () => appWindow.close(),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ),
             body: Container(
               // padding: const EdgeInsets.symmetric(vertical: 10),

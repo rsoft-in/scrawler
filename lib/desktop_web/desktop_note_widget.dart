@@ -30,9 +30,13 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
           : Container(
               alignment: Alignment.topCenter,
               child: SizedBox(
-                  width:
-                      _screenSize == ScreenSize.large ? 800 : double.infinity,
-                  child: Text(widget.note.noteText)),
+                width: _screenSize == ScreenSize.large ? 800 : double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [],
+                ),
+              ),
             ),
     );
   }

@@ -1,4 +1,3 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/desktop_web/desktop_landing.dart';
 import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/desktop_web/desktop_sign_up.dart';
@@ -11,20 +10,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'helpers/globals.dart' as globals;
 
 late SharedPreferences prefs;
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isDesktop) {
-    doWhenWindowReady(() {
-      const initialSize = Size(1000, 650);
-      appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-      appWindow.title = "scrawler";
+    await windowManager.ensureInitialized();
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(1000, 650),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: false,
+      titleBarStyle: TitleBarStyle.hidden,
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
     });
   }
   runApp(Phoenix(child: const MyApp()));

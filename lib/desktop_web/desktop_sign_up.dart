@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +8,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
-import 'desktop_app_screen.dart';
-import 'desktop_sign_in.dart';
 import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
@@ -19,6 +16,8 @@ import '../providers/user_api_provider.dart';
 import '../widgets/scrawl_otp_textfield.dart';
 import '../widgets/scrawl_snackbar.dart';
 import '../widgets/window_controls.dart';
+import 'desktop_app_screen.dart';
+import 'desktop_sign_in.dart';
 
 class DesktopSignUp extends StatefulWidget {
   const DesktopSignUp({Key? key}) : super(key: key);
@@ -113,13 +112,13 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
 
   @override
   void initState() {
-    doWhenWindowReady(() {
-      const initialSize = Size(450, 720);
-      appWindow.minSize = initialSize;
-      appWindow.size = initialSize;
-      appWindow.alignment = Alignment.center;
-      appWindow.show();
-    });
+    // doWhenWindowReady(() {
+    //   const initialSize = Size(450, 720);
+    //   appWindow.minSize = initialSize;
+    //   appWindow.size = initialSize;
+    //   appWindow.alignment = Alignment.center;
+    //   appWindow.show();
+    // });
     super.initState();
   }
 
@@ -421,16 +420,17 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
-              child: MoveWindow(
-                child: Container(
-                  // color: Colors.amber,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Visibility(
-                    visible: !UniversalPlatform.isMacOS,
-                    child: const WindowControls(showMaxButton: false),
-                  ),
-                ),
-              ),
+              child: Container(),
+              // child: MoveWindow(
+              //   child: Container(
+              //     // color: Colors.amber,
+              //     padding: const EdgeInsets.symmetric(horizontal: 10),
+              //     child: Visibility(
+              //       visible: !UniversalPlatform.isMacOS,
+              //       child: const WindowControls(showMaxButton: false),
+              //     ),
+              //   ),
+              // ),
             ),
             bottomSheet: Container(
               decoration: BoxDecoration(
