@@ -73,8 +73,8 @@ class _MyAppState extends State<MyApp> {
             break;
         }
       } else {
-        themeMode = ThemeMode.system;
-        prefs.setInt('themeMode', 2);
+        themeMode = ThemeMode.light;
+        prefs.setInt('themeMode', 0);
       }
       globals.themeMode = themeMode;
     });

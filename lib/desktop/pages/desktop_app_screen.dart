@@ -8,6 +8,7 @@ import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:bnotes/models/drawer_folder.dart';
 import 'package:bnotes/models/label.dart';
 import 'package:bnotes/widgets/rs_drawer_item.dart';
 import 'package:bnotes/widgets/rs_icon.dart';
@@ -36,6 +37,7 @@ class _DesktopAppState extends State<DesktopApp> {
   bool isBusy = false;
   List<Notes> notesList = [];
   List<Label> labelsList = [];
+  List<DrawerFolder> folderList = [];
 
   List<Map<String, dynamic>> menu = [];
   String _selectedDrawerIndex = 'all_notes';
@@ -72,6 +74,8 @@ class _DesktopAppState extends State<DesktopApp> {
       setState(() {
         if (value.error.isEmpty) {
           labelsList = value.labels;
+          folderList =
+              labelsList.map((e) => DrawerFolder(e.labelName, false)).toList();
         }
       });
     });
@@ -162,10 +166,10 @@ class _DesktopAppState extends State<DesktopApp> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          ...List.generate(labelsList.length, (index) {
+                          ...List.generate(folderList.length, (index) {
                             final notes = notesList
                                 .where((el) => el.noteLabel
-                                    .contains(labelsList[index].labelName))
+                                    .contains(folderList[index].title))
                                 .toList();
                             return ExpansionTile(
                               shape: const RoundedRectangleBorder(
@@ -173,10 +177,16 @@ class _DesktopAppState extends State<DesktopApp> {
                               leading: const Icon(Symbols.folder),
                               controlAffinity: ListTileControlAffinity.trailing,
                               title: Text(
-                                labelsList[index].labelName,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                folderList[index].title,
+                                style: TextStyle(
+                                    fontWeight: folderList[index].expanded
+                                        ? FontWeight.bold
+                                        : FontWeight.normal),
                               ),
+                              onExpansionChanged: (value) => setState(() {
+                                folderList[index].expanded =
+                                    !folderList[index].expanded;
+                              }),
                               children: notes
                                   .map((note) => RSDrawerItem(
                                         indent: true,
