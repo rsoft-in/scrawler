@@ -9,7 +9,7 @@ class ScrawlColorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 15,
+      width: 5,
       height: 15,
       decoration: BoxDecoration(
         color: NoteColor.getColor(colorCode, false),

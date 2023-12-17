@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/widgets/rs_icon.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -161,7 +160,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   autofocus: true,
                   decoration: const InputDecoration(
                     hintText: 'Email',
-                    prefixIcon: RSIcon(icon: Symbols.email),
+                    prefixIcon: Icon(Symbols.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -185,11 +184,11 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   obscureText: hidePassword,
                   decoration: InputDecoration(
                       hintText: 'Password',
-                      prefixIcon: const RSIcon(icon: Symbols.password),
+                      prefixIcon: const Icon(Symbols.password),
                       suffixIcon: IconButton(
                         icon: hidePassword
-                            ? const RSIcon(icon: Symbols.visibility)
-                            : const RSIcon(icon: Symbols.visibility_off),
+                            ? const Icon(Symbols.visibility)
+                            : const Icon(Symbols.visibility_off),
                         onPressed: () {
                           setState(() {
                             hidePassword = !hidePassword;

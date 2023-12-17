@@ -27,9 +27,13 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
               text: 'Select a Note to preview',
               width: MediaQuery.of(context).size.width * 0.4,
               asset: 'images/nothing_to_do.svg')
-          : ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 900),
-              child: Text(widget.note.noteText)),
+          : Container(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                  width:
+                      _screenSize == ScreenSize.large ? 800 : double.infinity,
+                  child: Text(widget.note.noteText)),
+            ),
     );
   }
 }

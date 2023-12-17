@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/desktop/pages/desktop_notes_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
-import 'package:bnotes/desktop/pages/desktop_tasks_screen.dart';
 import 'package:bnotes/desktop_web/desktop_note_toolbar.dart';
 import 'package:bnotes/desktop_web/desktop_note_widget.dart';
 import 'package:bnotes/helpers/adaptive.dart';
@@ -14,12 +12,11 @@ import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/drawer_folder.dart';
 import 'package:bnotes/models/label.dart';
 import 'package:bnotes/widgets/rs_drawer_item.dart';
-import 'package:bnotes/widgets/rs_icon.dart';
+import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../helpers/note_color.dart';
 import '../models/notes.dart';
 import '../providers/labels_api_provider.dart';
 import '../providers/notes_api_provider.dart';
@@ -43,25 +40,25 @@ class _DesktopAppState extends State<DesktopApp> {
   List<DrawerFolder> folderList = [];
 
   List<Map<String, dynamic>> menu = [];
-  String _selectedDrawerIndex = 'all_notes';
-  final int _selectedIndex = 0;
+  // String _selectedDrawerIndex = 'all_notes';
+  // final int _selectedIndex = 0;
   Notes selectedNote = Notes.empty();
   NavigationRailLabelType labelType = NavigationRailLabelType.none;
 
-  _onDrawerItemSelect(String menuId) {
-    setState(() => _selectedDrawerIndex = menuId);
-  }
+  // _onDrawerItemSelect(String menuId) {
+  //   setState(() => _selectedDrawerIndex = menuId);
+  // }
 
-  _getDrawerItemWidget(String menuId) {
-    switch (menuId) {
-      case 'all_notes':
-        return const DesktopNotesScreen();
-      case 'all_tasks':
-        return const DesktopTasksScreen();
-      default:
-        return const Text("Error");
-    }
-  }
+  // _getDrawerItemWidget(String menuId) {
+  //   switch (menuId) {
+  //     case 'all_notes':
+  //       return const DesktopNotesScreen();
+  //     case 'all_tasks':
+  //       return const DesktopTasksScreen();
+  //     default:
+  //       return const Text("Error");
+  //   }
+  // }
 
   Future<void> getLabels() async {
     Map<String, String> post = {
@@ -158,11 +155,11 @@ class _DesktopAppState extends State<DesktopApp> {
           children: [
             RSDrawerItem(
               label: 'Search',
-              icon: const RSIcon(icon: Symbols.search),
+              icon: const Icon(Symbols.search),
               onTap: () {},
             ),
             RSDrawerItem(
-              icon: const RSIcon(icon: Symbols.add_circle),
+              icon: const Icon(Symbols.add_circle),
               label: 'Add Note',
               onTap: () {},
             ),
@@ -184,8 +181,9 @@ class _DesktopAppState extends State<DesktopApp> {
                             return ExpansionTile(
                               shape: const RoundedRectangleBorder(
                                   side: BorderSide.none),
-                              leading: const Icon(Symbols.folder),
-                              controlAffinity: ListTileControlAffinity.trailing,
+                              leading: Icon(folderList[index].expanded
+                                  ? Symbols.folder_open
+                                  : Symbols.folder),
                               title: Text(
                                 folderList[index].title,
                                 style: TextStyle(
@@ -200,19 +198,10 @@ class _DesktopAppState extends State<DesktopApp> {
                               children: notes
                                   .map((note) => RSDrawerItem(
                                         indent: true,
-                                        icon: const RSIcon(
-                                            icon: Symbols.description),
+                                        icon: const Icon(Symbols.description),
                                         label: note.noteTitle,
-                                        trailing: Container(
-                                          width: 5,
-                                          height: 15,
-                                          decoration: BoxDecoration(
-                                            color: NoteColor.getColor(
-                                                note.noteColor, false),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                        ),
+                                        trailing: ScrawlColorDot(
+                                            colorCode: note.noteColor),
                                         onTap: () => onNoteSelected(note),
                                       ))
                                   .toList(),
@@ -223,9 +212,10 @@ class _DesktopAppState extends State<DesktopApp> {
                               .toList()
                               .map((note) => RSDrawerItem(
                                     onTap: () => onNoteSelected(note),
-                                    icon:
-                                        const RSIcon(icon: Symbols.description),
+                                    icon: const Icon(Symbols.description),
                                     label: note.noteTitle,
+                                    trailing: ScrawlColorDot(
+                                        colorCode: note.noteColor),
                                   ))
                               .toList(),
                         ],
@@ -233,17 +223,17 @@ class _DesktopAppState extends State<DesktopApp> {
                     ),
             ),
             RSDrawerItem(
-              icon: const RSIcon(icon: Symbols.delete),
+              icon: const Icon(Symbols.delete),
               label: 'Trash',
               onTap: () {},
             ),
             RSDrawerItem(
-              icon: const RSIcon(icon: Symbols.settings),
+              icon: const Icon(Symbols.settings),
               label: 'Settings',
               onTap: () {},
             ),
             RSDrawerItem(
-              icon: const RSIcon(icon: Symbols.account_circle),
+              icon: const Icon(Symbols.account_circle),
               label: 'Account',
               onTap: () {},
             ),

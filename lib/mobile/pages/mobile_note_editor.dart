@@ -89,8 +89,8 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
         (globals.themeMode == ThemeMode.system &&
             brightness == Brightness.dark));
 
-    return WillPopScope(
-      onWillPop: isEditMode ? onBackPressed : null,
+    return PopScope(
+      onPopInvoked: isEditMode ? (didPop) => onBackPressed() : null,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         appBar: PreferredSize(
@@ -128,7 +128,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                       scrollController: _scrollViewController,
                       controller: noteTextController,
                       undoController: undoHistoryController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                           hintText: 'Type something...',
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
