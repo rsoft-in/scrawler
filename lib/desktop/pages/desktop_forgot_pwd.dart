@@ -5,7 +5,6 @@ import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/providers/user_api_provider.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
@@ -169,7 +168,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return Language.get('mandatory_field');
+                        return 'Required';
                       }
                       return null;
                     },
@@ -190,7 +189,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return Language.get('mandatory_field');
+                        return 'Required';
                       }
                       return null;
                     },

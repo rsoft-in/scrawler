@@ -10,16 +10,15 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-import 'desktop_app_screen.dart';
 import '../desktop/pages/desktop_forgot_pwd.dart';
-import 'desktop_sign_up.dart';
 import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
-import '../helpers/language.dart';
 import '../providers/user_api_provider.dart';
 import '../widgets/scrawl_snackbar.dart';
 import '../widgets/window_controls.dart';
+import 'desktop_app_screen.dart';
+import 'desktop_sign_up.dart';
 
 class DesktopSignIn extends StatefulWidget {
   const DesktopSignIn({Key? key}) : super(key: key);
@@ -148,9 +147,9 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 ),
               ),
               const Visibility(visible: kIsWeb, child: kVSpace),
-              Text(
-                Language.get('welcome_back'),
-                style: const TextStyle(
+              const Text(
+                'Welcome Back',
+                style: TextStyle(
                   fontSize: 18.0,
                 ),
               ),
@@ -159,16 +158,17 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
                 child: TextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    hintText: Language.get('email'),
-                    prefixIcon: const RSIcon(icon: Symbols.email),
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: RSIcon(icon: Symbols.email),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return Language.get('mandatory_field');
+                      return 'Required';
                     }
                     if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                      return Language.get('invalid_email');
+                      return 'Invalid Email';
                     }
                     return null;
                   },
@@ -184,7 +184,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                   controller: _pwdController,
                   obscureText: hidePassword,
                   decoration: InputDecoration(
-                      hintText: Language.get('password'),
+                      hintText: 'Password',
                       prefixIcon: const RSIcon(icon: Symbols.password),
                       suffixIcon: IconButton(
                         icon: hidePassword
@@ -198,7 +198,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                       )),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return Language.get('mandatory_field');
+                      return 'Required';
                     }
                     return null;
                   },
@@ -213,7 +213,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   InkWell(
-                    child: Text(Language.get('forgot_password')),
+                    child: const Text('Forgot password?'),
                     onTap: () {
                       if (_emailController.text.isNotEmpty) {
                         sendOtp();
@@ -240,7 +240,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                                 signIn();
                               }
                             },
-                      child: Text(Language.get('sign_in')),
+                      child: const Text('Sign In'),
                     ),
                   ),
                 ],
@@ -257,7 +257,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                               builder: (BuildContext context) =>
                                   const DesktopSignUp()),
                           (route) => false),
-                      child: Text(Language.get('register_now')),
+                      child: const Text('Register Now'),
                     ),
                   ),
                 ],

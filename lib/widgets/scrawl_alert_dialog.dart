@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../helpers/language.dart';
-
 class ScrawlConfirmDialog extends StatefulWidget {
   final VoidCallback onAcceptPressed;
   final String? content;
@@ -61,11 +59,11 @@ class _ScrawlConfirmDialogState extends State<ScrawlConfirmDialog> {
       actions: [
         FilledButton(
           onPressed: () => widget.onAcceptPressed(),
-          child: Text(Language.get('yes')),
+          child: const Text('Yes'),
         ),
         OutlinedButton(
           onPressed: () => Navigator.pop(context),
-          child: Text(Language.get('no')),
+          child: const Text('No'),
         ),
       ],
     );

@@ -4,7 +4,6 @@ import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/desktop_web/desktop_sign_up.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/pages/mobile_start_page.dart';
@@ -49,7 +48,7 @@ class _MyAppState extends State<MyApp> {
     getprefs();
 
     // Load Language Resource into Memory
-    Language.readJson();
+    // Language.readJson();
 
     super.initState();
   }

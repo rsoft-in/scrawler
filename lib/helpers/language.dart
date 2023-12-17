@@ -1,16 +1,16 @@
-import 'dart:convert';
+// import 'dart:convert';
 
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 
-class Language {
-  static dynamic data = {};
+// class Language {
+//   static dynamic data = {};
 
-  static Future<void> readJson() async {
-    final String response = await rootBundle.loadString('res/languages.json');
-    data = json.decode(response);
-  }
+//   static Future<void> readJson() async {
+//     final String response = await rootBundle.loadString('res/languages.json');
+//     data = json.decode(response);
+//   }
 
-  static String get(String phrase) {
-    return data[phrase] ?? '_$phrase';
-  }
-}
+//   static String get(String phrase) {
+//     return data[phrase] ?? '_$phrase';
+//   }
+// }

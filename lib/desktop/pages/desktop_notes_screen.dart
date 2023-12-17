@@ -4,7 +4,6 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/string_values.dart';
 import 'package:bnotes/helpers/utility.dart';
@@ -57,14 +56,14 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
   // Context Menu Related
   Offset _tapPosition = Offset.zero;
   List<MenuItem> contextMenuItems = [
-    MenuItem('edit', Language.get('edit'), '', null),
-    MenuItem('delete', Language.get('delete'), '', null),
-    MenuItem('color', Language.get('color'), '', null),
-    MenuItem('tags', Language.get('tag'), '', null)
+    MenuItem('edit', 'Edit', '', null),
+    MenuItem('delete', 'Delte', '', null),
+    MenuItem('color', 'Color', '', null),
+    MenuItem('tags', 'Tags', '', null)
   ];
   List<SortItem> sortItems = [
-    SortItem(NoteSort.newest, Language.get('latest')),
-    SortItem(NoteSort.oldest, Language.get('oldest')),
+    SortItem(NoteSort.newest, 'Latest'),
+    SortItem(NoteSort.oldest, 'Oldest'),
     SortItem(NoteSort.title, 'A-Z'),
     SortItem(NoteSort.titleDesc, 'Z-A')
   ];
@@ -185,7 +184,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     NotesApiProvider.updateNotes(post).then((value) {
       if (value['status']) {
         ScaffoldMessenger.of(context).showSnackBar(
-            ScrawlSnackBar.show(context, Language.get('changes_saved')));
+            ScrawlSnackBar.show(context, 'Changes Saved'));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -319,13 +318,13 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
             brightness == Brightness.dark));
 
     AppBar appBar = AppBar(
-      title: Text(Language.get('notes')),
+      title: const Text('Notes'),
       actions: [
         PopupMenuButton<NoteSort>(
           itemBuilder: (_) => getSortItems(),
           onSelected: (value) => sortList(value),
           icon: const Icon(YaruIcons.sort_descending),
-          tooltip: Language.get('sort'),
+          tooltip: 'Sort',
         ),
       ],
     );
@@ -449,8 +448,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                 );
                               },
                             )
-                          : Center(
-                              child: Text(Language.get('no_notes')),
+                          : const Center(
+                              child: Text('No Notes'),
                             )),
                 ),
               ],
@@ -478,8 +477,8 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                       Expanded(
                         child: TextField(
                           controller: noteTextController,
-                          decoration: InputDecoration(
-                              hintText: Language.get('type_something'),
+                          decoration: const InputDecoration(
+                              hintText: 'Type something...',
                               border: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none),
@@ -504,7 +503,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                   });
                                 }
                               },
-                              child: Text(Language.get('save')),
+                              child: const Text('Save'),
                             ),
                             kHSpace,
                             OutlinedButton(
@@ -513,7 +512,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                   editMode = false;
                                 });
                               },
-                              child: Text(Language.get('cancel')),
+                              child: const Text('Cancel'),
                             ),
                           ],
                         ),
@@ -659,7 +658,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       )
                     : EmptyWidget(
-                        text: Language.get('select_note'),
+                        text: 'Select a Note to preview',
                         width: MediaQuery.of(context).size.width * 0.4,
                         asset: 'images/undraw_playful_cat.svg')),
           ),
@@ -862,7 +861,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
               deleteNotes(noteId);
               Navigator.pop(context);
             },
-            content: Language.get('confirm_delete'),
+            content: 'Are you sure you want to delete?',
           );
         });
   }

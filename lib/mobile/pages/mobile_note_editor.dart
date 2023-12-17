@@ -9,7 +9,6 @@ import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
 import '../../helpers/enums.dart';
 import '../../helpers/globals.dart' as globals;
-import '../../helpers/language.dart';
 import '../../models/notes.dart';
 import '../../widgets/scrawl_appbar.dart';
 import '../../widgets/scrawl_color_dot.dart';
@@ -130,7 +129,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                       controller: noteTextController,
                       undoController: undoHistoryController,
                       decoration: InputDecoration(
-                          hintText: Language.get('type_something'),
+                          hintText: 'Type something...',
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none),

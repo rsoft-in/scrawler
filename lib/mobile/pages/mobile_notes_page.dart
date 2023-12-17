@@ -1,7 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/helpers/language.dart';
 import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/models/notes.dart';
@@ -31,14 +30,14 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   List<Notes> notes = [];
   List<Notes> notesUnfiltered = [];
   List<MenuItem> contextMenuItems = [
-    MenuItem('edit', Language.get('edit'), '', YaruIcons.pen),
-    MenuItem('delete', Language.get('delete'), '', YaruIcons.trash),
-    MenuItem('color', Language.get('color'), '', YaruIcons.colors),
-    MenuItem('tags', Language.get('tag'), '', YaruIcons.tag)
+    MenuItem('edit', 'Edit', '', YaruIcons.pen),
+    MenuItem('delete', 'Delete', '', YaruIcons.trash),
+    MenuItem('color', 'Colors', '', YaruIcons.colors),
+    MenuItem('tags', 'Tags', '', YaruIcons.tag)
   ];
   List<SortItem> sortItems = [
-    SortItem(NoteSort.newest, Language.get('latest')),
-    SortItem(NoteSort.oldest, Language.get('oldest')),
+    SortItem(NoteSort.newest, 'Latest'),
+    SortItem(NoteSort.oldest, 'Oldest'),
     SortItem(NoteSort.title, 'A-Z'),
     SortItem(NoteSort.titleDesc, 'Z-A')
   ];
@@ -64,8 +63,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
               child: CircularProgressIndicator.adaptive(),
             )
           : (notes.isEmpty
-              ? EmptyWidget(
-                  text: Language.get('create_note'),
+              ? const EmptyWidget(
+                  text: 'Create Note',
                   width: 250,
                   asset: 'images/undraw_playful_cat.svg')
               : Column(
