@@ -101,9 +101,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
     final file = await _localFile;
     file.writeAsString(notesList.toString());
     // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-        context, 'Backup stored at ${file.path}',
-        duration: const Duration(seconds: 2)));
+    showSnackBar(context, 'Backup stored at ${file.path}');
   }
 
   Future<String> get _localPath async {

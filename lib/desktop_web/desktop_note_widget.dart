@@ -27,7 +27,7 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
       return json;
     } catch (e) {
       return [
-        {"insert": widget.note.noteText}
+        {"insert": "${widget.note.noteText}\n"}
       ];
     }
   }

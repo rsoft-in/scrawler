@@ -43,8 +43,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         'pwd': _pwdController.text
       })
     };
-    ScaffoldMessenger.of(context)
-        .showSnackBar(ScrawlSnackBar.show(context, 'Signing In...'));
+    showSnackBar(context, 'Signing In...');
     isSigningIn = true;
     setState(() {});
     UserApiProvider.checkUserCredential(post).then((value) async {
@@ -65,11 +64,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               (route) => false);
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-          context,
-          value['error'],
-          duration: const Duration(seconds: 2),
-        ));
+        showSnackBar(context, value['error']);
       }
       isSigningIn = false;
       setState(() {});
@@ -83,8 +78,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         'email': _emailController.text,
       })
     };
-    ScaffoldMessenger.of(context)
-        .showSnackBar(ScrawlSnackBar.show(context, 'Sending OTP...'));
+    showSnackBar(context, 'Sending OTP...');
     final result = await UserApiProvider.forgotPasswordVerification(post);
     if (result['error'].toString().isEmpty) {
       if (context.mounted) {
@@ -98,11 +92,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
       }
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-          context,
-          result['error'],
-          duration: const Duration(seconds: 2),
-        ));
+        showSnackBar(context, result['error']);
       }
     }
   }
@@ -214,9 +204,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                       if (_emailController.text.isNotEmpty) {
                         sendOtp();
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            ScrawlSnackBar.show(
-                                context, 'Enter Email address!'));
+                        showSnackBar(context, 'Enter Email address!');
                       }
                     },
                   ),

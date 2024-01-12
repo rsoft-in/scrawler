@@ -266,8 +266,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     final result = await dbHelper.deleteNotes(note.noteId);
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to delete!'));
+        showSnackBar(context, 'Failed to delete!');
       }
     } else {
       int idx = notes.indexWhere((el) => el.noteId == note.noteId);
@@ -283,8 +282,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+        showSnackBar(context, 'Failed to update!');
       }
     }
   }
@@ -293,8 +291,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     final result = await dbHelper.updateNoteLabel(note.noteId, label);
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+        showSnackBar(context, 'Failed to update!');
       }
     }
   }

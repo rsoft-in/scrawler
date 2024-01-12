@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:bnotes/desktop_web/desktop_sign_in.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
@@ -8,7 +9,6 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopForgotPassword extends StatefulWidget {
@@ -40,8 +40,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
         'type': 'fpwd'
       })
     };
-    ScaffoldMessenger.of(context)
-        .showSnackBar(ScrawlSnackBar.show(context, 'Verifying OTP...'));
+    showSnackBar(context, 'Verifying OTP...');
     final result = await UserApiProvider.verifyRecoveryOtp(post);
     if (result['error'].toString().isEmpty) {
       setState(() {
@@ -49,11 +48,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
       });
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-          context,
-          result['error'],
-          duration: const Duration(seconds: 2),
-        ));
+        showSnackBar(context, result['error']);
       }
     }
   }
@@ -61,8 +56,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
   void updatePassword() async {
     if (newPasswordController.text.compareTo(confirmPasswordController.text) !=
         0) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(ScrawlSnackBar.show(context, 'Password mismatch!'));
+      showSnackBar(context, 'Password mismatch!');
       return;
     }
     Map<String, String> post = {
@@ -82,11 +76,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
       }
     } else {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-          context,
-          result['error'],
-          duration: const Duration(seconds: 2),
-        ));
+        showSnackBar(context, result['error']);
       }
     }
   }

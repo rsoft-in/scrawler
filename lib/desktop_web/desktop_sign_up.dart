@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 import '../helpers/adaptive.dart';
@@ -15,7 +14,6 @@ import '../helpers/string_values.dart';
 import '../providers/user_api_provider.dart';
 import '../widgets/scrawl_otp_textfield.dart';
 import '../widgets/scrawl_snackbar.dart';
-import '../widgets/window_controls.dart';
 import 'desktop_app_screen.dart';
 import 'desktop_sign_in.dart';
 
@@ -63,11 +61,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         showIndex++;
         setState(() {});
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(ScrawlSnackBar.show(
-          context,
-          value['error'],
-          duration: const Duration(seconds: 2),
-        ));
+        showSnackBar(context, value['error']);
       }
     });
   }

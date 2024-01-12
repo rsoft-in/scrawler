@@ -565,8 +565,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     }
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to save!'));
+        showSnackBar(context, 'Failed to save!');
       }
     }
     return result;
@@ -576,8 +575,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+        showSnackBar(context, 'Failed to update!');
       }
     }
   }
@@ -586,8 +584,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     final result = await dbHelper.updateNoteLabel(note.noteId, label);
     if (!result) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(ScrawlSnackBar.show(context, 'Failed to update!'));
+        showSnackBar(context, 'Failed to update!');
       }
     }
   }

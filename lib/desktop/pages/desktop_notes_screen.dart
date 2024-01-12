@@ -21,7 +21,6 @@ import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 import 'package:yaru_icons/yaru_icons.dart';
@@ -182,8 +181,7 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     };
     NotesApiProvider.updateNotes(post).then((value) {
       if (value['status']) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            ScrawlSnackBar.show(context, 'Changes Saved'));
+        showSnackBar(context, 'Changes Saved');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
