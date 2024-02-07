@@ -43,21 +43,21 @@ Be sure to disable signing on build.gradle or change keystore to sign the app.
 
 For now the required flutter channel is master, so issue those two commands before starting building:
 ```
-$ flutter channel master
+flutter channel master
 ```
 ```
-$ flutter upgrade
+flutter upgrade
 ```
 
 After that, building is simple as this:
 ```
-$ flutter pub get
+flutter pub get
 ```
 ```
-$ flutter run
+flutter run
 ```
 ```
-$ flutter build platform-name
+flutter build platform-name
 ```
 
 ---
