@@ -5,7 +5,7 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/mobile/pages/mobile_start_page.dart';
+import 'package:bnotes/mobile/mobile_landing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -96,10 +96,10 @@ class _MyAppState extends State<MyApp> {
       darkTheme: themeDark(),
       routes: {
         '/': (context) =>
-            isDesktopOrWeb ? const DesktopLanding() : const MobileStartPage(),
+            isDesktopOrWeb ? const DesktopLanding() : const MobileLanding(),
         '/dsignin': (context) => const DesktopSignIn(),
         '/dsignup': (context) => const DesktopSignUp(),
-        '/mobilestart': (context) => const MobileStartPage()
+        '/mobilestart': (context) => const MobileLanding()
       },
       initialRoute: '/',
     );

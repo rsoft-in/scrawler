@@ -5,7 +5,7 @@ const kAppName = 'scrawler';
 const kWebsiteUrl = 'https://scrawler.net';
 const kGithubUrl = 'https://github.com/rsoft-in/scrawler';
 
-const kPrimaryColor = Color(0xFF5EAAA8);
+const kPrimaryColor = Color(0xFF1B1B2F);
 const kAlertColor = Color(0xFFD12A4C);
 
 const kLightPrimary = Color(0xFFF8F8F8);
@@ -24,6 +24,7 @@ const kDarkBody = Color(0xFF1A1A1A);
 const kBorderRadius = 4.0;
 const kBorderRadiusSmall = 5.0;
 const kPaddingLarge = EdgeInsets.all(15.0);
+const kPaddingMedium = EdgeInsets.all(8.0);
 const kGlobalOuterPadding = EdgeInsets.all(10.0);
 const kGlobalCardPadding = EdgeInsets.all(5.0);
 const kLinkColor = Color(0xFF001AFF);

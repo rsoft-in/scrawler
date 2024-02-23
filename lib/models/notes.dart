@@ -29,7 +29,7 @@ class Notes {
         'note_title': noteTitle,
         'note_text': noteText,
         'note_label': noteLabel,
-        'note_archived': noteArchived,
+        'note_archived': noteArchived ? 1 : 0,
         'note_color': noteColor,
         'note_image': noteImage
       };

@@ -41,7 +41,6 @@ class _DesktopAppState extends State<DesktopApp> {
   List<Map<String, dynamic>> menu = [];
   // String _selectedDrawerIndex = 'all_notes';
   // final int _selectedIndex = 0;
-  Notes selectedNote = Notes.empty();
   NavigationRailLabelType labelType = NavigationRailLabelType.none;
 
   // _onDrawerItemSelect(String menuId) {
@@ -87,9 +86,7 @@ class _DesktopAppState extends State<DesktopApp> {
         'api_key': globals.apiKey,
         'uid': globals.user!.userId,
         'qry': '',
-        'sort': 'note_title',
-        'page_no': _pageNr,
-        'offset': 30
+        'sort': 'note_title'
       })
     };
     setState(() {
@@ -109,21 +106,16 @@ class _DesktopAppState extends State<DesktopApp> {
     });
   }
 
+  Future<void> saveNote() async {}
+
   void onNoteSelected(Notes note) {
     setState(() {
-      selectedNote = note;
+      globals.selectedNote = note;
     });
   }
 
   @override
   void initState() {
-    // doWhenWindowReady(() {
-    //   const initialSize = Size(1100, 700);
-    //   appWindow.minSize = const Size(800, 700);
-    //   appWindow.size = initialSize;
-    //   appWindow.alignment = Alignment.center;
-    //   appWindow.show();
-    // });
     super.initState();
     menu = kMenu;
     getLabels();
@@ -252,7 +244,7 @@ class _DesktopAppState extends State<DesktopApp> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (selectedNote.noteId.isNotEmpty)
+                      if (globals.selectedNote.noteId.isNotEmpty)
                         Container(
                           padding: const EdgeInsets.all(8.0),
                           decoration: const BoxDecoration(
@@ -264,16 +256,20 @@ class _DesktopAppState extends State<DesktopApp> {
                               kHSpace,
                               Expanded(
                                 child: Text(
-                                  selectedNote.noteTitle,
+                                  globals.selectedNote.noteTitle,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              DesktopNoteToolbar(selectedNote),
+                              DesktopNoteToolbar(globals.selectedNote),
                             ],
                           ),
                         ),
-                      Expanded(child: DesktopNoteWidget(selectedNote)),
+                      Expanded(
+                          child: DesktopNoteWidget(
+                        note: globals.selectedNote,
+                        onSave: () {},
+                      )),
                     ],
                   ),
                 ),
@@ -283,7 +279,10 @@ class _DesktopAppState extends State<DesktopApp> {
         : Scaffold(
             appBar: AppBar(),
             drawer: drawer,
-            body: DesktopNoteWidget(selectedNote),
+            body: DesktopNoteWidget(
+              note: globals.selectedNote,
+              onSave: () {},
+            ),
           );
 
     // Widget drawer = SizedBox(

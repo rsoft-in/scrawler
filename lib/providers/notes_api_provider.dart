@@ -9,7 +9,7 @@ class NotesApiProvider {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse("${globals.apiServer}/notes/get"), body: post);
+          .post(Uri.parse("${globals.apiServer}/notes/getall"), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
@@ -19,7 +19,7 @@ class NotesApiProvider {
           var notes = parsed['notes']
               .map<Notes>((json) => Notes.fromJson(json))
               .toList();
-          return NotesResult(notes, parsed['records'], '');
+          return NotesResult(notes, 0, '');
         }
       } else {
         return NotesResult([], 0, result);

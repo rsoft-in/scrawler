@@ -82,7 +82,8 @@ class DBHelper {
 
   Future<bool> insertNotes(Notes note) async {
     Database? db = await instance.database;
-    await db!.insert('notes', note.toJson());
+    final repo = await db!.insert('notes', note.toJson());
+    print('Insert not was $repo');
     return true;
   }
 
@@ -123,6 +124,13 @@ class DBHelper {
     int rowsAffected =
         await db!.delete('notes', where: 'note_id = ?', whereArgs: [noteId]);
     return (rowsAffected == 1);
+  }
+
+  Future<bool> clearNotes() async {
+    Database? db = await instance.database;
+    int rowsAffected =
+        await db!.delete('notes');
+    return (rowsAffected > 0);
   }
 
   Future<List<Label>> getLabelsAll() async {

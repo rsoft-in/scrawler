@@ -5,34 +5,50 @@ import 'constants.dart';
 ThemeData theme() {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.black,
-      primary: Colors.black,
+      seedColor: const Color(0xFF1B1B2F),
     ),
     useMaterial3: true,
     fontFamily: 'Inter',
     inputDecorationTheme: inputDecorationTheme(),
+    appBarTheme: const AppBarTheme(centerTitle: false),
     iconTheme: const IconThemeData(
         color: Colors.black, fill: 0, weight: 300, opticalSize: 48),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
-        backgroundColor: kDarkPrimary,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: kDarkStroke, width: 1),
           borderRadius: BorderRadius.circular(kBorderRadius),
         ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kBorderRadius),
-          side: const BorderSide(color: kDarkPrimary, width: 1),
         ),
       ),
     ),
-    cardTheme: CardTheme(color: Colors.grey.shade100, elevation: 0),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
+      ),
+    ),
+    dialogTheme: DialogTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
+    ),
+    popupMenuTheme: PopupMenuThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kBorderRadius),
+      ),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+    ),
   );
 }
 
@@ -44,9 +60,10 @@ ThemeData themeDark() {
         brightness: Brightness.dark),
     useMaterial3: true,
     fontFamily: 'Inter',
+    scaffoldBackgroundColor: Colors.black,
+    appBarTheme:
+        const AppBarTheme(elevation: 0, backgroundColor: Colors.transparent),
     inputDecorationTheme: inputDecorationTheme(),
-    iconTheme: const IconThemeData(
-        color: Colors.black, fill: 0, weight: 300, opticalSize: 48),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -60,6 +77,17 @@ ThemeData themeDark() {
           borderRadius: BorderRadius.circular(kBorderRadius),
           side: const BorderSide(color: Colors.black, width: 0.5),
         ),
+      ),
+    ),
+    popupMenuTheme: const PopupMenuThemeData(
+        color: kDarkPrimary,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(color: kDarkStroke))),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
       ),
     ),
   );
