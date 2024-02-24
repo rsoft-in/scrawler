@@ -5,7 +5,9 @@ import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/theme.dart';
 import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/mobile/mobile_landing.dart';
+import 'package:bnotes/mobile/cupertino/dash_cupertino.dart';
+import 'package:bnotes/mobile/material/dash_material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -88,20 +90,33 @@ class _MyAppState extends State<MyApp> {
     _screenSize = getScreenSize(context);
     if ((_screenSize == ScreenSize.large || UniversalPlatform.isWeb) ||
         UniversalPlatform.isDesktop) isDesktopOrWeb = true;
-    return MaterialApp(
-      title: kAppName,
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: theme(),
-      darkTheme: themeDark(),
-      routes: {
-        '/': (context) =>
-            isDesktopOrWeb ? const DesktopLanding() : const MobileLanding(),
-        '/dsignin': (context) => const DesktopSignIn(),
-        '/dsignup': (context) => const DesktopSignUp(),
-        '/mobilestart': (context) => const MobileLanding()
-      },
-      initialRoute: '/',
-    );
+    if (UniversalPlatform.isIOS) {
+      return CupertinoApp(
+        title: kAppName,
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => UniversalPlatform.isIOS
+              ? const DashCupertino()
+              : const DashMaterial(),
+        },
+      );
+    } else {
+      return MaterialApp(
+        title: kAppName,
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: theme(),
+        darkTheme: themeDark(),
+        routes: {
+          '/': (context) =>
+              isDesktopOrWeb ? const DesktopLanding() : const DashMaterial(),
+          '/dsignin': (context) => const DesktopSignIn(),
+          '/dsignup': (context) => const DesktopSignUp(),
+          '/mobilestart': (context) => const DashMaterial()
+        },
+        initialRoute: '/',
+      );
+    }
   }
 }

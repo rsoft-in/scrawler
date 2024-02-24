@@ -1,4 +1,4 @@
-import 'package:bnotes/desktop_web/markdown_toolbar.dart';
+import 'package:bnotes/mobile/markdown_toolbar.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes.dart';
