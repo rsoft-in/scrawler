@@ -34,24 +34,21 @@ class _NotePageCupertinoState extends State<NotePageCupertino> {
   Future<void> saveNote() async {
     if (widget.note.noteId.isEmpty) {
       var uid = const Uuid();
-      final newNote = Notes(uid.v1(), Utility.getDateString(),
-          noteTitleController.text, noteController.text, '', false, 0, '');
-      final res = await dbHelper.insertNotes(newNote);
-      if (res) {
-        print('Unable to save your note!');
-        // if (context.mounted) {
-        //   Utility.showSnackbar(context, 'Unable to save your note!');
-        // }
-      }
+      final newNote = Notes(
+          uid.v1(),
+          Utility.getDateString(),
+          noteTitleController.text,
+          noteController.text,
+          '',
+          false,
+          0,
+          '',
+          false);
+      await dbHelper.insertNotes(newNote);
     } else {
       _note.noteText = noteController.text;
-      final res = await dbHelper.updateNotes(_note);
-      if (res) {
-        print('Unable to update your note!');
-        // if (context.mounted) {
-        //   Utility.showSnackbar(context, 'Unable to update your note!');
-        // }
-      }
+      _note.noteDate = Utility.getDateString();
+      await dbHelper.updateNotes(_note);
     }
   }
 

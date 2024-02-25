@@ -11,9 +11,9 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-import '../markdown_toolbar.dart';
 import '../../helpers/constants.dart';
 import '../../models/notes.dart';
+import '../markdown_toolbar.dart';
 
 class NotePageMaterial extends StatefulWidget {
   final Notes note;
@@ -40,22 +40,21 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   Future<void> saveNote() async {
     if (widget.note.noteId.isEmpty) {
       var uid = const Uuid();
-      final newNote = Notes(uid.v1(), Utility.getDateString(),
-          noteTitleController.text, noteController.text, '', false, 0, '');
-      final res = await dbHelper.insertNotes(newNote);
-      if (res) {
-        if (context.mounted) {
-          Utility.showSnackbar(context, 'Unable to save your note!');
-        }
-      }
+      final newNote = Notes(
+          uid.v1(),
+          Utility.getDateString(),
+          noteTitleController.text,
+          noteController.text,
+          '',
+          false,
+          0,
+          '',
+          false);
+      await dbHelper.insertNotes(newNote);
     } else {
       _note.noteText = noteController.text;
-      final res = await dbHelper.updateNotes(_note);
-      if (res) {
-        if (context.mounted) {
-          Utility.showSnackbar(context, 'Unable to update your note!');
-        }
-      }
+      _note.noteDate = Utility.getDateString();
+      await dbHelper.updateNotes(_note);
     }
   }
 
@@ -76,94 +75,84 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
       onPopInvoked: (wasEdited || (widget.note.noteId.isNotEmpty))
           ? (didPop) => saveNote()
           : null,
-      child: UniversalPlatform.isIOS
-          ? CupertinoPageScaffold(
-              navigationBar: CupertinoNavigationBar(
-                middle: GestureDetector(
-                    onTap: () => editTile(), child: Text(_note.noteTitle)),
-              ),
-              child: Container())
-          : Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Symbols.arrow_back)),
+          title: GestureDetector(
+            onTap: () => editTile(),
+            child: Text(_note.noteTitle),
+          ),
+          actions: [
+            PopupMenuButton(
+              icon: const Icon(Symbols.more_horiz),
+              itemBuilder: (context) => [
+                const PopupMenuItem(child: Text('Color')),
+                const PopupMenuItem(child: Text('Label')),
+              ],
+            ),
+          ],
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Visibility(
+              visible: editMode,
+              child: Expanded(
+                child: Padding(
+                  padding: kPaddingLarge,
+                  child: TextField(
+                    controller: noteController,
+                    maxLines: null,
+                    expands: true,
+                    textAlignVertical: TextAlignVertical.top,
+                    decoration: const InputDecoration(
+                      hintText: 'Start writing something...',
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        widget.note.noteText = value;
+                        if (!wasEdited) {
+                          wasEdited = true;
+                        }
+                      });
                     },
-                    icon: const Icon(Symbols.arrow_back)),
-                title: GestureDetector(
-                  onTap: () => editTile(),
-                  child: Text(_note.noteTitle),
+                  ),
                 ),
-                actions: [
-                  IconButton(
-                      onPressed: () => saveNote(),
-                      icon: const Icon(Symbols.check)),
-                  PopupMenuButton(
-                    icon: const Icon(Symbols.more_horiz),
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(child: Text('Color')),
-                      const PopupMenuItem(child: Text('Label')),
-                    ],
-                  ),
-                ],
-              ),
-              body: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Visibility(
-                    visible: editMode,
-                    child: Expanded(
-                      child: Padding(
-                        padding: kPaddingLarge,
-                        child: TextField(
-                          controller: noteController,
-                          maxLines: null,
-                          expands: true,
-                          textAlignVertical: TextAlignVertical.top,
-                          decoration: const InputDecoration(
-                            hintText: 'Start writing something...',
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              widget.note.noteText = value;
-                              if (!wasEdited) {
-                                wasEdited = true;
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: !editMode,
-                    child: Expanded(
-                      child: GestureDetector(
-                        onDoubleTap: () => setState(() {
-                          editMode = true;
-                        }),
-                        child: Markdown(
-                          data: widget.note.noteText,
-                          onTapLink: (text, href, title) async =>
-                              await _launchUrl(href),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: editMode,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: MarkdownToolbar(controller: noteController),
-                    ),
-                  ),
-                ],
               ),
             ),
+            Visibility(
+              visible: !editMode,
+              child: Expanded(
+                child: GestureDetector(
+                  onDoubleTap: () => setState(() {
+                    editMode = true;
+                  }),
+                  child: Markdown(
+                    data: widget.note.noteText,
+                    onTapLink: (text, href, title) async =>
+                        await _launchUrl(href),
+                  ),
+                ),
+              ),
+            ),
+            Visibility(
+              visible: editMode,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MarkdownToolbar(controller: noteController),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

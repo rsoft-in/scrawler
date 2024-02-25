@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 class DBHelper {
   late Database db;
   static const _databaseName = 'bnotes.s3db';
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 3;
   // static const _databaseOldVersion = 1;
   Database? _database;
 
@@ -37,17 +37,21 @@ class DBHelper {
                     note_archived integer,
                     note_color integer,
                     note_image text,
-                    note_audio_file text)
+                    note_audio_file text, 
+                    note_favorite integer)
                 ''');
         await db.execute('''
                   CREATE TABLE labels (label_id text primary key, label_name text)
                 ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        if (oldVersion == 1 && newVersion == 2) {
+        if (oldVersion == 1 && newVersion > 1) {
           db.execute('''ALTER TABLE notes DROP COLUMN note_list''');
           db.execute('''ALTER TABLE notes ADD COLUMN note_image text''');
           db.execute('''ALTER TABLE notes ADD COLUMN note_audio_file text''');
+        }
+        if (oldVersion == 2 && newVersion > 2) {
+          db.execute('''ALTER TABLE notes ADD COLUMN note_favorite integer''');
         }
       },
     );
@@ -82,9 +86,8 @@ class DBHelper {
 
   Future<bool> insertNotes(Notes note) async {
     Database? db = await instance.database;
-    final repo = await db!.insert('notes', note.toJson());
-    print('Insert not was $repo');
-    return true;
+    final rowsAffected = await db!.insert('notes', note.toJson());
+    return rowsAffected > 0;
   }
 
   Future<bool> updateNotes(Notes note) async {
@@ -98,7 +101,7 @@ class DBHelper {
     String id = map['note_id'];
     final rowsAffected =
         await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
-    return (rowsAffected == 1);
+    return (rowsAffected > 0);
   }
 
   Future<bool> updateNoteColor(String noteId, int noteColor) async {
@@ -128,8 +131,7 @@ class DBHelper {
 
   Future<bool> clearNotes() async {
     Database? db = await instance.database;
-    int rowsAffected =
-        await db!.delete('notes');
+    int rowsAffected = await db!.delete('notes');
     return (rowsAffected > 0);
   }
 

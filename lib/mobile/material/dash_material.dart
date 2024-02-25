@@ -3,6 +3,7 @@ import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/mobile/material/note_material.dart';
 import 'package:bnotes/models/label.dart';
 import 'package:bnotes/models/notes.dart';
+import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
@@ -22,14 +23,18 @@ class _DashMaterialState extends State<DashMaterial> {
     return await dbHelper.getLabelsAll();
   }
 
-  Future<List<Notes>> fetchNotes() async {
-    return await dbHelper.getNotesAll('', 'note_title');
+  Future<List<Notes>> fetchFavNotes() async {
+    return await dbHelper.getNotesAll('note_favorite = 1', 'note_date desc');
+  }
+
+  Future<List<Notes>> fetchNotesAll() async {
+    return await dbHelper.getNotesAll('', 'note_date desc');
   }
 
   @override
   Widget build(BuildContext context) {
-    FutureBuilder<List<Notes>> notesBuilder = FutureBuilder<List<Notes>>(
-      future: fetchNotes(),
+    FutureBuilder<List<Notes>> favNotesBuilder = FutureBuilder<List<Notes>>(
+      future: fetchFavNotes(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
@@ -39,6 +44,13 @@ class _DashMaterialState extends State<DashMaterial> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
                   title: Text(notes[index].noteTitle),
+                  subtitle: Text(
+                    notes[index].noteText,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  trailing: ScrawlColorDot(colorCode: notes[index].noteColor),
+                  onTap: () => openNote(notes[index]),
                 ),
               );
             } else {
@@ -59,7 +71,10 @@ class _DashMaterialState extends State<DashMaterial> {
       },
     );
 
-    return Scaffold(
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 0,
+      child: Scaffold(
         appBar: AppBar(
           title: const Text(
             kAppName,
@@ -75,13 +90,27 @@ class _DashMaterialState extends State<DashMaterial> {
               icon: const Icon(Symbols.person),
             ),
           ],
+          bottom: const TabBar(tabs: [
+            Tab(
+              child: Text('Favorites'),
+            ),
+            Tab(
+              child: Text('All Notes'),
+            )
+          ]),
         ),
-        body: notesBuilder,
+        body: TabBarView(children: [
+          favNotesBuilder,
+          const Center(
+            child: Text('All Notes'),
+          )
+        ]),
         floatingActionButton: FloatingActionButton(
           onPressed: () => openNote(Notes.empty()),
           child: const Icon(Symbols.add),
         ),
-      );
+      ),
+    );
   }
 
   void openNote(Notes note) async {

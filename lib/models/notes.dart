@@ -7,11 +7,20 @@ class Notes {
   bool noteArchived;
   int noteColor;
   String noteImage;
+  bool noteFavorite;
 
-  Notes(this.noteId, this.noteDate, this.noteTitle, this.noteText,
-      this.noteLabel, this.noteArchived, this.noteColor, this.noteImage);
+  Notes(
+      this.noteId,
+      this.noteDate,
+      this.noteTitle,
+      this.noteText,
+      this.noteLabel,
+      this.noteArchived,
+      this.noteColor,
+      this.noteImage,
+      this.noteFavorite);
 
-  Notes.empty() : this('', '', 'Untitled', '', '', false, 0, '');
+  Notes.empty() : this('', '', 'Untitled', '', '', false, 0, '', false);
 
   Notes.fromJson(Map<String, dynamic> json)
       : noteId = json['note_id'],
@@ -21,7 +30,8 @@ class Notes {
         noteLabel = json['note_label'],
         noteArchived = json['note_archived'] == 1,
         noteColor = int.parse('${json['note_color']}'),
-        noteImage = json['note_image'] ?? '';
+        noteImage = json['note_image'] ?? '',
+        noteFavorite = json['note_favorite'] == 1;
 
   Map<String, dynamic> toJson() => {
         'note_id': noteId,
@@ -31,7 +41,8 @@ class Notes {
         'note_label': noteLabel,
         'note_archived': noteArchived ? 1 : 0,
         'note_color': noteColor,
-        'note_image': noteImage
+        'note_image': noteImage,
+        'note_favorite': noteFavorite ? 1 : 0
       };
 }
 

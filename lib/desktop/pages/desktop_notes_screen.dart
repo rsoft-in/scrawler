@@ -146,8 +146,16 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     var newId = uuid.v1();
     late Notes currentNote;
     if (isNewNote) {
-      currentNote = Notes(newId, Utility.getDateString(),
-          noteTitleController.text, noteTextController.text, '', false, 0, '');
+      currentNote = Notes(
+          newId,
+          Utility.getDateString(),
+          noteTitleController.text,
+          noteTextController.text,
+          '',
+          false,
+          0,
+          '',
+          false);
       filteredNotes.add(currentNote);
     } else {
       int editIndex = filteredNotes
