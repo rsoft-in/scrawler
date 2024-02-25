@@ -64,13 +64,46 @@ class _DashCupertinoState extends State<DashCupertino> {
       },
     );
     return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: const Text(kAppName),
-          trailing: CupertinoButton(
-              child: const Icon(CupertinoIcons.add, size: 18),
-              onPressed: () => openNote(Notes.empty())),
-        ),
-        child: notesBuilder);
+      // navigationBar: CupertinoNavigationBar(
+      //   middle: const Text(kAppName),
+      //   trailing: Row(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       CupertinoButton(
+      //           child: const Icon(CupertinoIcons.add),
+      //           onPressed: () => openNote(Notes.empty())),
+      //       CupertinoButton(
+      //           child: const Icon(CupertinoIcons.person), onPressed: () {}),
+      //     ],
+      //   ),
+      // ),
+      // child: notesBuilder,
+      child: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              CupertinoSliverNavigationBar(
+                largeTitle: const Text(
+                  kAppName,
+                  // style: TextStyle(fontSize: 24),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        child: const Icon(CupertinoIcons.add),
+                        onPressed: () => openNote(Notes.empty())),
+                    CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        child: const Icon(CupertinoIcons.person),
+                        onPressed: () {}),
+                  ],
+                ),
+              ),
+            ];
+          },
+          body: notesBuilder),
+    );
   }
 
   void openNote(Notes note) async {
