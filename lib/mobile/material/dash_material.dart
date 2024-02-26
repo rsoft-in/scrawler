@@ -18,13 +18,18 @@ class DashMaterial extends StatefulWidget {
 
 class _DashMaterialState extends State<DashMaterial> {
   DBHelper dbHelper = DBHelper.instance;
+  String selectedView = 'favorites';
 
   Future<List<Label>> fetchLabels() async {
     return await dbHelper.getLabelsAll();
   }
 
-  Future<List<Notes>> fetchFavNotes() async {
-    return await dbHelper.getNotesAll('note_favorite = 1', 'note_date desc');
+  Future<List<Notes>> fetchNotes() async {
+    if (selectedView == 'favorites') {
+      return await dbHelper.getNotesFavorite();
+    } else {
+      return await dbHelper.getNotesAll('', 'note_title');
+    }
   }
 
   Future<List<Notes>> fetchNotesAll() async {
@@ -34,25 +39,25 @@ class _DashMaterialState extends State<DashMaterial> {
   @override
   Widget build(BuildContext context) {
     FutureBuilder<List<Notes>> favNotesBuilder = FutureBuilder<List<Notes>>(
-      future: fetchFavNotes(),
+      future: fetchNotes(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             if (snapshot.data!.isNotEmpty) {
               List<Notes> notes = snapshot.data!;
-              return SliverList(
-                delegate:
-                    SliverChildBuilderDelegate((context, index) => ListTile(
-                          title: Text(notes[index].noteTitle),
-                          subtitle: Text(
-                            notes[index].noteText,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                          ),
-                          trailing:
-                              ScrawlColorDot(colorCode: notes[index].noteColor),
-                          onTap: () => openNote(notes[index]),
-                        )),
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                      '${notes[index].noteTitle} ${notes[index].noteFavorite}'),
+                  subtitle: Text(
+                    notes[index].noteText,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  trailing: ScrawlColorDot(colorCode: notes[index].noteColor),
+                  onTap: () => openNote(notes[index]),
+                ),
               );
             } else {
               return Center(
@@ -73,11 +78,11 @@ class _DashMaterialState extends State<DashMaterial> {
     );
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar.large(
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar.medium(
             title: const Text(kAppName),
-            floating: true,
+            floating: false,
             actions: [
               IconButton(
                 onPressed: () => openNote(Notes.empty()),
@@ -88,11 +93,41 @@ class _DashMaterialState extends State<DashMaterial> {
                 icon: const Icon(Symbols.person),
               ),
             ],
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) => null),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => setState(() {
+                      selectedView = 'favorites';
+                    }),
+                    child: Text(
+                      'Favorites',
+                      style: TextStyle(
+                          fontWeight: selectedView == 'favorites'
+                              ? FontWeight.bold
+                              : FontWeight.normal),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => setState(() {
+                      selectedView = 'all';
+                    }),
+                    child: Text(
+                      'All',
+                      style: TextStyle(
+                          fontWeight: selectedView == 'all'
+                              ? FontWeight.bold
+                              : FontWeight.normal),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
+        body: favNotesBuilder,
       ),
     );
 

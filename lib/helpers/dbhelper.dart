@@ -57,12 +57,20 @@ class DBHelper {
     );
   }
 
+  Future<List<Notes>> getNotesFavorite() async {
+    Database? db = await instance.database;
+    var parsed = await db!
+        .query('notes', orderBy: 'note_title', where: 'note_favorite = 1');
+    return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
+
   Future<List<Notes>> getNotesAll(String filter, String sortBy) async {
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: sortBy,
         where:
             'note_archived = 0 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
+
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
@@ -87,6 +95,7 @@ class DBHelper {
   Future<bool> insertNotes(Notes note) async {
     Database? db = await instance.database;
     final rowsAffected = await db!.insert('notes', note.toJson());
+    print('$rowsAffected rows inserted');
     return rowsAffected > 0;
   }
 

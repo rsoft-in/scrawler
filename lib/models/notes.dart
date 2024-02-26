@@ -31,7 +31,7 @@ class Notes {
         noteArchived = json['note_archived'] == 1,
         noteColor = int.parse('${json['note_color']}'),
         noteImage = json['note_image'] ?? '',
-        noteFavorite = json['note_favorite'] == 1;
+        noteFavorite = (json['note_favorite'] ?? 0) == 1;
 
   Map<String, dynamic> toJson() => {
         'note_id': noteId,
