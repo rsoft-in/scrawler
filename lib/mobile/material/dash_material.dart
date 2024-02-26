@@ -40,18 +40,19 @@ class _DashMaterialState extends State<DashMaterial> {
           case ConnectionState.done:
             if (snapshot.data!.isNotEmpty) {
               List<Notes> notes = snapshot.data!;
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(notes[index].noteTitle),
-                  subtitle: Text(
-                    notes[index].noteText,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
-                  trailing: ScrawlColorDot(colorCode: notes[index].noteColor),
-                  onTap: () => openNote(notes[index]),
-                ),
+              return SliverList(
+                delegate:
+                    SliverChildBuilderDelegate((context, index) => ListTile(
+                          title: Text(notes[index].noteTitle),
+                          subtitle: Text(
+                            notes[index].noteText,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          trailing:
+                              ScrawlColorDot(colorCode: notes[index].noteColor),
+                          onTap: () => openNote(notes[index]),
+                        )),
               );
             } else {
               return Center(
@@ -71,46 +72,70 @@ class _DashMaterialState extends State<DashMaterial> {
       },
     );
 
-    return DefaultTabController(
-      length: 2,
-      initialIndex: 0,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            kAppName,
-            style: TextStyle(fontFamily: 'Inter'),
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar.large(
+            title: const Text(kAppName),
+            floating: true,
+            actions: [
+              IconButton(
+                onPressed: () => openNote(Notes.empty()),
+                icon: const Icon(Symbols.add),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Symbols.person),
+              ),
+            ],
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Symbols.search),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Symbols.person),
-            ),
-          ],
-          bottom: const TabBar(tabs: [
-            Tab(
-              child: Text('Favorites'),
-            ),
-            Tab(
-              child: Text('All Notes'),
-            )
-          ]),
-        ),
-        body: TabBarView(children: [
-          favNotesBuilder,
-          const Center(
-            child: Text('All Notes'),
-          )
-        ]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => openNote(Notes.empty()),
-          child: const Icon(Symbols.add),
-        ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) => null),
+          ),
+        ],
       ),
     );
+
+    // return DefaultTabController(
+    //   length: 2,
+    //   initialIndex: 0,
+    //   child: Scaffold(
+    //     appBar: AppBar(
+    //       title: const Text(
+    //         kAppName,
+    //         style: TextStyle(fontFamily: 'Inter'),
+    //       ),
+    //       actions: [
+    //         IconButton(
+    //           onPressed: () {},
+    //           icon: const Icon(Symbols.search),
+    //         ),
+    //         IconButton(
+    //           onPressed: () {},
+    //           icon: const Icon(Symbols.person),
+    //         ),
+    //       ],
+    //       bottom: const TabBar(tabs: [
+    //         Tab(
+    //           child: Text('Favorites'),
+    //         ),
+    //         Tab(
+    //           child: Text('All Notes'),
+    //         )
+    //       ]),
+    //     ),
+    //     body: TabBarView(children: [
+    //       favNotesBuilder,
+    //       const Center(
+    //         child: Text('All Notes'),
+    //       )
+    //     ]),
+    //     floatingActionButton: FloatingActionButton(
+    //       onPressed: () => openNote(Notes.empty()),
+    //       child: const Icon(Symbols.add),
+    //     ),
+    //   ),
+    // );
   }
 
   void openNote(Notes note) async {

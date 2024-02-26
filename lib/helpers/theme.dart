@@ -12,7 +12,7 @@ ThemeData theme() {
     inputDecorationTheme: inputDecorationTheme(),
     appBarTheme: const AppBarTheme(centerTitle: false),
     iconTheme: const IconThemeData(
-        color: Colors.black, fill: 0, weight: 300, opticalSize: 48),
+        color: Colors.black, fill: 0, weight: 400, opticalSize: 48),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         shape: RoundedRectangleBorder(
