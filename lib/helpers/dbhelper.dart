@@ -95,7 +95,6 @@ class DBHelper {
   Future<bool> insertNotes(Notes note) async {
     Database? db = await instance.database;
     final rowsAffected = await db!.insert('notes', note.toJson());
-    print('$rowsAffected rows inserted');
     return rowsAffected > 0;
   }
 
@@ -105,7 +104,10 @@ class DBHelper {
       'note_id': note.noteId,
       'note_date': note.noteDate,
       'note_title': note.noteTitle,
-      'note_text': note.noteText
+      'note_text': note.noteText,
+      'note_color': note.noteColor,
+      'note_favorite': note.noteFavorite,
+      'note_label': note.noteLabel
     };
     String id = map['note_id'];
     final rowsAffected =

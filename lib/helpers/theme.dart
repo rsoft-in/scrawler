@@ -34,21 +34,6 @@ ThemeData theme() {
         ),
       ),
     ),
-    dialogTheme: DialogTheme(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kBorderRadius),
-      ),
-    ),
-    popupMenuTheme: PopupMenuThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kBorderRadius),
-      ),
-    ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
-      ),
-    ),
   );
 }
 
@@ -63,6 +48,8 @@ ThemeData themeDark() {
     scaffoldBackgroundColor: Colors.black,
     appBarTheme:
         const AppBarTheme(elevation: 0, backgroundColor: Colors.transparent),
+    iconTheme: const IconThemeData(
+        color: Colors.white, fill: 0, weight: 400, opticalSize: 48),
     inputDecorationTheme: inputDecorationTheme(),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(

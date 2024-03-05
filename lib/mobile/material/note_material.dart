@@ -1,13 +1,13 @@
 import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/mobile/material/label_select_material.dart';
 import 'package:bnotes/widgets/rs_button.dart';
 import 'package:bnotes/widgets/rs_text_button.dart';
-import 'package:bnotes/widgets/rs_textfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bnotes/widgets/scrawl_color_dot.dart';
+import 'package:bnotes/widgets/scrawl_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -29,6 +29,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   Notes _note = Notes.empty();
   TextEditingController noteController = TextEditingController();
   TextEditingController noteTitleController = TextEditingController();
+  int noteColor = 0;
+  bool favorite = false;
+  String noteLabel = "";
   DBHelper dbHelper = DBHelper.instance;
 
   void updateTile() {
@@ -45,15 +48,18 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
           Utility.getDateString(),
           noteTitleController.text,
           noteController.text,
-          '',
+          noteLabel,
           false,
-          0,
+          noteColor,
           '',
-          false);
+          favorite);
       await dbHelper.insertNotes(newNote);
     } else {
       _note.noteText = noteController.text;
       _note.noteDate = Utility.getDateString();
+      _note.noteColor = noteColor;
+      _note.noteFavorite = favorite;
+      _note.noteLabel = noteLabel;
       await dbHelper.updateNotes(_note);
     }
   }
@@ -64,6 +70,10 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     _note = widget.note;
     noteTitleController.text = _note.noteTitle;
     noteController.text = _note.noteText;
+    noteColor = _note.noteColor;
+    favorite = _note.noteFavorite;
+    noteLabel = _note.noteLabel;
+    print(_note.noteLabel);
     if (_note.noteId.isEmpty) {
       editMode = true;
     }
@@ -84,14 +94,47 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
               icon: const Icon(Symbols.arrow_back)),
           title: GestureDetector(
             onTap: () => editTile(),
-            child: Text(_note.noteTitle),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(_note.noteTitle),
+                if (noteLabel.isNotEmpty)
+                  Text(
+                    noteLabel,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                    ),
+                  ),
+              ],
+            ),
           ),
           actions: [
+            ScrawlColorDot(colorCode: noteColor),
+            IconButton(
+                onPressed: () => setState(() {
+                      favorite = !favorite;
+                    }),
+                icon: favorite
+                    ? const Icon(Symbols.favorite, fill: 1)
+                    : const Icon(Symbols.favorite)),
             PopupMenuButton(
               icon: const Icon(Symbols.more_horiz),
               itemBuilder: (context) => [
-                const PopupMenuItem(child: Text('Color')),
-                const PopupMenuItem(child: Text('Label')),
+                PopupMenuItem(
+                  child: const Text('Color'),
+                  onTap: () => Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () => editColor(),
+                  ),
+                ),
+                PopupMenuItem(
+                  child: const Text('Label'),
+                  onTap: () => Future.delayed(
+                    const Duration(milliseconds: 500),
+                    () => assignLabel(),
+                  ),
+                ),
               ],
             ),
           ],
@@ -157,67 +200,59 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   }
 
   void editTile() {
-    if (UniversalPlatform.isIOS) {
-      showCupertinoModalPopup(
-          context: context,
-          builder: (context) {
-            return CupertinoAlertDialog(
-              title: const Text('Title'),
-              content: Padding(
-                padding: kPaddingMedium,
-                child: RSTextField(
-                  autofocus: true,
-                  controller: noteTitleController,
-                  hintText: '',
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Title'),
+            actions: [
+              RSButton(
+                onPressed: () {
+                  updateTile();
+                  Navigator.pop(context);
+                },
+                child: const Text('Ok'),
+              ),
+              RSTextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel'),
+              ),
+            ],
+            content: Padding(
+              padding: kPaddingMedium,
+              child: TextField(
+                autofocus: true,
+                maxLength: 50,
+                controller: noteTitleController,
+                decoration: const InputDecoration(
+                  counterText: '',
                 ),
               ),
-              actions: [
-                RSTextButton(
-                  onPressed: () {
-                    updateTile();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'),
-                ),
-                RSTextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-              ],
-            );
-          });
-    } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Title'),
-              actions: [
-                RSButton(
-                  onPressed: () {
-                    updateTile();
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Ok'),
-                ),
-                RSTextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-              ],
-              content: Padding(
-                padding: kPaddingMedium,
-                child: TextField(
-                  autofocus: true,
-                  maxLength: 50,
-                  controller: noteTitleController,
-                  decoration: const InputDecoration(
-                    counterText: '',
-                  ),
-                ),
-              ),
-            );
-          });
+            ),
+          );
+        });
+  }
+
+  Future<void> editColor() async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return const ScrawlColorPicker();
+        });
+    if (colorCode != null) {
+      setState(() {
+        noteColor = colorCode;
+      });
+    }
+  }
+
+  Future<void> assignLabel() async {
+    final labelName = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const LabelSelectMaterial()));
+    if (labelName != null) {
+      setState(() {
+        noteLabel = labelName;
+      });
     }
   }
 
