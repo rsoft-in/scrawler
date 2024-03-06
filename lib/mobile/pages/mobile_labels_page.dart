@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
@@ -32,7 +31,7 @@ class _MobileLabelsPageState extends State<MobileLabelsPage> {
       appBar: AppBar(
         leading: GestureDetector(
             onTap: () => Navigator.pop(context, true),
-            child: const Icon(YaruIcons.pan_start)),
+            child: const Icon(Icons.arrow_back)),
         title: const Text('Select or Manage Labels'),
       ),
       body: Padding(

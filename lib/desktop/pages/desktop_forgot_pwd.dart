@@ -9,7 +9,6 @@ import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopForgotPassword extends StatefulWidget {
   final String email;
@@ -152,7 +151,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Enter New Password',
-                      suffixIcon: Icon(YaruIcons.key),
+                      suffixIcon: Icon(Icons.password_outlined),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -173,7 +172,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       hintText: 'Confirm Password',
-                      suffixIcon: Icon(YaruIcons.key),
+                      suffixIcon: Icon(Icons.password_outlined),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {

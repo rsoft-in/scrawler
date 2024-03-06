@@ -1,7 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class ScrawlAddButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -23,7 +22,7 @@ class ScrawlAddButton extends StatelessWidget {
               color: darkModeOn ? kDarkStroke : kLightStroke,
             ),
             borderRadius: BorderRadius.circular(kBorderRadius)),
-        child: const Icon(YaruIcons.plus),
+        child: const Icon(Icons.add_outlined),
       ),
     );
   }

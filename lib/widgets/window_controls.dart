@@ -3,7 +3,6 @@ import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class WindowControls extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
@@ -31,7 +30,7 @@ class WindowControls extends StatelessWidget {
                       color: darkModeOn ? kDarkStroke : kLightStroke),
                   borderRadius: BorderRadius.circular(20)),
               child: const Icon(
-                YaruIcons.window_minimize,
+                Icons.minimize_outlined,
                 size: 14,
               )),
           // onTap: () => appWindow.minimize(),
@@ -48,7 +47,7 @@ class WindowControls extends StatelessWidget {
                         color: darkModeOn ? kDarkStroke : kLightStroke),
                     borderRadius: BorderRadius.circular(20)),
                 child: const Icon(
-                  YaruIcons.window_maximize,
+                  Icons.square_outlined,
                   size: 14,
                 )),
             // onTap: () => appWindow.maximizeOrRestore(),

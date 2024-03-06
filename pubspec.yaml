@@ -30,9 +30,6 @@ dependencies:
   url_launcher: ^6.0.20
   universal_platform: ^1.0.0+1
   window_manager: ^0.3.7
-  yaru: ^1.1.0
-  yaru_icons: ^2.2.1
-  yaru_widgets: ^3.1.0
 
 flutter_launcher_icons:
   ios: true

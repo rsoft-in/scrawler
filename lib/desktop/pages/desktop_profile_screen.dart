@@ -2,7 +2,6 @@ import 'package:bnotes/helpers/constants.dart';
 // import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class DesktopProfileScreen extends StatefulWidget {
   const DesktopProfileScreen({Key? key}) : super(key: key);
@@ -85,7 +84,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                     alignment: Alignment.centerRight,
                     child: //Icon Button
                         IconButton(
-                            icon: const Icon(YaruIcons.window_close),
+                            icon: const Icon(Icons.close_outlined),
                             onPressed: () => Navigator.pop(context)),
                   ),
                   Visibility(
@@ -96,7 +95,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
                         CircleAvatar(
                           radius: 40,
                           child: Icon(
-                            YaruIcons.user,
+                            Icons.person_outlined,
                             size: 40,
                           ),
                         ),

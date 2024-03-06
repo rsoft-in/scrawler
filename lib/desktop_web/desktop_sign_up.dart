@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
@@ -307,7 +306,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                 borderRadius: BorderRadius.circular(5),
               ),
               padding: const EdgeInsets.all(7),
-              child: const Icon(YaruIcons.pan_start),
+              child: const Icon(Icons.arrow_back),
             ),
             onTap: () {
               setState(() {

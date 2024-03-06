@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
@@ -227,7 +226,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                       IconButton(
                         onPressed: () => onToolbarClick(EditorTools.bold, true),
                         icon: const Icon(
-                          YaruIcons.bold,
+                          Icons.format_bold_outlined,
                           size: 18,
                         ),
                       ),
@@ -235,7 +234,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         onPressed: () =>
                             onToolbarClick(EditorTools.italic, true),
                         icon: const Icon(
-                          YaruIcons.italic,
+                          Icons.format_italic_outlined,
                           size: 18,
                         ),
                       ),
@@ -243,7 +242,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         onPressed: () =>
                             onToolbarClick(EditorTools.link, false),
                         icon: const Icon(
-                          YaruIcons.insert_link,
+                          Icons.link_outlined,
                           size: 18,
                         ),
                       ),
@@ -251,14 +250,14 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         onPressed: () =>
                             onToolbarClick(EditorTools.image, false),
                         icon: const Icon(
-                          YaruIcons.image,
+                          Icons.image_outlined,
                           size: 18,
                         ),
                       ),
                       IconButton(
                         onPressed: () {},
                         icon: const Icon(
-                          YaruIcons.unordered_list,
+                          Icons.list_outlined,
                           size: 18,
                         ),
                       ),
@@ -274,7 +273,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                                         undoHistoryController.undo();
                                       }
                                     : null,
-                                icon: const Icon(YaruIcons.undo),
+                                icon: const Icon(Icons.undo_outlined),
                               ),
                               IconButton(
                                 onPressed: value.canRedo
@@ -282,7 +281,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                                         undoHistoryController.redo();
                                       }
                                     : null,
-                                icon: const Icon(YaruIcons.redo),
+                                icon: const Icon(Icons.redo_outlined),
                               ),
                             ],
                           );
@@ -307,19 +306,19 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                         onPressed: () => setState(() {
                           isEditMode = true;
                         }),
-                        icon: const Icon(YaruIcons.pen),
+                        icon: const Icon(Icons.edit_outlined),
                       ),
                       IconButton(
                         onPressed: () => confirmDelete(note),
-                        icon: const Icon(YaruIcons.trash),
+                        icon: const Icon(Icons.delete_outlined),
                       ),
                       IconButton(
                         onPressed: () => pickColor(note),
-                        icon: const Icon(YaruIcons.colors),
+                        icon: const Icon(Icons.color_lens_outlined),
                       ),
                       IconButton(
                         onPressed: () => selectTag(note),
-                        icon: const Icon(YaruIcons.tag),
+                        icon: const Icon(Icons.label_outlined),
                       ),
                     ],
                   ),

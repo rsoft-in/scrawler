@@ -10,7 +10,6 @@ import 'package:bnotes/widgets/scrawl_note_list_item.dart';
 import 'package:bnotes/widgets/scrawl_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 import '../../models/menu_item.dart';
 import '../../models/sort_items.dart';
@@ -30,10 +29,10 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   List<Notes> notes = [];
   List<Notes> notesUnfiltered = [];
   List<MenuItem> contextMenuItems = [
-    MenuItem('edit', 'Edit', '', YaruIcons.pen),
-    MenuItem('delete', 'Delete', '', YaruIcons.trash),
-    MenuItem('color', 'Colors', '', YaruIcons.colors),
-    MenuItem('tags', 'Tags', '', YaruIcons.tag)
+    MenuItem('edit', 'Edit', '', Icons.edit_outlined),
+    MenuItem('delete', 'Delete', '', Icons.delete_outlined),
+    MenuItem('color', 'Colors', '', Icons.color_lens_outlined),
+    MenuItem('tags', 'Tags', '', Icons.label_outlined)
   ];
   List<SortItem> sortItems = [
     SortItem(NoteSort.newest, 'Latest'),
@@ -181,7 +180,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                 )),
       floatingActionButton: FloatingActionButton(
         onPressed: () => editNote(Notes.empty()),
-        child: const Icon(YaruIcons.plus),
+        child: const Icon(Icons.add_outlined),
       ),
     );
   }
