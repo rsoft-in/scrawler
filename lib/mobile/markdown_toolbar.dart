@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:bnotes/helpers/constants.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -12,6 +16,11 @@ class MarkdownToolbar extends StatefulWidget {
 }
 
 class _MarkdownToolbarState extends State<MarkdownToolbar> {
+  TextEditingController imgDescController = TextEditingController();
+  TextEditingController imgUrlController = TextEditingController();
+  TextEditingController linkNameController = TextEditingController();
+  TextEditingController linkUrlController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -120,17 +129,21 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                 ),
           UniversalPlatform.isIOS
               ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.photo), onPressed: () {})
+                  child: const Icon(CupertinoIcons.photo),
+                  onPressed: () => showImageSheet(),
+                )
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () => showImageSheet(),
                   icon: const Icon(Symbols.image),
                   tooltip: 'Insert Image',
                 ),
           UniversalPlatform.isIOS
               ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.link), onPressed: () {})
+                  child: const Icon(CupertinoIcons.link),
+                  onPressed: () => showLinkSheet(),
+                )
               : IconButton(
-                  onPressed: () {},
+                  onPressed: () => showLinkSheet(),
                   icon: const Icon(Symbols.link),
                   tooltip: 'Insert Link',
                 ),
@@ -147,7 +160,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
     final afterText =
         widget.controller.selection.textAfter(widget.controller.text);
     setState(() {
-      if (selectedText.isNotEmpty) {
+      if (selectedText.isNotEmpty || imgDescController.text.isNotEmpty) {
         switch (opt) {
           case 'bold':
             widget.controller.text = '$beforeText**$selectedText**$afterText';
@@ -176,9 +189,181 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
             }
             widget.controller.text = '$beforeText\n$lText\n$afterText';
             break;
+          case 'image':
+            widget.controller.text =
+                '$beforeText![${imgDescController.text}](${imgUrlController.text})$afterText';
+            imgDescController.text = "";
+            imgUrlController.text = "";
+            break;
+          case 'link':
+            widget.controller.text =
+                '$beforeText[${linkNameController.text}](${linkUrlController.text})$afterText';
+            linkNameController.text = "";
+            linkUrlController.text = "";
+            break;
           default:
         }
       }
     });
+  }
+
+  void showImageSheet() {
+    final selectedText =
+        widget.controller.selection.textInside(widget.controller.text);
+    setState(() {
+      imgDescController.text = selectedText;
+    });
+    if (UniversalPlatform.isIOS) {
+      showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return Container();
+          });
+    } else {
+      showModalBottomSheet(
+          context: context,
+          isDismissible: false,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (context) {
+            return Padding(
+              padding: kGlobalOuterPadding * 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Insert Image',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      CloseButton(
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  kVSpace,
+                  TextField(
+                    autofocus: true,
+                    controller: imgDescController,
+                    decoration: const InputDecoration(
+                        labelText: 'Enter Image Description'),
+                  ),
+                  kVSpace,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: imgUrlController,
+                          decoration: InputDecoration(
+                            labelText: 'Enter Image URL',
+                            hintText: 'http://',
+                            suffixIcon: IconButton(
+                              onPressed: () => pickImage(),
+                              icon: const Icon(Symbols.more_horiz),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  kVSpace,
+                  FilledButton.tonal(
+                    onPressed: () {
+                      formatText('image');
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Add'),
+                  ),
+                ],
+              ),
+            );
+          });
+    }
+  }
+
+  Future<void> pickImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      imgUrlController.text = file.path;
+      setState(() {});
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void showLinkSheet() {
+    final selectedText =
+        widget.controller.selection.textInside(widget.controller.text);
+    setState(() {
+      linkNameController.text = selectedText;
+    });
+    if (UniversalPlatform.isIOS) {
+      showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return Container();
+          });
+    } else {
+      showModalBottomSheet(
+          context: context,
+          isDismissible: false,
+          isScrollControlled: true,
+          useSafeArea: true,
+          builder: (context) {
+            return Padding(
+              padding: kGlobalOuterPadding * 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Insert Link',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      CloseButton(
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  kVSpace,
+                  TextField(
+                    autofocus: true,
+                    controller: linkNameController,
+                    decoration:
+                        const InputDecoration(labelText: 'Enter Link Name'),
+                  ),
+                  kVSpace,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: linkUrlController,
+                          decoration: const InputDecoration(
+                            labelText: 'Enter URL Address',
+                            hintText: 'http://',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  kVSpace,
+                  FilledButton.tonal(
+                    onPressed: () {
+                      formatText('link');
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Add'),
+                  ),
+                ],
+              ),
+            );
+          });
+    }
   }
 }

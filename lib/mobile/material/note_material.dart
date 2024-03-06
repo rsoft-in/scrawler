@@ -110,33 +110,45 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
             ),
           ),
           actions: [
-            ScrawlColorDot(colorCode: noteColor),
-            IconButton(
-                onPressed: () => setState(() {
-                      favorite = !favorite;
-                    }),
-                icon: favorite
-                    ? const Icon(Symbols.favorite, fill: 1)
-                    : const Icon(Symbols.favorite)),
-            PopupMenuButton(
-              icon: const Icon(Symbols.more_horiz),
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  child: const Text('Color'),
-                  onTap: () => Future.delayed(
-                    const Duration(milliseconds: 500),
-                    () => editColor(),
+            if (!editMode) ScrawlColorDot(colorCode: noteColor),
+            if (!editMode)
+              IconButton(
+                  onPressed: () => setState(() {
+                        favorite = !favorite;
+                      }),
+                  icon: favorite
+                      ? const Icon(Symbols.favorite, fill: 1)
+                      : const Icon(Symbols.favorite)),
+            if (!editMode)
+              PopupMenuButton(
+                icon: const Icon(Symbols.more_horiz),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: const Text('Color'),
+                    onTap: () => Future.delayed(
+                      const Duration(milliseconds: 500),
+                      () => editColor(),
+                    ),
                   ),
-                ),
-                PopupMenuItem(
-                  child: const Text('Label'),
-                  onTap: () => Future.delayed(
-                    const Duration(milliseconds: 500),
-                    () => assignLabel(),
+                  PopupMenuItem(
+                    child: const Text('Label'),
+                    onTap: () => Future.delayed(
+                      const Duration(milliseconds: 500),
+                      () => assignLabel(),
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            if (editMode)
+              IconButton(
+                onPressed: () {
+                  saveNote();
+                  setState(() {
+                    editMode = !editMode;
+                  });
+                },
+                icon: const Icon(Symbols.done),
+              ),
           ],
         ),
         body: Column(

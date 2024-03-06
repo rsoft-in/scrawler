@@ -98,7 +98,10 @@ class _LabelSelectMaterialState extends State<LabelSelectMaterial> {
                       children: [
                         Expanded(
                           child: FilledButton(
-                            onPressed: () => saveLabel(),
+                            onPressed: () {
+                              saveLabel();
+                              Navigator.pop(context);
+                            },
                             child: const Text('Ok'),
                           ),
                         ),

@@ -14,6 +14,7 @@ dependencies:
 
   adaptive_breakpoints: ^0.1.1
   cupertino_icons: ^1.0.4
+  file_picker: ^6.2.0
   flutter_markdown: ^0.6.9+1
   flutter_phoenix: ^1.1.1
   flutter_quill: ^9.0.3
