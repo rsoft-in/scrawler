@@ -24,6 +24,7 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
   ScreenSize _screenSize = ScreenSize.large;
   bool editMode = false;
   TextEditingController noteController = TextEditingController();
+  UndoHistoryController undoController = UndoHistoryController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,9 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
                   visible: editMode,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: MarkdownToolbar(controller: noteController),
+                    child: MarkdownToolbar(
+                        controller: noteController,
+                        undoController: undoController),
                   ),
                 ),
                 Visibility(

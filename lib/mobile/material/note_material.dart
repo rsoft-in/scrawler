@@ -28,6 +28,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   bool wasEdited = false;
   Notes _note = Notes.empty();
   TextEditingController noteController = TextEditingController();
+  UndoHistoryController undoController = UndoHistoryController();
   TextEditingController noteTitleController = TextEditingController();
   int noteColor = 0;
   bool favorite = false;
@@ -73,7 +74,6 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     noteColor = _note.noteColor;
     favorite = _note.noteFavorite;
     noteLabel = _note.noteLabel;
-    print(_note.noteLabel);
     if (_note.noteId.isEmpty) {
       editMode = true;
     }
@@ -162,6 +162,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                   padding: kPaddingLarge,
                   child: TextField(
                     controller: noteController,
+                    undoController: undoController,
                     maxLines: null,
                     expands: true,
                     textAlignVertical: TextAlignVertical.top,
@@ -202,7 +203,8 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
               visible: editMode,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: MarkdownToolbar(controller: noteController),
+                child: MarkdownToolbar(
+                    controller: noteController, undoController: undoController),
               ),
             ),
           ],

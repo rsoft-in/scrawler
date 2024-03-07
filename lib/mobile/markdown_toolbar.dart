@@ -9,7 +9,10 @@ import 'package:universal_platform/universal_platform.dart';
 
 class MarkdownToolbar extends StatefulWidget {
   final TextEditingController controller;
-  const MarkdownToolbar({Key? key, required this.controller}) : super(key: key);
+  final UndoHistoryController undoController;
+  const MarkdownToolbar(
+      {Key? key, required this.controller, required this.undoController})
+      : super(key: key);
 
   @override
   State<MarkdownToolbar> createState() => _MarkdownToolbarState();
@@ -28,24 +31,34 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.arrow_turn_up_left),
-                  onPressed: () {})
-              : IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Symbols.undo),
-                  tooltip: 'Undo',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.arrow_turn_up_right),
-                  onPressed: () {})
-              : IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Symbols.redo),
-                  tooltip: 'Redo',
-                ),
+          ValueListenableBuilder<UndoHistoryValue>(
+              valueListenable: widget.undoController,
+              builder: (context, value, child) {
+                return UniversalPlatform.isIOS
+                    ? CupertinoButton(
+                        child: const Icon(CupertinoIcons.arrow_turn_up_left),
+                        onPressed: () => widget.undoController.undo(),
+                      )
+                    : IconButton(
+                        onPressed: () => widget.undoController.undo(),
+                        icon: const Icon(Symbols.undo),
+                        tooltip: 'Undo',
+                      );
+              }),
+          ValueListenableBuilder<UndoHistoryValue>(
+              valueListenable: widget.undoController,
+              builder: (context, value, child) {
+                return UniversalPlatform.isIOS
+                    ? CupertinoButton(
+                        child: const Icon(CupertinoIcons.arrow_turn_up_right),
+                        onPressed: () => widget.undoController.redo(),
+                      )
+                    : IconButton(
+                        onPressed: () => widget.undoController.redo(),
+                        icon: const Icon(Symbols.redo),
+                        tooltip: 'Redo',
+                      );
+              }),
           const VerticalDivider(),
           UniversalPlatform.isIOS
               ? CupertinoButton(
@@ -208,11 +221,13 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
   }
 
   void showImageSheet() {
-    final selectedText =
-        widget.controller.selection.textInside(widget.controller.text);
-    setState(() {
-      imgDescController.text = selectedText;
-    });
+    if (widget.controller.selection.isValid) {
+      final selectedText =
+          widget.controller.selection.textInside(widget.controller.text);
+      setState(() {
+        imgDescController.text = selectedText;
+      });
+    }
     if (UniversalPlatform.isIOS) {
       showCupertinoModalPopup(
           context: context,
@@ -296,11 +311,13 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
   }
 
   void showLinkSheet() {
-    final selectedText =
-        widget.controller.selection.textInside(widget.controller.text);
-    setState(() {
-      linkNameController.text = selectedText;
-    });
+    if (widget.controller.selection.isValid) {
+      final selectedText =
+          widget.controller.selection.textInside(widget.controller.text);
+      setState(() {
+        linkNameController.text = selectedText;
+      });
+    }
     if (UniversalPlatform.isIOS) {
       showCupertinoModalPopup(
           context: context,

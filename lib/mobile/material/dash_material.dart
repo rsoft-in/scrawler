@@ -123,7 +123,7 @@ class _DashMaterialState extends State<DashMaterial> {
               icon: const Icon(Symbols.search),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () => openSettings(),
               icon: const Icon(Symbols.person),
             ),
           ],
@@ -156,5 +156,34 @@ class _DashMaterialState extends State<DashMaterial> {
         MaterialPageRoute(builder: (context) => NotePageMaterial(note)));
 
     setState(() {});
+  }
+
+  void openSettings() {
+    showModalBottomSheet(
+        context: context,
+        showDragHandle: true,
+        builder: (context) {
+          return Padding(
+            padding: kGlobalOuterPadding,
+            child: ListView(
+              children: const [
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Symbols.person),
+                  ),
+                  title: Text('Anonymous'),
+                  subtitle: Text('Free Account'),
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(Symbols.home_storage),
+                  ),
+                  title: Text('Backup'),
+                  subtitle: Text('last backup:'),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

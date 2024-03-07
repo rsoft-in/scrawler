@@ -22,6 +22,7 @@ class _NotePageCupertinoState extends State<NotePageCupertino> {
   bool wasEdited = false;
   Notes _note = Notes.empty();
   TextEditingController noteController = TextEditingController();
+  UndoHistoryController undoController = UndoHistoryController();
   TextEditingController noteTitleController = TextEditingController();
   DBHelper dbHelper = DBHelper.instance;
 
@@ -120,7 +121,9 @@ class _NotePageCupertinoState extends State<NotePageCupertino> {
                   visible: editMode,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: MarkdownToolbar(controller: noteController),
+                    child: MarkdownToolbar(
+                        controller: noteController,
+                        undoController: undoController),
                   ),
                 ),
               ],
