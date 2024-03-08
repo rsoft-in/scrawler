@@ -1,5 +1,6 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
+import 'package:bnotes/mobile/material/folder_material.dart';
 import 'package:bnotes/mobile/material/note_material.dart';
 import 'package:bnotes/models/label.dart';
 import 'package:bnotes/models/notes.dart';
@@ -48,8 +49,7 @@ class _DashMaterialState extends State<DashMaterial> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
                   leading: const Icon(Symbols.note),
-                  title: Text(
-                      '${notes[index].noteTitle} ${notes[index].noteFavorite}'),
+                  title: Text(notes[index].noteTitle),
                   subtitle: Text(
                     notes[index].noteText,
                     overflow: TextOverflow.ellipsis,
@@ -103,7 +103,11 @@ class _DashMaterialState extends State<DashMaterial> {
                         ),
                   trailing: ScrawlColorDot(colorCode: notes[index].noteColor),
                   onTap: notes[index].noteTitle.isEmpty
-                      ? null
+                      ? () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FolderPageMaterial(
+                                  folderName: notes[index].noteLabel)))
                       : () => openNote(notes[index]),
                 ),
               );
