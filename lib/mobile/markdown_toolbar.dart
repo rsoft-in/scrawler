@@ -11,16 +11,17 @@ class MarkdownToolbar extends StatefulWidget {
   final TextEditingController controller;
   final UndoHistoryController undoController;
   const MarkdownToolbar(
-      {Key? key, required this.controller, required this.undoController})
-      : super(key: key);
+      {super.key, required this.controller, required this.undoController});
 
   @override
   State<MarkdownToolbar> createState() => _MarkdownToolbarState();
 }
 
 class _MarkdownToolbarState extends State<MarkdownToolbar> {
-  TextEditingController imgDescController = TextEditingController();
-  TextEditingController imgUrlController = TextEditingController();
+  // TextEditingController imgDescController = TextEditingController();
+  // TextEditingController imgUrlController = TextEditingController();
+  String imgName = "";
+  String imgUrl = "";
   TextEditingController linkNameController = TextEditingController();
   TextEditingController linkUrlController = TextEditingController();
 
@@ -143,10 +144,10 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
           UniversalPlatform.isIOS
               ? CupertinoButton(
                   child: const Icon(CupertinoIcons.photo),
-                  onPressed: () => showImageSheet(),
+                  onPressed: () => pickImage(),
                 )
               : IconButton(
-                  onPressed: () => showImageSheet(),
+                  onPressed: () => pickImage(),
                   icon: const Icon(Symbols.image),
                   tooltip: 'Insert Image',
                 ),
@@ -173,7 +174,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
     final afterText =
         widget.controller.selection.textAfter(widget.controller.text);
     setState(() {
-      if (selectedText.isNotEmpty || imgDescController.text.isNotEmpty) {
+      if (selectedText.isNotEmpty || imgUrl.isNotEmpty) {
         switch (opt) {
           case 'bold':
             widget.controller.text = '$beforeText**$selectedText**$afterText';
@@ -204,9 +205,9 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
             break;
           case 'image':
             widget.controller.text =
-                '$beforeText![${imgDescController.text}](${imgUrlController.text})$afterText';
-            imgDescController.text = "";
-            imgUrlController.text = "";
+                '$beforeText![$imgName]($imgUrl)$afterText';
+            imgName = "";
+            imgUrl = "";
             break;
           case 'link':
             widget.controller.text =
@@ -220,91 +221,14 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
     });
   }
 
-  void showImageSheet() {
-    if (widget.controller.selection.isValid) {
-      final selectedText =
-          widget.controller.selection.textInside(widget.controller.text);
-      setState(() {
-        imgDescController.text = selectedText;
-      });
-    }
-    if (UniversalPlatform.isIOS) {
-      showCupertinoModalPopup(
-          context: context,
-          builder: (context) {
-            return Container();
-          });
-    } else {
-      showModalBottomSheet(
-          context: context,
-          isDismissible: false,
-          isScrollControlled: true,
-          useSafeArea: true,
-          builder: (context) {
-            return Padding(
-              padding: kGlobalOuterPadding * 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Insert Image',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      CloseButton(
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                  kVSpace,
-                  TextField(
-                    autofocus: true,
-                    controller: imgDescController,
-                    decoration: const InputDecoration(
-                        labelText: 'Enter Image Description'),
-                  ),
-                  kVSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: imgUrlController,
-                          decoration: InputDecoration(
-                            labelText: 'Enter Image URL',
-                            hintText: 'http://',
-                            suffixIcon: IconButton(
-                              onPressed: () => pickImage(),
-                              icon: const Icon(Symbols.more_horiz),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  kVSpace,
-                  FilledButton.tonal(
-                    onPressed: () {
-                      formatText('image');
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Add'),
-                  ),
-                ],
-              ),
-            );
-          });
-    }
-  }
-
   Future<void> pickImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       File file = File(result.files.single.path!);
-      imgUrlController.text = file.path;
-      setState(() {});
+      imgUrl = file.path;
+      imgName = "image";
+      formatText('image');
     } else {
       // User canceled the picker
     }

@@ -9,7 +9,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import '../../widgets/scrawl_empty.dart';
 
 class DashMaterial extends StatefulWidget {
-  const DashMaterial({Key? key}) : super(key: key);
+  const DashMaterial({super.key});
 
   @override
   State<DashMaterial> createState() => _DashMaterialState();
@@ -79,8 +79,7 @@ class _DashMaterialState extends State<DashMaterial> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
                   leading: const Icon(Symbols.note),
-                  title: Text(
-                      '${notes[index].noteTitle} ${notes[index].noteFavorite}'),
+                  title: Text(notes[index].noteTitle),
                   subtitle: Text(
                     notes[index].noteText,
                     overflow: TextOverflow.ellipsis,

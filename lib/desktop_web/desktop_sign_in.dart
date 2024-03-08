@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +16,7 @@ import 'desktop_app_screen.dart';
 import 'desktop_sign_up.dart';
 
 class DesktopSignIn extends StatefulWidget {
-  const DesktopSignIn({Key? key}) : super(key: key);
+  const DesktopSignIn({super.key});
 
   @override
   State<DesktopSignIn> createState() => _DesktopSignInState();
@@ -125,11 +124,11 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Visibility(
+              const Visibility(
                 visible: kIsWeb,
                 child: Text(
                   kAppName,
-                  style: GoogleFonts.raleway(fontSize: 36),
+                  style: TextStyle(fontSize: 36),
                 ),
               ),
               const Visibility(visible: kIsWeb, child: kVSpace),

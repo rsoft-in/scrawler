@@ -15,13 +15,12 @@ dependencies:
   adaptive_breakpoints: ^0.1.1
   cupertino_icons: ^1.0.4
   file_picker: ^6.2.0
-  flutter_markdown: ^0.6.9+1
+  flutter_markdown: ^0.6.20
   flutter_phoenix: ^1.1.1
-  flutter_quill: ^9.0.3
+  flutter_quill: ^2.0.7
   flutter_svg: ^2.0.7
-  google_fonts: ^6.1.0
-  http: ^1.1.0
-  intl: ^0.18.0
+  http: ^1.2.0
+  intl: ^0.19.0
   material_symbols_icons: ^4.2713.0
   shared_preferences: ^2.0.13
   sqflite: ^2.2.8+4
@@ -53,7 +52,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
   flutter_launcher_icons: ^0.13.1
 
 flutter:

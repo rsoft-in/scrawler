@@ -17,7 +17,7 @@ import '../markdown_toolbar.dart';
 
 class NotePageMaterial extends StatefulWidget {
   final Notes note;
-  const NotePageMaterial(this.note, {Key? key}) : super(key: key);
+  const NotePageMaterial(this.note, {super.key});
 
   @override
   State<NotePageMaterial> createState() => _NotePageMaterialState();
@@ -34,6 +34,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   bool favorite = false;
   String noteLabel = "";
   DBHelper dbHelper = DBHelper.instance;
+  FocusNode editorFocusNode = FocusNode();
 
   void updateTile() {
     setState(() {
@@ -140,14 +141,14 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                 ],
               ),
             if (editMode)
-              IconButton(
+              TextButton(
                 onPressed: () {
                   saveNote();
                   setState(() {
                     editMode = !editMode;
                   });
                 },
-                icon: const Icon(Symbols.done),
+                child: const Text('Done'),
               ),
           ],
         ),
@@ -165,7 +166,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                     undoController: undoController,
                     maxLines: null,
                     expands: true,
+                    focusNode: editorFocusNode,
                     textAlignVertical: TextAlignVertical.top,
+                    style: const TextStyle(fontSize: 14),
                     decoration: const InputDecoration(
                       hintText: 'Start writing something...',
                       border: InputBorder.none,
@@ -190,6 +193,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                 child: GestureDetector(
                   onDoubleTap: () => setState(() {
                     editMode = true;
+                    editorFocusNode.requestFocus();
                   }),
                   child: Markdown(
                     data: widget.note.noteText,
