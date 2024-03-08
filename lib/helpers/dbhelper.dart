@@ -64,6 +64,23 @@ class DBHelper {
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
+  Future<List<Notes>> getNotesByFolder(String noteLabel, String sortBy) async {
+    Database? db = await instance.database;
+    var parsed = await db!.query('notes',
+        orderBy: sortBy,
+        where: noteLabel.isEmpty ? null : 'note_label = \'$noteLabel\'');
+
+    return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
+
+  Future<List<Notes>> getNotesUnLabeled(String sortBy) async {
+    Database? db = await instance.database;
+    var parsed =
+        await db!.query('notes', orderBy: sortBy, where: 'note_label = \'\'');
+
+    return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
+  }
+
   Future<List<Notes>> getNotesAll(String filter, String sortBy) async {
     Database? db = await instance.database;
     var parsed = await db!.query('notes',

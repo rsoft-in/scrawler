@@ -10,8 +10,12 @@ import 'package:universal_platform/universal_platform.dart';
 class MarkdownToolbar extends StatefulWidget {
   final TextEditingController controller;
   final UndoHistoryController undoController;
+  final VoidCallback onChange;
   const MarkdownToolbar(
-      {super.key, required this.controller, required this.undoController});
+      {super.key,
+      required this.controller,
+      required this.undoController,
+      required this.onChange});
 
   @override
   State<MarkdownToolbar> createState() => _MarkdownToolbarState();
@@ -217,6 +221,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
             break;
           default:
         }
+        widget.onChange();
       }
     });
   }

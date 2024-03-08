@@ -122,8 +122,10 @@ class _NotePageCupertinoState extends State<NotePageCupertino> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: MarkdownToolbar(
-                        controller: noteController,
-                        undoController: undoController),
+                      controller: noteController,
+                      undoController: undoController,
+                      onChange: () {},
+                    ),
                   ),
                 ),
               ],

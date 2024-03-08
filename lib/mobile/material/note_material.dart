@@ -64,6 +64,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
       _note.noteLabel = noteLabel;
       await dbHelper.updateNotes(_note);
     }
+    setState(() {
+      wasEdited = false;
+    });
   }
 
   @override
@@ -176,6 +179,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                       enabledBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
+                      print('note has been edited');
                       setState(() {
                         widget.note.noteText = value;
                         if (!wasEdited) {
@@ -208,7 +212,15 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MarkdownToolbar(
-                    controller: noteController, undoController: undoController),
+                  controller: noteController,
+                  undoController: undoController,
+                  onChange: () => setState(() {
+                    if (!wasEdited) {
+                      wasEdited = true;
+                      print('note has been edited');
+                    }
+                  }),
+                ),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/mobile/material/note_material.dart';
+import 'package:bnotes/models/label.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +23,16 @@ class _DashMaterialState extends State<DashMaterial> {
     return await dbHelper.getNotesFavorite();
   }
 
-  Future<List<Notes>> fetchNotesAll() async {
-    return await dbHelper.getNotesAll('', 'note_title');
+  Future<List<Notes>> fetchNotes() async {
+    List<Notes> unLabeled = await dbHelper.getNotesUnLabeled('note_title');
+    List<Label> labels = await dbHelper.getLabelsAll();
+    List<Notes> mapedNotes = labels
+        .map((e) => Notes('', '', '', '', e.labelName, false, 0, '', false))
+        .toList();
+    List<Notes> unLabeledList = [];
+    unLabeledList.addAll(mapedNotes);
+    unLabeledList.addAll(unLabeled);
+    return unLabeledList;
   }
 
   @override
@@ -38,6 +47,7 @@ class _DashMaterialState extends State<DashMaterial> {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
+                  leading: const Icon(Symbols.note),
                   title: Text(
                       '${notes[index].noteTitle} ${notes[index].noteFavorite}'),
                   subtitle: Text(
@@ -68,25 +78,33 @@ class _DashMaterialState extends State<DashMaterial> {
     );
 
     FutureBuilder<List<Notes>> allNotesBuilder = FutureBuilder<List<Notes>>(
-      future: fetchNotesAll(),
+      future: fetchNotes(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             if (snapshot.data!.isNotEmpty) {
               List<Notes> notes = snapshot.data!;
-              notes.sort((a, b) => a.noteLabel.compareTo(b.noteLabel));
+              // notes.sort((a, b) => a.noteLabel.compareTo(b.noteLabel));
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) => ListTile(
-                  leading: const Icon(Symbols.note),
-                  title: Text(notes[index].noteTitle),
-                  subtitle: Text(
-                    notes[index].noteText,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
+                  leading: notes[index].noteTitle.isEmpty
+                      ? const Icon(Symbols.folder)
+                      : const Icon(Symbols.note),
+                  title: Text(notes[index].noteTitle.isEmpty
+                      ? notes[index].noteLabel
+                      : notes[index].noteTitle),
+                  subtitle: notes[index].noteTitle.isEmpty
+                      ? null
+                      : Text(
+                          notes[index].noteText,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                   trailing: ScrawlColorDot(colorCode: notes[index].noteColor),
-                  onTap: () => openNote(notes[index]),
+                  onTap: notes[index].noteTitle.isEmpty
+                      ? null
+                      : () => openNote(notes[index]),
                 ),
               );
             } else {
