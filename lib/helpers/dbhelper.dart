@@ -82,6 +82,7 @@ class DBHelper {
   }
 
   Future<List<Notes>> getNotesAll(String filter, String sortBy) async {
+    print('Searched for $filter');
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: sortBy,
@@ -147,6 +148,14 @@ class DBHelper {
     String id = map['note_id'];
     final rowsAffected =
         await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
+    return (rowsAffected == 1);
+  }
+
+  Future<bool> updateNoteFavorite(String noteId, bool fav) async {
+    Database? db = await instance.database;
+    Map<String, dynamic> map = {'note_favorite': fav ? 1 : 0};
+    final rowsAffected = await db!
+        .update('notes', map, where: 'note_id = ?', whereArgs: [noteId]);
     return (rowsAffected == 1);
   }
 

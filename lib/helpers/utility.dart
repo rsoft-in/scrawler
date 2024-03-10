@@ -59,6 +59,28 @@ class Utility {
     }
   }
 
+  static String readableDate(String dateTime) {
+    if (dateTime.isEmpty) return '';
+    DateTime now = DateTime.now();
+    DateTime date = DateTime.parse(dateTime);
+    var days = now.difference(date).inDays;
+
+    if (days == 0) {
+      return 'today';
+    } else if (days == 1) {
+      return 'yesterday';
+    } else if (days > 1 && days < 30) {
+      return '$days days ago';
+    } else {
+      var mon = (days / 30).ceil();
+      return '${mon}m ago';
+    }
+  }
+
+  static String stripNoteOfMD(String markDown) {
+    return markDown.replaceAll(RegExp(r'[^A-Za-z0-9\s]+'), '');
+  }
+
   static String markDownToHtml(String markDown) {
     var html = markDown;
     html = html.replaceAll('\n', '<br>');

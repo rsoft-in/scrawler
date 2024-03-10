@@ -1,3 +1,4 @@
+import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -6,11 +7,10 @@ class ScrawlSearch extends StatefulWidget {
   final VoidCallback onSearch;
   final VoidCallback onClearSearch;
   ScrawlSearch(
-      {Key? key,
+      {super.key,
       this.controller,
       required this.onSearch,
-      required this.onClearSearch})
-      : super(key: key);
+      required this.onClearSearch});
 
   @override
   State<ScrawlSearch> createState() => _ScrawlSearchState();
@@ -26,7 +26,18 @@ class _ScrawlSearchState extends State<ScrawlSearch> {
       autofocus: false,
       decoration: InputDecoration(
         hintText: 'Search',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            borderSide: BorderSide.none),
+        filled: true,
         prefixIcon: const Icon(Icons.search_outlined),
+        alignLabelWithHint: true,
         suffixIcon: Visibility(
           visible: hasText,
           child: InkWell(

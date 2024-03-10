@@ -1,13 +1,13 @@
 import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/material/label_select_material.dart';
-import 'package:bnotes/widgets/rs_button.dart';
-import 'package:bnotes/widgets/rs_text_button.dart';
 import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:bnotes/widgets/scrawl_color_picker.dart';
+import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -17,7 +17,8 @@ import '../markdown_toolbar.dart';
 
 class NotePageMaterial extends StatefulWidget {
   final Notes note;
-  const NotePageMaterial(this.note, {super.key});
+  final String? preferedLabel;
+  const NotePageMaterial(this.note, this.preferedLabel, {super.key});
 
   @override
   State<NotePageMaterial> createState() => _NotePageMaterialState();
@@ -35,10 +36,23 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   String noteLabel = "";
   DBHelper dbHelper = DBHelper.instance;
   FocusNode editorFocusNode = FocusNode();
+  late SharedPreferences prefs;
 
-  void updateTile() {
+  void checkHelperPreference() async {
+    prefs = await SharedPreferences.getInstance();
+    bool helperDisplayed = prefs.getBool('double_tap_intro') ?? false;
+    if (!helperDisplayed && !editMode) {
+      showSnackBar(context, 'Double Tap on the Note to Edit it!');
+      prefs.setBool('double_tap_intro', true);
+    }
+  }
+
+  void updateTile(String value) {
     setState(() {
-      _note.noteTitle = noteTitleController.text;
+      _note.noteTitle = value;
+      if (!wasEdited) {
+        wasEdited = true;
+      }
     });
   }
 
@@ -48,7 +62,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
       final newNote = Notes(
           uid.v1(),
           Utility.getDateString(),
-          noteTitleController.text,
+          noteTitleController.text.isEmpty
+              ? 'Untitled'
+              : noteTitleController.text,
           noteController.text,
           noteLabel,
           false,
@@ -57,6 +73,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
           favorite);
       await dbHelper.insertNotes(newNote);
     } else {
+      _note.noteTitle = noteTitleController.text.isEmpty
+          ? 'Untitled'
+          : noteTitleController.text;
       _note.noteText = noteController.text;
       _note.noteDate = Utility.getDateString();
       _note.noteColor = noteColor;
@@ -72,12 +91,15 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   @override
   void initState() {
     super.initState();
+    checkHelperPreference();
     _note = widget.note;
     noteTitleController.text = _note.noteTitle;
     noteController.text = _note.noteText;
     noteColor = _note.noteColor;
     favorite = _note.noteFavorite;
-    noteLabel = _note.noteLabel;
+    noteLabel = (widget.preferedLabel != null)
+        ? widget.preferedLabel!
+        : _note.noteLabel;
     if (_note.noteId.isEmpty) {
       editMode = true;
     }
@@ -86,9 +108,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (wasEdited || (widget.note.noteId.isNotEmpty))
-          ? (didPop) => saveNote()
-          : null,
+      onPopInvoked: (wasEdited) ? (didPop) => saveNote() : null,
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -96,22 +116,19 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                 Navigator.pop(context);
               },
               icon: const Icon(Symbols.arrow_back)),
-          title: GestureDetector(
-            onTap: () => editTile(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_note.noteTitle),
-                if (noteLabel.isNotEmpty)
-                  Text(
-                    noteLabel,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey,
-                    ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_note.noteTitle),
+              if (noteLabel.isNotEmpty)
+                Text(
+                  noteLabel,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey,
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
           actions: [
             if (!editMode) ScrawlColorDot(colorCode: noteColor),
@@ -119,6 +136,9 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
               IconButton(
                   onPressed: () => setState(() {
                         favorite = !favorite;
+                        if (!wasEdited) {
+                          wasEdited = true;
+                        }
                       }),
                   icon: favorite
                       ? const Icon(Symbols.favorite, fill: 1)
@@ -135,7 +155,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                     ),
                   ),
                   PopupMenuItem(
-                    child: const Text('Label'),
+                    child: const Text('Move to'),
                     onTap: () => Future.delayed(
                       const Duration(milliseconds: 500),
                       () => assignLabel(),
@@ -160,6 +180,23 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Visibility(
+                visible: editMode,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: TextField(
+                    controller: noteTitleController,
+                    style: const TextStyle(fontSize: 18),
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: const InputDecoration(
+                      hintText: 'Title',
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                    ),
+                    onChanged: (value) => updateTile(value),
+                  ),
+                )),
+            Visibility(
               visible: editMode,
               child: Expanded(
                 child: Padding(
@@ -179,7 +216,6 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                       enabledBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
-                      print('note has been edited');
                       setState(() {
                         widget.note.noteText = value;
                         if (!wasEdited) {
@@ -217,7 +253,6 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                   onChange: () => setState(() {
                     if (!wasEdited) {
                       wasEdited = true;
-                      print('note has been edited');
                     }
                   }),
                 ),
@@ -229,40 +264,6 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     );
   }
 
-  void editTile() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Title'),
-            actions: [
-              RSButton(
-                onPressed: () {
-                  updateTile();
-                  Navigator.pop(context);
-                },
-                child: const Text('Ok'),
-              ),
-              RSTextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-            ],
-            content: Padding(
-              padding: kPaddingMedium,
-              child: TextField(
-                autofocus: true,
-                maxLength: 50,
-                controller: noteTitleController,
-                decoration: const InputDecoration(
-                  counterText: '',
-                ),
-              ),
-            ),
-          );
-        });
-  }
-
   Future<void> editColor() async {
     final colorCode = await showDialog(
         context: context,
@@ -272,6 +273,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     if (colorCode != null) {
       setState(() {
         noteColor = colorCode;
+        wasEdited = true;
       });
     }
   }
@@ -282,6 +284,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     if (labelName != null) {
       setState(() {
         noteLabel = labelName;
+        wasEdited = true;
       });
     }
   }

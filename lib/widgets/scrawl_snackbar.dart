@@ -5,6 +5,7 @@ void showSnackBar(BuildContext context, String message) {
     content: Text(message),
     duration: const Duration(seconds: 3),
     behavior: SnackBarBehavior.floating,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     width: 350,
   ));
 }
