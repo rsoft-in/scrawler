@@ -3,9 +3,10 @@ import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/mobile/material/label_select_material.dart';
 import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:bnotes/widgets/scrawl_color_picker.dart';
-import 'package:bnotes/widgets/scrawl_snackbar.dart';
+import 'package:bnotes/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -37,12 +38,14 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   DBHelper dbHelper = DBHelper.instance;
   FocusNode editorFocusNode = FocusNode();
   late SharedPreferences prefs;
+  late FToast fToast;
 
   void checkHelperPreference() async {
     prefs = await SharedPreferences.getInstance();
     bool helperDisplayed = prefs.getBool('double_tap_intro') ?? false;
     if (!helperDisplayed && !editMode) {
-      showSnackBar(context, 'Double Tap on the Note to Edit it!');
+      fToast.showToast(
+          child: const ScrawlToast('Double Tap on the Note to Edit it!'));
       prefs.setBool('double_tap_intro', true);
     }
   }
@@ -104,6 +107,8 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     if (_note.noteId.isEmpty) {
       editMode = true;
     }
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
