@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:bnotes/helpers/constants.dart';
+import 'package:bnotes/widgets/toast_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -59,21 +59,11 @@ class _BackupRestorePageMaterialState extends State<BackupRestorePageMaterial> {
 
   Future<void> backupNotes() async {
     final path = await _localPath;
-    print(path);
     final file = File('$path/scrawler.bak');
     final notes = await dbHelper.getNotesAll('', 'note_title');
     file.writeAsString(jsonEncode(notes));
     // ignore: use_build_context_synchronously
-    fToast.showToast(
-        child: Container(
-            padding: kGlobalOuterPadding,
-            decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(kBorderRadius)),
-            child: const Text(
-              'Backup Done!',
-              style: TextStyle(color: Colors.white),
-            )));
+    fToast.showToast(child: const ScrawlToast('Backup Done!'));
   }
 
   Future<void> restoreNotes() async {
@@ -89,15 +79,6 @@ class _BackupRestorePageMaterialState extends State<BackupRestorePageMaterial> {
       final result = await dbHelper.insertNotes(note);
       if (result) notesRestored++;
     }
-    fToast.showToast(
-        child: Container(
-            padding: kGlobalOuterPadding,
-            decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(kBorderRadius)),
-            child: Text(
-              '$notesRestored Notes restored',
-              style: const TextStyle(color: Colors.white),
-            )));
+    fToast.showToast(child: ScrawlToast('$notesRestored Notes restored'));
   }
 }
