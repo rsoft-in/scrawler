@@ -32,7 +32,7 @@ class _LabelSelectMaterialState extends State<LabelSelectMaterial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Folder'),
+        title: Text(widget.standalone ? 'Folders' : 'Select Folder'),
       ),
       body: FutureBuilder<List<Label>>(
         future: fetchLabels(),

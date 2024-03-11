@@ -5,7 +5,7 @@ import 'constants.dart';
 ThemeData theme() {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color(0xFF1B1B2F),
+      seedColor: kPrimaryColor,
     ),
     useMaterial3: true,
     fontFamily: 'Inter',
@@ -40,9 +40,7 @@ ThemeData theme() {
 ThemeData themeDark() {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-        seedColor: Colors.black,
-        primary: Colors.white,
-        brightness: Brightness.dark),
+        seedColor: kPrimaryColor, brightness: Brightness.dark),
     useMaterial3: true,
     fontFamily: 'Inter',
     scaffoldBackgroundColor: Colors.black,
@@ -66,15 +64,11 @@ ThemeData themeDark() {
         ),
       ),
     ),
-    popupMenuTheme: const PopupMenuThemeData(
-        color: kDarkPrimary,
-        elevation: 0,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-            side: BorderSide(color: kDarkStroke))),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
       ),
     ),
   );

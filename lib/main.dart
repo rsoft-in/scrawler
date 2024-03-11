@@ -105,7 +105,7 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         title: kAppName,
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         theme: theme(),
         darkTheme: themeDark(),
         routes: {
