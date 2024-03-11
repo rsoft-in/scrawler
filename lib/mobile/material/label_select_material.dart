@@ -7,7 +7,8 @@ import '../../helpers/dbhelper.dart';
 import '../../models/label.dart';
 
 class LabelSelectMaterial extends StatefulWidget {
-  const LabelSelectMaterial({super.key});
+  final bool standalone;
+  const LabelSelectMaterial({super.key, this.standalone = false});
 
   @override
   State<LabelSelectMaterial> createState() => _LabelSelectMaterialState();
@@ -31,7 +32,7 @@ class _LabelSelectMaterialState extends State<LabelSelectMaterial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Label'),
+        title: const Text('Select Folder'),
       ),
       body: FutureBuilder<List<Label>>(
         future: fetchLabels(),
@@ -46,14 +47,16 @@ class _LabelSelectMaterialState extends State<LabelSelectMaterial> {
                     return ListTile(
                       leading: const Icon(Symbols.folder),
                       title: Text(labels[index].labelName),
-                      onTap: () =>
-                          Navigator.pop(context, labels[index].labelName),
+                      onTap: widget.standalone
+                          ? null
+                          : () =>
+                              Navigator.pop(context, labels[index].labelName),
                     );
                   },
                 );
               } else {
                 return const Center(
-                  child: Text('No Labels created yet!'),
+                  child: Text('No Folders created yet!'),
                 );
               }
             case ConnectionState.waiting:

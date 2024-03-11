@@ -93,7 +93,8 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
     super.initState();
     checkHelperPreference();
     _note = widget.note;
-    noteTitleController.text = _note.noteTitle;
+    noteTitleController.text =
+        _note.noteTitle.toLowerCase() == 'untitled' ? '' : _note.noteTitle;
     noteController.text = _note.noteText;
     noteColor = _note.noteColor;
     favorite = _note.noteFavorite;
@@ -119,7 +120,10 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(_note.noteTitle),
+              Text(
+                _note.noteTitle,
+                style: const TextStyle(fontSize: 18),
+              ),
               if (noteLabel.isNotEmpty)
                 Text(
                   noteLabel,
@@ -141,25 +145,51 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                         }
                       }),
                   icon: favorite
-                      ? const Icon(Symbols.favorite, fill: 1)
+                      ? Icon(
+                          Symbols.favorite,
+                          fill: 1,
+                          color: Colors.red.shade300,
+                        )
                       : const Icon(Symbols.favorite)),
             if (!editMode)
               PopupMenuButton(
-                icon: const Icon(Symbols.more_horiz),
+                icon: const Icon(Symbols.more_vert),
                 itemBuilder: (context) => [
                   PopupMenuItem(
-                    child: const Text('Color'),
+                    child: const Row(
+                      children: [
+                        Icon(Symbols.color_lens),
+                        kHSpace,
+                        Expanded(child: Text('Color')),
+                      ],
+                    ),
                     onTap: () => Future.delayed(
                       const Duration(milliseconds: 500),
                       () => editColor(),
                     ),
                   ),
                   PopupMenuItem(
-                    child: const Text('Move to'),
+                    child: const Row(
+                      children: [
+                        Icon(Symbols.folder),
+                        kHSpace,
+                        Text('Move to'),
+                      ],
+                    ),
                     onTap: () => Future.delayed(
                       const Duration(milliseconds: 500),
                       () => assignLabel(),
                     ),
+                  ),
+                  PopupMenuItem(
+                    child: const Row(
+                      children: [
+                        Icon(Symbols.delete),
+                        kHSpace,
+                        Text('Delete'),
+                      ],
+                    ),
+                    onTap: () {},
                   ),
                 ],
               ),
@@ -185,7 +215,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: TextField(
                     controller: noteTitleController,
-                    style: const TextStyle(fontSize: 18),
+                    style: const TextStyle(fontSize: 24),
                     textCapitalization: TextCapitalization.sentences,
                     decoration: const InputDecoration(
                       hintText: 'Title',
@@ -227,6 +257,15 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
                 ),
               ),
             ),
+            Visibility(
+                visible: !editMode,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    widget.note.noteTitle,
+                    style: const TextStyle(fontSize: 24),
+                  ),
+                )),
             Visibility(
               visible: !editMode,
               child: Expanded(

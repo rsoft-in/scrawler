@@ -51,7 +51,13 @@ class _FolderPageMaterialState extends State<FolderPageMaterial> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.folderName),
+        title: Row(
+          children: [
+            const Icon(Symbols.folder),
+            kHSpace,
+            Expanded(child: Text(widget.folderName)),
+          ],
+        ),
       ),
       body: FutureBuilder<List<Notes>>(
         future: fetchNotesByFolder(),
@@ -107,8 +113,10 @@ class _FolderPageMaterialState extends State<FolderPageMaterial> {
   }
 
   void openNote(Notes note) async {
-    await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => NotePageMaterial(note, widget.folderName)));
+    await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => NotePageMaterial(note, widget.folderName)));
 
     setState(() {});
   }

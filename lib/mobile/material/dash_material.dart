@@ -9,6 +9,7 @@ import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_alert_dialog.dart';
 import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import '../../widgets/scrawl_color_picker.dart';
@@ -24,6 +25,7 @@ class DashMaterial extends StatefulWidget {
 
 class _DashMaterialState extends State<DashMaterial> {
   DBHelper dbHelper = DBHelper.instance;
+  final _fabKey = GlobalKey<ExpandableFabState>();
 
   Future<List<Notes>> fetchNotesFav() async {
     return await dbHelper.getNotesFavorite();
@@ -208,10 +210,48 @@ class _DashMaterialState extends State<DashMaterial> {
           favNotesBuilder,
           allNotesBuilder,
         ]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => openNote(Notes.empty()),
-          child: const Icon(Symbols.add),
-        ),
+        floatingActionButtonLocation: ExpandableFab.location,
+        floatingActionButton: ExpandableFab(
+            key: _fabKey,
+            openButtonBuilder: RotateFloatingActionButtonBuilder(
+                child: const Icon(Symbols.add)),
+            closeButtonBuilder: RotateFloatingActionButtonBuilder(
+                child: const Icon(Symbols.close),
+                backgroundColor: kPrimaryColor,
+                foregroundColor: Colors.white),
+            distance: 80,
+            type: ExpandableFabType.up,
+            children: [
+              FloatingActionButton.extended(
+                heroTag: 'note',
+                onPressed: () {
+                  final state = _fabKey.currentState;
+                  if (state != null) {
+                    state.toggle();
+                  }
+                  openNote(Notes.empty());
+                },
+                icon: const Icon(Symbols.note_add),
+                label: const Text('Note'),
+              ),
+              FloatingActionButton.extended(
+                heroTag: 'folder',
+                onPressed: () {
+                  final state = _fabKey.currentState;
+                  if (state != null) {
+                    state.toggle();
+                  }
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LabelSelectMaterial(
+                                standalone: true,
+                              )));
+                },
+                label: const Text('Folder'),
+                icon: const Icon(Symbols.folder),
+              ),
+            ]),
       ),
     );
   }
