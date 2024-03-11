@@ -1,6 +1,7 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
 import 'package:bnotes/helpers/utility.dart';
+import 'package:bnotes/mobile/material/backup_restore_material.dart';
 import 'package:bnotes/mobile/material/folder_material.dart';
 import 'package:bnotes/mobile/material/note_material.dart';
 import 'package:bnotes/mobile/material/search_material.dart';
@@ -372,8 +373,8 @@ class _DashMaterialState extends State<DashMaterial> {
           return Padding(
             padding: kGlobalOuterPadding,
             child: ListView(
-              children: const [
-                ListTile(
+              children: [
+                const ListTile(
                   leading: CircleAvatar(
                     child: Icon(Symbols.person),
                   ),
@@ -381,15 +382,26 @@ class _DashMaterialState extends State<DashMaterial> {
                   subtitle: Text('Free Account'),
                 ),
                 ListTile(
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     child: Icon(Symbols.home_storage),
                   ),
-                  title: Text('Backup'),
-                  subtitle: Text('last backup:'),
+                  title: const Text('Backup & Restore'),
+                  subtitle: const Text('Locally backup notes'),
+                  onTap: () => backupRestore(),
                 ),
               ],
             ),
           );
         });
+  }
+
+  Future<void> backupRestore() async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const BackupRestorePageMaterial(),
+      ),
+    );
+    setState(() {});
   }
 }

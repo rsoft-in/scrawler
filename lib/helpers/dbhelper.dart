@@ -166,6 +166,13 @@ class DBHelper {
     return (rowsAffected == 1);
   }
 
+  Future<bool> deleteNotesAll() async {
+    Database? db = await instance.database;
+    int rowsAffected =
+        await db!.delete('notes');
+    return (rowsAffected > 0);
+  }
+
   Future<bool> clearNotes() async {
     Database? db = await instance.database;
     int rowsAffected = await db!.delete('notes');
