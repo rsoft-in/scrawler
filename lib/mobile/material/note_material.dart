@@ -60,7 +60,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
   }
 
   Future<void> saveNote() async {
-    if (widget.note.noteId.isEmpty) {
+    if (_note.noteId.isEmpty) {
       var uid = const Uuid();
       final newNote = Notes(
           uid.v1(),
@@ -74,6 +74,7 @@ class _NotePageMaterialState extends State<NotePageMaterial> {
           noteColor,
           '',
           favorite);
+      _note = newNote;
       await dbHelper.insertNotes(newNote);
     } else {
       _note.noteTitle = noteTitleController.text.isEmpty
