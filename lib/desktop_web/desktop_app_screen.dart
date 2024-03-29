@@ -21,18 +21,15 @@ import '../providers/labels_api_provider.dart';
 import '../providers/notes_api_provider.dart';
 
 class DesktopApp extends StatefulWidget {
-  const DesktopApp({Key? key}) : super(key: key);
+  const DesktopApp({super.key});
 
   @override
   State<DesktopApp> createState() => _DesktopAppState();
 }
 
 class _DesktopAppState extends State<DesktopApp> {
-  final GlobalKey<ScaffoldState> _desktopKey = GlobalKey();
-
   late SharedPreferences prefs;
   ScreenSize _screenSize = ScreenSize.large;
-  final int _pageNr = 0;
   bool isBusy = false;
   List<Notes> notesList = [];
   List<Label> labelsList = [];
@@ -125,18 +122,13 @@ class _DesktopAppState extends State<DesktopApp> {
   @override
   Widget build(BuildContext context) {
     _screenSize = getScreenSize(context);
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
 
     Widget drawer = Container(
       width: 280,
       // padding: const EdgeInsets.all(10),
       decoration: const BoxDecoration(
-        color: kLightPrimary,
         border: Border(
-          right: BorderSide(color: kLightStroke),
+          right: BorderSide(color: Colors.grey),
         ),
       ),
       child: Padding(
@@ -208,8 +200,7 @@ class _DesktopAppState extends State<DesktopApp> {
                                     label: note.noteTitle,
                                     trailing: ScrawlColorDot(
                                         colorCode: note.noteColor),
-                                  ))
-                              .toList(),
+                                  )),
                         ],
                       ),
                     ),
@@ -249,7 +240,7 @@ class _DesktopAppState extends State<DesktopApp> {
                           padding: const EdgeInsets.all(8.0),
                           decoration: const BoxDecoration(
                               border: Border(
-                                  bottom: BorderSide(color: kLightStroke))),
+                                  bottom: BorderSide(color: Colors.grey))),
                           child: Row(
                             children: [
                               const Icon(Symbols.description),
@@ -472,7 +463,7 @@ class _DesktopAppState extends State<DesktopApp> {
   void signOut() async {
     prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     }
   }

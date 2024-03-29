@@ -56,7 +56,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
         prefs.setString('user_otp', globals.user!.userOtp);
         prefs.setString('user_pwd', globals.user!.userPwd);
         prefs.setBool('user_enabled', globals.user!.userEnabled);
-        if (context.mounted) {
+        if (mounted) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (BuildContext context) => const DesktopApp()),
@@ -80,7 +80,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
     showSnackBar(context, 'Sending OTP...');
     final result = await UserApiProvider.forgotPasswordVerification(post);
     if (result['error'].toString().isEmpty) {
-      if (context.mounted) {
+      if (mounted) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -90,7 +90,7 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             (route) => false);
       }
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, result['error']);
       }
     }
@@ -112,10 +112,6 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
 
     Widget loginContent = SingleChildScrollView(
       child: Form(
@@ -316,12 +312,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
               ),
             ),
             bottomSheet: Container(
-              decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkSecondary : kLightSecondary,
-                  border: Border(
-                      top: BorderSide(
-                          color: darkModeOn ? kDarkStroke : kLightStroke,
-                          width: 2))),
+              decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(width: 2))),
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 70, vertical: 30),

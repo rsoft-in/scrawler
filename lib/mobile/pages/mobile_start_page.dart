@@ -6,7 +6,7 @@ import 'package:universal_platform/universal_platform.dart';
 import '../../helpers/constants.dart';
 
 class MobileStartPage extends StatefulWidget {
-  const MobileStartPage({Key? key}) : super(key: key);
+  const MobileStartPage({super.key});
 
   @override
   State<MobileStartPage> createState() => _MobileStartPageState();

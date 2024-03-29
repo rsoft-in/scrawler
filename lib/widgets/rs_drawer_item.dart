@@ -9,13 +9,12 @@ class RSDrawerItem extends StatefulWidget {
   final Widget? trailing;
   final bool indent;
   const RSDrawerItem(
-      {Key? key,
+      {super.key,
       this.icon,
       required this.label,
       required this.onTap,
       this.trailing,
-      this.indent = false})
-      : super(key: key);
+      this.indent = false});
 
   @override
   State<RSDrawerItem> createState() => _RSDrawerItemState();

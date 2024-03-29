@@ -2,7 +2,7 @@ import 'package:bnotes/helpers/string_values.dart';
 import 'package:flutter/material.dart';
 
 class DesktopTasksScreen extends StatefulWidget {
-  const DesktopTasksScreen({Key? key}) : super(key: key);
+  const DesktopTasksScreen({super.key});
 
   @override
   State<DesktopTasksScreen> createState() => _DesktopTasksScreenState();

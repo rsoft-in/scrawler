@@ -1,21 +1,14 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 
 class ScrawlOutlinedIconButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final IconData icon;
   const ScrawlOutlinedIconButton(
-      {Key? key, required this.icon, required this.onPressed})
-      : super(key: key);
+      {super.key, required this.icon, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
-
     return InkWell(
       borderRadius: BorderRadius.circular(5),
       onTap: onPressed,

@@ -17,7 +17,7 @@ import 'desktop_app_screen.dart';
 import 'desktop_sign_in.dart';
 
 class DesktopSignUp extends StatefulWidget {
-  const DesktopSignUp({Key? key}) : super(key: key);
+  const DesktopSignUp({super.key});
 
   @override
   State<DesktopSignUp> createState() => _DesktopSignUpState();
@@ -88,7 +88,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
         prefs.setString('user_pwd', globals.user!.userPwd);
         prefs.setBool('user_enabled', globals.user!.userEnabled);
         setState(() {});
-        if (context.mounted) {
+        if (mounted) {
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                   builder: (BuildContext context) => const DesktopApp()),
@@ -300,9 +300,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
             borderRadius: BorderRadius.circular(5),
             child: Container(
               decoration: BoxDecoration(
-                color: darkModeOn ? kDarkPrimary : kLightPrimary,
-                border: Border.all(
-                    color: darkModeOn ? kDarkStroke : kLightStroke, width: 2),
+                border: Border.all(width: 2),
                 borderRadius: BorderRadius.circular(5),
               ),
               padding: const EdgeInsets.all(7),
@@ -376,7 +374,6 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
     return kIsWeb
         ? Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             body: Row(
               children: [
                 if (isDesktop)
@@ -397,11 +394,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 50),
                         decoration: BoxDecoration(
-                            color: darkModeOn ? kDarkPrimary : kLightPrimary,
                             borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                                color: darkModeOn ? kDarkStroke : kLightStroke,
-                                width: 2)),
+                            border: Border.all(width: 2)),
                         child: signupContent,
                       ),
                     ),
@@ -426,12 +420,8 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
               // ),
             ),
             bottomSheet: Container(
-              decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkSecondary : kLightSecondary,
-                  border: Border(
-                      top: BorderSide(
-                          color: darkModeOn ? kDarkStroke : kLightStroke,
-                          width: 2))),
+              decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(width: 2))),
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 70, vertical: 30),

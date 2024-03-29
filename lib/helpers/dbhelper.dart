@@ -82,7 +82,6 @@ class DBHelper {
   }
 
   Future<List<Notes>> getNotesAll(String filter, String sortBy) async {
-    print('Searched for $filter');
     Database? db = await instance.database;
     var parsed = await db!.query('notes',
         orderBy: sortBy,

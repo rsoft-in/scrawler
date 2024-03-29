@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DesktopArchiveScreen extends StatefulWidget {
-  const DesktopArchiveScreen({Key? key}) : super(key: key);
+  const DesktopArchiveScreen({super.key});
 
   @override
   State<DesktopArchiveScreen> createState() => _DesktopArchiveScreenState();

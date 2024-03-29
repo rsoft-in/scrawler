@@ -6,8 +6,7 @@ class EmptyWidget extends StatelessWidget {
   final double width;
   final String asset;
   const EmptyWidget(
-      {Key? key, required this.text, required this.width, required this.asset})
-      : super(key: key);
+      {super.key, required this.text, required this.width, required this.asset});
 
   @override
   Widget build(BuildContext context) {

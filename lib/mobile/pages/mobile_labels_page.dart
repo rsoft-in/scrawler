@@ -7,7 +7,7 @@ import '../../models/label.dart';
 
 class MobileLabelsPage extends StatefulWidget {
   final String preselect;
-  const MobileLabelsPage({Key? key, required this.preselect}) : super(key: key);
+  const MobileLabelsPage({super.key, required this.preselect});
 
   @override
   State<MobileLabelsPage> createState() => _MobileLabelsPageState();

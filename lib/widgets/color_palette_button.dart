@@ -7,11 +7,10 @@ class ColorPaletteButton extends StatelessWidget {
   final bool isSelected;
 
   const ColorPaletteButton(
-      {Key? key,
+      {super.key,
       required this.onTap,
       required this.color,
-      required this.isSelected})
-      : super(key: key);
+      required this.isSelected});
 
   @override
   Widget build(BuildContext context) {

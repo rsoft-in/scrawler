@@ -1,20 +1,15 @@
 // import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class WindowControls extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   final showMaxButton;
-  const WindowControls({Key? key, this.showMaxButton = true}) : super(key: key);
+  const WindowControls({super.key, this.showMaxButton = true});
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
     return Row(
       mainAxisAlignment: UniversalPlatform.isMacOS
           ? MainAxisAlignment.start

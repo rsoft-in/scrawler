@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ScrawlLabelChip extends StatelessWidget {
   final String label;
-  const ScrawlLabelChip({Key? key, required this.label}) : super(key: key);
+  const ScrawlLabelChip({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {

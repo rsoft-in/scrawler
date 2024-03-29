@@ -4,7 +4,7 @@ import '../helpers/note_color.dart';
 
 class ScrawlColorDot extends StatelessWidget {
   final int colorCode;
-  const ScrawlColorDot({Key? key, required this.colorCode}) : super(key: key);
+  const ScrawlColorDot({super.key, required this.colorCode});
 
   @override
   Widget build(BuildContext context) {

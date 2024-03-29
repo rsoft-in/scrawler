@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopLanding extends StatefulWidget {
-  const DesktopLanding({Key? key}) : super(key: key);
+  const DesktopLanding({super.key});
 
   @override
   State<DesktopLanding> createState() => _DesktopLandingState();

@@ -14,7 +14,7 @@ class RSTextField extends StatelessWidget {
   final Function()? onEditingComplete;
 
   const RSTextField({
-    Key? key,
+    super.key,
     this.controller,
     required this.hintText,
     this.obscureText = false,
@@ -24,7 +24,7 @@ class RSTextField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.onEditingComplete
-  }) : super(key: key);
+  });
 
   // String? _validate(String? value) {
   //   if (notEmpty && (value == null || value.isEmpty)) {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../helpers/note_color.dart';
 
 class ScrawlColorPicker extends StatelessWidget {
-  const ScrawlColorPicker({Key? key}) : super(key: key);
+  const ScrawlColorPicker({super.key});
 
   @override
   Widget build(BuildContext context) {

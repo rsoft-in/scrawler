@@ -1,6 +1,5 @@
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/dbhelper.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
 import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
 import 'package:bnotes/models/notes.dart';
@@ -16,7 +15,7 @@ import '../../models/sort_items.dart';
 import '../../widgets/scrawl_snackbar.dart';
 
 class MobileNotesPage extends StatefulWidget {
-  const MobileNotesPage({Key? key}) : super(key: key);
+  const MobileNotesPage({super.key});
 
   @override
   State<MobileNotesPage> createState() => _MobileNotesPageState();
@@ -52,10 +51,6 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
     return Scaffold(
       body: isLoading
           ? const Center(
@@ -257,7 +252,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   void deleteNote(Notes note) async {
     final result = await dbHelper.deleteNotes(note.noteId);
     if (!result) {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, 'Failed to delete!');
       }
     } else {
@@ -273,7 +268,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   void updateNoteColor(Notes note, int colorCode) async {
     final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
     if (!result) {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, 'Failed to update!');
       }
     }
@@ -282,7 +277,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   void updateNoteLabel(Notes note, String label) async {
     final result = await dbHelper.updateNoteLabel(note.noteId, label);
     if (!result) {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, 'Failed to update!');
       }
     }

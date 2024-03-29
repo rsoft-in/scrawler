@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../helpers/dbhelper.dart';
 
 class MobileSettingsPage extends StatefulWidget {
-  const MobileSettingsPage({Key? key}) : super(key: key);
+  const MobileSettingsPage({super.key});
 
   @override
   State<MobileSettingsPage> createState() => _MobileSettingsPageState();
@@ -183,7 +183,7 @@ class _MobileSettingsPageState extends State<MobileSettingsPage> {
       prefs.setInt('themeMode', themeCode);
       Phoenix.rebirth(context);
     });
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pop(context);
     }
   }

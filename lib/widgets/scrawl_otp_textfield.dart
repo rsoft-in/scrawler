@@ -7,12 +7,11 @@ class ScrawlOtpTextField extends StatefulWidget {
   final int length;
 
   const ScrawlOtpTextField(
-      {Key? key,
+      {super.key,
       this.onChanged,
       this.onCompleted,
       this.length = 4,
-      required this.otpController})
-      : super(key: key);
+      required this.otpController});
 
   @override
   State<ScrawlOtpTextField> createState() => ScrawlOtpTextFieldState();

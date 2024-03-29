@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MobileTasksPage extends StatefulWidget {
-  const MobileTasksPage({Key? key}) : super(key: key);
+  const MobileTasksPage({super.key});
 
   @override
   State<MobileTasksPage> createState() => _MobileTasksPageState();

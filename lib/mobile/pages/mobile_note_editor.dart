@@ -20,8 +20,8 @@ class MobileNoteEditor extends StatefulWidget {
   final Notes note;
   final bool? editMode;
 
-  const MobileNoteEditor({Key? key, required this.note, this.editMode = false})
-      : super(key: key);
+  const MobileNoteEditor(
+      {super.key, required this.note, this.editMode = false});
 
   @override
   State<MobileNoteEditor> createState() => _MobileNoteEditorState();
@@ -337,9 +337,13 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     final res = await saveNote();
     if (context.mounted) {
       if (res) {
-        Navigator.pop(context, true);
+        if (mounted) {
+          Navigator.pop(context, true);
+        }
       } else {
-        Navigator.pop(context, noteUpdated);
+        if (mounted) {
+          Navigator.pop(context, noteUpdated);
+        }
       }
     }
     return false;
@@ -561,7 +565,9 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
     }
     if (!result) {
       if (context.mounted) {
-        showSnackBar(context, 'Failed to save!');
+        if (mounted) {
+          showSnackBar(context, 'Failed to save!');
+        }
       }
     }
     return result;
@@ -570,7 +576,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   void updateNoteColor(Notes note, int colorCode) async {
     final result = await dbHelper.updateNoteColor(note.noteId, colorCode);
     if (!result) {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, 'Failed to update!');
       }
     }
@@ -579,7 +585,7 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
   void updateNoteLabel(Notes note, String label) async {
     final result = await dbHelper.updateNoteLabel(note.noteId, label);
     if (!result) {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, 'Failed to update!');
       }
     }

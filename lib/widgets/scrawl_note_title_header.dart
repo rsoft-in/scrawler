@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NoteTitleWidget extends StatelessWidget {
   final String text;
-  const NoteTitleWidget({Key? key, required this.text}) : super(key: key);
+  const NoteTitleWidget({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

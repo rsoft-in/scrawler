@@ -1,13 +1,11 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:flutter/material.dart';
 
 class ScrawlFilledButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   const ScrawlFilledButton(
-      {Key? key, required this.label, required this.onPressed})
-      : super(key: key);
+      {super.key, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

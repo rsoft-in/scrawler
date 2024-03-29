@@ -12,8 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DesktopForgotPassword extends StatefulWidget {
   final String email;
-  const DesktopForgotPassword({Key? key, required this.email})
-      : super(key: key);
+  const DesktopForgotPassword({super.key, required this.email});
 
   @override
   State<DesktopForgotPassword> createState() => _DesktopForgotPasswordState();
@@ -46,7 +45,7 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
         otpVerified = true;
       });
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, result['error']);
       }
     }
@@ -67,14 +66,14 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
     };
     final result = await UserApiProvider.updatePassword(post);
     if (result['error'].toString().isEmpty) {
-      if (context.mounted) {
+      if (mounted) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const DesktopSignIn()),
             (route) => false);
       }
     } else {
-      if (context.mounted) {
+      if (mounted) {
         showSnackBar(context, result['error']);
       }
     }
@@ -88,10 +87,6 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
   @override
   Widget build(BuildContext context) {
     isDesktop = isDisplayDesktop(context);
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
 
     Widget loginContent = SingleChildScrollView(
       child: Form(
@@ -207,7 +202,6 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
     return kIsWeb
         ? Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             body: Row(
               children: [
                 if (isDesktop)
@@ -228,12 +222,8 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 50),
                           decoration: BoxDecoration(
-                              color: darkModeOn ? kDarkPrimary : kLightPrimary,
                               borderRadius: BorderRadius.circular(5),
-                              border: Border.all(
-                                  color:
-                                      darkModeOn ? kDarkStroke : kLightStroke,
-                                  width: 2)),
+                              border: Border.all(width: 2)),
                           child: loginContent),
                     ),
                   ),
@@ -322,12 +312,8 @@ class _DesktopForgotPasswordState extends State<DesktopForgotPassword> {
               ),
             ),
             bottomSheet: Container(
-              decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkSecondary : kLightSecondary,
-                  border: Border(
-                      top: BorderSide(
-                          color: darkModeOn ? kDarkStroke : kLightStroke,
-                          width: 2))),
+              decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(width: 2))),
               child: Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 70, vertical: 30),

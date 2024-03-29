@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MobileSignIn extends StatefulWidget {
-  const MobileSignIn({Key? key}) : super(key: key);
+  const MobileSignIn({super.key});
 
   @override
   State<MobileSignIn> createState() => _MobileSignInState();

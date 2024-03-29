@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopProfileScreen extends StatefulWidget {
-  const DesktopProfileScreen({Key? key}) : super(key: key);
+  const DesktopProfileScreen({super.key});
 
   @override
   State<DesktopProfileScreen> createState() => _DesktopProfileScreenState();
@@ -144,7 +144,7 @@ class _DesktopProfileScreenState extends State<DesktopProfileScreen> {
   void signOut() async {
     prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
     }
   }

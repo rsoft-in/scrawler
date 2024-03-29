@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MobileAboutPage extends StatefulWidget {
-  const MobileAboutPage({Key? key}) : super(key: key);
+  const MobileAboutPage({super.key});
 
   @override
   State<MobileAboutPage> createState() => _MobileAboutPageState();

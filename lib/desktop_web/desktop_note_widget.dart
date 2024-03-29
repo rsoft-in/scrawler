@@ -1,6 +1,4 @@
 import 'package:bnotes/mobile/markdown_toolbar.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:flutter/material.dart';
@@ -13,22 +11,19 @@ import '../helpers/constants.dart';
 class DesktopNoteWidget extends StatefulWidget {
   final Notes note;
   final VoidCallback onSave;
-  const DesktopNoteWidget({Key? key, required this.note, required this.onSave})
-      : super(key: key);
+  const DesktopNoteWidget({super.key, required this.note, required this.onSave});
 
   @override
   State<DesktopNoteWidget> createState() => _DesktopNoteWidgetState();
 }
 
 class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
-  ScreenSize _screenSize = ScreenSize.large;
   bool editMode = false;
   TextEditingController noteController = TextEditingController();
   UndoHistoryController undoController = UndoHistoryController();
 
   @override
   Widget build(BuildContext context) {
-    _screenSize = getScreenSize(context);
     setState(() {
       noteController.text = widget.note.noteText;
     });

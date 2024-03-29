@@ -6,7 +6,7 @@ import '../models/notes.dart';
 
 class DesktopNoteToolbar extends StatelessWidget {
   final Notes note;
-  const DesktopNoteToolbar(this.note, {Key? key}) : super(key: key);
+  const DesktopNoteToolbar(this.note, {super.key});
 
   @override
   Widget build(BuildContext context) {

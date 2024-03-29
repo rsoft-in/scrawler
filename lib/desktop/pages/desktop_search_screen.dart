@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DesktopSearchScreen extends StatefulWidget {
-  const DesktopSearchScreen({Key? key}) : super(key: key);
+  const DesktopSearchScreen({super.key});
 
   @override
   State<DesktopSearchScreen> createState() => _DesktopSearchScreenState();

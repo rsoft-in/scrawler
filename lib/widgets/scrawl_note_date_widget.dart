@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class NoteDateWidget extends StatelessWidget {
   final String text;
-  const NoteDateWidget({Key? key, required this.text}) : super(key: key);
+  const NoteDateWidget({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

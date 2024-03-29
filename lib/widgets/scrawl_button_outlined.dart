@@ -1,5 +1,3 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -7,16 +5,10 @@ class ScrawlOutlinedButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final String label;
   const ScrawlOutlinedButton(
-      {Key? key, required this.label, required this.onPressed})
-      : super(key: key);
+      {super.key, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
-
     return InkWell(
       onTap: onPressed,
       child: Container(

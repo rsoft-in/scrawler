@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
 
 class MobileHomePage extends StatefulWidget {
-  const MobileHomePage({Key? key}) : super(key: key);
+  const MobileHomePage({super.key});
 
   @override
   State<MobileHomePage> createState() => _MobileHomePageState();

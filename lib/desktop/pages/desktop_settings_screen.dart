@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DesktopSettingsScreen extends StatefulWidget {
-  const DesktopSettingsScreen({Key? key}) : super(key: key);
+  const DesktopSettingsScreen({super.key});
 
   @override
   State<DesktopSettingsScreen> createState() => D_SettingsStatePage();

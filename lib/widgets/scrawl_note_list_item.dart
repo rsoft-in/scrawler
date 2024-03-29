@@ -3,7 +3,6 @@ import 'package:bnotes/helpers/note_color.dart';
 import 'package:bnotes/helpers/utility.dart';
 import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 
 // ignore: must_be_immutable
 class NoteListItemWidget extends StatefulWidget {
@@ -13,13 +12,12 @@ class NoteListItemWidget extends StatefulWidget {
   VoidCallback? onTap;
   VoidCallback? onLongPress;
   NoteListItemWidget(
-      {Key? key,
+      {super.key,
       required this.note,
       required this.selectedIndex,
       required this.isSelected,
       this.onTap,
-      this.onLongPress})
-      : super(key: key);
+      this.onLongPress});
 
   @override
   State<NoteListItemWidget> createState() => _NoteListItemWidgetState();
@@ -28,11 +26,6 @@ class NoteListItemWidget extends StatefulWidget {
 class _NoteListItemWidgetState extends State<NoteListItemWidget> {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,

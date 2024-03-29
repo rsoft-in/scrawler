@@ -28,7 +28,7 @@ import '../../widgets/scrawl_add_button.dart';
 import '../../widgets/scrawl_circular_progress.dart';
 
 class DesktopNotesScreen extends StatefulWidget {
-  const DesktopNotesScreen({Key? key}) : super(key: key);
+  const DesktopNotesScreen({super.key});
 
   @override
   State<DesktopNotesScreen> createState() => _DesktopNotesScreenState();
@@ -336,11 +336,9 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
     Widget readerHead = Container(
       alignment: Alignment.centerLeft,
       height: 56,
-      decoration: BoxDecoration(
-        color: darkModeOn ? kDarkPrimary : kLightPrimary,
+      decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-              color: darkModeOn ? kDarkStroke : kLightStroke, width: 2),
+          bottom: BorderSide(width: 2),
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -375,7 +373,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
         SizedBox(
           width: 350,
           child: Scaffold(
-            backgroundColor: darkModeOn ? kDarkSecondary : kLightSecondary,
             appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56),
               child: appBar,
@@ -484,7 +481,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                         ),
                       ),
                       Container(
-                        color: darkModeOn ? kDarkSecondary : kLightSecondary,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 15.0),
                         child: Row(
@@ -568,30 +564,26 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                                       onTapLink: (text, href, title) =>
                                           _launchUrl(href),
                                       styleSheet: MarkdownStyleSheet(
-                                          blockquote: const TextStyle(
-                                              color: Colors.black),
-                                          blockquoteDecoration:
-                                              const BoxDecoration(
-                                            color: Colors.transparent,
-                                            border: Border(
-                                              left: BorderSide(
-                                                  color: kPrimaryColor,
-                                                  width: 3),
-                                            ),
+                                        blockquote: const TextStyle(
+                                            color: Colors.black),
+                                        blockquoteDecoration:
+                                            const BoxDecoration(
+                                          color: Colors.transparent,
+                                          border: Border(
+                                            left: BorderSide(
+                                                color: kPrimaryColor, width: 3),
                                           ),
-                                          code: const TextStyle(
-                                              backgroundColor:
-                                                  Colors.transparent),
-                                          codeblockAlign:
-                                              WrapAlignment.spaceAround,
-                                          codeblockDecoration: BoxDecoration(
-                                              color: darkModeOn
-                                                  ? Colors.white10
-                                                  : Colors.black12),
-                                          checkbox: TextStyle(
-                                              color: darkModeOn
-                                                  ? kLightPrimary
-                                                  : kDarkPrimary)),
+                                        ),
+                                        code: const TextStyle(
+                                            backgroundColor:
+                                                Colors.transparent),
+                                        codeblockAlign:
+                                            WrapAlignment.spaceAround,
+                                        codeblockDecoration: BoxDecoration(
+                                            color: darkModeOn
+                                                ? Colors.white10
+                                                : Colors.black12),
+                                      ),
                                       data: filteredNotes.isEmpty
                                           ? ''
                                           : filteredNotes[selectedIndex]
@@ -605,8 +597,6 @@ class _DesktopNotesScreenState extends State<DesktopNotesScreen> {
                           visible: isSelected && !editMode,
                           replacement: Container(),
                           child: Material(
-                            color:
-                                darkModeOn ? kDarkSecondary : kLightSecondary,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(

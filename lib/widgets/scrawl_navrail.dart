@@ -1,5 +1,3 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
 
 class ScrawlNavRailItem extends StatefulWidget {
@@ -9,13 +7,12 @@ class ScrawlNavRailItem extends StatefulWidget {
   final IconData icon;
   final VoidCallback onTap;
   const ScrawlNavRailItem(
-      {Key? key,
+      {super.key,
       required this.index,
       required this.tooltip,
       required this.selectedIndex,
       required this.icon,
-      required this.onTap})
-      : super(key: key);
+      required this.onTap});
 
   @override
   State<ScrawlNavRailItem> createState() => _ScrawlNavRailItemState();
@@ -24,10 +21,6 @@ class ScrawlNavRailItem extends StatefulWidget {
 class _ScrawlNavRailItemState extends State<ScrawlNavRailItem> {
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
     return Tooltip(
       message: widget.tooltip,
       child: InkWell(
