@@ -7,18 +7,18 @@ const kGithubUrl = 'https://github.com/rsoft-in/scrawler';
 const kPrimaryColor = Color(0xFF6750A4);
 const kAlertColor = Color(0xFFD12A4C);
 
-const kLightPrimary = Color(0xFFF8F8F8);
-const kLightSecondary = Color(0xFFF4F4F4);
-const kLightStroke = Color(0xFFDBDBDB);
-const kLightScaffold = Color(0xFFFFFFFF);
-const kLightSelected = Color(0xFFEFEFEF);
+// const kLightPrimary = Color(0xFFF8F8F8);
+// const kLightSecondary = Color(0xFFF4F4F4);
+// const kLightStroke = Color(0xFFDBDBDB);
+// const kLightScaffold = Color(0xFFFFFFFF);
+// const kLightSelected = Color(0xFFEFEFEF);
 
-const kDarkPrimary = Color(0xFF262626);
-const kDarkSecondary = Color(0xFF1D1D1D);
-const kDarkStroke = Color(0xFF363636);
-const kDarkScaffold = Color(0xFF191919);
-const kDarkSelected = Color(0xFFF4F4F4);
-const kDarkBody = Color(0xFF1A1A1A);
+// const kDarkPrimary = Color(0xFF262626);
+// const kDarkSecondary = Color(0xFF1D1D1D);
+// const kDarkStroke = Color(0xFF363636);
+// const kDarkScaffold = Color(0xFF191919);
+// const kDarkSelected = Color(0xFFF4F4F4);
+// const kDarkBody = Color(0xFF1A1A1A);
 
 const kBorderRadius = 4.0;
 const kBorderRadiusSmall = 5.0;

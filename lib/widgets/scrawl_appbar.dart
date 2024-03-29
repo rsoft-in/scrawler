@@ -24,9 +24,6 @@ class _ScrawlAppBarState extends State<ScrawlAppBar> {
         (brightness == Brightness.dark &&
             globals.themeMode == ThemeMode.system));
     return Container(
-      decoration: BoxDecoration(
-        color: darkModeOn ? kDarkBody : kLightSelected,
-      ),
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
       child: SafeArea(

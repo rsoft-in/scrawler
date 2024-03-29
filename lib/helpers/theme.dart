@@ -78,15 +78,15 @@ InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(color: kDarkStroke, width: 1),
+      borderSide: const BorderSide(width: 1),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(color: kDarkStroke, width: 1),
+      borderSide: const BorderSide(width: 1),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(color: kDarkStroke, width: 1),
+      borderSide: const BorderSide(width: 1),
     ),
     contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
   );

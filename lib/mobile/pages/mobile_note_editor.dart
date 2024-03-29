@@ -154,26 +154,23 @@ class _MobileNoteEditorState extends State<MobileNoteEditor> {
                                 onTapLink: (text, href, title) =>
                                     _launchUrl(href),
                                 styleSheet: MarkdownStyleSheet(
-                                    blockquote:
-                                        const TextStyle(color: Colors.black),
-                                    blockquoteDecoration: const BoxDecoration(
-                                      color: Colors.transparent,
-                                      border: Border(
-                                        left: BorderSide(
-                                            color: kPrimaryColor, width: 3),
-                                      ),
+                                  blockquote:
+                                      const TextStyle(color: Colors.black),
+                                  blockquoteDecoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                    border: Border(
+                                      left: BorderSide(
+                                          color: kPrimaryColor, width: 3),
                                     ),
-                                    code: const TextStyle(
-                                        backgroundColor: Colors.transparent),
-                                    codeblockAlign: WrapAlignment.spaceAround,
-                                    codeblockDecoration: BoxDecoration(
-                                        color: darkModeOn
-                                            ? Colors.white10
-                                            : Colors.black12),
-                                    checkbox: TextStyle(
-                                        color: darkModeOn
-                                            ? kLightPrimary
-                                            : kDarkPrimary)),
+                                  ),
+                                  code: const TextStyle(
+                                      backgroundColor: Colors.transparent),
+                                  codeblockAlign: WrapAlignment.spaceAround,
+                                  codeblockDecoration: BoxDecoration(
+                                      color: darkModeOn
+                                          ? Colors.white10
+                                          : Colors.black12),
+                                ),
                                 data: note.noteText),
                           ],
                         ),

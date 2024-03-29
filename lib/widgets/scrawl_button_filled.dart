@@ -17,12 +17,9 @@ class ScrawlFilledButton extends StatelessWidget {
             globals.themeMode == ThemeMode.system));
     return FilledButton(
       style: FilledButton.styleFrom(
-        backgroundColor: darkModeOn ? kDarkSelected : Colors.black,
         foregroundColor: darkModeOn ? Colors.black : Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
-          side: BorderSide(
-              color: darkModeOn ? kLightStroke : kDarkStroke, width: 2),
         ),
         // padding: EdgeInsets.symmetric(
         //     vertical: UniversalPlatform.isDesktopOrWeb ? 15 : 10,

@@ -24,11 +24,8 @@ class WindowControls extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           child: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkSecondary : kLightSelected,
-                  border: Border.all(
-                      color: darkModeOn ? kDarkStroke : kLightStroke),
-                  borderRadius: BorderRadius.circular(20)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: const Icon(
                 Icons.minimize_outlined,
                 size: 14,
@@ -41,11 +38,8 @@ class WindowControls extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             child: Container(
                 padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                    color: darkModeOn ? kDarkSecondary : kLightSelected,
-                    border: Border.all(
-                        color: darkModeOn ? kDarkStroke : kLightStroke),
-                    borderRadius: BorderRadius.circular(20)),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
                 child: const Icon(
                   Icons.square_outlined,
                   size: 14,
@@ -57,11 +51,8 @@ class WindowControls extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           child: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: darkModeOn ? kDarkSecondary : kLightSelected,
-                  border: Border.all(
-                      color: darkModeOn ? kDarkStroke : kLightStroke),
-                  borderRadius: BorderRadius.circular(20)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(20)),
               child: const Icon(
                 Icons.close_outlined,
                 size: 14,

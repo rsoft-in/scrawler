@@ -35,23 +35,10 @@ class _ScrawlNavRailItemState extends State<ScrawlNavRailItem> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
           margin: const EdgeInsets.only(bottom: 8),
-          decoration: BoxDecoration(
-              color: widget.selectedIndex == widget.index
-                  ? darkModeOn
-                      ? kDarkSelected
-                      : kLightSelected
-                  : null,
-              borderRadius: BorderRadius.circular(5)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
           child: Icon(
             widget.icon,
             size: 22.0,
-            color: widget.selectedIndex == widget.index
-                ? darkModeOn
-                    ? kDarkPrimary
-                    : Colors.black
-                : darkModeOn
-                    ? Colors.white
-                    : Colors.black,
           ),
         ),
       ),

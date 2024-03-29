@@ -19,7 +19,6 @@ class ScrawlAddButton extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(
               width: 2.0,
-              color: darkModeOn ? kDarkStroke : kLightStroke,
             ),
             borderRadius: BorderRadius.circular(kBorderRadius)),
         child: const Icon(Icons.add_outlined),

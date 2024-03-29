@@ -99,14 +99,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: darkModeOn
-                                          ? kDarkPrimary
-                                          : kLightPrimary,
-                                      border: Border.all(
-                                          color: darkModeOn
-                                              ? kDarkStroke
-                                              : kLightStroke,
-                                          width: 2),
+                                      border: Border.all(width: 2),
                                       borderRadius:
                                           BorderRadius.circular(kBorderRadius),
                                     ),

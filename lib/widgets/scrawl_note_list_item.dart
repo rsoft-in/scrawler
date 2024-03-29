@@ -45,10 +45,8 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
         child: Container(
           padding: kGlobalCardPadding * 2,
           decoration: BoxDecoration(
-            color: darkModeOn ? kDarkPrimary : kLightPrimary,
             border: widget.isSelected
-                ? Border.all(
-                    color: darkModeOn ? kDarkStroke : kLightStroke, width: 2)
+                ? Border.all(width: 2)
                 : Border.all(color: Colors.transparent),
             borderRadius: BorderRadius.circular(8.0),
           ),

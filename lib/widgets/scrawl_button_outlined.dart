@@ -25,10 +25,8 @@ class ScrawlOutlinedButton extends StatelessWidget {
             vertical: UniversalPlatform.isDesktopOrWeb ? 15 : 10,
             horizontal: 20),
         decoration: BoxDecoration(
-            color: darkModeOn ? kDarkPrimary : kLightPrimary,
             borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(
-                color: darkModeOn ? kDarkStroke : kLightStroke, width: 2)),
+            border: Border.all(width: 2)),
         child: Text(label),
       ),
     );
