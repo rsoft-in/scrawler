@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bnotes/helpers/utility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,8 +29,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
   late FocusNode focusNodePassword;
   double loginWidth = 400;
   bool isSigningIn = false;
-  bool isDesktop = true;
   bool hidePassword = true;
+  ScreenSize screenSize = ScreenSize.large;
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _pwdController = TextEditingController();
@@ -98,46 +99,38 @@ class _DesktopSignInState extends State<DesktopSignIn> {
 
   @override
   void initState() {
-    // doWhenWindowReady(() {
-    //   const initialSize = Size(450, 650);
-    //   appWindow.minSize = initialSize;
-    //   appWindow.size = initialSize;
-    //   appWindow.alignment = Alignment.center;
-    //   appWindow.show();
-    // });
     focusNodePassword = FocusNode();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    isDesktop = isDisplayDesktop(context);
-
+    screenSize = getScreenSize(context);
     Widget loginContent = SingleChildScrollView(
       child: Form(
         key: _formKey,
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Visibility(
-                visible: kIsWeb,
-                child: Text(
-                  kAppName,
-                  style: TextStyle(fontSize: 36),
+        child: Padding(
+          padding: kGlobalOuterPadding,
+          child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Visibility(
+                  visible: kIsWeb,
+                  child: Text(
+                    kAppName,
+                    style: TextStyle(fontSize: 36),
+                  ),
                 ),
-              ),
-              const Visibility(visible: kIsWeb, child: kVSpace),
-              const Text(
-                'Welcome Back',
-                style: TextStyle(
-                  fontSize: 18.0,
+                const Visibility(visible: kIsWeb, child: kVSpace),
+                const Text(
+                  'Welcome Back',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                  ),
                 ),
-              ),
-              kVSpace,
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-                child: TextFormField(
+                kVSpace,
+                TextFormField(
                   controller: _emailController,
                   autofocus: true,
                   decoration: const InputDecoration(
@@ -157,10 +150,8 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                     focusNodePassword.requestFocus();
                   },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-                child: TextFormField(
+                kVSpace,
+                TextFormField(
                   focusNode: focusNodePassword,
                   controller: _pwdController,
                   obscureText: hidePassword,
@@ -189,77 +180,78 @@ class _DesktopSignInState extends State<DesktopSignIn> {
                     }
                   },
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    child: const Text('Forgot password?'),
-                    onTap: () {
-                      if (_emailController.text.isNotEmpty) {
-                        sendOtp();
-                      } else {
-                        showSnackBar(context, 'Enter Email address!');
-                      }
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 30.0,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: isSigningIn
-                          ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                signIn();
-                              }
-                            },
-                      child: const Text('Sign In'),
+                kVSpace,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                      child: const Text('Forgot password?'),
+                      onTap: () {
+                        if (_emailController.text.isNotEmpty) {
+                          sendOtp();
+                        } else {
+                          showSnackBar(context, 'Enter Email address!');
+                        }
+                      },
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const DesktopSignUp()),
-                          (route) => false),
-                      child: const Text('Register Now'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 30.0,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton(
+                        onPressed: isSigningIn
+                            ? null
+                            : () {
+                                if (_formKey.currentState!.validate()) {
+                                  signIn();
+                                }
+                              },
+                        child: const Text('Sign In'),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ]),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.of(context)
+                            .pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const DesktopSignUp()),
+                                (route) => false),
+                        child: const Text('Register Now'),
+                      ),
+                    ),
+                  ],
+                ),
+              ]),
+        ),
       ),
     );
-    return kIsWeb
+    return screenSize == ScreenSize.large
         ? Scaffold(
-            backgroundColor: const Color(0xFFd9eff3),
+            backgroundColor: kPrimaryColor.withOpacity(0.2),
             resizeToAvoidBottomInset: false,
             body: Row(
               children: [
-                if (isDesktop)
-                  Expanded(
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'images/welcome.svg',
-                        width: 300,
-                        height: 300,
-                      ),
+                Expanded(
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'images/welcome.svg',
+                      width: 300,
+                      height: 300,
                     ),
                   ),
+                ),
                 Expanded(
                   child: Center(
                     child: SizedBox(
@@ -277,48 +269,21 @@ class _DesktopSignInState extends State<DesktopSignIn> {
             ),
           )
         : Scaffold(
-            backgroundColor: const Color(0xffd9eff3),
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(56),
-              child: Container(),
-              // child: MoveWindow(
-              //   child: Container(
-              //     padding: const EdgeInsets.symmetric(horizontal: 10),
-              //     child: Visibility(
-              //       visible: !UniversalPlatform.isMacOS,
-              //       child: const WindowControls(showMaxButton: false),
-              //     ),
-              //   ),
-              // ),
-            ),
+            backgroundColor: kPrimaryColor.withOpacity(0.2),
             body: Container(
               margin: const EdgeInsets.only(top: 56),
               alignment: Alignment.topCenter,
               child: Column(
                 children: [
-                  Image.asset(
-                    'images/scrawler-desktop.png',
-                    // fit: BoxFit.fitHeight,
-                    width: 50,
-                    height: 50,
-                  ),
-                  kVSpace,
-                  const Text(
-                    kAppName,
-                    style:
-                        TextStyle(fontSize: 36.0, fontWeight: FontWeight.w200),
+                  SvgPicture.asset(
+                    'images/welcome.svg',
+                    width: MediaQuery.of(context).size.width * 0.5,
                   ),
                 ],
               ),
             ),
-            bottomSheet: Container(
-              decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(width: 2))),
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 30),
-                  child: loginContent),
-            ),
+            bottomSheet:
+                Padding(padding: kGlobalOuterPadding * 2, child: loginContent),
           );
   }
 }

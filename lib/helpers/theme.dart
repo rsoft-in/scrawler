@@ -78,16 +78,16 @@ InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 1),
+      borderSide: const BorderSide(width: 0.5),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 1),
+      borderSide: const BorderSide(width: 0.5),
     ),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(kBorderRadius),
-      borderSide: const BorderSide(width: 1),
+      borderSide: const BorderSide(width: 0.5),
     ),
-    contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+    isDense: true,
   );
 }

@@ -123,104 +123,102 @@ class _DesktopAppState extends State<DesktopApp> {
   Widget build(BuildContext context) {
     _screenSize = getScreenSize(context);
 
-    Widget drawer = Container(
+    Widget drawer = SizedBox(
       width: 280,
-      // padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-        border: Border(
-          right: BorderSide(color: Colors.grey),
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            RSDrawerItem(
-              label: 'Search',
-              icon: const Icon(Symbols.search),
-              onTap: () {},
-            ),
-            RSDrawerItem(
-              icon: const Icon(Symbols.add_circle),
-              label: 'Add Note',
-              onTap: () {},
-            ),
-            kVSpace,
-            Expanded(
-              child: isBusy
-                  ? const Center(
-                      child: CircularProgressIndicator.adaptive(strokeWidth: 2),
-                    )
-                  : SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          ...List.generate(folderList.length, (index) {
-                            final notes = notesList
-                                .where((el) => el.noteLabel
-                                    .contains(folderList[index].title))
-                                .toList();
-                            return ExpansionTile(
-                              shape: const RoundedRectangleBorder(
-                                  side: BorderSide.none),
-                              leading: Icon(folderList[index].expanded
-                                  ? Symbols.folder_open
-                                  : Symbols.folder),
-                              title: Text(
-                                folderList[index].title,
-                                style: TextStyle(
-                                    fontWeight: folderList[index].expanded
-                                        ? FontWeight.bold
-                                        : FontWeight.normal),
-                              ),
-                              onExpansionChanged: (value) => setState(() {
-                                folderList[index].expanded =
-                                    !folderList[index].expanded;
-                              }),
-                              children: notes
-                                  .map((note) => RSDrawerItem(
-                                        indent: true,
-                                        icon: const Icon(Symbols.description),
-                                        label: note.noteTitle,
-                                        trailing: ScrawlColorDot(
-                                            colorCode: note.noteColor),
-                                        onTap: () => onNoteSelected(note),
-                                      ))
-                                  .toList(),
-                            );
-                          }),
-                          kVSpace,
-                          ...notesList
-                              .where((el) => el.noteLabel.isEmpty)
-                              .toList()
-                              .map((note) => RSDrawerItem(
-                                    onTap: () => onNoteSelected(note),
-                                    icon: const Icon(Symbols.description),
-                                    label: note.noteTitle,
-                                    trailing: ScrawlColorDot(
-                                        colorCode: note.noteColor),
-                                  )),
-                        ],
+      child: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              RSDrawerItem(
+                label: 'Search',
+                icon: const Icon(Symbols.search),
+                onTap: () {},
+              ),
+              RSDrawerItem(
+                icon: const Icon(Symbols.add_circle),
+                label: 'Add Note',
+                onTap: () {},
+              ),
+              kVSpace,
+              Expanded(
+                child: isBusy
+                    ? const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ...List.generate(folderList.length, (index) {
+                              final notes = notesList
+                                  .where((el) => el.noteLabel
+                                      .contains(folderList[index].title))
+                                  .toList();
+                              return ExpansionTile(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide.none,
+                                  borderRadius:
+                                      BorderRadius.circular(kBorderRadius),
+                                ),
+                                leading: Icon(folderList[index].expanded
+                                    ? Symbols.folder_open
+                                    : Symbols.folder),
+                                title: Text(
+                                  folderList[index].title,
+                                  style: TextStyle(
+                                      fontWeight: folderList[index].expanded
+                                          ? FontWeight.bold
+                                          : FontWeight.normal),
+                                ),
+                                onExpansionChanged: (value) => setState(() {
+                                  folderList[index].expanded = value;
+                                }),
+                                children: notes
+                                    .map((note) => RSDrawerItem(
+                                          indent: true,
+                                          icon: const Icon(Symbols.description),
+                                          label: note.noteTitle,
+                                          trailing: ScrawlColorDot(
+                                              colorCode: note.noteColor),
+                                          onTap: () => onNoteSelected(note),
+                                        ))
+                                    .toList(),
+                              );
+                            }),
+                            kVSpace,
+                            ...notesList
+                                .where((el) => el.noteLabel.isEmpty)
+                                .toList()
+                                .map((note) => RSDrawerItem(
+                                      onTap: () => onNoteSelected(note),
+                                      icon: const Icon(Symbols.description),
+                                      label: note.noteTitle,
+                                      trailing: ScrawlColorDot(
+                                          colorCode: note.noteColor),
+                                    )),
+                          ],
+                        ),
                       ),
-                    ),
-            ),
-            RSDrawerItem(
-              icon: const Icon(Symbols.delete),
-              label: 'Trash',
-              onTap: () {},
-            ),
-            RSDrawerItem(
-              icon: const Icon(Symbols.settings),
-              label: 'Settings',
-              onTap: () {},
-            ),
-            RSDrawerItem(
-              icon: const Icon(Symbols.account_circle),
-              label: 'Account',
-              onTap: () {},
-            ),
-          ],
+              ),
+              RSDrawerItem(
+                icon: const Icon(Symbols.delete),
+                label: 'Trash',
+                onTap: () {},
+              ),
+              RSDrawerItem(
+                icon: const Icon(Symbols.settings),
+                label: 'Settings',
+                onTap: () {},
+              ),
+              RSDrawerItem(
+                icon: const Icon(Symbols.account_circle),
+                label: 'Account',
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -268,7 +266,15 @@ class _DesktopAppState extends State<DesktopApp> {
             ),
           )
         : Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: globals.selectedNote.noteId.isNotEmpty
+                  ? Text(globals.selectedNote.noteTitle)
+                  : const Text(kAppName),
+              actions: [
+                if (globals.selectedNote.noteId.isNotEmpty)
+                  DesktopNoteToolbar(globals.selectedNote),
+              ],
+            ),
             drawer: drawer,
             body: DesktopNoteWidget(
               note: globals.selectedNote,

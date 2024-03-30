@@ -46,7 +46,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   int themeID = 3;
-  bool isDesktopOrWeb = false;
   ScreenSize _screenSize = ScreenSize.large;
 
   @override
@@ -74,7 +73,7 @@ class _MyAppState extends State<MyApp> {
             themeMode = ThemeMode.system;
             break;
           default:
-            themeMode = ThemeMode.dark;
+            themeMode = ThemeMode.system;
             break;
         }
       } else {
@@ -88,8 +87,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     _screenSize = getScreenSize(context);
-    if ((_screenSize == ScreenSize.large || UniversalPlatform.isWeb) ||
-        UniversalPlatform.isDesktop) isDesktopOrWeb = true;
+
     if (UniversalPlatform.isIOS) {
       return CupertinoApp(
         title: kAppName,
@@ -105,12 +103,14 @@ class _MyAppState extends State<MyApp> {
       return MaterialApp(
         title: kAppName,
         debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.system,
+        themeMode: globals.themeMode,
         theme: theme(),
         darkTheme: themeDark(),
         routes: {
           '/': (context) =>
-              isDesktopOrWeb ? const DesktopLanding() : const DashMaterial(),
+              (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)
+                  ? const DashMaterial()
+                  : const DesktopLanding(),
           '/dsignin': (context) => const DesktopSignIn(),
           '/dsignup': (context) => const DesktopSignUp(),
           '/mobilestart': (context) => const DashMaterial()
