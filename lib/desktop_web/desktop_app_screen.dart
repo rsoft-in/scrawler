@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
 import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
 import 'package:bnotes/desktop_web/desktop_note_toolbar.dart';
-import 'package:bnotes/desktop_web/desktop_note_widget.dart';
 import 'package:bnotes/helpers/adaptive.dart';
 import 'package:bnotes/helpers/constants.dart';
 import 'package:bnotes/helpers/globals.dart' as globals;
@@ -13,12 +12,17 @@ import 'package:bnotes/models/label.dart';
 import 'package:bnotes/widgets/rs_drawer_item.dart';
 import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../mobile/markdown_toolbar.dart';
 import '../models/notes.dart';
 import '../providers/labels_api_provider.dart';
 import '../providers/notes_api_provider.dart';
+import '../widgets/scrawl_empty.dart';
 
 class DesktopApp extends StatefulWidget {
   const DesktopApp({super.key});
@@ -39,6 +43,10 @@ class _DesktopAppState extends State<DesktopApp> {
   // String _selectedDrawerIndex = 'all_notes';
   // final int _selectedIndex = 0;
   NavigationRailLabelType labelType = NavigationRailLabelType.none;
+
+  bool editMode = false;
+  TextEditingController noteController = TextEditingController();
+  UndoHistoryController undoController = UndoHistoryController();
 
   // _onDrawerItemSelect(String menuId) {
   //   setState(() => _selectedDrawerIndex = menuId);
@@ -223,6 +231,77 @@ class _DesktopAppState extends State<DesktopApp> {
       ),
     );
 
+    Widget noteWidget = KeyboardListener(
+      focusNode: FocusNode(),
+      onKeyEvent: (event) {
+        if (event is KeyDownEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.escape && editMode) {
+            setState(() {
+              editMode = false;
+            });
+          }
+        }
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Visibility(
+            visible: editMode,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MarkdownToolbar(
+                controller: noteController,
+                undoController: undoController,
+                onChange: () {},
+              ),
+            ),
+          ),
+          Visibility(
+            visible: editMode,
+            child: Expanded(
+              child: Padding(
+                padding: kPaddingLarge,
+                child: TextField(
+                  controller: noteController,
+                  maxLines: null,
+                  expands: true,
+                  textAlignVertical: TextAlignVertical.top,
+                  decoration: const InputDecoration(
+                    hintText: 'Start writing something...',
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      globals.selectedNote.noteText = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !editMode,
+            child: Expanded(
+              child: GestureDetector(
+                onDoubleTap: () => setState(() {
+                  editMode = true;
+                  noteController.text = globals.selectedNote.noteText;
+                }),
+                child: Markdown(
+                  data: globals.selectedNote.noteText,
+                  onTapLink: (text, href, title) async =>
+                      await _launchUrl(href),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
     return _screenSize == ScreenSize.large
         ? Scaffold(
             body: Row(
@@ -254,11 +333,15 @@ class _DesktopAppState extends State<DesktopApp> {
                             ],
                           ),
                         ),
-                      Expanded(
-                          child: DesktopNoteWidget(
-                        note: globals.selectedNote,
-                        onSave: () {},
-                      )),
+                      globals.selectedNote.noteId.isEmpty
+                          ? Expanded(
+                              child: EmptyWidget(
+                                  text: 'Select a Note to preview',
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.4,
+                                  asset: 'images/nothing_to_do.svg'),
+                            )
+                          : Expanded(child: noteWidget)
                     ],
                   ),
                 ),
@@ -276,10 +359,14 @@ class _DesktopAppState extends State<DesktopApp> {
               ],
             ),
             drawer: drawer,
-            body: DesktopNoteWidget(
-              note: globals.selectedNote,
-              onSave: () {},
-            ),
+            body: globals.selectedNote.noteId.isEmpty
+                ? Expanded(
+                    child: EmptyWidget(
+                        text: 'Select a Note to preview',
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        asset: 'images/nothing_to_do.svg'),
+                  )
+                : Expanded(child: noteWidget),
           );
 
     // Widget drawer = SizedBox(
@@ -464,6 +551,12 @@ class _DesktopAppState extends State<DesktopApp> {
                 child: const DesktopSettingsScreen()),
           );
         });
+  }
+
+  Future<void> _launchUrl(url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   void signOut() async {

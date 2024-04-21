@@ -32,10 +32,10 @@ class _DesktopNoteWidgetState extends State<DesktopNoteWidget> {
             text: 'Select a Note to preview',
             width: MediaQuery.of(context).size.width * 0.4,
             asset: 'images/nothing_to_do.svg')
-        : RawKeyboardListener(
+        : KeyboardListener(
             focusNode: FocusNode(),
-            onKey: (event) {
-              if (event is RawKeyDownEvent) {
+            onKeyEvent: (event) {
+              if (event is KeyDownEvent) {
                 if (event.logicalKey == LogicalKeyboardKey.escape && editMode) {
                   setState(() {
                     editMode = false;

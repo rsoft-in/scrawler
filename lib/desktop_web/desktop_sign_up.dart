@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
+import 'package:bnotes/helpers/adaptive.dart';
+import 'package:bnotes/helpers/utility.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
 import '../helpers/string_values.dart';
@@ -24,7 +24,7 @@ class DesktopSignUp extends StatefulWidget {
 }
 
 class _DesktopSignUpState extends State<DesktopSignUp> {
-  bool isDesktop = false;
+  ScreenSize screenSize = ScreenSize.large;
   late SharedPreferences prefs;
   double signupWidth = 400;
 
@@ -117,11 +117,7 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
 
   @override
   Widget build(BuildContext context) {
-    var brightness = MediaQuery.of(context).platformBrightness;
-    bool darkModeOn = (globals.themeMode == ThemeMode.dark ||
-        (brightness == Brightness.dark &&
-            globals.themeMode == ThemeMode.system));
-    isDesktop = isDisplayDesktop(context);
+    screenSize = getScreenSize(context);
     Widget signUpItems = Form(
       key: _signUpFormKey,
       child: Column(
@@ -136,29 +132,24 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
               ),
             ),
           ),
-          Text(
-            kLabels['email']!,
-            style: const TextStyle(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-            child: TextFormField(
-              controller: emailController,
-              onChanged: (value) {
-                showSkipButton =
-                    value.isNotEmpty && RegExp(kEmailRegEx).hasMatch(value);
-                setState(() {});
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return kLabels['please_enter_text'];
-                }
-                if (!RegExp(kEmailRegEx).hasMatch(value)) {
-                  return kLabels['invalid_email'];
-                }
-                return null;
-              },
-            ),
+          kVSpace,
+          TextFormField(
+            controller: emailController,
+            onChanged: (value) {
+              showSkipButton =
+                  value.isNotEmpty && RegExp(kEmailRegEx).hasMatch(value);
+              setState(() {});
+            },
+            decoration: const InputDecoration(labelText: 'Email'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return kLabels['please_enter_text'];
+              }
+              if (!RegExp(kEmailRegEx).hasMatch(value)) {
+                return kLabels['invalid_email'];
+              }
+              return null;
+            },
           ),
           Visibility(
             visible: showSkipButton,
@@ -176,58 +167,43 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
               ),
             ),
           ),
-          Text(
-            kLabels['fullname']!,
-            style: const TextStyle(),
+          kVSpace,
+          TextFormField(
+            controller: fullNameController,
+            decoration: const InputDecoration(labelText: 'Fullname'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return kLabels['please_enter_text'];
+              }
+              return null;
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-            child: TextFormField(
-              controller: fullNameController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return kLabels['please_enter_text'];
-                }
-                return null;
-              },
-            ),
+          kVSpace,
+          TextFormField(
+            controller: passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(labelText: 'Password'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return kLabels['please_enter_text'];
+              }
+              return null;
+            },
           ),
-          Text(
-            kLabels['password']!,
-            style: const TextStyle(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-            child: TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return kLabels['please_enter_text'];
-                }
-                return null;
-              },
-            ),
-          ),
-          Text(
-            kLabels['confirm_password']!,
-            style: const TextStyle(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 25.0, top: 10.0),
-            child: TextFormField(
-              controller: confirmPassController,
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return kLabels['please_enter_text'];
-                }
-                if (value != passwordController.text) {
-                  return kLabels['password_mismatch'];
-                }
-                return null;
-              },
-            ),
+          kVSpace,
+          TextFormField(
+            controller: confirmPassController,
+            obscureText: true,
+            decoration: const InputDecoration(labelText: 'Confirm Password'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return kLabels['please_enter_text'];
+              }
+              if (value != passwordController.text) {
+                return kLabels['password_mismatch'];
+              }
+              return null;
+            },
           ),
           kVSpace,
           Row(
@@ -349,9 +325,6 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
                 text: TextSpan(children: [
                   TextSpan(
                     text: kLabels['already_have_account'],
-                    style: TextStyle(
-                      color: darkModeOn ? Colors.white : Colors.black,
-                    ),
                   ),
                   TextSpan(
                       text: kLabels['login'],
@@ -371,32 +344,30 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
             ),
           ]),
     );
-    return kIsWeb
+    return screenSize == ScreenSize.large
         ? Scaffold(
+            backgroundColor: kPrimaryColor.withOpacity(0.2),
             resizeToAvoidBottomInset: false,
             body: Row(
               children: [
-                if (isDesktop)
-                  Expanded(
-                    child: Center(
-                      child: SvgPicture.asset(
-                        'images/welcome.svg',
-                        width: 300,
-                        height: 300,
-                      ),
+                Expanded(
+                  child: Center(
+                    child: SvgPicture.asset(
+                      'images/welcome.svg',
+                      width: 300,
+                      height: 300,
                     ),
                   ),
+                ),
                 Expanded(
                   child: Center(
                     child: SizedBox(
                       width: signupWidth,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 50),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(width: 2)),
-                        child: signupContent,
+                      child: Card(
+                        child: Padding(
+                          padding: kGlobalOuterPadding * 3,
+                          child: signupContent,
+                        ),
                       ),
                     ),
                   ),
@@ -405,28 +376,9 @@ class _DesktopSignUpState extends State<DesktopSignUp> {
             ),
           )
         : Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(56),
-              child: Container(),
-              // child: MoveWindow(
-              //   child: Container(
-              //     // color: Colors.amber,
-              //     padding: const EdgeInsets.symmetric(horizontal: 10),
-              //     child: Visibility(
-              //       visible: !UniversalPlatform.isMacOS,
-              //       child: const WindowControls(showMaxButton: false),
-              //     ),
-              //   ),
-              // ),
-            ),
-            bottomSheet: Container(
-              decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(width: 2))),
-              child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 70, vertical: 30),
-                  child: signupContent),
-            ),
+            backgroundColor: kPrimaryColor.withOpacity(0.2),
+            bottomSheet:
+                Padding(padding: kGlobalOuterPadding * 3, child: signupContent),
           );
   }
 }
