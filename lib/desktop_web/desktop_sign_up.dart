@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/utility.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:scrawler/helpers/adaptive.dart';
+import 'package:scrawler/helpers/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/constants.dart';

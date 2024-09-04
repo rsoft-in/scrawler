@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:bnotes/desktop_web/desktop_sign_in.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/providers/user_api_provider.dart';
-import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:scrawler/desktop_web/desktop_sign_in.dart';
+import 'package:scrawler/helpers/adaptive.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/providers/user_api_provider.dart';
+import 'package:scrawler/widgets/scrawl_snackbar.dart';
 
 class DesktopForgotPassword extends StatefulWidget {
   final String email;

@@ -1,9 +1,9 @@
-import 'package:bnotes/desktop_web/desktop_app_screen.dart';
-import 'package:bnotes/desktop_web/desktop_sign_in.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/models/users_model.dart';
-import 'package:bnotes/providers/api_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/desktop_web/desktop_app_screen.dart';
+import 'package:scrawler/desktop_web/desktop_sign_in.dart';
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/models/users_model.dart';
+import 'package:scrawler/providers/api_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DesktopLanding extends StatefulWidget {

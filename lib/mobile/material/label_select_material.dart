@@ -1,6 +1,6 @@
-import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/helpers/constants.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../helpers/dbhelper.dart';

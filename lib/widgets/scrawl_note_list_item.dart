@@ -1,8 +1,8 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/note_color.dart';
-import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/models/notes.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/note_color.dart';
+import 'package:scrawler/helpers/utility.dart';
+import 'package:scrawler/models/notes.dart';
 
 // ignore: must_be_immutable
 class NoteListItemWidget extends StatefulWidget {

@@ -1,5 +1,5 @@
-import 'package:bnotes/mobile/cupertino/note_cupertino.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:scrawler/mobile/cupertino/note_cupertino.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';

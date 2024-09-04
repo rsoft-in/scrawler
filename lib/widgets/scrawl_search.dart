@@ -1,5 +1,5 @@
-import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
 
 // ignore: must_be_immutable
 class ScrawlSearch extends StatefulWidget {

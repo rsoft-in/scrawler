@@ -1,11 +1,11 @@
-import 'package:bnotes/models/label.dart';
-import 'package:bnotes/models/notes.dart';
 import 'package:path/path.dart';
+import 'package:scrawler/models/label.dart';
+import 'package:scrawler/models/notes.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
   late Database db;
-  static const _databaseName = 'bnotes.s3db';
+  static const _databaseName = 'scrawler.s3db';
   static const _databaseVersion = 3;
   // static const _databaseOldVersion = 1;
   Database? _database;
@@ -167,8 +167,7 @@ class DBHelper {
 
   Future<bool> deleteNotesAll() async {
     Database? db = await instance.database;
-    int rowsAffected =
-        await db!.delete('notes');
+    int rowsAffected = await db!.delete('notes');
     return (rowsAffected > 0);
   }
 

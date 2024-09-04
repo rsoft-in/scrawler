@@ -1,6 +1,6 @@
-import 'package:bnotes/helpers/constants.dart';
-// import 'package:bnotes/helpers/globals.dart' as globals;
+// import 'package:scrawler/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 

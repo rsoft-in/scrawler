@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/mobile/pages/mobile_about_page.dart';
-import 'package:bnotes/models/notes.dart';
-import 'package:bnotes/widgets/scrawl_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/mobile/pages/mobile_about_page.dart';
+import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/dbhelper.dart';

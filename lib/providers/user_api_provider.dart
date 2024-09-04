@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:bnotes/models/users_model.dart';
-
 import 'package:http/http.dart' as http;
-import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/models/users_model.dart';
 
 class UserApiProvider {
   static Future<Map<String, dynamic>> checkUserCredential(Map post) async {

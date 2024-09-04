@@ -1,6 +1,6 @@
-import 'package:bnotes/mobile/material/note_material.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/mobile/material/note_material.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';

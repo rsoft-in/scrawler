@@ -11,4 +11,4 @@ PRODUCT_NAME = scrawler
 PRODUCT_BUNDLE_IDENTIFIER = com.rsoft.scrawler
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.rsoft. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.rsoft. All rights reserved.

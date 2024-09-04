@@ -1,5 +1,5 @@
-import 'package:bnotes/helpers/string_values.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/string_values.dart';
 
 class DesktopTasksScreen extends StatefulWidget {
   const DesktopTasksScreen({super.key});

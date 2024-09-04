@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:bnotes/helpers/utility.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/helpers/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../desktop/pages/desktop_forgot_pwd.dart';

@@ -1,6 +1,6 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/widgets/scrawl_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/widgets/scrawl_appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MobileAboutPage extends StatefulWidget {

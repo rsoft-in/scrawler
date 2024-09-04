@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:scrawler/helpers/globals.dart' as globals;
 
 class ColorPaletteButton extends StatelessWidget {
   final Function onTap;

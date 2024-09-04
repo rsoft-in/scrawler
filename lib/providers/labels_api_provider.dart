@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:bnotes/models/label.dart';
 import 'package:http/http.dart' as http;
-import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/models/label.dart';
 
 class LabelsApiProvider {
   static Future<LabelsData> fecthLabels(Map post) async {

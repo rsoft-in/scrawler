@@ -1,9 +1,9 @@
-import 'package:bnotes/mobile/markdown_toolbar.dart';
-import 'package:bnotes/models/notes.dart';
-import 'package:bnotes/widgets/scrawl_empty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:scrawler/mobile/markdown_toolbar.dart';
+import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/scrawl_empty.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../helpers/constants.dart';
@@ -11,7 +11,8 @@ import '../helpers/constants.dart';
 class DesktopNoteWidget extends StatefulWidget {
   final Notes note;
   final VoidCallback onSave;
-  const DesktopNoteWidget({super.key, required this.note, required this.onSave});
+  const DesktopNoteWidget(
+      {super.key, required this.note, required this.onSave});
 
   @override
   State<DesktopNoteWidget> createState() => _DesktopNoteWidgetState();

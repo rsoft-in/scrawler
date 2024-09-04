@@ -1,14 +1,14 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/dbhelper.dart';
-import 'package:bnotes/mobile/pages/mobile_labels_page.dart';
-import 'package:bnotes/mobile/pages/mobile_note_editor.dart';
-import 'package:bnotes/models/notes.dart';
-import 'package:bnotes/widgets/scrawl_color_picker.dart';
-import 'package:bnotes/widgets/scrawl_empty.dart';
-import 'package:bnotes/widgets/scrawl_note_list_item.dart';
-import 'package:bnotes/widgets/scrawl_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/dbhelper.dart';
+import 'package:scrawler/mobile/pages/mobile_labels_page.dart';
+import 'package:scrawler/mobile/pages/mobile_note_editor.dart';
+import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/scrawl_color_picker.dart';
+import 'package:scrawler/widgets/scrawl_empty.dart';
+import 'package:scrawler/widgets/scrawl_note_list_item.dart';
+import 'package:scrawler/widgets/scrawl_search.dart';
 
 import '../../models/menu_item.dart';
 import '../../models/sort_items.dart';

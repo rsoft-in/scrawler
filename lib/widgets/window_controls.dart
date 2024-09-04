@@ -1,6 +1,6 @@
 // import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:bnotes/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class WindowControls extends StatelessWidget {

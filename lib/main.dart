@@ -1,15 +1,10 @@
-import 'package:bnotes/desktop_web/desktop_landing.dart';
-import 'package:bnotes/desktop_web/desktop_sign_in.dart';
-import 'package:bnotes/desktop_web/desktop_sign_up.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/theme.dart';
-import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/mobile/cupertino/dash_cupertino.dart';
-import 'package:bnotes/mobile/material/dash_material.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:scrawler/helpers/adaptive.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/utility.dart';
+import 'package:scrawler/windows/windows_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
@@ -24,9 +19,8 @@ void main() async {
     WindowOptions windowOptions = const WindowOptions(
       size: Size(1000, 650),
       center: true,
-      backgroundColor: Colors.transparent,
       skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.hidden,
+      // titleBarStyle: TitleBarStyle.hidden,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
       await windowManager.show();
@@ -88,35 +82,58 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     _screenSize = getScreenSize(context);
 
-    if (UniversalPlatform.isIOS) {
-      return CupertinoApp(
+    // if (UniversalPlatform.isIOS) {
+    //   return CupertinoApp(
+    //     title: kAppName,
+    //     debugShowCheckedModeBanner: false,
+    //     initialRoute: '/',
+    //     routes: {
+    //       '/': (context) => UniversalPlatform.isIOS
+    //           ? const DashCupertino()
+    //           : const DashMaterial(),
+    //     },
+    //   );
+    // } else {
+    //   return MaterialApp(
+    //     title: kAppName,
+    //     debugShowCheckedModeBanner: false,
+    //     themeMode: globals.themeMode,
+    //     theme: theme(),
+    //     darkTheme: themeDark(),
+    //     routes: {
+    //       '/': (context) =>
+    //           (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)
+    //               ? const DashMaterial()
+    //               : const DesktopLanding(),
+    //       '/dsignin': (context) => const DesktopSignIn(),
+    //       '/dsignup': (context) => const DesktopSignUp(),
+    //       '/mobilestart': (context) => const DashMaterial()
+    //     },
+    //     initialRoute: '/',
+    //   );
+    // }
+    if (UniversalPlatform.isWindows) {
+      return fluent.FluentApp(
         title: kAppName,
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => UniversalPlatform.isIOS
-              ? const DashCupertino()
-              : const DashMaterial(),
-        },
+        darkTheme: fluent.FluentThemeData(
+          brightness: Brightness.dark,
+          accentColor: fluent.Colors.red,
+          visualDensity: VisualDensity.standard,
+          focusTheme: fluent.FocusThemeData(
+            glowFactor: fluent.is10footScreen(context) ? 2.0 : 0.0,
+          ),
+        ),
+        theme: fluent.FluentThemeData(
+          accentColor: fluent.Colors.blue,
+          visualDensity: VisualDensity.standard,
+          focusTheme: fluent.FocusThemeData(
+            glowFactor: fluent.is10footScreen(context) ? 2.0 : 0.0,
+          ),
+        ),
+        home: const WindowsApp(),
       );
     } else {
-      return MaterialApp(
-        title: kAppName,
-        debugShowCheckedModeBanner: false,
-        themeMode: globals.themeMode,
-        theme: theme(),
-        darkTheme: themeDark(),
-        routes: {
-          '/': (context) =>
-              (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)
-                  ? const DashMaterial()
-                  : const DesktopLanding(),
-          '/dsignin': (context) => const DesktopSignIn(),
-          '/dsignup': (context) => const DesktopSignUp(),
-          '/mobilestart': (context) => const DashMaterial()
-        },
-        initialRoute: '/',
-      );
+      return const MaterialApp();
     }
   }
 }

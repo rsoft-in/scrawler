@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:bnotes/models/notes.dart';
 import 'package:http/http.dart' as http;
-import 'package:bnotes/helpers/globals.dart' as globals;
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/models/notes.dart';
 
 class NotesApiProvider {
   static Future<NotesResult> fecthNotes(Map post) async {

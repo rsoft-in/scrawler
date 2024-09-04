@@ -1,5 +1,5 @@
-import 'package:bnotes/helpers/globals.dart' as globals;
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/globals.dart' as globals;
 
 class ScrawlFilledButton extends StatelessWidget {
   final VoidCallback? onPressed;

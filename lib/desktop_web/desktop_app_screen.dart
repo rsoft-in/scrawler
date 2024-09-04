@@ -1,20 +1,20 @@
 import 'dart:convert';
 
-import 'package:bnotes/desktop/pages/desktop_profile_screen.dart';
-import 'package:bnotes/desktop/pages/desktop_settings_screen.dart';
-import 'package:bnotes/desktop_web/desktop_note_toolbar.dart';
-import 'package:bnotes/helpers/adaptive.dart';
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/helpers/globals.dart' as globals;
-import 'package:bnotes/helpers/utility.dart';
-import 'package:bnotes/models/drawer_folder.dart';
-import 'package:bnotes/models/label.dart';
-import 'package:bnotes/widgets/rs_drawer_item.dart';
-import 'package:bnotes/widgets/scrawl_color_dot.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/desktop/pages/desktop_profile_screen.dart';
+import 'package:scrawler/desktop/pages/desktop_settings_screen.dart';
+import 'package:scrawler/desktop_web/desktop_note_toolbar.dart';
+import 'package:scrawler/helpers/adaptive.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/globals.dart' as globals;
+import 'package:scrawler/helpers/utility.dart';
+import 'package:scrawler/models/drawer_folder.dart';
+import 'package:scrawler/models/label.dart';
+import 'package:scrawler/widgets/rs_drawer_item.dart';
+import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 

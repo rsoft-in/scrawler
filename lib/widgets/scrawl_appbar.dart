@@ -1,6 +1,6 @@
-import 'package:bnotes/helpers/constants.dart';
-import 'package:bnotes/widgets/scrawl_icon_button_outlined.dart';
 import 'package:flutter/material.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/widgets/scrawl_icon_button_outlined.dart';
 
 class ScrawlAppBar extends StatefulWidget {
   final Widget middle;
@@ -8,7 +8,10 @@ class ScrawlAppBar extends StatefulWidget {
 
   final Widget? trailing;
   const ScrawlAppBar(
-      {super.key, required this.middle, required this.onPressed, this.trailing});
+      {super.key,
+      required this.middle,
+      required this.onPressed,
+      this.trailing});
 
   @override
   State<ScrawlAppBar> createState() => _ScrawlAppBarState();
