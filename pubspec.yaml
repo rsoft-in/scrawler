@@ -33,7 +33,13 @@ dependencies:
   universal_platform: ^1.0.0+1
   window_manager: ^0.4.2
 
+  adwaita: ^1.1.0
   fluent_ui: ^4.9.1
+  libadwaita: ^2.0.2
+  libadwaita_window_manager: ^0.5.4+1
+  sqflite_common_ffi: ^2.3.3
+  sqlite3_flutter_libs: ^0.5.24
+
 
 flutter_launcher_icons:
   ios: true

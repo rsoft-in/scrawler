@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:adwaita/adwaita.dart';
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:scrawler/helpers/adaptive.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/utility.dart';
+import 'package:scrawler/linux/linux_app.dart';
 import 'package:scrawler/windows/windows_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -23,10 +27,14 @@ void main() async {
       // titleBarStyle: TitleBarStyle.hidden,
     );
     windowManager.waitUntilReadyToShow(windowOptions, () async {
+      if (Platform.isLinux) {
+        await windowManager.setAsFrameless();
+      }
       await windowManager.show();
       await windowManager.focus();
     });
   }
+
   runApp(Phoenix(child: const MyApp()));
 }
 
@@ -131,6 +139,15 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         home: const WindowsApp(),
+      );
+    } else if (UniversalPlatform.isLinux) {
+      return MaterialApp(
+        title: kAppName,
+        theme: AdwaitaThemeData.light(),
+        darkTheme: AdwaitaThemeData.dark(),
+        themeMode: themeMode,
+        debugShowCheckedModeBanner: false,
+        home: const LinuxApp(),
       );
     } else {
       return const MaterialApp();

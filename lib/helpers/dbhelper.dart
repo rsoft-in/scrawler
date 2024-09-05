@@ -1,13 +1,12 @@
 import 'package:path/path.dart';
 import 'package:scrawler/models/label.dart';
 import 'package:scrawler/models/notes.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DBHelper {
   late Database db;
   static const _databaseName = 'scrawler.s3db';
   static const _databaseVersion = 3;
-  // static const _databaseOldVersion = 1;
   Database? _database;
 
   DBHelper._privateConstructor();
@@ -45,14 +44,6 @@ class DBHelper {
                 ''');
       },
       onUpgrade: (db, oldVersion, newVersion) {
-        if (oldVersion == 1 && newVersion > 1) {
-          db.execute('''ALTER TABLE notes DROP COLUMN note_list''');
-          db.execute('''ALTER TABLE notes ADD COLUMN note_image text''');
-          db.execute('''ALTER TABLE notes ADD COLUMN note_audio_file text''');
-        }
-        if (oldVersion == 2 && newVersion > 2) {
-          db.execute('''ALTER TABLE notes ADD COLUMN note_favorite integer''');
-        }
       },
     );
   }
