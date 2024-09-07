@@ -1,13 +1,16 @@
+import 'dart:io';
+
 import 'package:path/path.dart';
 import 'package:scrawler/models/label.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class DBHelper {
-  late Database db;
   static const _databaseName = 'scrawler.s3db';
   static const _databaseVersion = 3;
   Database? _database;
+  var databaseFactory = databaseFactoryFfi;
 
   DBHelper._privateConstructor();
 
@@ -20,7 +23,9 @@ class DBHelper {
   }
 
   Future _initDatabase() async {
-    var databasesPath = await getDatabasesPath();
+    var databasesPath = UniversalPlatform.isAndroid || UniversalPlatform.isIOS
+        ? await getDatabasesPath()
+        : Directory.current.path;
     String path = join(databasesPath, _databaseName);
     return await openDatabase(
       path,
@@ -36,15 +41,14 @@ class DBHelper {
                     note_archived integer,
                     note_color integer,
                     note_image text,
-                    note_audio_file text, 
+                    note_audio_file text,
                     note_favorite integer)
                 ''');
         await db.execute('''
                   CREATE TABLE labels (label_id text primary key, label_name text)
                 ''');
       },
-      onUpgrade: (db, oldVersion, newVersion) {
-      },
+      onUpgrade: (db, oldVersion, newVersion) {},
     );
   }
 
@@ -114,8 +118,10 @@ class DBHelper {
       'note_title': note.noteTitle,
       'note_text': note.noteText,
       'note_color': note.noteColor,
-      'note_favorite': note.noteFavorite,
-      'note_label': note.noteLabel
+      'note_favorite': note.noteFavorite ? 1 : 0,
+      'note_label': note.noteLabel,
+      'note_archived': note.noteArchived ? 1 : 0,
+      'note_image': note.noteImage
     };
     String id = map['note_id'];
     final rowsAffected =

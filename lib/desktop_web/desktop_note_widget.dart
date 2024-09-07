@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:scrawler/mobile/markdown_toolbar.dart';
+import 'package:scrawler/markdown_toolbar.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_empty.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -14,7 +14,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../helpers/constants.dart';
 import '../../models/notes.dart';
-import '../markdown_toolbar.dart';
+import '../../markdown_toolbar.dart';
 
 class NotePageMaterial extends StatefulWidget {
   final Notes note;

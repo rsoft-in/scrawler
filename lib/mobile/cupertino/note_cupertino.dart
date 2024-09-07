@@ -7,7 +7,7 @@ import '../../helpers/constants.dart';
 import '../../helpers/dbhelper.dart';
 import '../../helpers/utility.dart';
 import '../../models/notes.dart';
-import '../markdown_toolbar.dart';
+import '../../markdown_toolbar.dart';
 
 class NotePageCupertino extends StatefulWidget {
   final Notes note;

@@ -18,7 +18,7 @@ import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../mobile/markdown_toolbar.dart';
+import '../markdown_toolbar.dart';
 import '../models/notes.dart';
 import '../providers/labels_api_provider.dart';
 import '../providers/notes_api_provider.dart';
