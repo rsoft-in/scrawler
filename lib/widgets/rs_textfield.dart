@@ -26,25 +26,9 @@ class RSTextField extends StatelessWidget {
     this.onEditingComplete
   });
 
-  // String? _validate(String? value) {
-  //   if (notEmpty && (value == null || value.isEmpty)) {
-  //     return 'mandatory_text';
-  //   }
-  //   if (isNumber && !Utility.isNumber(value)) {
-  //     return 'invalid_input';
-  //   }
-  //   if (isAlphaNum && !kAplhaNumRegEx.hasMatch(value ?? '')) {
-  //     return 'invalid_input';
-  //   }
-  //   if (isEmail && !Utility.isEmail(value)) {
-  //     return 'invalid_email';
-  //   }
-  //   return null;
-  // }
-
   @override
   Widget build(BuildContext context) {
-    return UniversalPlatform.isIOS
+    return UniversalPlatform.isIOS || UniversalPlatform.isMacOS
         ? Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey),

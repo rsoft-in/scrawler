@@ -9,7 +9,7 @@ class RSButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UniversalPlatform.isIOS
+    return UniversalPlatform.isIOS || UniversalPlatform.isMacOS
         ? CupertinoButton.filled(onPressed: onPressed, child: child)
         : FilledButton(onPressed: onPressed, child: child);
   }

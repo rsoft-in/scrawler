@@ -9,7 +9,7 @@ class RSTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UniversalPlatform.isIOS
+    return UniversalPlatform.isIOS || UniversalPlatform.isMacOS
         ? CupertinoButton(onPressed: onPressed, child: child)
         : TextButton(onPressed: onPressed, child: child);
   }

@@ -1,9 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:scrawler/helpers/adaptive.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/linux/linux_app.dart';
 import 'package:scrawler/linux/theme.dart';
 import 'package:scrawler/windows/windows_app.dart';
@@ -54,7 +52,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   int themeID = 3;
-  ScreenSize _screenSize = ScreenSize.large;
 
   @override
   void initState() {
@@ -94,7 +91,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    _screenSize = getScreenSize(context);
 
     // if (UniversalPlatform.isIOS) {
     //   return CupertinoApp(
