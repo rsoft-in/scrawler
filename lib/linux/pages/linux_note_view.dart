@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
 
@@ -26,6 +27,7 @@ class _LinuxNoteViewState extends State<LinuxNoteView> {
     return Padding(
       padding: kPaddingLarge,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
           Row(
@@ -101,6 +103,11 @@ class _LinuxNoteViewState extends State<LinuxNoteView> {
                 },
               ),
             ],
+          ),
+          kVSpace,
+          Text(
+            Utility.formatDateTime(widget.note.noteDate),
+            style: const TextStyle(color: Colors.grey),
           ),
           kVSpace,
           Expanded(

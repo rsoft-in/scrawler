@@ -71,7 +71,12 @@ class _LinuxNoteEditState extends State<LinuxNoteEdit> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    autofocus: true,
                     controller: titleController,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                     decoration: const InputDecoration.collapsed(
                       hintText: 'Enter Title',
                     ),

@@ -5,6 +5,7 @@ import 'package:scrawler/helpers/dbhelper.dart';
 import 'package:scrawler/linux/pages/linux_note_edit.dart';
 import 'package:scrawler/linux/pages/linux_note_view.dart';
 import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/rs_alert_dialog.dart';
 import 'package:uuid/uuid.dart';
 
 class LinuxApp extends StatefulWidget {
@@ -138,7 +139,22 @@ class _LinuxAppState extends State<LinuxApp> {
                           },
                           onDeleteClicked: () {
                             Future.delayed(const Duration(microseconds: 500),
-                                () => deleteNote());
+                                () {
+                              if (mounted) {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return RSAlertDialog(
+                                        title: const Text('Confirm'),
+                                        content: const Text(
+                                            'Are you sure you want to Delete?'),
+                                        acceptText: 'Yes',
+                                        rejectText: 'No',
+                                        onAcceptAction: () => deleteNote(),
+                                      );
+                                    });
+                              }
+                            });
                           },
                         ),
                 )
