@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/desktop/pages/desktop_note_edit.dart';
+import 'package:scrawler/desktop/pages/desktop_note_view.dart';
+import 'package:scrawler/desktop/pages/settings.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/dbhelper.dart';
-import 'package:scrawler/linux/pages/linux_note_edit.dart';
-import 'package:scrawler/linux/pages/linux_note_view.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/rs_alert_dialog.dart';
 import 'package:uuid/uuid.dart';
 
-class LinuxApp extends StatefulWidget {
-  const LinuxApp({super.key});
+class DesktopApp extends StatefulWidget {
+  const DesktopApp({super.key});
 
   @override
-  State<LinuxApp> createState() => _LinuxAppState();
+  State<DesktopApp> createState() => _DesktopAppState();
 }
 
-class _LinuxAppState extends State<LinuxApp> {
+class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   bool editorMode = false;
   bool isNewNote = false;
   final dbHelper = DBHelper.instance;
@@ -57,6 +58,18 @@ class _LinuxAppState extends State<LinuxApp> {
     getNotes();
   }
 
+  showSettings() {
+    showAdaptiveDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return const Dialog(
+          child: SettingsPage(),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -69,24 +82,37 @@ class _LinuxAppState extends State<LinuxApp> {
       body: Row(
         children: [
           SizedBox(
-            width: 280,
+            width: 250,
             child: Padding(
               padding: kPaddingMedium,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ListTile(
-                    leading: const Icon(Symbols.add),
-                    title: const Text('Add Note'),
-                    onTap: () => setState(() {
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  FilledButton.tonal(
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                    ),
+                    onPressed: () => setState(() {
                       Notes newNote = Notes.empty();
                       newNote.noteId = const Uuid().v1();
                       selectedNote = newNote;
                       isNewNote = true;
                       editorMode = true;
                     }),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(kBorderRadius)),
+                    child: const Row(
+                      children: [
+                        Icon(Symbols.add),
+                        kHSpace,
+                        Text('Add Note'),
+                      ],
+                    ),
+                  ),
+                  const Divider(
+                    thickness: 0.2,
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -108,7 +134,7 @@ class _LinuxAppState extends State<LinuxApp> {
                   ListTile(
                     leading: const Icon(Symbols.settings),
                     title: const Text('Settings'),
-                    onTap: () {},
+                    onTap: () => showSettings(),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(kBorderRadius)),
                   ),
@@ -116,46 +142,50 @@ class _LinuxAppState extends State<LinuxApp> {
               ),
             ),
           ),
-          const VerticalDivider(
-            width: 2,
-          ),
           selectedNote != null
               ? Expanded(
                   child: editorMode
-                      ? LinuxNoteEdit(
-                          note: selectedNote!,
-                          onSave: (note, isNew) {
-                            saveNote(note, isNew);
-                          },
-                          isNewNote: isNewNote,
+                      ? Card(
+                          elevation: 5,
+                          child: DesktopNoteEdit(
+                            note: selectedNote!,
+                            onSave: (note, isNew) {
+                              saveNote(note, isNew);
+                            },
+                            isNewNote: isNewNote,
+                          ),
                         )
-                      : LinuxNoteView(
-                          note: selectedNote!,
-                          onEditClicked: () {
-                            setState(() {
-                              editorMode = true;
-                              isNewNote = false;
-                            });
-                          },
-                          onDeleteClicked: () {
-                            Future.delayed(const Duration(microseconds: 500),
-                                () {
-                              if (mounted) {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return RSAlertDialog(
-                                        title: const Text('Confirm'),
-                                        content: const Text(
-                                            'Are you sure you want to Delete?'),
-                                        acceptText: 'Yes',
-                                        rejectText: 'No',
-                                        onAcceptAction: () => deleteNote(),
-                                      );
-                                    });
-                              }
-                            });
-                          },
+                      : Card(
+                          elevation: 5,
+                          semanticContainer: false,
+                          child: DesktopNoteView(
+                            note: selectedNote!,
+                            onEditClicked: () {
+                              setState(() {
+                                editorMode = true;
+                                isNewNote = false;
+                              });
+                            },
+                            onDeleteClicked: () {
+                              Future.delayed(const Duration(microseconds: 500),
+                                  () {
+                                if (mounted) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return RSAlertDialog(
+                                          title: const Text('Confirm'),
+                                          content: const Text(
+                                              'Are you sure you want to Delete?'),
+                                          acceptText: 'Yes',
+                                          rejectText: 'No',
+                                          onAcceptAction: () => deleteNote(),
+                                        );
+                                      });
+                                }
+                              });
+                            },
+                          ),
                         ),
                 )
               : const Expanded(

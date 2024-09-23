@@ -40,13 +40,21 @@ class RSAlertDialog extends StatelessWidget {
             title: title,
             content: content,
             actions: [
-              TextButton(
-                onPressed: onAcceptAction,
-                child: Text(acceptText),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(rejectText),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FilledButton.tonal(
+                    onPressed: onAcceptAction,
+                    child: Text(acceptText),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(rejectText),
+                  ),
+                ],
               ),
             ],
           );

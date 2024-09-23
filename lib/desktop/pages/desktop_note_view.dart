@@ -4,13 +4,12 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
-import 'package:scrawler/widgets/scrawl_color_dot.dart';
 
-class LinuxNoteView extends StatefulWidget {
+class DesktopNoteView extends StatefulWidget {
   final Notes note;
   final VoidCallback onEditClicked;
   final VoidCallback onDeleteClicked;
-  const LinuxNoteView({
+  const DesktopNoteView({
     super.key,
     required this.note,
     required this.onEditClicked,
@@ -18,35 +17,48 @@ class LinuxNoteView extends StatefulWidget {
   });
 
   @override
-  State<LinuxNoteView> createState() => _LinuxNoteViewState();
+  State<DesktopNoteView> createState() => _DesktopNoteViewState();
 }
 
-class _LinuxNoteViewState extends State<LinuxNoteView> {
+class _DesktopNoteViewState extends State<DesktopNoteView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: kPaddingLarge,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
+          // Row(
+          //   children: [
+          //     Expanded(
+          //       child: Text(
+          //         widget.note.noteTitle,
+          //         style: const TextStyle(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //     ScrawlColorDot(colorCode: widget.note.noteColor),
+          //     if (widget.note.noteFavorite)
+          //       const Icon(
+          //         Symbols.favorite,
+          //         color: Colors.red,
+          //       ),
+
+          //   ],
+          // ),
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  widget.note.noteTitle,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+              Text(
+                widget.note.noteTitle,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              ScrawlColorDot(colorCode: widget.note.noteColor),
-              if (widget.note.noteFavorite)
-                const Icon(
-                  Symbols.favorite,
-                  color: Colors.red,
-                ),
+              const Spacer(),
               IconButton(
                 onPressed: () => widget.onEditClicked(),
                 icon: const Icon(Symbols.edit),
@@ -105,16 +117,18 @@ class _LinuxNoteViewState extends State<LinuxNoteView> {
             ],
           ),
           kVSpace,
-          Text(
-            Utility.formatDateTime(widget.note.noteDate),
-            style: const TextStyle(color: Colors.grey),
-          ),
-          kVSpace,
           Expanded(
             child: Markdown(
               padding: EdgeInsets.zero,
               data: widget.note.noteText,
+              selectable: true,
+              softLineBreak: true,
             ),
+          ),
+          kVSpace,
+          Text(
+            Utility.formatDateTime(widget.note.noteDate),
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),

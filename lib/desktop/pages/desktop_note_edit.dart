@@ -5,21 +5,21 @@ import 'package:scrawler/markdown_toolbar.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:uuid/uuid.dart';
 
-class LinuxNoteEdit extends StatefulWidget {
+class DesktopNoteEdit extends StatefulWidget {
   final Notes note;
   final Function(Notes, bool) onSave;
   final bool isNewNote;
-  const LinuxNoteEdit(
+  const DesktopNoteEdit(
       {super.key,
       required this.note,
       required this.onSave,
       this.isNewNote = false});
 
   @override
-  State<LinuxNoteEdit> createState() => _LinuxNoteEditState();
+  State<DesktopNoteEdit> createState() => _DesktopNoteEditState();
 }
 
-class _LinuxNoteEditState extends State<LinuxNoteEdit> {
+class _DesktopNoteEditState extends State<DesktopNoteEdit> {
   TextEditingController titleController = TextEditingController();
   TextEditingController editorController = TextEditingController();
   UndoHistoryController undoController = UndoHistoryController();
@@ -61,36 +61,35 @@ class _LinuxNoteEditState extends State<LinuxNoteEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    autofocus: true,
-                    controller: titleController,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: const InputDecoration.collapsed(
-                      hintText: 'Enter Title',
-                    ),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  autofocus: true,
+                  controller: titleController,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  decoration: const InputDecoration.collapsed(
+                    hintText: 'Enter Title',
                   ),
                 ),
-                IconButton(
-                  onPressed: () => saveNote(),
-                  icon: const Icon(Symbols.check),
-                )
-              ],
-            ),
+              ),
+              IconButton(
+                onPressed: () => saveNote(),
+                icon: const Icon(Symbols.check),
+              )
+            ],
           ),
           const Divider(
             height: 2,
+            thickness: 0.2,
           ),
           MarkdownToolbar(
             controller: editorController,
@@ -99,16 +98,15 @@ class _LinuxNoteEditState extends State<LinuxNoteEdit> {
           ),
           const Divider(
             height: 2,
+            thickness: 0.2,
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                controller: editorController,
-                maxLines: null,
-                expands: true,
-                decoration: const InputDecoration.collapsed(hintText: ''),
-              ),
+            child: TextFormField(
+              controller: editorController,
+              maxLines: null,
+              expands: true,
+              style: const TextStyle(fontSize: 14.0),
+              decoration: const InputDecoration.collapsed(hintText: ''),
             ),
           ),
         ],

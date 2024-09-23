@@ -1,10 +1,9 @@
-import 'package:fluent_ui/fluent_ui.dart' as fluent;
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:macos_ui/macos_ui.dart';
+import 'package:scrawler/desktop/desktop_app.dart';
+import 'package:scrawler/desktop/theme.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/linux/linux_app.dart';
-import 'package:scrawler/linux/theme.dart';
-import 'package:scrawler/windows/windows_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -13,6 +12,14 @@ import 'package:window_manager/window_manager.dart';
 import 'helpers/globals.dart' as globals;
 
 late SharedPreferences prefs;
+
+Future<void> _configureMacosWindowUtils() async {
+  const config = MacosWindowUtilsConfig(
+    toolbarStyle: NSWindowToolbarStyle.expanded,
+  );
+  await config.apply();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (UniversalPlatform.isWindows ||
@@ -38,6 +45,9 @@ void main() async {
       await windowManager.focus();
     });
   }
+
+  // ** Enable this ** //
+  if (UniversalPlatform.isMacOS) await _configureMacosWindowUtils();
 
   runApp(Phoenix(child: const MyApp()));
 }
@@ -91,7 +101,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     // if (UniversalPlatform.isIOS) {
     //   return CupertinoApp(
     //     title: kAppName,
@@ -122,33 +131,15 @@ class _MyAppState extends State<MyApp> {
     //     initialRoute: '/',
     //   );
     // }
-    if (UniversalPlatform.isWindows) {
-      return fluent.FluentApp(
-        title: kAppName,
-        darkTheme: fluent.FluentThemeData(
-          brightness: Brightness.dark,
-          accentColor: fluent.Colors.red,
-          visualDensity: VisualDensity.standard,
-          focusTheme: fluent.FocusThemeData(
-            glowFactor: fluent.is10footScreen(context) ? 2.0 : 0.0,
-          ),
-        ),
-        theme: fluent.FluentThemeData(
-          accentColor: fluent.Colors.blue,
-          visualDensity: VisualDensity.standard,
-          focusTheme: fluent.FocusThemeData(
-            glowFactor: fluent.is10footScreen(context) ? 2.0 : 0.0,
-          ),
-        ),
-        home: const WindowsApp(),
-      );
-    } else if (UniversalPlatform.isLinux) {
+    if (UniversalPlatform.isDesktop) {
       return MaterialApp(
         title: kAppName,
         theme: theme,
-        themeMode: themeMode,
+        darkTheme: themeDark,
+        // themeMode: themeMode,
+        themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
-        home: const LinuxApp(),
+        home: const DesktopApp(),
       );
     } else {
       return const MaterialApp();

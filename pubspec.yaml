@@ -33,6 +33,7 @@ dependencies:
   window_manager: ^0.4.2
 
   fluent_ui: ^4.9.1
+  macos_ui: ^2.0.9
   material_symbols_icons: ^4.2784.0
   sqflite_common_ffi: ^2.3.3
   sqlite3_flutter_libs: ^0.5.24
