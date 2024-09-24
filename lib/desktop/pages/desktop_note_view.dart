@@ -9,11 +9,15 @@ class DesktopNoteView extends StatefulWidget {
   final Notes note;
   final VoidCallback onEditClicked;
   final VoidCallback onDeleteClicked;
+  final VoidCallback onSidebarClicked;
+  final bool showSidebar;
   const DesktopNoteView({
     super.key,
     required this.note,
     required this.onEditClicked,
     required this.onDeleteClicked,
+    required this.onSidebarClicked,
+    required this.showSidebar,
   });
 
   @override
@@ -24,7 +28,7 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
@@ -49,8 +53,24 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
 
           //   ],
           // ),
+          // if (!widget.showSidebar)
+          //   const SizedBox(
+          //     height: 20,
+          //   ),
           Row(
             children: [
+              AnimatedContainer(
+                width: !widget.showSidebar ? 70.0 : 0.0,
+                // height: !widget.showSidebar ? 100.0 : 200.0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.ease,
+                child: Container(
+                  width: 0,
+                ),
+              ),
+              IconButton(
+                  onPressed: () => widget.onSidebarClicked(),
+                  icon: const Icon(Symbols.dock_to_right)),
               Text(
                 widget.note.noteTitle,
                 style: const TextStyle(

@@ -15,7 +15,7 @@ late SharedPreferences prefs;
 
 Future<void> _configureMacosWindowUtils() async {
   const config = MacosWindowUtilsConfig(
-    toolbarStyle: NSWindowToolbarStyle.expanded,
+    toolbarStyle: NSWindowToolbarStyle.unified,
   );
   await config.apply();
 }
@@ -33,6 +33,7 @@ void main() async {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = const WindowOptions(
       size: Size(1000, 650),
+      minimumSize: Size(500, 500),
       center: true,
       skipTaskbar: false,
       // titleBarStyle: TitleBarStyle.hidden,

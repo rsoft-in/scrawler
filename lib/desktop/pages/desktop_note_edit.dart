@@ -62,7 +62,7 @@ class _DesktopNoteEditState extends State<DesktopNoteEdit> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -76,11 +76,16 @@ class _DesktopNoteEditState extends State<DesktopNoteEdit> {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
-                  decoration: const InputDecoration.collapsed(
+                  decoration: const InputDecoration(
                     hintText: 'Enter Title',
+                    isCollapsed: true,
+                    filled: false,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                   ),
                 ),
               ),
+              const Spacer(),
               IconButton(
                 onPressed: () => saveNote(),
                 icon: const Icon(Symbols.check),
@@ -106,7 +111,12 @@ class _DesktopNoteEditState extends State<DesktopNoteEdit> {
               maxLines: null,
               expands: true,
               style: const TextStyle(fontSize: 14.0),
-              decoration: const InputDecoration.collapsed(hintText: ''),
+              decoration: const InputDecoration(
+                isCollapsed: true,
+                filled: false,
+                border: InputBorder.none,
+                focusedBorder: InputBorder.none,
+              ),
             ),
           ),
         ],

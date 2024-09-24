@@ -16,6 +16,7 @@ ThemeData theme = ThemeData(
   dialogTheme: dialogTheme(),
   dropdownMenuTheme: dropdownMenuThemeData(),
   popupMenuTheme: popupMenuThemeData(),
+  inputDecorationTheme: inputDecorationTheme(),
 );
 
 ThemeData themeDark = ThemeData(
@@ -33,6 +34,7 @@ ThemeData themeDark = ThemeData(
   dialogTheme: dialogTheme(),
   dropdownMenuTheme: dropdownMenuThemeData(),
   popupMenuTheme: popupMenuThemeData(),
+  inputDecorationTheme: inputDecorationTheme(),
 );
 
 // ListTile
@@ -113,6 +115,27 @@ PopupMenuThemeData popupMenuThemeData() {
     position: PopupMenuPosition.under,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+    ),
+  );
+}
+
+InputDecorationTheme inputDecorationTheme() {
+  return InputDecorationTheme(
+    filled: true,
+    floatingLabelBehavior: FloatingLabelBehavior.never,
+    isDense: true,
+    hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    counterStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    helperStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    border: OutlineInputBorder(
+      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(25),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: const BorderSide(width: 2),
+      borderRadius: BorderRadius.circular(25),
     ),
   );
 }
