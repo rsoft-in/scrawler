@@ -4,6 +4,7 @@ import 'package:macos_ui/macos_ui.dart';
 import 'package:scrawler/desktop/desktop_app.dart';
 import 'package:scrawler/desktop/theme.dart';
 import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/mobile/mobile_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_platform/universal_platform.dart';
@@ -143,7 +144,9 @@ class _MyAppState extends State<MyApp> {
         home: const DesktopApp(),
       );
     } else {
-      return const MaterialApp();
+      return const MaterialApp(
+        home: MobileApp(),
+      );
     }
   }
 }

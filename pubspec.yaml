@@ -24,7 +24,7 @@ dependencies:
   http: ^1.2.0
   intl: ^0.19.0
   shared_preferences: ^2.0.13
-  sqflite: ^2.2.8+4
+  
   path: ^1.8.3
   path_provider: ^2.1.1
   uuid: ^4.0.0
@@ -37,6 +37,7 @@ dependencies:
   flutter_svg_provider: ^1.0.7
   macos_ui: ^2.0.9
   material_symbols_icons: ^4.2784.0
+  sqlite3: ^2.4.6
   sqflite_common_ffi: ^2.3.3
   sqlite3_flutter_libs: ^0.5.24
 
