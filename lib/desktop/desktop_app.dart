@@ -4,11 +4,13 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/desktop/pages/desktop_note_edit.dart';
 import 'package:scrawler/desktop/pages/desktop_note_view.dart';
 import 'package:scrawler/desktop/pages/settings.dart';
+import 'package:scrawler/helpers/adaptive.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/dbhelper.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/rs_alert_dialog.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../helpers/globals.dart' as globals;
@@ -28,6 +30,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   List<Notes> notes = [];
   Notes? selectedNote;
   bool darkModeOn = false;
+  bool isLargeDevice = false;
 
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_title');
@@ -88,6 +91,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
     darkModeOn = (globals.themeMode == ThemeMode.dark ||
         (globals.themeMode == ThemeMode.system &&
             brightness == Brightness.dark));
+    isLargeDevice = getScreenSize(context) == ScreenSize.large;
     // return Scaffold(
     //   body: Row(
     //     children: [
@@ -376,9 +380,10 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(
-              height: 35,
-            ),
+            if (UniversalPlatform.isMacOS)
+              const SizedBox(
+                height: 35,
+              ),
             TextField(
               decoration: const InputDecoration(
                 prefixIcon: Icon(Symbols.search),
@@ -473,9 +478,10 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 30,
-              ),
+              if (UniversalPlatform.isMacOS)
+                const SizedBox(
+                  height: 30,
+                ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -523,23 +529,13 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                           child: GridView.builder(
                             itemCount: notes.length,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: isLargeDevice ? 4 : 2,
                               crossAxisSpacing: 8.0,
                               mainAxisSpacing: 8.0,
-                              childAspectRatio: 2,
+                              childAspectRatio: isLargeDevice ? 1.8 : 2.5,
                             ),
                             itemBuilder: (context, index) {
-                              // return ListTile(
-                              //   leading: const Icon(Symbols.note),
-                              //   title: Text(notes[index].noteTitle),
-                              //   onTap: () => onNoteSelected(notes[index]),
-                              //   selected: selectedNote?.noteId == notes[index].noteId,
-                              //   selectedTileColor: kPrimaryColor.withOpacity(0.2),
-                              //   shape: RoundedRectangleBorder(
-                              //     borderRadius: BorderRadius.circular(kBorderRadius),
-                              //   ),
-                              // );
                               return Card.filled(
                                 child: InkWell(
                                   onTap: () => onNoteSelected(notes[index]),
@@ -558,6 +554,8 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                           style: Theme.of(context)
                                               .textTheme
                                               .titleMedium,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                         const SizedBox(height: 10),
                                         Text(
@@ -567,7 +565,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelSmall,
-                                          maxLines: 3,
+                                          maxLines: 1,
                                         ),
                                       ],
                                     ),
