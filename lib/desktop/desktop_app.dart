@@ -71,6 +71,16 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> saveFavorite() async {
+    final res = await dbHelper.updateNoteFavorite(
+        selectedNote!.noteId, !selectedNote!.noteFavorite);
+    if (res) {
+      getNotes();
+      selectedNote!.noteFavorite = !selectedNote!.noteFavorite;
+      setState(() {});
+    }
+  }
+
   Future<void> deleteNote() async {
     await dbHelper.deleteNotes(selectedNote!.noteId);
     setState(() {
@@ -305,7 +315,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                       },
                                       onColorPickerClicked: () {
                                         Future.delayed(
-                                            const Duration(milliseconds: 500),
+                                            const Duration(microseconds: 500),
                                             () async {
                                           if (mounted) {
                                             final colorCode = await showDialog(
@@ -319,6 +329,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                           }
                                         });
                                       },
+                                      onFavoriteClicked: () => saveFavorite(),
                                       onSidebarClicked: () {
                                         setState(() {
                                           showSidebar = !showSidebar;

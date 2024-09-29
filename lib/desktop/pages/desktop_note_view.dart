@@ -12,6 +12,7 @@ class DesktopNoteView extends StatefulWidget {
   final VoidCallback onEditClicked;
   final VoidCallback onDeleteClicked;
   final VoidCallback onColorPickerClicked;
+  final VoidCallback onFavoriteClicked;
   final VoidCallback onSidebarClicked;
   final bool showSidebar;
   const DesktopNoteView({
@@ -20,6 +21,7 @@ class DesktopNoteView extends StatefulWidget {
     required this.onEditClicked,
     required this.onDeleteClicked,
     required this.onColorPickerClicked,
+    required this.onFavoriteClicked,
     required this.onSidebarClicked,
     required this.showSidebar,
   });
@@ -49,11 +51,6 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
           //       ),
           //     ),
           //     ScrawlColorDot(colorCode: widget.note.noteColor),
-          //     if (widget.note.noteFavorite)
-          //       const Icon(
-          //         Symbols.favorite,
-          //         color: Colors.red,
-          //       ),
 
           //   ],
           // ),
@@ -84,6 +81,12 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
               ),
               const Spacer(),
               ScrawlColorDot(colorCode: widget.note.noteColor),
+              kHSpace,
+              if (widget.note.noteFavorite)
+                const Icon(
+                  Symbols.favorite,
+                  color: Colors.red,
+                ),
               kHSpace,
               IconButton(
                 onPressed: () => widget.onEditClicked(),
@@ -138,6 +141,9 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
                       break;
                     case 2:
                       widget.onDeleteClicked();
+                      break;
+                    case 3:
+                      widget.onFavoriteClicked();
                       break;
                     default:
                   }
