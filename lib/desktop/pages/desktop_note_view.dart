@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/helpers/utility.dart';
-import 'package:scrawler/models/notes.dart';
 
+import '../../helpers/constants.dart';
+import '../../helpers/utility.dart';
+import '../../models/notes.dart';
 import '../../widgets/scrawl_color_dot.dart';
 
 class DesktopNoteView extends StatefulWidget {
@@ -39,30 +39,10 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
-          // Row(
-          //   children: [
-          //     Expanded(
-          //       child: Text(
-          //         widget.note.noteTitle,
-          //         style: const TextStyle(
-          //           fontSize: 18,
-          //           fontWeight: FontWeight.bold,
-          //         ),
-          //       ),
-          //     ),
-          //     ScrawlColorDot(colorCode: widget.note.noteColor),
-
-          //   ],
-          // ),
-          // if (!widget.showSidebar)
-          //   const SizedBox(
-          //     height: 20,
-          //   ),
           Row(
             children: [
               AnimatedContainer(
                 width: !widget.showSidebar ? 70.0 : 0.0,
-                // height: !widget.showSidebar ? 100.0 : 200.0,
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.ease,
                 child: Container(
