@@ -5,10 +5,13 @@ import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 
+import '../../widgets/scrawl_color_dot.dart';
+
 class DesktopNoteView extends StatefulWidget {
   final Notes note;
   final VoidCallback onEditClicked;
   final VoidCallback onDeleteClicked;
+  final VoidCallback onColorPickerClicked;
   final VoidCallback onSidebarClicked;
   final bool showSidebar;
   const DesktopNoteView({
@@ -16,6 +19,7 @@ class DesktopNoteView extends StatefulWidget {
     required this.note,
     required this.onEditClicked,
     required this.onDeleteClicked,
+    required this.onColorPickerClicked,
     required this.onSidebarClicked,
     required this.showSidebar,
   });
@@ -79,6 +83,8 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
                 ),
               ),
               const Spacer(),
+              ScrawlColorDot(colorCode: widget.note.noteColor),
+              kHSpace,
               IconButton(
                 onPressed: () => widget.onEditClicked(),
                 icon: const Icon(Symbols.edit),
@@ -127,6 +133,9 @@ class _DesktopNoteViewState extends State<DesktopNoteView> {
                 },
                 onSelected: (value) {
                   switch (value) {
+                    case 0:
+                      widget.onColorPickerClicked();
+                      break;
                     case 2:
                       widget.onDeleteClicked();
                       break;

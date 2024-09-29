@@ -49,3 +49,5 @@ apiserver
 
 data/
 /debian/packages/
+
+*.s3db

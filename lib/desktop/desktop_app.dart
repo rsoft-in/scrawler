@@ -10,6 +10,7 @@ import 'package:scrawler/helpers/dbhelper.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/rs_alert_dialog.dart';
+import 'package:scrawler/widgets/scrawl_color_picker.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:uuid/uuid.dart';
 
@@ -57,6 +58,17 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
       editorMode = false;
       isNewNote = false;
     });
+  }
+
+  Future<void> saveColor(int noteColor) async {
+    final res = await dbHelper.updateNoteColor(selectedNote!.noteId, noteColor);
+    if (res) {
+      getNotes();
+      selectedNote!.noteColor = noteColor;
+      setState(() {});
+    } else {
+      print('Unable to save note color!');
+    }
   }
 
   Future<void> deleteNote() async {
@@ -219,7 +231,6 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
         actions: <Type, Action<Intent>>{
           SidebarIntent: SetCounterAction(perform: () {
             // _searchNode.requestFocus();
-            print('object');
           }),
         },
         child: Scaffold(
@@ -289,6 +300,22 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                                 );
                                               },
                                             );
+                                          }
+                                        });
+                                      },
+                                      onColorPickerClicked: () {
+                                        Future.delayed(
+                                            const Duration(milliseconds: 500),
+                                            () async {
+                                          if (mounted) {
+                                            final colorCode = await showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return const ScrawlColorPicker();
+                                                });
+                                            if (colorCode != null) {
+                                              saveColor(colorCode);
+                                            }
                                           }
                                         });
                                       },
