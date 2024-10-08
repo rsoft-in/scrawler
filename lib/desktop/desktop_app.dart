@@ -32,6 +32,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   Notes? selectedNote;
   bool darkModeOn = false;
   bool isLargeDevice = false;
+  final SearchController controller = SearchController();
 
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_title');
@@ -422,13 +423,36 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
               const SizedBox(
                 height: 35,
               ),
-            TextField(
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Symbols.search),
-                hintText: 'Search Notes',
-              ),
-              onChanged: (value) {
-                // Implement search logic
+            SearchAnchor(
+              viewConstraints: const BoxConstraints(maxWidth: 280),
+              dividerColor: Colors.transparent,
+              viewHintText: 'Search note',
+              builder: (BuildContext context, SearchController controller) {
+                return SearchBar(
+                  controller: controller,
+                  hintText: 'Search note',
+                  onTap: () {
+                    controller.openView();
+                  },
+                  onChanged: (_) {
+                    controller.openView();
+                  },
+                  leading: const Icon(Icons.search),
+                );
+              },
+              suggestionsBuilder:
+                  (BuildContext context, SearchController controller) {
+                return List<ListTile>.generate(5, (int index) {
+                  final String item = 'item $index';
+                  return ListTile(
+                    title: Text(item),
+                    onTap: () {
+                      setState(() {
+                        controller.closeView(item);
+                      });
+                    },
+                  );
+                });
               },
             ),
             const SizedBox(
@@ -523,27 +547,81 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Icon(Symbols.home),
-                  kHSpace,
-                  const Text(
-                    'Home',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w300),
+                  const Expanded(
+                    child: Row(
+                      children: [
+                        Icon(Symbols.home),
+                        kHSpace,
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w300),
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
-                  IconButton.filledTonal(
-                      onPressed: () => showSettings(),
-                      icon: const Icon(Symbols.settings))
+                  // const Spacer(),
+                  Expanded(
+                    child: SearchAnchor(
+                      viewConstraints: const BoxConstraints(maxHeight: 300),
+                      dividerColor: Colors.transparent,
+                      viewHintText: 'Search note',
+                      builder:
+                          (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          controller: controller,
+                          hintText: 'Search note',
+                          onTap: () {
+                            controller.openView();
+                          },
+                          onChanged: (_) {
+                            controller.openView();
+                          },
+                          leading: const Icon(Icons.search),
+                        );
+                      },
+                      suggestionsBuilder:
+                          (BuildContext context, SearchController controller) {
+                        return List<ListTile>.generate(5, (int index) {
+                          final String item = 'item $index';
+                          return ListTile(
+                            title: Text(item),
+                            onTap: () {
+                              setState(() {
+                                controller.closeView(item);
+                              });
+                            },
+                          );
+                        });
+                      },
+                    ),
+                  ),
+                  // const Spacer(),
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.all(16),
+                        ),
+                        onPressed: () => setState(() {
+                          Notes newNote = Notes.empty();
+                          newNote.noteId = const Uuid().v1();
+                          selectedNote = newNote;
+                          isNewNote = true;
+                          editorMode = true;
+                        }),
+                        label: const Text('New Note'),
+                        icon: const Icon(Symbols.add),
+                      ),
+                      kHSpace,
+                      IconButton.filledTonal(
+                          onPressed: () => showSettings(),
+                          icon: const Icon(Symbols.settings))
+                    ],
+                  ))
                 ],
-              ),
-              kVSpace,
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search Notes',
-                ),
-                onChanged: (value) {
-                  // Implement search logic
-                },
               ),
               kVSpace,
               Expanded(

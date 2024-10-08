@@ -136,10 +136,10 @@ class _MyAppState extends State<MyApp> {
     if (UniversalPlatform.isDesktop) {
       return MaterialApp(
         title: kAppName,
-        theme: theme,
-        darkTheme: themeDark,
+        theme: theme(context),
+        darkTheme: themeDark(context),
         // themeMode: themeMode,
-        themeMode: ThemeMode.system,
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
         home: const DesktopApp(),
       );
