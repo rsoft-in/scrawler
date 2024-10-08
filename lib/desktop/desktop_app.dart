@@ -6,7 +6,7 @@ import 'package:scrawler/desktop/pages/desktop_note_view.dart';
 import 'package:scrawler/desktop/pages/settings.dart';
 import 'package:scrawler/helpers/adaptive.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/helpers/dbhelper.dart';
+import 'package:scrawler/desktop/dbhelper.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/rs_alert_dialog.dart';

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:scrawler/helpers/dbhelper.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/mobile/dbhelper.dart';
+import 'package:scrawler/mobile/pages/mobile_note_edit.dart';
 import 'package:scrawler/models/notes.dart';
 
 class MobileApp extends StatefulWidget {
@@ -10,58 +13,59 @@ class MobileApp extends StatefulWidget {
 }
 
 class _MobileAppState extends State<MobileApp> {
-  bool editorMode = false;
-  bool showSidebar = true;
-  bool isNewNote = false;
-  final dbHelper = DBHelper.instance;
   List<Notes> notes = [];
-  Notes? selectedNote;
-  bool darkModeOn = false;
-  bool isLargeDevice = false;
+  final dbHelper = DBHelper();
 
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_title');
     setState(() {});
   }
 
-  void onNoteSelected(Notes note) {
-    setState(() {
-      selectedNote = note;
-      editorMode = false;
-      isNewNote = false;
-    });
-  }
-
-  Future<void> saveNote(Notes note, bool isNew) async {
-    if (isNew) {
-      await dbHelper.insertNotes(note);
-    } else {
-      await dbHelper.updateNotes(note);
-    }
-    getNotes();
-    setState(() {
-      selectedNote = note;
-      editorMode = false;
-      isNewNote = false;
-    });
-  }
-
-  Future<void> deleteNote() async {
-    await dbHelper.deleteNotes(selectedNote!.noteId);
-    setState(() {
-      selectedNote = null;
-    });
-    getNotes();
-  }
-
   @override
   void initState() {
-    getNotes();
     super.initState();
+    getNotes();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(kAppName),
+      ),
+      body: notes.isEmpty
+          ? const Center(
+              child: Text('No Notes'),
+            )
+          : ListView.builder(
+              itemCount: notes.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(notes[index].noteTitle),
+                  onTap: () => openNote(notes[index], false, true),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => openNote(Notes.empty(), true, false),
+        child: const Icon(Symbols.add),
+      ),
+    );
+  }
+
+  void openNote(Notes note, bool isNew, bool readMode) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MobileNoteEdit(
+          note: note,
+          isNewNote: isNew,
+          readMode: readMode,
+        ),
+      ),
+    );
+    if (result) {
+      getNotes();
+    }
   }
 }

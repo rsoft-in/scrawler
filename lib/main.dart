@@ -116,7 +116,10 @@ class _MyAppState extends State<MyApp> {
       );
     } else {
       return const MaterialApp(
+        title: kAppName,
+        themeMode: ThemeMode.light,
         home: MobileApp(),
+        debugShowCheckedModeBanner: false,
       );
     }
   }
