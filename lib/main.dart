@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:scrawler/desktop/desktop_app.dart';
+import 'package:scrawler/desktop/pages/web_signin.dart';
 import 'package:scrawler/desktop/theme.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/mobile/mobile_app.dart';
@@ -103,37 +104,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // if (UniversalPlatform.isIOS) {
-    //   return CupertinoApp(
-    //     title: kAppName,
-    //     debugShowCheckedModeBanner: false,
-    //     initialRoute: '/',
-    //     routes: {
-    //       '/': (context) => UniversalPlatform.isIOS
-    //           ? const DashCupertino()
-    //           : const DashMaterial(),
-    //     },
-    //   );
-    // } else {
-    //   return MaterialApp(
-    //     title: kAppName,
-    //     debugShowCheckedModeBanner: false,
-    //     themeMode: globals.themeMode,
-    //     theme: theme(),
-    //     darkTheme: themeDark(),
-    //     routes: {
-    //       '/': (context) =>
-    //           (UniversalPlatform.isAndroid || UniversalPlatform.isIOS)
-    //               ? const DashMaterial()
-    //               : const DesktopLanding(),
-    //       '/dsignin': (context) => const DesktopSignIn(),
-    //       '/dsignup': (context) => const DesktopSignUp(),
-    //       '/mobilestart': (context) => const DashMaterial()
-    //     },
-    //     initialRoute: '/',
-    //   );
-    // }
-    if (UniversalPlatform.isDesktop) {
+    if (UniversalPlatform.isDesktop || UniversalPlatform.isWeb) {
       return MaterialApp(
         title: kAppName,
         theme: theme(context),
@@ -141,7 +112,7 @@ class _MyAppState extends State<MyApp> {
         // themeMode: themeMode,
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
-        home: const DesktopApp(),
+        home: UniversalPlatform.isWeb ? const WebSignIn() : const DesktopApp(),
       );
     } else {
       return const MaterialApp(

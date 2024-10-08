@@ -27,7 +27,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   bool editorMode = false;
   bool showSidebar = true;
   bool isNewNote = false;
-  final dbHelper = DBHelper.instance;
+  late DBHelper dbHelper;
   List<Notes> notes = [];
   Notes? selectedNote;
   bool darkModeOn = false;
@@ -35,7 +35,9 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   final SearchController controller = SearchController();
 
   Future<void> getNotes() async {
-    notes = await dbHelper.getNotesAll('', 'note_title');
+    if (UniversalPlatform.isDesktop) {
+      notes = await dbHelper.getNotesAll('', 'note_title');
+    } else {}
     setState(() {});
   }
 
@@ -48,11 +50,13 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Future<void> saveNote(Notes note, bool isNew) async {
-    if (isNew) {
-      await dbHelper.insertNotes(note);
-    } else {
-      await dbHelper.updateNotes(note);
-    }
+    if (UniversalPlatform.isDesktop) {
+      if (isNew) {
+        await dbHelper.insertNotes(note);
+      } else {
+        await dbHelper.updateNotes(note);
+      }
+    } else {}
     getNotes();
     setState(() {
       selectedNote = note;
@@ -62,7 +66,10 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Future<void> saveColor(int noteColor) async {
-    final res = await dbHelper.updateNoteColor(selectedNote!.noteId, noteColor);
+    bool res = false;
+    if (UniversalPlatform.isDesktop) {
+      res = await dbHelper.updateNoteColor(selectedNote!.noteId, noteColor);
+    } else {}
     if (res) {
       getNotes();
       selectedNote!.noteColor = noteColor;
@@ -73,8 +80,11 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Future<void> saveFavorite() async {
-    final res = await dbHelper.updateNoteFavorite(
-        selectedNote!.noteId, !selectedNote!.noteFavorite);
+    bool res = false;
+    if (UniversalPlatform.isDesktop) {
+      res = await dbHelper.updateNoteFavorite(
+          selectedNote!.noteId, !selectedNote!.noteFavorite);
+    } else {}
     if (res) {
       getNotes();
       selectedNote!.noteFavorite = !selectedNote!.noteFavorite;
@@ -83,7 +93,9 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Future<void> deleteNote() async {
-    await dbHelper.deleteNotes(selectedNote!.noteId);
+    if (UniversalPlatform.isDesktop) {
+      await dbHelper.deleteNotes(selectedNote!.noteId);
+    } else {}
     setState(() {
       selectedNote = null;
     });
@@ -105,6 +117,9 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    if (UniversalPlatform.isDesktop) {
+      dbHelper = DBHelper.instance;
+    }
     getNotes();
   }
 
@@ -115,124 +130,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
         (globals.themeMode == ThemeMode.system &&
             brightness == Brightness.dark));
     isLargeDevice = getScreenSize(context) == ScreenSize.large;
-    // return Scaffold(
-    //   body: Row(
-    //     children: [
-    //       SizedBox(
-    //         width: 250,
-    //         child: Padding(
-    //           padding: kPaddingMedium,
-    //           child: Column(
-    //             mainAxisSize: MainAxisSize.max,
-    //             crossAxisAlignment: CrossAxisAlignment.stretch,
-    //             children: [
-    //               const SizedBox(
-    //                 height: 35,
-    //               ),
-    //               FilledButton.tonal(
-    //                 style: FilledButton.styleFrom(
-    //                   padding: const EdgeInsets.all(16),
-    //                 ),
-    //                 onPressed: () => setState(() {
-    //                   Notes newNote = Notes.empty();
-    //                   newNote.noteId = const Uuid().v1();
-    //                   selectedNote = newNote;
-    //                   isNewNote = true;
-    //                   editorMode = true;
-    //                 }),
-    //                 child: const Row(
-    //                   children: [
-    //                     Icon(Symbols.add),
-    //                     kHSpace,
-    //                     Text('Add Note'),
-    //                   ],
-    //                 ),
-    //               ),
-    //               const Divider(
-    //                 thickness: 0.2,
-    //               ),
-    //               Expanded(
-    //                 child: ListView.builder(
-    //                   itemCount: notes.length,
-    //                   itemBuilder: (context, index) {
-    //                     return ListTile(
-    //                       leading: const Icon(Symbols.note),
-    //                       title: Text(notes[index].noteTitle),
-    //                       onTap: () => onNoteSelected(notes[index]),
-    //                       selected: selectedNote?.noteId == notes[index].noteId,
-    //                       selectedTileColor: kPrimaryColor.withOpacity(0.2),
-    //                       shape: RoundedRectangleBorder(
-    //                         borderRadius: BorderRadius.circular(kBorderRadius),
-    //                       ),
-    //                     );
-    //                   },
-    //                 ),
-    //               ),
-    //               ListTile(
-    //                 leading: const Icon(Symbols.settings),
-    //                 title: const Text('Settings'),
-    //                 onTap: () => showSettings(),
-    //                 shape: RoundedRectangleBorder(
-    //                     borderRadius: BorderRadius.circular(kBorderRadius)),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //       selectedNote != null
-    //           ? Expanded(
-    //               child: editorMode
-    //                   ? Card(
-    //                       elevation: 5,
-    //                       child: DesktopNoteEdit(
-    //                         note: selectedNote!,
-    //                         onSave: (note, isNew) {
-    //                           saveNote(note, isNew);
-    //                         },
-    //                         isNewNote: isNewNote,
-    //                       ),
-    //                     )
-    //                   : Card(
-    //                       elevation: 5,
-    //                       semanticContainer: false,
-    //                       child: DesktopNoteView(
-    //                         note: selectedNote!,
-    //                         onEditClicked: () {
-    //                           setState(() {
-    //                             editorMode = true;
-    //                             isNewNote = false;
-    //                           });
-    //                         },
-    //                         onDeleteClicked: () {
-    //                           Future.delayed(const Duration(microseconds: 500),
-    //                               () {
-    //                             if (mounted) {
-    //                               showDialog(
-    //                                   context: context,
-    //                                   builder: (context) {
-    //                                     return RSAlertDialog(
-    //                                       title: const Text('Confirm'),
-    //                                       content: const Text(
-    //                                           'Are you sure you want to Delete?'),
-    //                                       acceptText: 'Yes',
-    //                                       rejectText: 'No',
-    //                                       onAcceptAction: () => deleteNote(),
-    //                                     );
-    //                                   });
-    //                             }
-    //                           });
-    //                         },
-    //                       ),
-    //                     ),
-    //             )
-    //           : const Expanded(
-    //               child: Center(
-    //                 child: Text('Select a Note'),
-    //               ),
-    //             ),
-    //     ],
-    //   ),
-    // );
+
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
         LogicalKeySet(LogicalKeyboardKey.superKey, LogicalKeyboardKey.slash):
@@ -340,62 +238,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                     ),
                             ),
                           ),
-                          // Expanded(
-                          //   child: editorMode
-                          //       ? Card(
-                          //           elevation: 5,
-                          //           semanticContainer: false,
-                          //           child: DesktopNoteEdit(
-                          //             note: selectedNote!,
-                          //             onSave: (note, isNew) {
-                          //               saveNote(note, isNew);
-                          //             },
-                          //             isNewNote: isNewNote,
-                          //           ),
-                          //         )
-                          //       : Card(
-                          //           elevation: 5,
-                          //           semanticContainer: false,
-                          //           child: DesktopNoteView(
-                          //             note: selectedNote!,
-                          //             onEditClicked: () {
-                          //               setState(() {
-                          //                 editorMode = true;
-                          //                 isNewNote = false;
-                          //               });
-                          //             },
-                          //             onDeleteClicked: () {
-                          //               Future.delayed(
-                          //                   const Duration(microseconds: 500),
-                          //                   () {
-                          //                 if (mounted) {
-                          //                   showDialog(
-                          //                     context: context,
-                          //                     builder: (context) {
-                          //                       return RSAlertDialog(
-                          //                         title: const Text('Confirm'),
-                          //                         content: const Text(
-                          //                             'Are you sure you want to Delete?'),
-                          //                         acceptText: 'Yes',
-                          //                         rejectText: 'No',
-                          //                         onAcceptAction: () {
-                          //                           deleteNote();
-                          //                           Navigator.pop(context);
-                          //                         },
-                          //                       );
-                          //                     },
-                          //                   );
-                          //                 }
-                          //               });
-                          //             },
-                          //             onSidebarClicked: () {
-                          //               setState(() {
-                          //                 showSidebar = !showSidebar;
-                          //               });
-                          //             },
-                          //           ),
-                          //         ),
-                          // )
+                          
                         ],
                       ),
                     )
