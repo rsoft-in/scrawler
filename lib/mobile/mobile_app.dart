@@ -17,7 +17,7 @@ class _MobileAppState extends State<MobileApp> {
   final dbHelper = DBHelper();
 
   Future<void> getNotes() async {
-    notes = await dbHelper.getNotesAll('', 'note_title');
+    notes = await dbHelper.getNotesAll('', 'note_date DESC');
     setState(() {});
   }
 
