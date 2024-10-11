@@ -42,21 +42,20 @@ dependencies:
   sqflite_common_ffi: ^2.3.3
   sqlite3_flutter_libs: ^0.5.24
 
-
-
-icons_launcher:
+flutter_launcher_icons:
+  android: "ic_launcher"
   ios: true
   image_path: "images/scrawler-desktop.png"
-  # min_sdk_android: 21 # android min sdk min:16, default 21
-  # web:
-  #   enable: true
-  #   image_path: "images/scrawler.png"
-  #   background_color: "#5EAAA8"
-  #   theme_color: "#5EAAA8"
-  # windows:
-  #   enable: true
-  #   image_path: "images/scrawler-desktop.png"
-  #   icon_size: 256 # min:48, max:256, default: 48
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    enable: true
+    image_path: "images/scrawler.png"
+    background_color: "#5EAAA8"
+    theme_color: "#5EAAA8"
+  windows:
+    enable: true
+    image_path: "images/scrawler-desktop.png"
+    icon_size: 256 # min:48, max:256, default: 48
   platforms:
     macos:
       enable: true
