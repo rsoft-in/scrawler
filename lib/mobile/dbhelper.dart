@@ -1,7 +1,7 @@
+import 'package:path/path.dart';
 import 'package:scrawler/models/label.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper._internal();
@@ -44,21 +44,21 @@ class DBHelper {
                     note_audio_file text,
                     note_favorite integer)
                 ''');
-        await db.execute('''
+    await db.execute('''
                   CREATE TABLE labels (label_id text primary key, label_name text)
                 ''');
   }
 
   Future<List<Notes>> getNotesFavorite() async {
     Database? db = await database;
-    var parsed = await db!
-        .query('notes', orderBy: 'note_title', where: 'note_favorite = 1');
+    var parsed = await db.query('notes',
+        orderBy: 'note_title', where: 'note_favorite = 1');
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
   Future<List<Notes>> getNotesByFolder(String noteLabel, String sortBy) async {
     Database? db = await database;
-    var parsed = await db!.query('notes',
+    var parsed = await db.query('notes',
         orderBy: sortBy,
         where: noteLabel.isEmpty ? null : 'note_label = \'$noteLabel\'');
 
@@ -68,14 +68,14 @@ class DBHelper {
   Future<List<Notes>> getNotesUnLabeled(String sortBy) async {
     Database? db = await database;
     var parsed =
-        await db!.query('notes', orderBy: sortBy, where: 'note_label = \'\'');
+        await db.query('notes', orderBy: sortBy, where: 'note_label = \'\'');
 
     return parsed.map<Notes>((json) => Notes.fromJson(json)).toList();
   }
 
   Future<List<Notes>> getNotesAll(String filter, String sortBy) async {
     Database? db = await database;
-    var parsed = await db!.query('notes',
+    var parsed = await db.query('notes',
         orderBy: sortBy,
         where:
             'note_archived = 0 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
@@ -85,7 +85,7 @@ class DBHelper {
 
   Future<List<Notes>> getNotesArchived(String filter) async {
     Database? db = await database;
-    var parsed = await db!.query('notes',
+    var parsed = await db.query('notes',
         orderBy: 'note_date DESC',
         where:
             'note_archived = 1 ${filter.isNotEmpty ? ' AND (note_title LIKE \'%$filter%\' OR note_text LIKE \'%$filter%\' OR note_label LIKE \'%$filter%\')' : ''}');
@@ -97,13 +97,13 @@ class DBHelper {
     Map<String, dynamic> map = {'note_id': noteId, 'note_archived': archive};
     String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
+        await db.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> insertNotes(Notes note) async {
     Database? db = await database;
-    final rowsAffected = await db!.insert('notes', note.toJson());
+    final rowsAffected = await db.insert('notes', note.toJson());
     return rowsAffected > 0;
   }
 
@@ -122,32 +122,40 @@ class DBHelper {
     };
     String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
+        await db.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected > 0);
   }
 
   Future<bool> updateNoteColor(String noteId, int noteColor) async {
     Database? db = await database;
-    Map<String, dynamic> map = {'note_id': noteId, 'note_color': noteColor};
+    Map<String, dynamic> map = {
+      'note_id': noteId,
+      'note_color': noteColor,
+      'note_date': DateTime.now().toString()
+    };
     String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
+        await db.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> updateNoteLabel(String noteId, String noteLabel) async {
     Database? db = await database;
-    Map<String, dynamic> map = {'note_id': noteId, 'note_label': noteLabel};
+    Map<String, dynamic> map = {
+      'note_id': noteId,
+      'note_label': noteLabel,
+      'note_date': DateTime.now().toString()
+    };
     String id = map['note_id'];
     final rowsAffected =
-        await db!.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
+        await db.update('notes', map, where: 'note_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> updateNoteFavorite(String noteId, bool fav) async {
     Database? db = await database;
     Map<String, dynamic> map = {'note_favorite': fav ? 1 : 0};
-    final rowsAffected = await db!
+    final rowsAffected = await db
         .update('notes', map, where: 'note_id = ?', whereArgs: [noteId]);
     return (rowsAffected == 1);
   }
@@ -155,31 +163,31 @@ class DBHelper {
   Future<bool> deleteNotes(String noteId) async {
     Database? db = await database;
     int rowsAffected =
-        await db!.delete('notes', where: 'note_id = ?', whereArgs: [noteId]);
+        await db.delete('notes', where: 'note_id = ?', whereArgs: [noteId]);
     return (rowsAffected == 1);
   }
 
   Future<bool> deleteNotesAll() async {
     Database? db = await database;
-    int rowsAffected = await db!.delete('notes');
+    int rowsAffected = await db.delete('notes');
     return (rowsAffected > 0);
   }
 
   Future<bool> clearNotes() async {
     Database? db = await database;
-    int rowsAffected = await db!.delete('notes');
+    int rowsAffected = await db.delete('notes');
     return (rowsAffected > 0);
   }
 
   Future<List<Label>> getLabelsAll() async {
     Database? db = await database;
-    var parsed = await db!.query('labels', orderBy: 'label_name');
+    var parsed = await db.query('labels', orderBy: 'label_name');
     return parsed.map<Label>((json) => Label.fromJson(json)).toList();
   }
 
   Future<bool> insertLabel(Label label) async {
     Database? db = await database;
-    int rowsAffected = await db!.insert('labels', label.toJson());
+    int rowsAffected = await db.insert('labels', label.toJson());
     return (rowsAffected >= 0);
   }
 
@@ -191,14 +199,14 @@ class DBHelper {
     };
     String id = map['label_id'];
     final rowsAffected =
-        await db!.update('labels', map, where: 'label_id = ?', whereArgs: [id]);
+        await db.update('labels', map, where: 'label_id = ?', whereArgs: [id]);
     return (rowsAffected == 1);
   }
 
   Future<bool> deleteLabel(String labelId) async {
     Database? db = await database;
     int rowsAffected =
-        await db!.delete('labels', where: 'label_id = ?', whereArgs: [labelId]);
+        await db.delete('labels', where: 'label_id = ?', whereArgs: [labelId]);
     return (rowsAffected == 1);
   }
 }

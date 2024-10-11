@@ -6,6 +6,7 @@ import 'package:scrawler/markdown_toolbar.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
+import 'package:scrawler/widgets/scrawl_color_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class MobileNoteEdit extends StatefulWidget {
@@ -68,38 +69,16 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
     }
   }
 
-  Future<bool?> _showBackDialog(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Are you sure?'),
-          content: const Text(
-            'You have unsaved changes. Are you sure you want to leave this page?',
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Stay'),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Leave'),
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> saveColor(int noteColor) async {
+    final res = await dbHelper.updateNoteColor(currentNote.noteId, noteColor);
+    if (res) {
+      setState(() {
+        currentNote.noteColor = noteColor;
+        hasChanges = true;
+      });
+    } else {
+      print('Unable to save note color!');
+    }
   }
 
   @override
@@ -166,17 +145,16 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                       value: 0,
                       child: ListTile(
                         leading: Icon(Symbols.palette),
-                        title: Text('Color'),
+                        title: Text('Change Color'),
                       ),
                     ),
                     const PopupMenuItem(
                       value: 1,
                       child: ListTile(
                         leading: Icon(Symbols.label),
-                        title: Text('Label'),
+                        title: Text('Move to Folder'),
                       ),
                     ),
-                    const PopupMenuDivider(),
                     const PopupMenuItem(
                       value: 2,
                       child: ListTile(
@@ -203,7 +181,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                 onSelected: (value) {
                   switch (value) {
                     case 0:
-                      // widget.onColorPickerClicked();
+                      changeColor();
                       break;
                     case 2:
                       // widget.onDeleteClicked();
@@ -226,7 +204,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                 child: readMode
                     ? Markdown(
                         padding: EdgeInsets.zero,
-                        data: widget.note.noteText,
+                        data: currentNote.noteText,
                         selectable: true,
                         softLineBreak: true,
                       )
@@ -312,6 +290,17 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
         currentNote.noteTitle = titleController.text;
         formDirty = true;
       });
+    }
+  }
+
+  void changeColor() async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return const ScrawlColorPicker();
+        });
+    if (colorCode != null) {
+      saveColor(colorCode);
     }
   }
 }

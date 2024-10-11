@@ -4,6 +4,7 @@ import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/mobile/pages/mobile_note_edit.dart';
 import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/scrawl_color_picker.dart';
 
 class MobileApp extends StatefulWidget {
   const MobileApp({super.key});
@@ -19,6 +20,18 @@ class _MobileAppState extends State<MobileApp> {
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_date DESC');
     setState(() {});
+  }
+
+  Future<void> saveColor(String noteId, int noteColor) async {
+    final res = await dbHelper.updateNoteColor(noteId, noteColor);
+    if (res) {
+      setState(() {
+        final index = notes.indexWhere((n) => n.noteId == noteId);
+        notes[index].noteColor = noteColor;
+      });
+    } else {
+      print('Unable to save note color!');
+    }
   }
 
   @override
@@ -43,6 +56,7 @@ class _MobileAppState extends State<MobileApp> {
                 return ListTile(
                   title: Text(notes[index].noteTitle),
                   onTap: () => openNote(notes[index], false, true),
+                  onLongPress: () => onNoteLongPressed(notes[index]),
                 );
               },
             ),
@@ -66,6 +80,55 @@ class _MobileAppState extends State<MobileApp> {
     );
     if (result) {
       getNotes();
+    }
+  }
+
+  void onNoteLongPressed(Notes note) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: kGlobalOuterPadding,
+            child: ListView(
+              children: [
+                const ListTile(
+                  leading: Icon(Symbols.folder_copy),
+                  title: Text('Move to Folder'),
+                ),
+                const ListTile(
+                  leading: Icon(Symbols.favorite),
+                  title: Text('Add to Favorites'),
+                ),
+                ListTile(
+                  leading: const Icon(Symbols.palette),
+                  title: const Text('Change Color'),
+                  onTap: () => changeColor(note),
+                ),
+                const ListTile(
+                  leading: Icon(Symbols.archive),
+                  title: Text('Archive'),
+                ),
+                const ListTile(
+                  leading: Icon(Symbols.delete),
+                  title: Text('Delete'),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  void changeColor(Notes note) async {
+    final colorCode = await showDialog(
+        context: context,
+        builder: (context) {
+          return const ScrawlColorPicker();
+        });
+    if (colorCode != null) {
+      if (mounted) {
+        Navigator.pop(context);
+      }
+      saveColor(note.noteId, colorCode);
     }
   }
 }
