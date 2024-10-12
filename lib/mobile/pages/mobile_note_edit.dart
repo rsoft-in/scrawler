@@ -83,6 +83,19 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
     }
   }
 
+  Future<void> setAsFavorite() async {
+    final res = await dbHelper.updateNoteFavorite(
+        currentNote.noteId, !currentNote.noteFavorite);
+    if (res) {
+      setState(() {
+        currentNote.noteFavorite = !currentNote.noteFavorite;
+        hasChanges = true;
+      });
+    } else {
+      print('Unable to save note color!');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,10 +132,15 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
           ),
           actions: [
             if (readMode) ScrawlColorDot(colorCode: widget.note.noteColor),
-            if (currentNote.noteFavorite && readMode)
-              const Icon(
-                Symbols.favorite,
-                color: Colors.red,
+            kHSpace,
+            if (readMode)
+              IconButton(
+                onPressed: () => setAsFavorite(),
+                icon: Icon(
+                  Symbols.favorite,
+                  color: currentNote.noteFavorite ? Colors.red.shade500 : null,
+                  fill: currentNote.noteFavorite ? 1 : 0,
+                ),
               ),
             if (!readMode)
               IconButton(
@@ -140,15 +158,6 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
               IconButton.filledTonal(
                 onPressed: () => saveNote(),
                 icon: const Icon(Symbols.check),
-              ),
-            if (readMode)
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    readMode = false;
-                  });
-                },
-                icon: const Icon(Symbols.edit),
               ),
             if (readMode)
               PopupMenuButton<int>(
@@ -176,11 +185,12 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                         title: Text('Delete'),
                       ),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 3,
                       child: ListTile(
-                        leading: Icon(Symbols.favorite),
-                        title: Text('Add to Favorites'),
+                        leading: const Icon(Symbols.favorite),
+                        title: Text(
+                            '${currentNote.noteFavorite ? 'Remove from' : 'Add to'} Favorites'),
                       ),
                     ),
                     const PopupMenuItem(
@@ -201,7 +211,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                       onDeleteClicked();
                       break;
                     case 3:
-                      // widget.onFavoriteClicked();
+                      setAsFavorite();
                       break;
                     default:
                   }
@@ -255,6 +265,16 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
               ),
           ],
         ),
+        floatingActionButton: readMode
+            ? FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    readMode = false;
+                  });
+                },
+                child: const Icon(Symbols.edit),
+              )
+            : null,
       ),
     );
   }

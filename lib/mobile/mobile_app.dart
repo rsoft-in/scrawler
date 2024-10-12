@@ -41,6 +41,21 @@ class _MobileAppState extends State<MobileApp> {
     }
   }
 
+  Future<void> setAsFavorite(String noteId, bool value) async {
+    final res = await dbHelper.updateNoteFavorite(noteId, value);
+    if (res) {
+      setState(() {
+        final index = notes.indexWhere((n) => n.noteId == noteId);
+        notes[index].noteFavorite = value;
+      });
+      if (mounted) {
+        Navigator.pop(context);
+      }
+    } else {
+      print('Unable to save note color!');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -358,9 +373,11 @@ class _MobileAppState extends State<MobileApp> {
                   leading: Icon(Symbols.folder_copy),
                   title: Text('Move to Folder'),
                 ),
-                const ListTile(
-                  leading: Icon(Symbols.favorite),
-                  title: Text('Add to Favorites'),
+                ListTile(
+                  leading: const Icon(Symbols.favorite),
+                  title: Text(
+                      '${note.noteFavorite ? 'Remove from' : 'Add to'}  Favorites'),
+                  onTap: () => setAsFavorite(note.noteId, !note.noteFavorite),
                 ),
                 const ListTile(
                   leading: Icon(Symbols.palette),
