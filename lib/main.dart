@@ -109,16 +109,17 @@ class _MyAppState extends State<MyApp> {
         title: kAppName,
         theme: theme(context),
         darkTheme: themeDark(context),
-        // themeMode: themeMode,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
         home: UniversalPlatform.isWeb ? const WebSignIn() : const DesktopApp(),
       );
     } else {
-      return const MaterialApp(
+      return MaterialApp(
         title: kAppName,
-        themeMode: ThemeMode.light,
-        home: MobileApp(),
+        themeMode: ThemeMode.system,
+        theme: theme(context),
+        darkTheme: themeDark(context),
+        home: const MobileApp(),
         debugShowCheckedModeBanner: false,
       );
     }

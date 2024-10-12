@@ -5,6 +5,7 @@ import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/markdown_toolbar.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:scrawler/widgets/scrawl_color_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -197,7 +198,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                       changeColor();
                       break;
                     case 2:
-                      // widget.onDeleteClicked();
+                      onDeleteClicked();
                       break;
                     case 3:
                       // widget.onFavoriteClicked();
@@ -305,6 +306,27 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
         formDirty = true;
       });
     }
+  }
+
+  Future<void> onDeleteClicked() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ScrawlConfirmDialog(
+          title: 'Delete?',
+          content: 'Are you sure?',
+          onAcceptPressed: () {
+            Navigator.pop(context);
+            deleteNote();
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> deleteNote() async {
+    await dbHelper.deleteNotes(currentNote.noteId);
+    if (mounted) Navigator.pop(context, true);
   }
 
   void changeColor() async {

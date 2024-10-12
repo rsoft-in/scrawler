@@ -7,7 +7,6 @@ ThemeData theme(BuildContext context) {
       seedColor: kPrimaryColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
-    scaffoldBackgroundColor: const Color(0xFFefeff0),
     splashFactory: NoSplash.splashFactory,
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
