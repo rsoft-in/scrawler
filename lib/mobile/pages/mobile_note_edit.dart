@@ -32,6 +32,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
   bool readMode = true;
   bool hasChanges = false;
   bool formDirty = false;
+  bool showToolbar = true;
 
   Future<void> saveNote() async {
     if (titleController.text.isEmpty) {
@@ -124,6 +125,18 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
               ),
             if (!readMode)
               IconButton(
+                tooltip: 'Show/Hide toolbar',
+                onPressed: () {
+                  setState(() {
+                    showToolbar = !showToolbar;
+                  });
+                },
+                icon: const Icon(Symbols.keyboard_arrow_down),
+                selectedIcon: const Icon(Symbols.keyboard_arrow_up),
+                isSelected: showToolbar,
+              ),
+            if (!readMode)
+              IconButton.filledTonal(
                 onPressed: () => saveNote(),
                 icon: const Icon(Symbols.check),
               ),
@@ -198,6 +211,12 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
         body: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (!readMode && showToolbar)
+              MarkdownToolbar(
+                controller: editorController,
+                undoController: undoController,
+                onChange: () {},
+              ),
             Expanded(
               child: Padding(
                 padding: kPaddingLarge,
@@ -212,6 +231,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                         controller: editorController,
                         maxLines: null,
                         expands: true,
+                        autofocus: true,
                         style: const TextStyle(fontSize: 14.0),
                         decoration: const InputDecoration(
                           isCollapsed: true,
@@ -231,12 +251,6 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
               const Divider(
                 height: 2,
                 thickness: 0.2,
-              ),
-            if (!readMode)
-              MarkdownToolbar(
-                controller: editorController,
-                undoController: undoController,
-                onChange: () {},
               ),
           ],
         ),

@@ -16,6 +16,7 @@ class MobileApp extends StatefulWidget {
 class _MobileAppState extends State<MobileApp> {
   List<Notes> notes = [];
   final dbHelper = DBHelper();
+  SearchController searchController = SearchController();
 
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_date DESC');
@@ -43,23 +44,78 @@ class _MobileAppState extends State<MobileApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(kAppName),
-      ),
+      // appBar: AppBar(
+      //   title: const Text(kAppName),
+      // ),
       body: notes.isEmpty
           ? const Center(
               child: Text('No Notes'),
             )
-          : ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(notes[index].noteTitle),
-                  onTap: () => openNote(notes[index], false, true),
-                  onLongPress: () => onNoteLongPressed(notes[index]),
-                );
-              },
+          : SafeArea(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SearchAnchor(
+                      builder:
+                          (BuildContext context, SearchController controller) {
+                        return SearchBar(
+                          controller: controller,
+                          autoFocus: false,
+                          elevation: const WidgetStatePropertyAll(0),
+                          padding: const WidgetStatePropertyAll<EdgeInsets>(
+                              EdgeInsets.symmetric(horizontal: 16.0)),
+                          onTap: () {
+                            controller.openView();
+                          },
+                          onChanged: (_) {
+                            controller.openView();
+                          },
+                          leading: const Icon(Icons.search),
+                          hintText: 'Search note',
+                          trailing: [
+                            IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Symbols.account_circle))
+                          ],
+                        );
+                      },
+                      suggestionsBuilder:
+                          (BuildContext context, SearchController controller) {
+                        return List<ListTile>.generate(
+                          notes.length,
+                          (int index) {
+                            return ListTile(
+                              title: Text(notes[index].noteTitle),
+                              onTap: () {
+                                setState(() {
+                                  controller.closeView(notes[index].noteTitle);
+                                  controller.clear();
+                                });
+                                openNote(notes[index], false, true);
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: notes.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(notes[index].noteTitle),
+                          onTap: () => openNote(notes[index], false, true),
+                          onLongPress: () => onNoteLongPressed(notes[index]),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () => openNote(Notes.empty(), true, false),
         child: const Icon(Symbols.add),
