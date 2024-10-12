@@ -7,7 +7,6 @@ import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/mobile/pages/mobile_note_edit.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
-import 'package:scrawler/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/widgets/scrawl_empty.dart';
 
 class MobileApp extends StatefulWidget {
@@ -352,7 +351,8 @@ class _MobileAppState extends State<MobileApp> {
         builder: (context) {
           return Container(
             padding: kGlobalOuterPadding,
-            child: ListView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const ListTile(
                   leading: Icon(Symbols.folder_copy),
@@ -362,10 +362,37 @@ class _MobileAppState extends State<MobileApp> {
                   leading: Icon(Symbols.favorite),
                   title: Text('Add to Favorites'),
                 ),
-                ListTile(
-                  leading: const Icon(Symbols.palette),
-                  title: const Text('Change Color'),
-                  onTap: () => changeColor(note),
+                const ListTile(
+                  leading: Icon(Symbols.palette),
+                  title: Text('Change Color'),
+                ),
+                SizedBox(
+                  height: 50,
+                  child: ListView(scrollDirection: Axis.horizontal, children: [
+                    const SizedBox(
+                      width: 48,
+                    ),
+                    ...NoteColor.colorSet.map((colorSet) => InkWell(
+                          onTap: () => changeColor(note, colorSet.code),
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4),
+                            height: 48,
+                            width: 48,
+                            decoration: BoxDecoration(
+                              color: colorSet.color,
+                              border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant),
+                              borderRadius:
+                                  BorderRadius.circular(kBorderRadius),
+                            ),
+                            child: note.noteColor == colorSet.code
+                                ? const Icon(Symbols.check_circle)
+                                : null,
+                          ),
+                        )),
+                  ]),
                 ),
                 const ListTile(
                   leading: Icon(Symbols.archive),
@@ -382,17 +409,10 @@ class _MobileAppState extends State<MobileApp> {
         });
   }
 
-  void changeColor(Notes note) async {
-    final colorCode = await showDialog(
-        context: context,
-        builder: (context) {
-          return const ScrawlColorPicker();
-        });
-    if (colorCode != null) {
-      if (mounted) {
-        Navigator.pop(context);
-      }
-      saveColor(note.noteId, colorCode);
+  void changeColor(Notes note, int colorCode) async {
+    if (mounted) {
+      Navigator.pop(context);
     }
+    saveColor(note.noteId, colorCode);
   }
 }
