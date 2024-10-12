@@ -82,17 +82,24 @@ class _MobileAppState extends State<MobileApp> {
                       },
                       suggestionsBuilder:
                           (BuildContext context, SearchController controller) {
+                        final List<Notes> suggestions = notes
+                            .where((n) => n.noteTitle
+                                .toLowerCase()
+                                .contains(controller.text.toLowerCase()))
+                            .toList();
+
                         return List<ListTile>.generate(
-                          notes.length,
+                          suggestions.length,
                           (int index) {
                             return ListTile(
-                              title: Text(notes[index].noteTitle),
+                              title: Text(suggestions[index].noteTitle),
                               onTap: () {
                                 setState(() {
-                                  controller.closeView(notes[index].noteTitle);
+                                  controller
+                                      .closeView(suggestions[index].noteTitle);
                                   controller.clear();
                                 });
-                                openNote(notes[index], false, true);
+                                openNote(suggestions[index], false, true);
                               },
                             );
                           },
