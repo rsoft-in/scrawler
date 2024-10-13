@@ -4,7 +4,9 @@ import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/note_color.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
-import 'package:scrawler/mobile/pages/mobile_note_edit.dart';
+import 'package:scrawler/mobile/pages/mobile_labels.dart';
+import 'package:scrawler/mobile/pages/mobile_notes.dart';
+import 'package:scrawler/models/label.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_empty.dart';
@@ -18,14 +20,24 @@ class MobileApp extends StatefulWidget {
 
 class _MobileAppState extends State<MobileApp> {
   List<Notes> notes = [];
+  List<Label> labels = [];
   final dbHelper = DBHelper();
   SearchController searchController = SearchController();
   late PageController pageController =
       PageController(initialPage: 0, keepPage: true);
   int currentPageIndex = 0;
+  String selectedLabel = "";
 
   Future<void> getNotes() async {
     notes = await dbHelper.getNotesAll('', 'note_date DESC');
+    setState(() {});
+  }
+
+  Future<void> getLabels() async {
+    final allLabels = await dbHelper.getLabelsAll();
+    labels.clear();
+    labels.add(Label('all', 'All', false));
+    labels.addAll(allLabels);
     setState(() {});
   }
 
@@ -52,14 +64,51 @@ class _MobileAppState extends State<MobileApp> {
         Navigator.pop(context);
       }
     } else {
-      print('Unable to save note color!');
+      print('Unable to set favorite!');
     }
+  }
+
+  Future<void> saveLabel(Notes note, String noteLabel) async {
+    final res = await dbHelper.updateNoteLabel(note.noteId, noteLabel);
+    if (res) {
+      setState(() {
+        final index = notes.indexWhere((n) => n.noteId == note.noteId);
+        notes[index].noteLabel = noteLabel;
+      });
+      getLabels();
+    } else {
+      print('Unable to save note label!');
+    }
+  }
+
+  Future<void> deleteNote(Notes note) async {
+    await dbHelper.deleteNotes(note.noteId);
+    if (mounted) Navigator.pop(context);
+    getNotes();
+  }
+
+  void onNavigate(int index) {
+    setState(() {
+      currentPageIndex = index;
+    });
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
+  }
+
+  void setLabelFilter(String label) {
+    if (label.toLowerCase() == "all") {
+      selectedLabel = "";
+    } else {
+      selectedLabel = label;
+    }
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     getNotes();
+    getLabels();
   }
 
   @override
@@ -151,14 +200,6 @@ class _MobileAppState extends State<MobileApp> {
         child: const Icon(Symbols.add),
       ),
     );
-  }
-
-  void onNavigate(int index) {
-    setState(() {
-      currentPageIndex = index;
-    });
-    pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 400), curve: Curves.easeOut);
   }
 
   Widget dash() {
@@ -274,6 +315,8 @@ class _MobileAppState extends State<MobileApp> {
   }
 
   Widget myNote() {
+    final myNotes =
+        notes.where((n) => n.noteLabel.contains(selectedLabel)).toList();
     return SingleChildScrollView(
       physics: const ClampingScrollPhysics(),
       child: Padding(
@@ -281,16 +324,52 @@ class _MobileAppState extends State<MobileApp> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 30,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: labels.length,
+                  itemBuilder: (context, index) => Container(
+                    margin: const EdgeInsets.only(right: 4),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(kBorderRadius),
+                      onTap: () => setLabelFilter(labels[index].labelName),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(kBorderRadius),
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant)),
+                        child: Text(
+                          labels[index].labelName,
+                          style: selectedLabel == labels[index].labelName
+                              ? const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                )
+                              : null,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 4),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: notes.length,
+              itemCount: myNotes.length,
               itemBuilder: (context, index) {
                 return Card(
                   child: InkWell(
                     borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-                    onTap: () => openNote(notes[index], false, true),
-                    onLongPress: () => onNoteLongPressed(notes[index]),
+                    onTap: () => openNote(myNotes[index], false, true),
+                    onLongPress: () => onNoteLongPressed(myNotes[index]),
                     child: Row(
                       children: [
                         Container(
@@ -299,14 +378,14 @@ class _MobileAppState extends State<MobileApp> {
                           height: 50,
                           decoration: BoxDecoration(
                             color: NoteColor.getColor(
-                                notes[index].noteColor, false),
+                                myNotes[index].noteColor, false),
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         Expanded(
                           child: ListTile(
-                            title: Text(notes[index].noteTitle),
-                            subtitle: Text(notes[index].noteDate),
+                            title: Text(myNotes[index].noteTitle),
+                            subtitle: Text(myNotes[index].noteDate),
                           ),
                         ),
                       ],
@@ -325,7 +404,7 @@ class _MobileAppState extends State<MobileApp> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MobileNoteEdit(
+        builder: (context) => MobileNotesPage(
           note: note,
           isNewNote: isNew,
           readMode: readMode,
@@ -342,8 +421,8 @@ class _MobileAppState extends State<MobileApp> {
       context: context,
       builder: (context) {
         return ScrawlConfirmDialog(
-          title: 'Delete?',
-          content: 'Are you sure?',
+          title: 'Confirm Delete',
+          content: 'Are you sure you want to delete?',
           onAcceptPressed: () {
             Navigator.pop(context);
             deleteNote(note);
@@ -351,13 +430,6 @@ class _MobileAppState extends State<MobileApp> {
         );
       },
     );
-  }
-
-  Future<void> deleteNote(Notes note) async {
-    await dbHelper.deleteNotes(note.noteId);
-    if (mounted) Navigator.pop(context);
-
-    getNotes();
   }
 
   void onNoteLongPressed(Notes note) {
@@ -369,9 +441,10 @@ class _MobileAppState extends State<MobileApp> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const ListTile(
-                  leading: Icon(Symbols.folder_copy),
-                  title: Text('Move to Folder'),
+                ListTile(
+                  leading: const Icon(Symbols.folder_copy),
+                  title: const Text('Assign Labels'),
+                  onTap: () => assignLabels(note),
                 ),
                 ListTile(
                   leading: const Icon(Symbols.favorite),
@@ -431,5 +504,22 @@ class _MobileAppState extends State<MobileApp> {
       Navigator.pop(context);
     }
     saveColor(note.noteId, colorCode);
+  }
+
+  void assignLabels(Notes note) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MobileLabelsPage(
+          noteLabel: note.noteLabel,
+        ),
+      ),
+    );
+    if (result != null) {
+      if (mounted) {
+        Navigator.pop(context);
+      }
+      saveLabel(note, result);
+    }
   }
 }

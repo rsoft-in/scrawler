@@ -4,27 +4,28 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/markdown_toolbar.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
+import 'package:scrawler/mobile/pages/mobile_labels.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:scrawler/widgets/scrawl_color_picker.dart';
 import 'package:uuid/uuid.dart';
 
-class MobileNoteEdit extends StatefulWidget {
+class MobileNotesPage extends StatefulWidget {
   final Notes note;
   final bool isNewNote;
   final bool readMode;
-  const MobileNoteEdit(
+  const MobileNotesPage(
       {super.key,
       required this.note,
       this.isNewNote = false,
       this.readMode = true});
 
   @override
-  State<MobileNoteEdit> createState() => _MobileNoteEditState();
+  State<MobileNotesPage> createState() => _MobileNotesPageState();
 }
 
-class _MobileNoteEditState extends State<MobileNoteEdit> {
+class _MobileNotesPageState extends State<MobileNotesPage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController editorController = TextEditingController();
   UndoHistoryController undoController = UndoHistoryController();
@@ -92,7 +93,19 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
         hasChanges = true;
       });
     } else {
-      print('Unable to save note color!');
+      print('Unable to set favorite!');
+    }
+  }
+
+  Future<void> saveLabel() async {
+    final res = await dbHelper.updateNoteLabel(
+        currentNote.noteId, currentNote.noteLabel);
+    if (res) {
+      setState(() {
+        hasChanges = true;
+      });
+    } else {
+      print('Unable to save note label!');
     }
   }
 
@@ -175,7 +188,7 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                       value: 1,
                       child: ListTile(
                         leading: Icon(Symbols.label),
-                        title: Text('Move to Folder'),
+                        title: Text('Assign Labels'),
                       ),
                     ),
                     const PopupMenuItem(
@@ -206,6 +219,9 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
                   switch (value) {
                     case 0:
                       changeColor();
+                      break;
+                    case 1:
+                      assignLabels();
                       break;
                     case 2:
                       onDeleteClicked();
@@ -357,6 +373,25 @@ class _MobileNoteEditState extends State<MobileNoteEdit> {
         });
     if (colorCode != null) {
       saveColor(colorCode);
+    }
+  }
+
+  void assignLabels() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MobileLabelsPage(
+          noteLabel: currentNote.noteLabel,
+        ),
+      ),
+    );
+    if (result != null) {
+      if (mounted) {
+        Navigator.pop(context);
+      }
+      setState(() {
+        currentNote.noteLabel = result;
+      });
     }
   }
 }
