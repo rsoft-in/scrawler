@@ -245,34 +245,35 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                 onChange: () {},
               ),
             Expanded(
-              child: Padding(
-                padding: kPaddingLarge,
-                child: readMode
-                    ? Markdown(
+              child: readMode
+                  ? Padding(
+                      padding: kPaddingLarge,
+                      child: Markdown(
                         padding: EdgeInsets.zero,
                         data: currentNote.noteText,
                         selectable: true,
                         softLineBreak: true,
-                      )
-                    : TextFormField(
-                        controller: editorController,
-                        maxLines: null,
-                        expands: true,
-                        autofocus: true,
-                        style: const TextStyle(fontSize: 14.0),
-                        decoration: const InputDecoration(
+                      ),
+                    )
+                  : TextFormField(
+                      controller: editorController,
+                      maxLines: null,
+                      expands: true,
+                      autofocus: true,
+                      style: const TextStyle(fontSize: 14.0),
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: const InputDecoration(
                           isCollapsed: true,
                           filled: false,
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            formDirty = true;
-                          });
-                        },
-                      ),
-              ),
+                          hintText: 'Start Writing here...'),
+                      onChanged: (value) {
+                        setState(() {
+                          formDirty = true;
+                        });
+                      },
+                    ),
             ),
             if (!readMode)
               const Divider(

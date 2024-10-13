@@ -325,41 +325,26 @@ class _MobileAppState extends State<MobileApp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 30,
+              height: 40,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: labels.length,
                   itemBuilder: (context, index) => Container(
-                    margin: const EdgeInsets.only(right: 4),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(kBorderRadius),
-                      onTap: () => setLabelFilter(labels[index].labelName),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(kBorderRadius),
-                            border: Border.all(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .outlineVariant)),
-                        child: Text(
-                          labels[index].labelName,
-                          style: selectedLabel == labels[index].labelName
-                              ? const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                )
-                              : null,
-                        ),
-                      ),
+                    margin: const EdgeInsets.only(right: 8),
+                    child: ActionChip(
+                      avatar: selectedLabel == labels[index].labelName
+                          ? const Icon(Symbols.check)
+                          : null,
+                      label: Text(labels[index].labelName),
+                      onPressed: () => setLabelFilter(labels[index].labelName),
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 4),
+            // const SizedBox(height: 4),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
