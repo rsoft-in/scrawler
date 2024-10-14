@@ -370,7 +370,8 @@ class _MobileAppState extends State<MobileApp> {
                         Expanded(
                           child: ListTile(
                             title: Text(myNotes[index].noteTitle),
-                            subtitle: Text(myNotes[index].noteDate),
+                            subtitle: Text(Utility.formatDateTime(
+                                myNotes[index].noteDate)),
                           ),
                         ),
                       ],

@@ -52,8 +52,18 @@ class Utility {
     var formatter = DateFormat('MMM dd, yyyy');
     var formatter2 = DateFormat('hh:mm a');
     DateTime dt = DateTime.parse(dateTime);
-    if (dt.day == DateTime.now().day) {
+    int mins = DateTime.now().difference(dt).inMinutes;
+    int hours = DateTime.now().difference(dt).inHours;
+    int days = DateTime.now().difference(dt).inDays;
+    print('$mins $hours $days');
+    if (mins < 5) {
+      return 'now';
+    } else if (hours < 9) {
+      return '$hours ago';
+    } else if (hours >= 9 && days == 0) {
       return formatter2.format(dt);
+    } else if (days == 1) {
+      return 'yesterday';
     } else {
       return formatter.format(dt);
     }
