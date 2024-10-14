@@ -58,7 +58,7 @@ class Utility {
     print('$mins $hours $days');
     if (mins < 5) {
       return 'now';
-    } else if (hours < 9) {
+    } else if (hours > 0 && hours < 9) {
       return '$hours ago';
     } else if (hours >= 9 && days == 0) {
       return formatter2.format(dt);
