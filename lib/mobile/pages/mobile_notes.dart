@@ -262,6 +262,34 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                       autofocus: true,
                       style: const TextStyle(fontSize: 14.0),
                       textCapitalization: TextCapitalization.sentences,
+                      contextMenuBuilder: (context, editableTextState) {
+                        final TextEditingValue value =
+                            editableTextState.textEditingValue;
+                        final List<ContextMenuButtonItem> buttonItems =
+                            editableTextState.contextMenuButtonItems;
+                        buttonItems.insert(
+                          3,
+                          ContextMenuButtonItem(
+                            onPressed: () {
+                              print(value.selection.textInside(value.text));
+                            },
+                            label: 'Bold',
+                          ),
+                        );
+                        buttonItems.insert(
+                          4,
+                          ContextMenuButtonItem(
+                            onPressed: () {
+                              print(value.selection.textInside(value.text));
+                            },
+                            label: 'Italic',
+                          ),
+                        );
+                        return AdaptiveTextSelectionToolbar.buttonItems(
+                          buttonItems: buttonItems,
+                          anchors: editableTextState.contextMenuAnchors,
+                        );
+                      },
                       decoration: const InputDecoration(
                           isCollapsed: true,
                           filled: false,
