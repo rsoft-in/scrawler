@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 class MarkdownToolbar extends StatefulWidget {
   final TextEditingController controller;
@@ -39,132 +37,65 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return UniversalPlatform.isIOS
-                    ? CupertinoButton(
-                        child: const Icon(CupertinoIcons.arrow_turn_up_left),
-                        onPressed: () => widget.undoController.undo(),
-                      )
-                    : IconButton(
-                        onPressed: () => widget.undoController.undo(),
-                        icon: const Icon(Symbols.undo),
-                        tooltip: 'Undo',
-                      );
+                return IconButton(
+                  onPressed: () => widget.undoController.undo(),
+                  icon: const Icon(Symbols.undo),
+                  tooltip: 'Undo',
+                );
               }),
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return UniversalPlatform.isIOS
-                    ? CupertinoButton(
-                        child: const Icon(CupertinoIcons.arrow_turn_up_right),
-                        onPressed: () => widget.undoController.redo(),
-                      )
-                    : IconButton(
-                        onPressed: () => widget.undoController.redo(),
-                        icon: const Icon(Symbols.redo),
-                        tooltip: 'Redo',
-                      );
+                return IconButton(
+                  onPressed: () => widget.undoController.redo(),
+                  icon: const Icon(Symbols.redo),
+                  tooltip: 'Redo',
+                );
               }),
           const VerticalDivider(),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.bold),
-                  onPressed: () => formatText('bold'))
-              : IconButton(
-                  onPressed: () => formatText('bold'),
-                  icon: const Icon(Symbols.format_bold),
-                  tooltip: 'Bold',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.italic),
-                  onPressed: () => formatText('italic'))
-              : IconButton(
-                  onPressed: () => formatText('italic'),
-                  icon: const Icon(Symbols.format_italic),
-                  tooltip: 'Italic',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.list_bullet),
-                  onPressed: () => formatText('ul'))
-              : IconButton(
-                  onPressed: () => formatText('ul'),
-                  icon: const Icon(Symbols.format_list_bulleted),
-                  tooltip: 'Bulleted List',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.list_number),
-                  onPressed: () => formatText('ol'))
-              : IconButton(
-                  onPressed: () => formatText('ol'),
-                  icon: const Icon(Symbols.format_list_numbered),
-                  tooltip: 'Numbered List',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoContextMenu(
-                  actions: [
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 1'),
-                        onPressed: () => formatText('h1'),
-                      ),
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 2'),
-                        onPressed: () => formatText('h2'),
-                      ),
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 3'),
-                        onPressed: () => formatText('h3'),
-                      ),
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 4'),
-                        onPressed: () => formatText('h4'),
-                      ),
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 5'),
-                        onPressed: () => formatText('h5'),
-                      ),
-                      CupertinoContextMenuAction(
-                        child: const Text('Heading 6'),
-                        onPressed: () => formatText('h6'),
-                      ),
-                    ],
-                  child: CupertinoButton(
-                      child: const Icon(CupertinoIcons.textformat),
-                      onPressed: () {}))
-              : PopupMenuButton<String>(
-                  icon: const Text('H', style: TextStyle(fontSize: 16)),
-                  tooltip: 'Headings',
-                  itemBuilder: (context) => <PopupMenuEntry<String>>[
-                    const PopupMenuItem(value: 'h1', child: Text('Heading 1')),
-                    const PopupMenuItem(value: 'h2', child: Text('Heading 2')),
-                    const PopupMenuItem(value: 'h3', child: Text('Heading 3')),
-                    const PopupMenuItem(value: 'h4', child: Text('Heading 4')),
-                    const PopupMenuItem(value: 'h5', child: Text('Heading 5')),
-                    const PopupMenuItem(value: 'h6', child: Text('Heading 6')),
-                  ],
-                  onSelected: (value) => formatText(value),
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.photo),
-                  onPressed: () => pickImage(),
-                )
-              : IconButton(
-                  onPressed: () => pickImage(),
-                  icon: const Icon(Symbols.image),
-                  tooltip: 'Insert Image',
-                ),
-          UniversalPlatform.isIOS
-              ? CupertinoButton(
-                  child: const Icon(CupertinoIcons.link),
-                  onPressed: () => showLinkSheet(),
-                )
-              : IconButton(
-                  onPressed: () => showLinkSheet(),
-                  icon: const Icon(Symbols.link),
-                  tooltip: 'Insert Link',
-                ),
+          IconButton(
+            onPressed: () => formatText('bold'),
+            icon: const Icon(Symbols.format_bold),
+            tooltip: 'Bold',
+          ),
+          IconButton(
+            onPressed: () => formatText('italic'),
+            icon: const Icon(Symbols.format_italic),
+            tooltip: 'Italic',
+          ),
+          IconButton(
+            onPressed: () => formatText('ul'),
+            icon: const Icon(Symbols.format_list_bulleted),
+            tooltip: 'Bulleted List',
+          ),
+          IconButton(
+            onPressed: () => formatText('ol'),
+            icon: const Icon(Symbols.format_list_numbered),
+            tooltip: 'Numbered List',
+          ),
+          PopupMenuButton<String>(
+            icon: const Text('H', style: TextStyle(fontSize: 16)),
+            tooltip: 'Headings',
+            itemBuilder: (context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem(value: 'h1', child: Text('Heading 1')),
+              const PopupMenuItem(value: 'h2', child: Text('Heading 2')),
+              const PopupMenuItem(value: 'h3', child: Text('Heading 3')),
+              const PopupMenuItem(value: 'h4', child: Text('Heading 4')),
+              const PopupMenuItem(value: 'h5', child: Text('Heading 5')),
+              const PopupMenuItem(value: 'h6', child: Text('Heading 6')),
+            ],
+            onSelected: (value) => formatText(value),
+          ),
+          IconButton(
+            onPressed: () => pickImage(),
+            icon: const Icon(Symbols.image),
+            tooltip: 'Insert Image',
+          ),
+          IconButton(
+            onPressed: () => showLinkSheet(),
+            icon: const Icon(Symbols.link),
+            tooltip: 'Insert Link',
+          ),
         ],
       ),
     );
@@ -247,69 +178,62 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
         linkNameController.text = selectedText;
       });
     }
-    if (UniversalPlatform.isIOS) {
-      showCupertinoModalPopup(
-          context: context,
-          builder: (context) {
-            return Container();
-          });
-    } else {
-      showModalBottomSheet(
-          context: context,
-          isDismissible: false,
-          isScrollControlled: true,
-          useSafeArea: true,
-          builder: (context) {
-            return Padding(
-              padding: kGlobalOuterPadding * 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Insert Link',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      CloseButton(
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                  kVSpace,
-                  TextField(
-                    autofocus: true,
-                    controller: linkNameController,
-                    decoration:
-                        const InputDecoration(labelText: 'Enter Link Name'),
-                  ),
-                  kVSpace,
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: linkUrlController,
-                          decoration: const InputDecoration(
-                            labelText: 'Enter URL Address',
-                            hintText: 'http://',
-                          ),
+
+    showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (context) {
+          return Padding(
+            padding: kGlobalOuterPadding * 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Insert Link',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    CloseButton(
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                kVSpace,
+                TextField(
+                  autofocus: true,
+                  controller: linkNameController,
+                  decoration:
+                      const InputDecoration(labelText: 'Enter Link Name'),
+                ),
+                kVSpace,
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: linkUrlController,
+                        decoration: const InputDecoration(
+                          labelText: 'Enter URL Address',
+                          hintText: 'http://',
                         ),
                       ),
-                    ],
-                  ),
-                  kVSpace,
-                  FilledButton.tonal(
-                    onPressed: () {
-                      formatText('link');
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Add'),
-                  ),
-                ],
-              ),
-            );
-          });
-    }
+                    ),
+                  ],
+                ),
+                kVSpace,
+                FilledButton.tonal(
+                  onPressed: () {
+                    formatText('link');
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Add'),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
