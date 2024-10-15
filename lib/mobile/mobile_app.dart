@@ -333,12 +333,10 @@ class _MobileAppState extends State<MobileApp> {
                   itemCount: labels.length,
                   itemBuilder: (context, index) => Container(
                     margin: const EdgeInsets.only(right: 8),
-                    child: ActionChip(
-                      avatar: selectedLabel == labels[index].labelName
-                          ? const Icon(Symbols.check)
-                          : null,
+                    child: FilterChip(
+                      selected: selectedLabel == labels[index].labelName,
                       label: Text(labels[index].labelName),
-                      onPressed: () => setLabelFilter(labels[index].labelName),
+                      onSelected: (value) => setLabelFilter(labels[index].labelName),
                     ),
                   ),
                 ),
