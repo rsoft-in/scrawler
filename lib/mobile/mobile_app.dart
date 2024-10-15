@@ -4,6 +4,7 @@ import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/note_color.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
+import 'package:scrawler/mobile/pages/settings_page.dart';
 import 'package:scrawler/mobile/pages/mobile_labels.dart';
 import 'package:scrawler/mobile/pages/mobile_notes.dart';
 import 'package:scrawler/models/label.dart';
@@ -118,6 +119,7 @@ class _MobileAppState extends State<MobileApp> {
         title: const Text(kAppName),
         actions: [
           SearchAnchor(
+            // viewSurfaceTintColor: Theme.of(context).colorScheme.surfaceDim,
             builder: (BuildContext context, SearchController controller) {
               return IconButton(
                 icon: const Icon(Symbols.search),
@@ -149,7 +151,13 @@ class _MobileAppState extends State<MobileApp> {
               );
             },
           ),
-          IconButton(onPressed: () {}, icon: const Icon(Symbols.account_circle))
+          IconButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SettingsPage(),
+                  )),
+              icon: const Icon(Symbols.account_circle))
         ],
       ),
       body: notes.isEmpty
@@ -300,6 +308,13 @@ class _MobileAppState extends State<MobileApp> {
                             title: Text(recentNotes[index].noteTitle),
                             subtitle: Text(Utility.formatDateTime(
                                 recentNotes[index].noteDate)),
+                            trailing: recentNotes[index].noteFavorite
+                                ? Icon(
+                                    Symbols.favorite,
+                                    fill: 1,
+                                    color: Colors.red.shade400,
+                                  )
+                                : null,
                           ),
                         ),
                       ],
@@ -336,7 +351,8 @@ class _MobileAppState extends State<MobileApp> {
                     child: FilterChip(
                       selected: selectedLabel == labels[index].labelName,
                       label: Text(labels[index].labelName),
-                      onSelected: (value) => setLabelFilter(labels[index].labelName),
+                      onSelected: (value) =>
+                          setLabelFilter(labels[index].labelName),
                     ),
                   ),
                 ),
@@ -370,6 +386,13 @@ class _MobileAppState extends State<MobileApp> {
                             title: Text(myNotes[index].noteTitle),
                             subtitle: Text(Utility.formatDateTime(
                                 myNotes[index].noteDate)),
+                            trailing: myNotes[index].noteFavorite
+                                ? Icon(
+                                    Symbols.favorite,
+                                    fill: 1,
+                                    color: Colors.red.shade400,
+                                  )
+                                : null,
                           ),
                         ),
                       ],

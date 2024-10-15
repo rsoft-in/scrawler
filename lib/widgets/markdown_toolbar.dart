@@ -86,11 +86,11 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
             ],
             onSelected: (value) => formatText(value),
           ),
-          IconButton(
-            onPressed: () => pickImage(),
-            icon: const Icon(Symbols.image),
-            tooltip: 'Insert Image',
-          ),
+          // IconButton(
+          //   onPressed: () => pickImage(),
+          //   icon: const Icon(Symbols.image),
+          //   tooltip: 'Insert Image',
+          // ),
           IconButton(
             onPressed: () => showLinkSheet(),
             icon: const Icon(Symbols.link),

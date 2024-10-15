@@ -133,13 +133,14 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
 
     return Shortcuts(
       shortcuts: <LogicalKeySet, Intent>{
-        LogicalKeySet(LogicalKeyboardKey.superKey, LogicalKeyboardKey.slash):
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyS):
             const SidebarIntent(),
       },
       child: Actions(
         actions: <Type, Action<Intent>>{
           SidebarIntent: SetCounterAction(perform: () {
             // _searchNode.requestFocus();
+            print('object');
           }),
         },
         child: Scaffold(
@@ -238,7 +239,6 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                     ),
                             ),
                           ),
-                          
                         ],
                       ),
                     )

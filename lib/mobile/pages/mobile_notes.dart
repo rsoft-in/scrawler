@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/markdown_toolbar.dart';
+import 'package:scrawler/widgets/markdown_toolbar.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/mobile/pages/mobile_labels.dart';
 import 'package:scrawler/models/notes.dart';

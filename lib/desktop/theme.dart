@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scrawler/helpers/constants.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 ThemeData theme(BuildContext context) {
   return ThemeData(
@@ -46,8 +47,8 @@ ThemeData themeDark(BuildContext context) {
 
 // ListTile
 ListTileThemeData listTileThemeData() {
-  return const ListTileThemeData(
-    dense: true,
+  return ListTileThemeData(
+    dense: UniversalPlatform.isDesktopOrWeb ? true : false,
   );
 }
 
@@ -175,6 +176,5 @@ SearchViewThemeData searchViewThemeData() {
       borderRadius: BorderRadius.circular(kGlobalBorderRadius),
     ),
     side: BorderSide.none,
-    surfaceTintColor: kPrimaryColor,
   );
 }

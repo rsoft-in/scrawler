@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/desktop/dbhelper.dart';
-import 'package:scrawler/markdown_toolbar.dart';
+import 'package:scrawler/widgets/markdown_toolbar.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:uuid/uuid.dart';
 
