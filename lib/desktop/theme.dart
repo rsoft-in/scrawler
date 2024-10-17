@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:universal_platform/universal_platform.dart';
 
-ThemeData theme(BuildContext context) {
+ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: kPrimaryColor,
+      seedColor: appColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
     splashFactory: NoSplash.splashFactory,
@@ -23,10 +23,10 @@ ThemeData theme(BuildContext context) {
   );
 }
 
-ThemeData themeDark(BuildContext context) {
+ThemeData themeDark(BuildContext context, Color appColor) {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: kPrimaryColor,
+      seedColor: appColor,
       brightness: Brightness.dark,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),

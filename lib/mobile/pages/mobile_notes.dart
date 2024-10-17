@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/widgets/markdown_toolbar.dart';
 import 'package:scrawler/mobile/dbhelper.dart';
 import 'package:scrawler/mobile/pages/mobile_labels.dart';
 import 'package:scrawler/models/notes.dart';
+import 'package:scrawler/widgets/markdown_toolbar.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:scrawler/widgets/scrawl_color_picker.dart';
@@ -267,8 +267,11 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                             editableTextState.textEditingValue;
                         final List<ContextMenuButtonItem> buttonItems =
                             editableTextState.contextMenuButtonItems;
+                        // Check the current length of buttonItems
+                        int insertIndex =
+                            buttonItems.length > 3 ? 3 : buttonItems.length;
                         buttonItems.insert(
-                          3,
+                          insertIndex,
                           ContextMenuButtonItem(
                             onPressed: () {
                               print(value.selection.textInside(value.text));
@@ -276,8 +279,10 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                             label: 'Bold',
                           ),
                         );
+                        insertIndex =
+                            buttonItems.length > 4 ? 4 : buttonItems.length;
                         buttonItems.insert(
-                          4,
+                          insertIndex,
                           ContextMenuButtonItem(
                             onPressed: () {
                               print(value.selection.textInside(value.text));

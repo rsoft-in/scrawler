@@ -55,7 +55,6 @@ class Utility {
     int mins = DateTime.now().difference(dt).inMinutes;
     int hours = DateTime.now().difference(dt).inHours;
     int days = DateTime.now().difference(dt).inDays;
-    print('$mins $hours $days');
     if (mins < 5) {
       return 'now';
     } else if (hours > 0 && hours < 9) {
