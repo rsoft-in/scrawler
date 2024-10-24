@@ -4,6 +4,7 @@ import 'package:universal_platform/universal_platform.dart';
 
 ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
@@ -12,7 +13,7 @@ ThemeData theme(BuildContext context, Color appColor) {
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),
-    outlinedButtonTheme: outlinedButtonThemeData(),
+    outlinedButtonTheme: outlinedButtonThemeData(context),
     textButtonTheme: textButtonThemeData(),
     dialogTheme: dialogTheme(),
     dropdownMenuTheme: dropdownMenuThemeData(),
@@ -20,11 +21,13 @@ ThemeData theme(BuildContext context, Color appColor) {
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
+    tabBarTheme: tabBarTheme(context),
   );
 }
 
 ThemeData themeDark(BuildContext context, Color appColor) {
   return ThemeData(
+    fontFamily: 'Inter',
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       brightness: Brightness.dark,
@@ -34,7 +37,7 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),
-    outlinedButtonTheme: outlinedButtonThemeData(),
+    outlinedButtonTheme: outlinedButtonThemeData(context),
     textButtonTheme: textButtonThemeData(),
     dialogTheme: dialogTheme(),
     dropdownMenuTheme: dropdownMenuThemeData(),
@@ -42,6 +45,7 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
+    tabBarTheme: tabBarTheme(context),
   );
 }
 
@@ -75,12 +79,13 @@ FilledButtonThemeData filledButtonThemeData() {
 }
 
 // OutlinedButton
-OutlinedButtonThemeData outlinedButtonThemeData() {
+OutlinedButtonThemeData outlinedButtonThemeData(BuildContext context) {
   return OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-      ),
+          borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+          side:
+              BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
     ),
   );
 }
@@ -176,5 +181,17 @@ SearchViewThemeData searchViewThemeData() {
       borderRadius: BorderRadius.circular(kGlobalBorderRadius),
     ),
     side: BorderSide.none,
+  );
+}
+
+TabBarTheme tabBarTheme(BuildContext context) {
+  return TabBarTheme(
+    indicator: BoxDecoration(
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+      borderRadius: BorderRadius.circular(20),
+    ),
+    indicatorSize: TabBarIndicatorSize.tab,
+    dividerHeight: 0,
+    tabAlignment: TabAlignment.start,
   );
 }

@@ -214,6 +214,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flutter_context_menu:
+    dependency: "direct main"
+    description:
+      name: flutter_context_menu
+      sha256: "4bc1dc30ae5aa705ed99ebbeb875898c6341a6d092397a566fecd5184b392380"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   flutter_expandable_fab:
     dependency: "direct main"
     description:

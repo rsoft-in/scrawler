@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/desktop/dbhelper.dart';
 import 'package:scrawler/desktop/pages/desktop_note_edit.dart';
 import 'package:scrawler/desktop/pages/desktop_note_view.dart';
 import 'package:scrawler/desktop/pages/settings.dart';
 import 'package:scrawler/helpers/adaptive.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/desktop/dbhelper.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/rs_alert_dialog.dart';
@@ -254,6 +255,55 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Widget buildSidebar() {
+    // define your context menu entries
+    final entries = <ContextMenuEntry>[
+      const MenuHeader(text: "Context Menu"),
+      MenuItem(
+        label: 'Favourite',
+        icon: Symbols.favorite,
+        onSelected: () {
+          // implement paste
+        },
+      ),
+      const MenuDivider(),
+      MenuItem.submenu(
+        label: 'Assign Labels',
+        icon: Icons.edit,
+        items: [
+          MenuItem(
+            label: 'Label 1',
+            onSelected: () {
+              // implement redo
+            },
+          ),
+          const MenuDivider(),
+          MenuItem(
+            label: 'Manage',
+            onSelected: () {
+              // implement redo
+            },
+          ),
+        ],
+      ),
+      MenuItem(
+        label: 'Assign Labels',
+        icon: Symbols.folder_copy,
+        onSelected: () {
+          // implement copy
+        },
+      ),
+    ];
+
+    final menu = ContextMenu(
+      entries: entries,
+      boxDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border:
+              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+          color: Theme.of(context).colorScheme.surface),
+      // position: const Offset(300, 30),
+      padding: const EdgeInsets.all(8.0),
+    );
     return SizedBox(
       width: 250,
       child: Padding(
@@ -345,14 +395,21 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
               child: ListView.builder(
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: const Icon(Symbols.note),
-                    title: Text(notes[index].noteTitle),
-                    onTap: () => onNoteSelected(notes[index]),
-                    selected: selectedNote?.noteId == notes[index].noteId,
-                    selectedTileColor: kPrimaryColor.withOpacity(0.2),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(kBorderRadius),
+                  return ContextMenuRegion(
+                    contextMenu: menu,
+                    onItemSelected: (value) {
+                      print(value);
+                    },
+                    child: ListTile(
+                      leading: const Icon(Symbols.note),
+                      title: Text(notes[index].noteTitle),
+                      onTap: () => onNoteSelected(notes[index]),
+                      selected: selectedNote?.noteId == notes[index].noteId,
+                      selectedTileColor:
+                          Theme.of(context).colorScheme.surfaceContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(kBorderRadius),
+                      ),
                     ),
                   );
                 },
@@ -372,6 +429,63 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
   }
 
   Widget gridViewBuilder() {
+    final recentNotes = notes.sublist(0, notes.length > 5 ? 5 : notes.length);
+    final favNotes = notes
+        .where(
+          (element) => element.noteFavorite,
+        )
+        .toList();
+
+    // define your context menu entries
+    final entries = <ContextMenuEntry>[
+      const MenuHeader(text: "Context Menu"),
+      MenuItem(
+        label: 'Favourite',
+        icon: Symbols.favorite,
+        onSelected: () {
+          // implement paste
+        },
+      ),
+      const MenuDivider(),
+      MenuItem.submenu(
+        label: 'Assign Labels',
+        icon: Icons.edit,
+        items: [
+          MenuItem(
+            label: 'Label 1',
+            onSelected: () {
+              // implement redo
+            },
+          ),
+          const MenuDivider(),
+          MenuItem(
+            label: 'Manage',
+            onSelected: () {
+              // implement redo
+            },
+          ),
+        ],
+      ),
+      MenuItem(
+        label: 'Assign Labels',
+        icon: Symbols.folder_copy,
+        onSelected: () {
+          // implement copy
+        },
+      ),
+    ];
+
+    final menu = ContextMenu(
+      entries: entries,
+      boxDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border:
+              Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+          color: Theme.of(context).colorScheme.surface),
+      // position: const Offset(300, 30),
+      padding: const EdgeInsets.all(8.0),
+    );
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(
@@ -468,6 +582,99 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
               ),
               kVSpace,
               Expanded(
+                flex: 1,
+                child: Card(
+                  child: Padding(
+                    padding: kPaddingMedium,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        kVSpace,
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: Text(
+                            'Favourites',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                        kVSpace,
+                        favNotes.isEmpty
+                            ? Center(
+                                child: Column(
+                                children: [
+                                  Icon(Symbols.favorite),
+                                  Text('No Favourites')
+                                ],
+                              ))
+                            : Expanded(
+                                child: GridView.builder(
+                                  itemCount: favNotes.length,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: isLargeDevice ? 4 : 2,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisSpacing: 8.0,
+                                    childAspectRatio: isLargeDevice ? 1.8 : 2.5,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    return ContextMenuRegion(
+                                      contextMenu: menu,
+                                      onItemSelected: (value) {
+                                        print(value);
+                                      },
+                                      child: Card.filled(
+                                        child: InkWell(
+                                          onTap: () =>
+                                              onNoteSelected(favNotes[index]),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Padding(
+                                            padding: kPaddingLarge,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  favNotes[index].noteTitle,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Text(
+                                                  Utility.formatDateTime(
+                                                      favNotes[index].noteDate),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall,
+                                                  maxLines: 1,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
                 child: Card(
                   child: Padding(
                     padding: kPaddingMedium,
@@ -486,7 +693,8 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                         kVSpace,
                         Expanded(
                           child: GridView.builder(
-                            itemCount: notes.length,
+                            itemCount: recentNotes.length,
+                            physics: NeverScrollableScrollPhysics(),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: isLargeDevice ? 4 : 2,
@@ -495,38 +703,45 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                               childAspectRatio: isLargeDevice ? 1.8 : 2.5,
                             ),
                             itemBuilder: (context, index) {
-                              return Card.filled(
-                                child: InkWell(
-                                  onTap: () => onNoteSelected(notes[index]),
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: kPaddingLarge,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          notes[index].noteTitle,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          Utility.formatDateTime(
-                                              notes[index].noteDate),
-                                          overflow: TextOverflow.ellipsis,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelSmall,
-                                          maxLines: 1,
-                                        ),
-                                      ],
+                              return ContextMenuRegion(
+                                contextMenu: menu,
+                                onItemSelected: (value) {
+                                  print(value);
+                                },
+                                child: Card.filled(
+                                  child: InkWell(
+                                    onTap: () =>
+                                        onNoteSelected(recentNotes[index]),
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Padding(
+                                      padding: kPaddingLarge,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            recentNotes[index].noteTitle,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            Utility.formatDateTime(
+                                                recentNotes[index].noteDate),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelSmall,
+                                            maxLines: 1,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
