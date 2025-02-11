@@ -76,7 +76,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
       selectedNote!.noteColor = noteColor;
       setState(() {});
     } else {
-      print('Unable to save note color!');
+      // print('Unable to save note color!');
     }
   }
 
@@ -141,7 +141,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
         actions: <Type, Action<Intent>>{
           SidebarIntent: SetCounterAction(perform: () {
             // _searchNode.requestFocus();
-            print('object');
+            // print('object');
           }),
         },
         child: Scaffold(
@@ -398,7 +398,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                   return ContextMenuRegion(
                     contextMenu: menu,
                     onItemSelected: (value) {
-                      print(value);
+                      // print(value);
                     },
                     child: ListTile(
                       leading: const Icon(Symbols.note),
@@ -622,7 +622,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                                     return ContextMenuRegion(
                                       contextMenu: menu,
                                       onItemSelected: (value) {
-                                        print(value);
+                                        // print(value);
                                       },
                                       child: Card.filled(
                                         child: InkWell(
@@ -706,7 +706,7 @@ class _DesktopAppState extends State<DesktopApp> with TickerProviderStateMixin {
                               return ContextMenuRegion(
                                 contextMenu: menu,
                                 onItemSelected: (value) {
-                                  print(value);
+                                  // print(value);
                                 },
                                 child: Card.filled(
                                   child: InkWell(

@@ -9,6 +9,7 @@ import 'package:scrawler/widgets/markdown_toolbar.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_color_dot.dart';
 import 'package:scrawler/widgets/scrawl_color_picker.dart';
+import 'package:scrawler/widgets/scrawl_snackbar.dart';
 import 'package:uuid/uuid.dart';
 
 class MobileNotesPage extends StatefulWidget {
@@ -80,7 +81,9 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
         hasChanges = true;
       });
     } else {
-      print('Unable to save note color!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to save note color!');
+      }
     }
   }
 
@@ -93,7 +96,9 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
         hasChanges = true;
       });
     } else {
-      print('Unable to set favorite!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to set favorite!');
+      }
     }
   }
 
@@ -105,7 +110,9 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
         hasChanges = true;
       });
     } else {
-      print('Unable to save note label!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to set note label!');
+      }
     }
   }
 

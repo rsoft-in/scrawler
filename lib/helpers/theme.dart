@@ -189,7 +189,7 @@ SearchViewThemeData searchViewThemeData() {
 TabBarTheme tabBarTheme(BuildContext context) {
   return TabBarTheme(
     indicator: BoxDecoration(
-      color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+      color: Theme.of(context).colorScheme.surface.withAlpha(20),
       borderRadius: BorderRadius.circular(20),
     ),
     indicatorSize: TabBarIndicatorSize.tab,

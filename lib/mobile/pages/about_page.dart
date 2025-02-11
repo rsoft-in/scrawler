@@ -10,21 +10,21 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   @override
-  Widget build(BuildContext context) {
-    @override
-    void initState() {
-      showAboutDialog(
-          context: context,
-          applicationName: kAppName,
-          applicationVersion: kAppVersion,
-          applicationLegalese: 'RSoft',
-          applicationIcon: Image.asset(
-            'images/scrawler-desktop.png',
-            scale: 6,
-          ));
-      super.initState();
-    }
+  void initState() {
+    // showAboutDialog(
+    //     context: context,
+    //     applicationName: kAppName,
+    //     applicationVersion: kAppVersion,
+    //     applicationLegalese: 'RSoft',
+    //     applicationIcon: Image.asset(
+    //       'images/scrawler-desktop.png',
+    //       scale: 6,
+    //     ));
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[

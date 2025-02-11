@@ -11,6 +11,7 @@ import 'package:scrawler/models/label.dart';
 import 'package:scrawler/models/notes.dart';
 import 'package:scrawler/widgets/scrawl_alert_dialog.dart';
 import 'package:scrawler/widgets/scrawl_empty.dart';
+import 'package:scrawler/widgets/scrawl_snackbar.dart';
 
 class MobileApp extends StatefulWidget {
   const MobileApp({super.key});
@@ -50,7 +51,9 @@ class _MobileAppState extends State<MobileApp> {
         notes[index].noteColor = noteColor;
       });
     } else {
-      print('Unable to save note color!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to save note color!');
+      }
     }
   }
 
@@ -65,7 +68,9 @@ class _MobileAppState extends State<MobileApp> {
         Navigator.pop(context);
       }
     } else {
-      print('Unable to set favorite!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to set favorite!');
+      }
     }
   }
 
@@ -80,7 +85,9 @@ class _MobileAppState extends State<MobileApp> {
         Navigator.pop(context);
       }
     } else {
-      print('Unable to archive!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to archive!');
+      }
     }
   }
 
@@ -93,7 +100,9 @@ class _MobileAppState extends State<MobileApp> {
       });
       getLabels();
     } else {
-      print('Unable to save note label!');
+      if (mounted) {
+        showSnackBar(context, 'Unable to set note label!');
+      }
     }
   }
 

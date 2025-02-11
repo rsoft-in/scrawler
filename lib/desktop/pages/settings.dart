@@ -116,7 +116,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 : () {
                                     themeProvider
                                         .setSelectedPrimaryColor(color);
-                                    // setPrefs(color);
                                   },
                             child: Container(
                               width: 50,
@@ -254,10 +253,5 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
     );
-  }
-
-  setPrefs(Color seedColor) async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setInt('selected_seed_color', seedColor.value);
   }
 }
