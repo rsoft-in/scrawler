@@ -251,7 +251,10 @@ class _MobileAppState extends State<MobileApp> {
             kVSpace,
             favNotes.isEmpty
                 ? const Center(
-                    child: Text('It\'s empty'),
+                    child: Text(
+                      'None yet!',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   )
                 : ListView.builder(
                     shrinkWrap: true,

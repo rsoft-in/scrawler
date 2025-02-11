@@ -308,6 +308,15 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                       },
                     ),
             ),
+            if (readMode)
+              Padding(
+                padding: kPaddingLarge,
+                child: Row(
+                  children: [
+                    Text(currentNote.noteLabel),
+                  ],
+                ),
+              ),
             if (!readMode)
               const Divider(
                 height: 2,

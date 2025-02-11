@@ -38,14 +38,14 @@ class Utility {
     int mins = DateTime.now().difference(dt).inMinutes;
     int hours = DateTime.now().difference(dt).inHours;
     int days = DateTime.now().difference(dt).inDays;
-    if (mins < 5) {
+    if (mins < 5 && hours == 0 && days == 0) {
       return 'now';
-    } else if (hours > 0 && hours < 9) {
-      return '$hours ago';
+    } else if (mins > 5 && hours == 0 && days == 0) {
+      return '${mins}m ago';
+    } else if (hours >= 1 && hours < 9 && days == 0) {
+      return '${hours}h ago';
     } else if (hours >= 9 && days == 0) {
       return formatter2.format(dt);
-    } else if (days == 1) {
-      return 'yesterday';
     } else {
       return formatter.format(dt);
     }
