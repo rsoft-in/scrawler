@@ -1,16 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Utility {
-  static void showSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      width: 320,
-      duration: const Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-    ));
-  }
-
   static bool isEmail(String? email) {
     if (email!.isEmpty) return true;
     return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9._]+@[a-zA-Z0-9\-]+\.[a-zA-Z]+")

@@ -316,12 +316,19 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
                     ),
             ),
             if (readMode)
-              Padding(
-                padding: kPaddingLarge,
-                child: Row(
-                  children: [
-                    Text(currentNote.noteLabel),
-                  ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: kPaddingLarge,
+                  child: Row(
+                    children: currentNote.noteLabel
+                        .split(',')
+                        .map((label) => Padding(
+                              padding: const EdgeInsets.only(right: 5),
+                              child: Chip(label: Text(label)),
+                            ))
+                        .toList(),
+                  ),
                 ),
               ),
             if (!readMode)

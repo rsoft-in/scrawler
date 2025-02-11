@@ -211,18 +211,12 @@ class _MobileAppState extends State<MobileApp> {
                 NavigationDestination(
                   icon: Icon(Symbols.home),
                   label: 'Home',
-                  selectedIcon: Icon(
-                    Symbols.home,
-                    fill: 1,
-                  ),
+                  selectedIcon: Icon(Symbols.home),
                 ),
                 NavigationDestination(
                   icon: Icon(Symbols.note_stack),
                   label: 'My Notes',
-                  selectedIcon: Icon(
-                    Symbols.note_stack,
-                    fill: 1,
-                  ),
+                  selectedIcon: Icon(Symbols.note_stack),
                 ),
               ],
             ),
