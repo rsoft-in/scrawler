@@ -59,12 +59,12 @@ class ScrawlOtpTextFieldState extends State<ScrawlOtpTextField> {
     if (_focusNodes[index] == null) _focusNodes[index] = FocusNode();
     return Expanded(
       child: Container(
-        margin: const EdgeInsets.only(right: 5, left: 5),
+        margin: const EdgeInsets.only(right: 3, left: 3),
         child: TextField(
           focusNode: _focusNodes[index],
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 18.0,
+            fontSize: 16.0,
             fontWeight: FontWeight.bold,
           ),
           maxLength: 1,
