@@ -50,9 +50,9 @@ flutter_launcher_icons:
   image_path: "images/scrawler-desktop.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
-    enable: true
+    generate: true
     image_path: "images/scrawler.png"
-    background_color: "#5EAAA8"
+    background_color: "#FFFFFF"
     theme_color: "#5EAAA8"
   windows:
     enable: true
@@ -74,13 +74,6 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
-
-  fonts:
-    - family: Inter
-      fonts:
-      - asset: res/Inter-Bold.ttf
-      - asset: res/Inter-Light.ttf
-      - asset: res/Inter-Regular.ttf
 
   assets:
     - images/bnotes.png

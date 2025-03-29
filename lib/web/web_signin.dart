@@ -8,7 +8,6 @@ import 'package:scrawler/desktop/desktop_app.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/users_model.dart';
-import 'package:scrawler/widgets/scrawl_otp_textfield.dart';
 import 'package:scrawler/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +29,7 @@ class _WebSignInState extends State<WebSignIn> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController fullNameController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-  ScrawlOtpFieldController otpController = ScrawlOtpFieldController();
+  TextEditingController otpController = TextEditingController();
 
   List<User> users = [];
   final _signInFormKey = GlobalKey<FormState>();
@@ -127,7 +126,8 @@ class _WebSignInState extends State<WebSignIn> {
         if (response.statusCode == 200) {
           final res = response.body.split('|');
           if (res.length == 2) {
-            showSnackBar(context, res[0]);
+            showSnackBar(
+                context, 'Check your email for the verification code!');
             setState(() {
               otp = res[1];
             });
@@ -341,9 +341,32 @@ class _WebSignInState extends State<WebSignIn> {
           ),
           textAlign: TextAlign.center,
         ),
-        ScrawlOtpTextField(otpController: otpController),
         kVSpace,
-        FilledButton(onPressed: () {}, child: Text('Submit')),
+        TextFormField(
+          controller: otpController,
+          maxLength: 6,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(counterText: ''),
+          style: TextStyle(fontWeight: FontWeight.bold),
+          onChanged: (value) {
+            setState(() {});
+          },
+        ),
+        kVSpace,
+        FilledButton(
+          onPressed: otpController.text.length < 6
+              ? null
+              : () {
+                  if (otpController.text == otp) {
+                    // CREATE USER SESSION
+                  }
+                },
+          child: Text('Submit'),
+        ),
       ],
     );
 
