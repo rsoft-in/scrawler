@@ -30,28 +30,10 @@ class _WebSignInState extends State<WebSignIn> {
   TextEditingController fullNameController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
   TextEditingController otpController = TextEditingController();
-
   List<User> users = [];
   final _signInFormKey = GlobalKey<FormState>();
   final _signUpFormKey = GlobalKey<FormState>();
   String otp = '';
-
-  Future<void> setAPIServer() async {
-    try {
-      String server = await rootBundle.loadString('res/apiserver');
-      globals.apiServer = server;
-      getPreferences();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$e'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
-      }
-    }
-  }
 
   void getPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -148,7 +130,7 @@ class _WebSignInState extends State<WebSignIn> {
   @override
   void initState() {
     super.initState();
-    setAPIServer();
+    getPreferences();
   }
 
   @override
@@ -362,7 +344,7 @@ class _WebSignInState extends State<WebSignIn> {
               ? null
               : () {
                   if (otpController.text == otp) {
-                    // CREATE USER SESSION
+                    // Enable User and redirect to Sign-In
                   }
                 },
           child: Text('Submit'),

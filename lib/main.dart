@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/desktop/desktop_app.dart';
-import 'package:scrawler/web/web_signin.dart';
-import 'package:scrawler/helpers/theme.dart';
 import 'package:scrawler/helpers/constants.dart';
+import 'package:scrawler/helpers/theme.dart';
 import 'package:scrawler/helpers/theme_notifier.dart';
 import 'package:scrawler/mobile/mobile_app.dart';
 import 'package:scrawler/mobile/pages/about_page.dart';
 import 'package:scrawler/mobile/pages/appearance_page.dart';
+import 'package:scrawler/web/web_signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'helpers/globals.dart' as globals;
 
 late SharedPreferences prefs;
 
@@ -72,14 +74,29 @@ class _MyAppState extends State<MyApp> {
   ThemeMode themeMode = ThemeMode.system;
   int themeID = 3;
 
+  Future<void> setAPIServer() async {
+    try {
+      String server = await rootBundle.loadString('res/apiserver');
+      globals.apiServer = server;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$e'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     getprefs();
-
     // Load Language Resource into Memory
     // Language.readJson();
-
     super.initState();
+    setAPIServer();
   }
 
   getprefs() async {
@@ -97,86 +114,83 @@ class _MyAppState extends State<MyApp> {
             darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
             themeMode: themeNotifier.themeMode,
             debugShowCheckedModeBanner: false,
-            home: UniversalPlatform.isWeb
-                ? const WebSignIn()
-                : Column(
-                    children: [
-                      if (!UniversalPlatform.isMacOS)
-                        Material(
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            onPanStart: (details) {
-                              windowManager.startDragging();
-                            },
-                            onDoubleTap: () async {
-                              bool isMaximized =
-                                  await windowManager.isMaximized();
-                              if (!isMaximized) {
-                                windowManager.maximize();
-                              } else {
-                                windowManager.unmaximize();
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  const Text(kAppName),
-                                  const Spacer(),
-                                  InkWell(
-                                    onTap: () {
-                                      windowManager.minimize();
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 8.0),
-                                      child: Icon(
-                                        Symbols.minimize,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      bool isMaximized =
-                                          await windowManager.isMaximized();
-                                      if (!isMaximized) {
-                                        windowManager.maximize();
-                                      } else {
-                                        windowManager.unmaximize();
-                                      }
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 8.0),
-                                      child: Icon(
-                                        Symbols.square_rounded,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      windowManager.close();
-                                    },
-                                    child: const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 16.0, vertical: 8.0),
-                                      child: Icon(
-                                        Symbols.close,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+            home: Column(
+              children: [
+                if (!UniversalPlatform.isMacOS)
+                  Material(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onPanStart: (details) {
+                        windowManager.startDragging();
+                      },
+                      onDoubleTap: () async {
+                        bool isMaximized = await windowManager.isMaximized();
+                        if (!isMaximized) {
+                          windowManager.maximize();
+                        } else {
+                          windowManager.unmaximize();
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(kAppName),
+                            const Spacer(),
+                            InkWell(
+                              onTap: () {
+                                windowManager.minimize();
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                                child: Icon(
+                                  Symbols.minimize,
+                                  size: 16,
+                                ),
                               ),
                             ),
-                          ),
+                            InkWell(
+                              onTap: () async {
+                                bool isMaximized =
+                                    await windowManager.isMaximized();
+                                if (!isMaximized) {
+                                  windowManager.maximize();
+                                } else {
+                                  windowManager.unmaximize();
+                                }
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                                child: Icon(
+                                  Symbols.square_rounded,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                windowManager.close();
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.0, vertical: 8.0),
+                                child: Icon(
+                                  Symbols.close,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      const Expanded(child: DesktopApp()),
-                    ],
+                      ),
+                    ),
                   ),
+                const Expanded(child: DesktopApp()),
+              ],
+            ),
           );
         },
       );
