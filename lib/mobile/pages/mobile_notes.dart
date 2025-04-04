@@ -27,6 +27,7 @@ class MobileNotesPage extends StatefulWidget {
 }
 
 class _MobileNotesPageState extends State<MobileNotesPage> {
+  bool isNewNote = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController editorController = TextEditingController();
   UndoHistoryController undoController = UndoHistoryController();
@@ -37,6 +38,8 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   bool formDirty = false;
   bool showToolbar = true;
 
+  /// bug: saving note using done button and editing again in place causes
+  /// creating duplicate entries
   Future<void> saveNote() async {
     if (titleController.text.isEmpty) {
       titleController.text = 'Untitled';
@@ -45,7 +48,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
       return;
     }
     bool result = false;
-    if (widget.isNewNote) {
+    if (isNewNote) {
       var noteId = const Uuid().v1();
       currentNote = Notes(noteId, DateTime.now().toString(),
           titleController.text, editorController.text, '', false, 0, '', false);
@@ -58,6 +61,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
     }
     if (result) {
       setState(() {
+        isNewNote = false;
         readMode = true;
         hasChanges = true;
         formDirty = false;
@@ -119,6 +123,7 @@ class _MobileNotesPageState extends State<MobileNotesPage> {
   @override
   void initState() {
     super.initState();
+    isNewNote = widget.isNewNote;
     readMode = widget.readMode;
     currentNote = widget.note;
     editorController.text = widget.note.noteText;
