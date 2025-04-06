@@ -10,7 +10,6 @@ ThemeData theme(BuildContext context, Color appColor) {
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
     textTheme: GoogleFonts.interTextTheme(),
-    splashFactory: NoSplash.splashFactory,
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),
@@ -35,7 +34,6 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     ),
     textTheme: GoogleFonts.interTextTheme(
         ThemeData(brightness: Brightness.dark).textTheme),
-    splashFactory: NoSplash.splashFactory,
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),

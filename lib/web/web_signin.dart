@@ -34,6 +34,7 @@ class _WebSignInState extends State<WebSignIn> {
   final _signInFormKey = GlobalKey<FormState>();
   final _signUpFormKey = GlobalKey<FormState>();
   String otp = '';
+  bool busyVerifying = false;
 
   void getPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -95,6 +96,9 @@ class _WebSignInState extends State<WebSignIn> {
   }
 
   Future<void> emailVerification(bool isNew) async {
+    setState(() {
+      busyVerifying = true;
+    });
     try {
       var response = await http.Client().post(
         Uri.parse('${globals.apiServer}/verifyemail'),
@@ -125,6 +129,9 @@ class _WebSignInState extends State<WebSignIn> {
         showSnackBar(context, '$e');
       }
     }
+    setState(() {
+      busyVerifying = false;
+    });
   }
 
   @override
@@ -279,15 +286,18 @@ class _WebSignInState extends State<WebSignIn> {
             },
           ),
           kVSpace,
-          FilledButton(
-            onPressed: () {
-              if (_signUpFormKey.currentState!.validate()) {
-                // Create Account and Send OTP to Email
-                emailVerification(true);
-              }
-            },
-            child: const Text('Submit'),
-          ),
+          busyVerifying
+              ? SizedBox(
+                  width: 25, height: 25, child: CircularProgressIndicator())
+              : FilledButton(
+                  onPressed: () {
+                    if (_signUpFormKey.currentState!.validate()) {
+                      // Create Account and Send OTP to Email
+                      emailVerification(true);
+                    }
+                  },
+                  child: const Text('Submit'),
+                ),
           kVSpace,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
