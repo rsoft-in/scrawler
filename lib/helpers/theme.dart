@@ -147,11 +147,11 @@ InputDecorationTheme inputDecorationTheme() {
     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
-      borderRadius: BorderRadius.circular(25),
+      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: const BorderSide(width: 2),
-      borderRadius: BorderRadius.circular(25),
+      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
     ),
   );
 }
