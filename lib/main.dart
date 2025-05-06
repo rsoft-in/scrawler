@@ -105,127 +105,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isDesktop) {
-      return Consumer<ThemeNotifier>(
-        builder: (context, themeNotifier, child) {
-          return MaterialApp(
-            title: kAppName,
-            theme: theme(context, themeNotifier.selectedPrimaryColor),
-            darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
-            themeMode: themeNotifier.themeMode,
-            debugShowCheckedModeBanner: false,
-            home: Column(
-              children: [
-                if (!UniversalPlatform.isMacOS)
-                  Material(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanStart: (details) {
-                        windowManager.startDragging();
-                      },
-                      onDoubleTap: () async {
-                        bool isMaximized = await windowManager.isMaximized();
-                        if (!isMaximized) {
-                          windowManager.maximize();
-                        } else {
-                          windowManager.unmaximize();
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Text(kAppName),
-                            const Spacer(),
-                            InkWell(
-                              onTap: () {
-                                windowManager.minimize();
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                child: Icon(
-                                  Symbols.minimize,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                bool isMaximized =
-                                    await windowManager.isMaximized();
-                                if (!isMaximized) {
-                                  windowManager.maximize();
-                                } else {
-                                  windowManager.unmaximize();
-                                }
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                child: Icon(
-                                  Symbols.square_rounded,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                windowManager.close();
-                              },
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16.0, vertical: 8.0),
-                                child: Icon(
-                                  Symbols.close,
-                                  size: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                const Expanded(child: DesktopApp()),
-              ],
-            ),
-          );
-        },
-      );
-    } else if (UniversalPlatform.isWeb) {
-      return Consumer<ThemeNotifier>(
-        builder: (context, themeNotifier, child) {
-          return MaterialApp(
-            title: kAppName,
-            themeMode: themeNotifier.themeMode,
-            theme: theme(context, themeNotifier.selectedPrimaryColor),
-            darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
-            debugShowCheckedModeBanner: false,
-            home: WebSignIn(),
-          );
-        },
-      );
-    } else {
-      return Consumer<ThemeNotifier>(
-        builder: (context, themeNotifier, child) {
-          // themeNotifier.setSelectedPrimaryColor(globals.selectedSeedColor);
-          return MaterialApp(
-            title: kAppName,
-            themeMode: themeNotifier.themeMode,
-            theme: theme(context, themeNotifier.selectedPrimaryColor),
-            darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/',
-            routes: {
-              '/': (context) => MobileApp(),
-              '/appearance': (context) => AppearancePage(),
-              '/about': (context) => AboutPage(),
-            },
-          );
-        },
-      );
-    }
+    return Consumer<ThemeNotifier>(
+      builder: (context, themeNotifier, child) {
+        return MaterialApp(
+          title: kAppName,
+          themeMode: themeNotifier.themeMode,
+          theme: theme(context, themeNotifier.selectedPrimaryColor),
+          darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
+          debugShowCheckedModeBanner: false,
+          home: WebSignIn(),
+        );
+      },
+    );
   }
 }

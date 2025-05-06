@@ -48,6 +48,7 @@ class _WebSignInState extends State<WebSignIn> {
   }
 
   Future<void> signIn() async {
+    print("${globals.apiServer}/signin");
     try {
       var response = await http.Client().post(
           Uri.parse("${globals.apiServer}/signin"),
@@ -56,6 +57,7 @@ class _WebSignInState extends State<WebSignIn> {
             'username': usernameController.text,
             'password': passwordController.text
           }));
+      print('${response.statusCode} ${response.body}');
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         users = parsed.map<User>((json) => User.fromJson(json)).toList();
@@ -84,6 +86,7 @@ class _WebSignInState extends State<WebSignIn> {
         }
       }
     } on Exception catch (e) {
+      print('$e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
