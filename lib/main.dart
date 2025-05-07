@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:macos_ui/macos_ui.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
-import 'package:scrawler/desktop/desktop_app.dart';
 import 'package:scrawler/helpers/constants.dart';
 import 'package:scrawler/helpers/theme.dart';
 import 'package:scrawler/helpers/theme_notifier.dart';
-import 'package:scrawler/mobile/mobile_app.dart';
-import 'package:scrawler/mobile/pages/about_page.dart';
-import 'package:scrawler/mobile/pages/appearance_page.dart';
 import 'package:scrawler/web/web_signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';

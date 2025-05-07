@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/desktop/desktop_app.dart';
 import 'package:scrawler/helpers/constants.dart';
-import 'package:scrawler/helpers/utility.dart';
 import 'package:scrawler/models/users_model.dart';
 import 'package:scrawler/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,16 +22,10 @@ class WebSignIn extends StatefulWidget {
 class _WebSignInState extends State<WebSignIn> {
   late SharedPreferences preferences;
   bool isSignUpMode = false;
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController fullNameController = TextEditingController();
-  TextEditingController confirmPassController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   List<User> users = [];
   final _signInFormKey = GlobalKey<FormState>();
-  final _signUpFormKey = GlobalKey<FormState>();
   String otp = '';
   bool busyVerifying = false;
 
@@ -53,10 +46,7 @@ class _WebSignInState extends State<WebSignIn> {
       var response = await http.Client().post(
           Uri.parse("${globals.apiServer}/signin"),
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'username': usernameController.text,
-            'password': passwordController.text
-          }));
+          body: json.encode({'email': emailController.text}));
       print('${response.statusCode} ${response.body}');
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
@@ -65,7 +55,7 @@ class _WebSignInState extends State<WebSignIn> {
           if (users.isEmpty) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('Invalid Username or Password!'),
+                content: Text('Unable to create account!'),
                 duration: Duration(seconds: 3),
               ),
             );
@@ -98,7 +88,7 @@ class _WebSignInState extends State<WebSignIn> {
     }
   }
 
-  Future<void> emailVerification(bool isNew) async {
+  Future<void> emailVerification() async {
     setState(() {
       busyVerifying = true;
     });
@@ -107,10 +97,10 @@ class _WebSignInState extends State<WebSignIn> {
         Uri.parse('${globals.apiServer}/verifyemail'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'fullname': isNew ? fullNameController.text : 'FORGOTPASSWORD',
           'email': emailController.text,
         }),
       );
+      print('${response.statusCode} ${response.body}');
       if (mounted) {
         if (response.statusCode == 200) {
           final res = response.body.split('|');
@@ -149,89 +139,10 @@ class _WebSignInState extends State<WebSignIn> {
       key: _signInFormKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: usernameController,
-            decoration: const InputDecoration(
-              hintText: 'Email',
-              prefixIcon: Icon(Symbols.person),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter Email';
-              }
-              return null;
-            },
-          ),
           kVSpace,
-          TextFormField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-              prefixIcon: Icon(Symbols.password),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter Password';
-              }
-              return null;
-            },
-          ),
-          kVSpace,
-          FilledButton(
-            onPressed: () {
-              if (_signInFormKey.currentState!.validate()) {
-                signIn();
-              }
-            },
-            child: const Text('Sign-In'),
-          ),
-          kVSpace,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Don\'t have an account?'),
-              kHSpace,
-              TextButton(
-                onPressed: () => setState(() {
-                  isSignUpMode = true;
-                }),
-                child: const Text('Sign-Up'),
-              ),
-            ],
-          ),
-          kVSpace,
-          TextButton(
-            onPressed: () {
-              if (usernameController.text.isEmpty) {
-                showSnackBar(context, 'Enter your registered Email!');
-                return;
-              }
-              emailVerification(false);
-            },
-            child: const Text('Forgot password?'),
-          ),
-        ],
-      ),
-    );
-
-    Widget signUpForm = Form(
-      key: _signUpFormKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            controller: fullNameController,
-            decoration: const InputDecoration(
-              hintText: 'Full Name',
-              prefixIcon: Icon(Symbols.person),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a name';
-              }
-              return null;
-            },
+          Text(
+            'Use your email to create or access your account',
+            style: TextStyle(fontSize: 12),
           ),
           kVSpace,
           TextFormField(
@@ -242,78 +153,19 @@ class _WebSignInState extends State<WebSignIn> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter an Email';
-              }
-              if (!Utility.isEmail(value)) {
-                return 'Enter a valid Email';
+                return 'Please enter Email';
               }
               return null;
             },
           ),
           kVSpace,
-          TextFormField(
-            controller: newPasswordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              hintText: 'Password',
-              prefixIcon: Icon(Symbols.password),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a Password';
+          FilledButton(
+            onPressed: () {
+              if (_signInFormKey.currentState!.validate()) {
+                emailVerification();
               }
-              if (confirmPassController.text.isNotEmpty &&
-                  confirmPassController.text != value) {
-                return 'Passwords do not match';
-              }
-              return null;
             },
-          ),
-          kVSpace,
-          TextFormField(
-            controller: confirmPassController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              hintText: 'Confirm Password',
-              prefixIcon: Icon(Symbols.password),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a Password';
-              }
-              if (newPasswordController.text.isNotEmpty &&
-                  newPasswordController.text != value) {
-                return 'Passwords do not match';
-              }
-              return null;
-            },
-          ),
-          kVSpace,
-          busyVerifying
-              ? SizedBox(
-                  width: 25, height: 25, child: CircularProgressIndicator())
-              : FilledButton(
-                  onPressed: () {
-                    if (_signUpFormKey.currentState!.validate()) {
-                      // Create Account and Send OTP to Email
-                      emailVerification(true);
-                    }
-                  },
-                  child: const Text('Submit'),
-                ),
-          kVSpace,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('Already have an account?'),
-              kHSpace,
-              TextButton(
-                onPressed: () => setState(() {
-                  isSignUpMode = false;
-                }),
-                child: const Text('Sign-In'),
-              ),
-            ],
+            child: const Text('Sign-In'),
           ),
         ],
       ),
@@ -357,7 +209,7 @@ class _WebSignInState extends State<WebSignIn> {
               ? null
               : () {
                   if (otpController.text == otp) {
-                    // Enable User and redirect to Sign-In
+                    signIn();
                   }
                 },
           child: Text('Submit'),
@@ -377,7 +229,7 @@ class _WebSignInState extends State<WebSignIn> {
                 style: TextStyle(fontSize: 28),
               ),
               kVSpace,
-              otp.isEmpty ? (isSignUpMode ? signUpForm : signInForm) : otpForm,
+              otp.isEmpty ? signInForm : otpForm,
               kVSpace,
               Text(
                 '© Rennovation Software 2024',
