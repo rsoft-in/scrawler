@@ -7,7 +7,7 @@ ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+      dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
     textTheme: GoogleFonts.interTextTheme(),
     listTileTheme: listTileThemeData(),
@@ -29,7 +29,7 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       brightness: Brightness.dark,
-      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+      dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
     textTheme: GoogleFonts.interTextTheme(
         ThemeData(brightness: Brightness.dark).textTheme),

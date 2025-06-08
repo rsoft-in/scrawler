@@ -45,6 +45,15 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
           ),
           child: Row(
             children: [
+              Container(
+                width: 5,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: NoteColor.getColor(widget.note.noteColor, false),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              kHSpace,
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4.0),
@@ -55,14 +64,13 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                       Text(
                         widget.note.noteTitle,
                         style: const TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 16.0,
                         ),
                       ),
-                      kVSpace,
                       Text(
-                        Utility.formatDateTime(widget.note.noteDate),
+                        formatDateTime(widget.note.noteDate),
                         style: const TextStyle(
-                          fontSize: 10.0,
+                          fontSize: 12.0,
                           color: Colors.grey,
                         ),
                       ),
@@ -77,15 +85,6 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
                     style: const TextStyle(fontSize: 10.0),
                   ),
                 ),
-              kHSpace,
-              Container(
-                width: 5,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: NoteColor.getColor(widget.note.noteColor, false),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
             ],
           ),
         ),

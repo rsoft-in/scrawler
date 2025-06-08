@@ -33,6 +33,9 @@ class _WebSignInState extends State<WebSignIn> {
   final _signInFormKey = GlobalKey<FormState>();
   String otp = '';
   bool busyVerifying = false;
+  bool showSignIn = false;
+  FocusNode nameFocusNode = FocusNode();
+  FocusNode emailFocusNode = FocusNode();
 
   void getPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -46,6 +49,10 @@ class _WebSignInState extends State<WebSignIn> {
           context,
           MaterialPageRoute(builder: (context) => const AppPage()),
           (Route<dynamic> route) => false);
+    } else {
+      setState(() {
+        showSignIn = true;
+      });
     }
   }
 
@@ -116,16 +123,18 @@ class _WebSignInState extends State<WebSignIn> {
       if (mounted) {
         showSnackBar(context, '$e');
       }
+    } finally {
+      setState(() {
+        busyVerifying = false;
+      });
     }
-    setState(() {
-      busyVerifying = false;
-    });
   }
 
   @override
   void initState() {
     super.initState();
     getPreferences();
+    nameFocusNode.requestFocus();
   }
 
   @override
@@ -143,6 +152,7 @@ class _WebSignInState extends State<WebSignIn> {
           kVSpace,
           TextFormField(
             controller: nameController,
+            focusNode: nameFocusNode,
             decoration: InputDecoration(
               hintText: 'name'.tr(),
               prefixIcon: Icon(Symbols.person),
@@ -153,10 +163,14 @@ class _WebSignInState extends State<WebSignIn> {
               }
               return null;
             },
+            onEditingComplete: () {
+              emailFocusNode.requestFocus();
+            },
           ),
           kVSpace,
           TextFormField(
             controller: emailController,
+            focusNode: emailFocusNode,
             decoration: InputDecoration(
               hintText: 'email'.tr(),
               prefixIcon: Icon(Symbols.email),
@@ -167,14 +181,21 @@ class _WebSignInState extends State<WebSignIn> {
               }
               return null;
             },
-          ),
-          kVSpace,
-          FilledButton(
-            onPressed: () {
+            onEditingComplete: () {
               if (_signInFormKey.currentState!.validate()) {
                 emailVerification();
               }
             },
+          ),
+          kVSpace,
+          FilledButton(
+            onPressed: busyVerifying
+                ? null
+                : () {
+                    if (_signInFormKey.currentState!.validate()) {
+                      emailVerification();
+                    }
+                  },
             child: Text('sign_in'.tr()),
           ),
         ],
@@ -211,6 +232,11 @@ class _WebSignInState extends State<WebSignIn> {
           onChanged: (value) {
             setState(() {});
           },
+          onEditingComplete: () {
+            if (otpController.text.length == 6 && otpController.text == otp) {
+              signIn();
+            }
+          },
         ),
         kVSpace,
         FilledButton(
@@ -227,44 +253,48 @@ class _WebSignInState extends State<WebSignIn> {
     );
 
     return Scaffold(
-      body: Row(
-        children: [
-          if (screenSize == ScreenSize.large)
-            Expanded(
-                child: Center(
-              child: SvgPicture.asset(
-                'images/undraw_friends_xscy.svg',
-                width: MediaQuery.of(context).size.width * 0.5 * 0.8,
-              ),
-            )),
-          Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 300),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      kAppName,
-                      style: TextStyle(fontSize: 28),
+      body: showSignIn
+          ? Row(
+              children: [
+                if (screenSize == ScreenSize.large)
+                  Expanded(
+                      child: Center(
+                    child: SvgPicture.asset(
+                      'images/undraw_friends_xscy.svg',
+                      width: MediaQuery.of(context).size.width * 0.5 * 0.8,
                     ),
-                    kVSpace,
-                    otp.isEmpty ? signInForm : otpForm,
-                    kVSpace,
-                    Text(
-                      '© Rennovation Software 2024',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
+                  )),
+                Expanded(
+                  child: Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            kAppName,
+                            style: TextStyle(fontSize: 28),
+                          ),
+                          kVSpace,
+                          otp.isEmpty ? signInForm : otpForm,
+                          kVSpace,
+                          Text(
+                            '© Rennovation Software 2024',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
+            )
+          : Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        ],
-      ),
     );
   }
 }
