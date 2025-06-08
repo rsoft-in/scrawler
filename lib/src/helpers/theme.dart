@@ -7,7 +7,7 @@ ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
     ),
     textTheme: GoogleFonts.interTextTheme(),
     listTileTheme: listTileThemeData(),
@@ -20,6 +20,7 @@ ThemeData theme(BuildContext context, Color appColor) {
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
+    dialogTheme: dialogThemeData(),
   );
 }
 
@@ -28,7 +29,7 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       brightness: Brightness.dark,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
+      dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
     ),
     textTheme: GoogleFonts.interTextTheme(
         ThemeData(brightness: Brightness.dark).textTheme),
@@ -42,6 +43,7 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
+    dialogTheme: dialogThemeData(),
   );
 }
 
@@ -98,8 +100,8 @@ TextButtonThemeData textButtonThemeData() {
 }
 
 // DialogTheme
-DialogTheme dialogTheme() {
-  return DialogTheme(
+DialogThemeData dialogThemeData() {
+  return DialogThemeData(
     shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kGlobalBorderRadius)),
   );
@@ -132,13 +134,7 @@ PopupMenuThemeData popupMenuThemeData() {
 InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
     filled: true,
-    floatingLabelBehavior: FloatingLabelBehavior.never,
     isDense: true,
-    hintStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-    counterStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-    labelStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-    helperStyle: const TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
       borderRadius: BorderRadius.circular(kGlobalBorderRadius),

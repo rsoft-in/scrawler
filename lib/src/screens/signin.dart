@@ -1,11 +1,15 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/constants.dart';
-import 'package:scrawler/src/models/users_model.dart';
+import 'package:scrawler/src/helpers/utility.dart';
+import 'package:scrawler/src/models/user.dart';
 import 'package:scrawler/src/screens/app.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +26,7 @@ class WebSignIn extends StatefulWidget {
 class _WebSignInState extends State<WebSignIn> {
   late SharedPreferences preferences;
   bool isSignUpMode = false;
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   List<User> users = [];
@@ -33,6 +38,10 @@ class _WebSignInState extends State<WebSignIn> {
     preferences = await SharedPreferences.getInstance();
     final appSignedIn = preferences.getBool("scrawler_signed_in") ?? false;
     if (appSignedIn && mounted) {
+      globals.user.userId = preferences.getString('user_id') ?? '';
+      globals.user.userName = preferences.getString('user_name') ?? '';
+      globals.user.userEmail = preferences.getString('user_email') ?? '';
+      globals.user.userEnabled = preferences.getBool('user_enabled') ?? false;
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const AppPage()),
@@ -45,27 +54,22 @@ class _WebSignInState extends State<WebSignIn> {
       var response = await http.Client().post(
           Uri.parse("${globals.apiServer}/signin"),
           headers: {'Content-Type': 'application/json'},
-          body: json.encode({'email': emailController.text}));
-      debugPrint('${response.statusCode} ${response.body}');
+          body: json.encode(
+              {'email': emailController.text, 'name': nameController.text}));
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         users = parsed.map<User>((json) => User.fromJson(json)).toList();
         if (mounted) {
           if (users.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Unable to create account!'),
-                duration: Duration(seconds: 3),
-              ),
-            );
+            showSnackBar(context, 'unable_to_create_account'.tr());
           } else {
             setState(() {
               globals.user = users[0];
               preferences.setBool('scrawler_signed_in', true);
-              preferences.setString('user_id', globals.user!.userId);
-              preferences.setString('user_name', globals.user!.userName);
-              preferences.setString('user_email', globals.user!.userEmail);
-              preferences.setBool('user_enabled', globals.user!.userEnabled);
+              preferences.setString('user_id', globals.user.userId);
+              preferences.setString('user_name', globals.user.userName);
+              preferences.setString('user_email', globals.user.userEmail);
+              preferences.setBool('user_enabled', globals.user.userEnabled);
             });
             Navigator.pushAndRemoveUntil(
                 context,
@@ -77,12 +81,7 @@ class _WebSignInState extends State<WebSignIn> {
     } on Exception catch (e) {
       debugPrint('$e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$e'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        showSnackBar(context, '$e');
       }
     }
   }
@@ -95,22 +94,19 @@ class _WebSignInState extends State<WebSignIn> {
       var response = await http.Client().post(
         Uri.parse('${globals.apiServer}/verifyemail'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'email': emailController.text,
-        }),
+        body: json.encode(
+            {'email': emailController.text, 'name': nameController.text}),
       );
-      debugPrint('${response.statusCode} ${response.body}');
       if (mounted) {
         if (response.statusCode == 200) {
           final res = response.body.split('|');
           if (res.length == 2) {
-            showSnackBar(
-                context, 'Check your email for the verification code!');
+            showSnackBar(context, 'check_email_for_code'.tr());
             setState(() {
               otp = res[1];
             });
           } else {
-            showSnackBar(context, 'Unable to verify Email');
+            showSnackBar(context, 'email_verification_failed'.tr());
           }
         } else {
           showSnackBar(context, response.body);
@@ -134,25 +130,40 @@ class _WebSignInState extends State<WebSignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = getScreenSize(context);
     Widget signInForm = Form(
       key: _signInFormKey,
       child: Column(
         children: [
           kVSpace,
           Text(
-            'Use your email to create or access your account',
+            'sign_in_help_text'.tr(),
             style: TextStyle(fontSize: 12),
           ),
           kVSpace,
           TextFormField(
+            controller: nameController,
+            decoration: InputDecoration(
+              hintText: 'name'.tr(),
+              prefixIcon: Icon(Symbols.person),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'please_enter_name'.tr();
+              }
+              return null;
+            },
+          ),
+          kVSpace,
+          TextFormField(
             controller: emailController,
-            decoration: const InputDecoration(
-              hintText: 'Email',
+            decoration: InputDecoration(
+              hintText: 'email'.tr(),
               prefixIcon: Icon(Symbols.email),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Please enter Email';
+                return 'please_enter_email'.tr();
               }
               return null;
             },
@@ -164,7 +175,7 @@ class _WebSignInState extends State<WebSignIn> {
                 emailVerification();
               }
             },
-            child: const Text('Sign-In'),
+            child: Text('sign_in'.tr()),
           ),
         ],
       ),
@@ -174,13 +185,12 @@ class _WebSignInState extends State<WebSignIn> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          'Email Verification',
+          'email_verification'.tr(),
           style: TextStyle(fontSize: 18),
         ),
         kVSpace,
         Text(
-          'An OTP has been sent to your Email address. '
-          'Please enter it here for verification.',
+          'otp_hint'.tr(),
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,
@@ -211,35 +221,49 @@ class _WebSignInState extends State<WebSignIn> {
                     signIn();
                   }
                 },
-          child: Text('Submit'),
+          child: Text('submit'.tr()),
         ),
       ],
     );
 
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 300),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text(
-                kAppName,
-                style: TextStyle(fontSize: 28),
+      body: Row(
+        children: [
+          if (screenSize == ScreenSize.large)
+            Expanded(
+                child: Center(
+              child: SvgPicture.asset(
+                'images/undraw_friends_xscy.svg',
+                width: MediaQuery.of(context).size.width * 0.5 * 0.8,
               ),
-              kVSpace,
-              otp.isEmpty ? signInForm : otpForm,
-              kVSpace,
-              Text(
-                '© Rennovation Software 2024',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
+            )),
+          Expanded(
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 300),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      kAppName,
+                      style: TextStyle(fontSize: 28),
+                    ),
+                    kVSpace,
+                    otp.isEmpty ? signInForm : otpForm,
+                    kVSpace,
+                    Text(
+                      '© Rennovation Software 2024',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

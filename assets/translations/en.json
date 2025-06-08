@@ -1,0 +1,14 @@
+{
+    "submit": "Submit",
+    "otp_hint": "An OTP has been sent to your Email address. Please enter it here for verification.",
+    "email_verification": "E-mail Verification",
+    "sign_in": "Sign-In",
+    "please_enter_email": "Please enter Email",
+    "please_enter_name": "Please enter Name",
+    "email":"E-mail",
+    "name": "Name",
+    "sign_in_help_text": "Use your email to create or access your account",
+    "unable_to_create_account": "Unable to create account!",
+    "check_email_for_code": "Check your email for the verification code!",
+    "email_verification_failed": "Unable to verify Email"
+}

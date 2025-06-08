@@ -3,11 +3,11 @@ library;
 import 'package:flutter/material.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
-import 'package:scrawler/src/models/users_model.dart';
+import 'package:scrawler/src/models/user.dart';
 
 ThemeMode themeMode = ThemeMode.system;
 
-User? user;
+User user = User.empty();
 String apiKey = '';
 String apiServer = '';
 

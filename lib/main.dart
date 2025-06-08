@@ -1,15 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:macos_ui/macos_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/screens/signin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'src/helpers/globals.dart' as globals;
 
@@ -17,11 +14,18 @@ late SharedPreferences prefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(ChangeNotifierProvider(
-    create: (_) => ThemeNotifier(),
-    child: const MyApp(),
-  ));
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('en'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: ChangeNotifierProvider(
+          create: (_) => ThemeNotifier(), child: MyApp()),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -63,6 +67,9 @@ class _MyAppState extends State<MyApp> {
       builder: (context, themeNotifier, child) {
         return MaterialApp(
           title: kAppName,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           themeMode: themeNotifier.themeMode,
           theme: theme(context, themeNotifier.selectedPrimaryColor),
           darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),

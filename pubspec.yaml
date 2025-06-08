@@ -12,11 +12,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.4
   file_picker: ^10.1.9
   flutter_expandable_fab: ^2.0.0
   flutter_markdown: ^0.7.3+1
-  flutter_phoenix: ^1.1.1
   flutter_quill: ^11.4.1
   
   fluttertoast: ^8.2.4
@@ -31,7 +32,6 @@ dependencies:
   universal_platform: ^1.0.0+1
   window_manager: ^0.5.0
 
-  fluent_ui: ^4.9.1
   flutter_svg: ^2.0.10+1
   flutter_svg_provider: ^1.0.7
   macos_ui: ^2.0.9
@@ -41,8 +41,8 @@ dependencies:
   sqflite_common_ffi: ^2.3.3
   sqlite3_flutter_libs: ^0.5.24
   provider: ^6.1.2
-  flutter_context_menu: ^0.2.0
   google_fonts: ^6.2.1
+  easy_localization: ^3.0.7+1
 
 flutter_launcher_icons:
   android: "ic_launcher"
@@ -76,16 +76,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - images/bnotes.png
-    - images/bnotes-transparent.png
     - images/scrawler.png
     - images/scrawler-desktop.png
     - images/google.png
-    - images/undraw_playful_cat.svg
-    - images/undraw_login.svg
-    - images/welcome.svg
-    - images/nothing_to_do.svg
-    - images/pattern.svg
+    - images/undraw_friends_xscy.svg
     - res/apikey
     - res/apiserver
-    - res/languages.json
+    - assets/translations/

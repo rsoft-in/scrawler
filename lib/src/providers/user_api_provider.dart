@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:scrawler/src/helpers/globals.dart' as globals;
-import 'package:scrawler/src/models/users_model.dart';
+import 'package:scrawler/src/models/user.dart';
 
 class UserApiProvider {
   static Future<Map<String, dynamic>> checkUserCredential(Map post) async {
