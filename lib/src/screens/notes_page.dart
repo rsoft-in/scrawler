@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/filter_button.dart';
@@ -27,16 +28,15 @@ class _NotesPageState extends State<NotesPage> {
 
   Future<NotesResult> getNotes() async {
     try {
-      debugPrint('User ID: ${globals.user.userId}');
       final response = await http.Client().post(
-          Uri.parse("${globals.apiServer}/getnotes"),
-          headers: {'Content-Type': 'application/json'},
-          body: json.encode({
-            'user_id': globals.user.userId,
-            'fav': filterIndex == 1,
-            'note_label': ''
-          }));
-      debugPrint('${response.statusCode} ${response.body}');
+        Uri.parse("${globals.apiServer}/getnotes"),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'user_id': globals.user.userId,
+          'fav': filterIndex == 1 ? 1 : 0,
+          'note_label': ''
+        }),
+      );
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         return NotesResult(
@@ -53,51 +53,50 @@ class _NotesPageState extends State<NotesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<NotesResult>(
-        future: getNotes(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            case ConnectionState.done:
-              if (snapshot.data!.error.isNotEmpty) {
-                return Center(
-                  child: Text(snapshot.data!.error),
-                );
-              }
-              if (snapshot.data!.notes.isEmpty) {
-                return Center(
-                  child: Text('No Data'),
-                );
-              }
-              return Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(
-                    height: 30,
-                    child: Padding(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: filterMap
-                            .map((item) => FilterButton(
-                                  label: item['name'],
-                                  index: item['index'],
-                                  selectedIndex: filterIndex,
-                                  onTap: () {
-                                    setState(() {
-                                      filterIndex = item['index'];
-                                    });
-                                  },
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
+      body: Column(
+        children: [
+          SizedBox(
+            height: 30,
+            child: Padding(
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: filterMap
+                    .map((item) => FilterButton(
+                          label: item['name'],
+                          index: item['index'],
+                          selectedIndex: filterIndex,
+                          onTap: () {
+                            setState(() {
+                              filterIndex = item['index'];
+                            });
+                          },
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<NotesResult>(
+              future: getNotes(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  case ConnectionState.done:
+                    if (snapshot.data!.error.isNotEmpty) {
+                      return Center(
+                        child: Text(snapshot.data!.error),
+                      );
+                    }
+                    if (snapshot.data!.notes.isEmpty) {
+                      return Center(
+                        child: Text('No Data'),
+                      );
+                    }
+                    return ListView.builder(
                       itemCount: snapshot.data!.notes.length,
                       itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
@@ -106,16 +105,17 @@ class _NotesPageState extends State<NotesPage> {
                           isSelected: false,
                           note: notes[index],
                           onTap: () => openNoteView(notes[index]),
+                          onLongPress: () => openNoteOption(notes[index]),
                         );
                       },
-                    ),
-                  ),
-                ],
-              );
-            default:
-              return Container();
-          }
-        },
+                    );
+                  default:
+                    return Container();
+                }
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => openNoteView(Notes.empty()),
@@ -133,5 +133,58 @@ class _NotesPageState extends State<NotesPage> {
     if (result) {
       setState(() {});
     }
+  }
+
+  void openNoteOption(Notes note) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: kPaddingLarge,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: kPaddingLarge,
+                child: Row(
+                  children: [
+                    Text(
+                      note.noteTitle,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Spacer(),
+                    CloseButton(
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              ListTile(
+                leading: Icon(Symbols.favorite),
+                title: Text('Set as Favorite'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Symbols.palette),
+                title: Text('Set Color'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(
+                  Symbols.delete,
+                  color: Colors.red,
+                ),
+                title: Text(
+                  'Delete',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onTap: () {},
+              )
+            ],
+          ),
+        );
+      },
+    );
   }
 }

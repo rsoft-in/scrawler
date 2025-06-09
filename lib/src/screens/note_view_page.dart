@@ -5,7 +5,9 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
+import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
+import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:uuid/uuid.dart';
 
@@ -39,7 +41,6 @@ class _NoteViewState extends State<NoteView> {
           {'user_id': globals.user.userId, 'note_id': widget.note.noteId},
         ),
       );
-      debugPrint('${response.statusCode} ${response.body}');
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         if (parsed.isNotEmpty) {
@@ -84,18 +85,61 @@ class _NoteViewState extends State<NoteView> {
           },
         ),
       );
-      debugPrint('${response.statusCode} ${response.body}');
       if (response.statusCode == 200) {
         setState(() {
           hasChanges = true;
           formDirty = false;
           editing = false;
+          if (isNew) note.noteId = uuid;
         });
       } else {
         if (mounted) showSnackBar(context, response.body);
       }
     } catch (e) {
-      debugPrint('$e');
+      if (mounted) showSnackBar(context, '$e');
+    }
+  }
+
+  Future<void> updateFavorite() async {
+    try {
+      final response = await http.Client().post(
+        Uri.parse("${globals.apiServer}/updatefavnote"),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(
+          {'id': note.noteId},
+        ),
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          note.noteFavorite = !note.noteFavorite;
+          hasChanges = true;
+        });
+      } else {
+        if (mounted) showSnackBar(context, response.body);
+      }
+    } catch (e) {
+      if (mounted) showSnackBar(context, '$e');
+    }
+  }
+
+  Future<void> updateColor(int colorCode) async {
+    try {
+      final response = await http.Client().post(
+        Uri.parse("${globals.apiServer}/updatenotecolor"),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(
+          {'id': note.noteId, 'color': colorCode},
+        ),
+      );
+      if (response.statusCode == 200) {
+        setState(() {
+          note.noteColor = colorCode;
+          hasChanges = true;
+        });
+      } else {
+        if (mounted) showSnackBar(context, response.body);
+      }
+    } catch (e) {
       if (mounted) showSnackBar(context, '$e');
     }
   }
@@ -146,13 +190,16 @@ class _NoteViewState extends State<NoteView> {
           actions: [
             if (!editing)
               IconButton(
-                onPressed: () {},
-                icon: Icon(Symbols.favorite),
+                onPressed: () => updateFavorite(),
+                icon: Icon(
+                  note.noteFavorite ? Icons.favorite : Symbols.favorite,
+                  color: note.noteFavorite ? Colors.red : null,
+                ),
               ),
             if (!editing)
               IconButton(
-                onPressed: () {},
-                icon: Icon(Symbols.archive),
+                onPressed: () => openColorPicker(),
+                icon: Icon(Symbols.palette),
               ),
             if (!editing)
               IconButton(
@@ -201,14 +248,25 @@ class _NoteViewState extends State<NoteView> {
                   ),
                 ],
               )
-            : Padding(
-                padding: kPaddingLarge,
-                child: Markdown(
-                  padding: EdgeInsets.zero,
-                  data: note.noteText,
-                  selectable: true,
-                  softLineBreak: true,
-                ),
+            : Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    height: 5,
+                    color: NoteColor.getColor(note.noteColor, false),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: kPaddingLarge,
+                      child: Markdown(
+                        padding: EdgeInsets.zero,
+                        data: note.noteText,
+                        selectable: true,
+                        softLineBreak: true,
+                      ),
+                    ),
+                  ),
+                ],
               ),
       ),
     );
@@ -273,5 +331,17 @@ class _NoteViewState extends State<NoteView> {
       formDirty = true;
     });
     Navigator.pop(context);
+  }
+
+  void openColorPicker() async {
+    final colorCode = await showDialog(
+      context: context,
+      builder: (context) {
+        return ScrawlColorPicker();
+      },
+    );
+    if (colorCode != null) {
+      updateColor(colorCode);
+    }
   }
 }

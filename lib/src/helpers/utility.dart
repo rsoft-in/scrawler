@@ -28,7 +28,6 @@ String formatDateTime(String dateTime) {
   int mins = DateTime.now().difference(dt).inMinutes;
   int hours = DateTime.now().difference(dt).inHours;
   int days = DateTime.now().difference(dt).inDays;
-  debugPrint('${dt.day}');
   if (mins < 5 && hours == 0 && days == 0) {
     return 'now';
   } else if (mins > 5 && hours == 0 && days == 0) {
