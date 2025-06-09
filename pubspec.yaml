@@ -80,6 +80,7 @@ flutter:
     - images/scrawler-desktop.png
     - images/google.png
     - images/undraw_friends_xscy.svg
+    - images/undraw_random-thoughts_goca.svg
     - res/apikey
     - res/apiserver
     - assets/translations/

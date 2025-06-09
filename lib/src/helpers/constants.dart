@@ -21,5 +21,3 @@ const kHSpace = SizedBox(width: 10.0);
 const kButtonPadding = EdgeInsets.symmetric(vertical: 20.0, horizontal: 15.0);
 const kEmailRegEx =
     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
-
-

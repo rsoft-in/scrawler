@@ -7,6 +7,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/filter_button.dart';
+import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 
@@ -93,7 +94,11 @@ class _NotesPageState extends State<NotesPage> {
                     }
                     if (snapshot.data!.notes.isEmpty) {
                       return Center(
-                        child: Text('No Data'),
+                        child: EmptyWidget(
+                          text: "You don't have any Notes",
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          onTap: () => openNoteView(Notes.empty()),
+                        ),
                       );
                     }
                     return ListView.builder(
