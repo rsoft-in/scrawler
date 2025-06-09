@@ -45,7 +45,7 @@ dependencies:
   easy_localization: ^3.0.7+1
 
 flutter_launcher_icons:
-  android: "ic_launcher"
+  android: false
   ios: true
   image_path: "images/scrawler-desktop.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
