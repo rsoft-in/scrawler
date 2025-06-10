@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
+import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
-import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 
 import '../helpers/globals.dart' as globals;
+import '../widgets/scrawl_snackbar.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -28,26 +28,23 @@ class _NotesPageState extends State<NotesPage> {
   ];
 
   Future<NotesResult> getNotes() async {
-    try {
-      final response = await http.Client().post(
-        Uri.parse("${globals.apiServer}/getnotes"),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({
-          'user_id': globals.user.userId,
-          'fav': filterIndex == 1 ? 1 : 0,
-          'note_label': ''
-        }),
-      );
-      if (response.statusCode == 200) {
-        final parsed = json.decode(response.body);
-        return NotesResult(
-            parsed.map<Notes>((json) => Notes.fromJson(json)).toList(), 0, '');
-      } else {
-        return NotesResult([], 0, response.body);
-      }
-    } catch (e) {
-      if (mounted) showSnackBar(context, '$e');
-      return NotesResult([], 0, '$e');
+    final response = await NotesApiProvider.getNotes(json.encode({
+      'user_id': globals.user.userId,
+      'fav': filterIndex == 1 ? 1 : 0,
+      'note_label': ''
+    }));
+    return response;
+  }
+
+  Future<void> deleteNote(String noteId) async {
+    final response = await NotesApiProvider.delete(json.encode(
+      {'id': noteId},
+    ));
+    if (response['status']) {
+      if (mounted) Navigator.pop(context);
+      setState(() {});
+    } else {
+      if (mounted) showSnackBar(context, response['error']);
     }
   }
 
@@ -184,12 +181,41 @@ class _NotesPageState extends State<NotesPage> {
                   'Delete',
                   style: TextStyle(color: Colors.red),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                  confirmDelete(note);
+                },
               )
             ],
           ),
         );
       },
+    );
+  }
+
+  void confirmDelete(Notes note) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm'),
+        content: Text('Are you sure you want to delete?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              deleteNote(note.noteId);
+            },
+            child: Text(
+              'Yes',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('No'),
+          ),
+        ],
+      ),
     );
   }
 }

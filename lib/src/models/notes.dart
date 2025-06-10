@@ -26,7 +26,7 @@ class Notes {
       : noteId = json['note_id'],
         noteDate = json['note_date'],
         noteTitle = json['note_title'],
-        noteText = '',
+        noteText = json['note_text'] ?? '',
         noteLabel = json['note_label'],
         noteArchived = json['note_archived'] == 1,
         noteColor = int.parse('${json['note_color']}'),
