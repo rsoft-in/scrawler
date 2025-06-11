@@ -15,13 +15,13 @@ ThemeData theme(BuildContext context, Color appColor) {
     filledButtonTheme: filledButtonThemeData(),
     outlinedButtonTheme: outlinedButtonThemeData(context),
     textButtonTheme: textButtonThemeData(),
-    dialogTheme: dialogTheme(),
+    dialogTheme: dialogTheme().data,
     dropdownMenuTheme: dropdownMenuThemeData(),
     popupMenuTheme: popupMenuThemeData(),
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
-    tabBarTheme: tabBarTheme(context),
+    tabBarTheme: tabBarTheme(context).data,
   );
 }
 
@@ -39,13 +39,13 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     filledButtonTheme: filledButtonThemeData(),
     outlinedButtonTheme: outlinedButtonThemeData(context),
     textButtonTheme: textButtonThemeData(),
-    dialogTheme: dialogTheme(),
+    dialogTheme: dialogTheme().data,
     dropdownMenuTheme: dropdownMenuThemeData(),
     popupMenuTheme: popupMenuThemeData(),
     inputDecorationTheme: inputDecorationTheme(),
     searchBarTheme: _searchBarThemeData(context),
     searchViewTheme: searchViewThemeData(),
-    tabBarTheme: tabBarTheme(context),
+    tabBarTheme: tabBarTheme(context).data,
   );
 }
 
