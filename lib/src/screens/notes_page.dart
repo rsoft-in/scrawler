@@ -36,13 +36,28 @@ class _NotesPageState extends State<NotesPage> {
     return response;
   }
 
+  Future<void> updateFavorite(Notes note) async {
+    final response = await NotesApiProvider.updateFavorite(json.encode(
+      {'id': note.noteId},
+    ));
+    if (response['status']) {
+      setState(() {});
+      if (mounted) Navigator.pop(context);
+      if (mounted) showSnackBar(context, 'Done!');
+    } else {
+      if (mounted) showSnackBar(context, response['error']);
+    }
+  }
+
   Future<void> deleteNote(String noteId) async {
     final response = await NotesApiProvider.delete(json.encode(
       {'id': noteId},
     ));
+    print(response['status']);
     if (response['status']) {
-      if (mounted) Navigator.pop(context);
       setState(() {});
+      if (mounted) Navigator.pop(context);
+      if (mounted) showSnackBar(context, 'Deleted!');
     } else {
       if (mounted) showSnackBar(context, response['error']);
     }
@@ -74,6 +89,7 @@ class _NotesPageState extends State<NotesPage> {
               ),
             ),
           ),
+          kVSpace,
           Expanded(
             child: FutureBuilder<NotesResult>(
               future: getNotes(),
@@ -164,8 +180,10 @@ class _NotesPageState extends State<NotesPage> {
               ),
               ListTile(
                 leading: Icon(Symbols.favorite),
-                title: Text('Set as Favorite'),
-                onTap: () {},
+                title: Text(note.noteFavorite
+                    ? 'Remove from Favorite'
+                    : 'Set as Favorite'),
+                onTap: () => updateFavorite(note),
               ),
               ListTile(
                 leading: Icon(Symbols.palette),

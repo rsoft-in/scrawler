@@ -84,6 +84,8 @@ class _WebSignInState extends State<WebSignIn> {
                 (Route<dynamic> route) => false);
           }
         }
+      } else {
+        if (mounted) showSnackBar(context, response.body);
       }
     } on Exception catch (e) {
       if (mounted) {

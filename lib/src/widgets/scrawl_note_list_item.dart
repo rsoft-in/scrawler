@@ -28,7 +28,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
+        vertical: 4.0,
         horizontal: 10.0,
       ),
       child: InkWell(
@@ -36,7 +36,7 @@ class _NoteListItemWidgetState extends State<NoteListItemWidget> {
         onTap: widget.onTap,
         onLongPress: widget.onLongPress,
         child: Container(
-          padding: kGlobalCardPadding * 2,
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
             border: widget.isSelected
                 ? Border.all(width: 2)

@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 bool isEmail(String? email) {
   if (email!.isEmpty) return true;
@@ -30,13 +30,13 @@ String formatDateTime(String dateTime) {
   if (mins < 5 && hours == 0 && days == 0) {
     return 'now';
   } else if (mins > 5 && hours == 0 && days == 0) {
-    return '${mins}m ago';
+    return 'minutes_ago'.plural(mins, namedArgs: {'count': '$mins'});
   } else if (hours >= 1 && hours < 9 && days == 0) {
-    return '${hours}h ago';
+    return 'hours_ago'.plural(hours, namedArgs: {'count': '$hours'});
   } else if (hours >= 9 && dt.day == DateTime.now().day) {
     return formatter2.format(dt);
-  } else if (dt.day < DateTime.now().day) {
-    return 'yesterday';
+  } else if (days > 0 && days <= 7) {
+    return 'days_ago'.plural(days, namedArgs: {'count': '$days'});
   } else {
     return formatter.format(dt);
   }

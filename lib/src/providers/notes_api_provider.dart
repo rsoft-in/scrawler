@@ -102,10 +102,12 @@ class NotesApiProvider {
   static Future<Map<String, dynamic>> delete(String post) async {
     String result = "";
     try {
-      var response = await http.Client()
-          .post(Uri.parse('${globals.apiServer}/deletenote'), body: post);
+      var response = await http.Client().post(
+          Uri.parse('${globals.apiServer}/deletenote'),
+          headers: {'Content-Type': 'application/json'},
+          body: post);
+      print('${response.statusCode} ${response.body}');
       result = response.body;
-      print(response.statusCode);
       if (response.statusCode == 200) {
         return {'status': true, 'error': ''};
       } else {

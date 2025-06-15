@@ -10,5 +10,20 @@
     "sign_in_help_text": "Use your email to create or access your account",
     "unable_to_create_account": "Unable to create account!",
     "check_email_for_code": "Check your email for the verification code!",
-    "email_verification_failed": "Unable to verify Email"
+    "email_verification_failed": "Unable to verify Email",
+    "days_ago": {
+        "zero": "less than a day ago",
+        "one": "1 days ago",
+        "other": "{count} days ago"
+    },
+    "hours_ago": {
+        "zero": "less than an hour ago",
+        "one": "1 hour ago",
+        "other": "{count} hours ago"
+    },
+    "minutes_ago": {
+        "zero": "less than an minute ago",
+        "one": "a min ago",
+        "other": "{count} mins ago"
+    }
 }
