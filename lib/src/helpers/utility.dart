@@ -1,9 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 
-bool isEmail(String? email) {
-  if (email!.isEmpty) return true;
-  return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9._]+@[a-zA-Z0-9\-]+\.[a-zA-Z]+")
-      .hasMatch(email);
+String? emailValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'email_empty'.tr();
+  }
+  final bool emailValid =
+      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+          .hasMatch(value);
+
+  if (!emailValid) {
+    return 'enter_valid_email'.tr();
+  }
+  return null;
 }
 
 String getInitials(String text) {

@@ -5,7 +5,7 @@
     "sign_in": "Sign-In",
     "please_enter_email": "Please enter Email",
     "please_enter_name": "Please enter Name",
-    "email":"E-mail",
+    "email": "E-mail",
     "name": "Name",
     "sign_in_help_text": "Use your email to create or access your account",
     "unable_to_create_account": "Unable to create account!",
@@ -25,5 +25,8 @@
         "zero": "less than an minute ago",
         "one": "a min ago",
         "other": "{count} mins ago"
-    }
+    },
+    "enter_valid_email": "Please enter a valid email address",
+    "empty_email": "Email cannot be empty",
+    "forgot_password": "Forgot password?"
 }

@@ -25,7 +25,6 @@ class _FilterButtonState extends State<FilterButton> {
       borderRadius: BorderRadius.circular(kBorderRadius),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-        margin: EdgeInsets.only(right: 5),
         decoration: BoxDecoration(
           color: widget.index == widget.selectedIndex
               ? kPrimaryColor.withAlpha(100)

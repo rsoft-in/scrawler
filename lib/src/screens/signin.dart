@@ -154,6 +154,7 @@ class _WebSignInState extends State<WebSignIn> {
           TextFormField(
             controller: nameController,
             focusNode: nameFocusNode,
+            textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
               hintText: 'name'.tr(),
               prefixIcon: Icon(Symbols.person),
@@ -172,16 +173,12 @@ class _WebSignInState extends State<WebSignIn> {
           TextFormField(
             controller: emailController,
             focusNode: emailFocusNode,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'email'.tr(),
               prefixIcon: Icon(Symbols.email),
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'please_enter_email'.tr();
-              }
-              return null;
-            },
+            validator: emailValidator,
             onEditingComplete: () {
               if (_signInFormKey.currentState!.validate()) {
                 emailVerification();
@@ -199,6 +196,11 @@ class _WebSignInState extends State<WebSignIn> {
                   },
             child: Text('sign_in'.tr()),
           ),
+          kVSpace,
+          TextButton(
+            onPressed: () {},
+            child: Text('forgot_password'.tr()),
+          )
         ],
       ),
     );
