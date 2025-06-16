@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
@@ -23,8 +24,8 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   int filterIndex = 0;
   List<Map<String, dynamic>> filterMap = [
-    {"name": "All", "index": 0},
-    {"name": "Favorites", "index": 1},
+    {"name": "notes_all".tr(), "index": 0},
+    {"name": "notes_fav".tr(), "index": 1},
   ];
 
   Future<NotesResult> getNotes() async {
@@ -43,7 +44,7 @@ class _NotesPageState extends State<NotesPage> {
     if (response['status']) {
       setState(() {});
       if (mounted) Navigator.pop(context);
-      if (mounted) showSnackBar(context, 'Done!');
+      if (mounted) showSnackBar(context, 'done'.tr());
     } else {
       if (mounted) showSnackBar(context, response['error']);
     }
@@ -56,7 +57,7 @@ class _NotesPageState extends State<NotesPage> {
     if (response['status']) {
       setState(() {});
       if (mounted) Navigator.pop(context);
-      if (mounted) showSnackBar(context, 'Deleted!');
+      if (mounted) showSnackBar(context, 'deleted'.tr());
     } else {
       if (mounted) showSnackBar(context, response['error']);
     }
@@ -107,7 +108,7 @@ class _NotesPageState extends State<NotesPage> {
                     if (snapshot.data!.notes.isEmpty) {
                       return Center(
                         child: EmptyWidget(
-                          text: "You don't have any Notes",
+                          text: "no_notes".tr(),
                           width: MediaQuery.of(context).size.width * 0.6,
                           onTap: () => openNoteView(Notes.empty()),
                         ),
@@ -180,13 +181,13 @@ class _NotesPageState extends State<NotesPage> {
               ListTile(
                 leading: Icon(Symbols.favorite),
                 title: Text(note.noteFavorite
-                    ? 'Remove from Favorite'
-                    : 'Set as Favorite'),
+                    ? 'remove_from_fav'.tr()
+                    : 'set_as_fav'.tr()),
                 onTap: () => updateFavorite(note),
               ),
               ListTile(
                 leading: Icon(Symbols.palette),
-                title: Text('Set Color'),
+                title: Text('set_color'.tr()),
                 onTap: () {},
               ),
               ListTile(
@@ -195,7 +196,7 @@ class _NotesPageState extends State<NotesPage> {
                   color: Colors.red,
                 ),
                 title: Text(
-                  'Delete',
+                  'delete'.tr(),
                   style: TextStyle(color: Colors.red),
                 ),
                 onTap: () {
@@ -214,21 +215,21 @@ class _NotesPageState extends State<NotesPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirm'),
-        content: Text('Are you sure you want to delete?'),
+        title: Text('confirm'.tr()),
+        content: Text('confirm_delete'.tr()),
         actions: [
           TextButton(
             onPressed: () {
               deleteNote(note.noteId);
             },
             child: Text(
-              'Yes',
+              'yes'.tr(),
               style: TextStyle(color: Colors.red),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('No'),
+            child: Text('no'.tr()),
           ),
         ],
       ),

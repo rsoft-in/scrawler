@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
@@ -16,7 +17,7 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int selectedIndex = 0;
-  List<String> navRailTitles = ['Notes', 'Settings'];
+  List<String> navRailTitles = ['notes'.tr(), 'settings'.tr()];
 
   @override
   void initState() {
@@ -30,11 +31,11 @@ class _AppPageState extends State<AppPage> {
       destinations: <NavigationRailDestination>[
         NavigationRailDestination(
           icon: Icon(Symbols.note),
-          label: Text('Notes'),
+          label: Text('notes'.tr()),
         ),
         NavigationRailDestination(
           icon: Icon(Symbols.settings),
-          label: Text('Settings'),
+          label: Text('settings'.tr()),
         ),
       ],
       selectedIndex: selectedIndex,
@@ -46,8 +47,9 @@ class _AppPageState extends State<AppPage> {
     final Widget navBar = NavigationBar(
       selectedIndex: selectedIndex,
       destinations: [
-        NavigationDestination(icon: Icon(Symbols.note), label: 'Notes'),
-        NavigationDestination(icon: Icon(Symbols.settings), label: 'Settings'),
+        NavigationDestination(icon: Icon(Symbols.note), label: 'notes'.tr()),
+        NavigationDestination(
+            icon: Icon(Symbols.settings), label: 'settings'.tr()),
       ],
       onDestinationSelected: (value) => setState(() {
         selectedIndex = value;
@@ -56,7 +58,8 @@ class _AppPageState extends State<AppPage> {
     return isSmallDevice
         ? Scaffold(
             appBar: AppBar(
-              title: Text('Hello ${globals.user.userName}'),
+              title: Text('welcome_message'
+                  .tr(namedArgs: {'name': globals.user.userName})),
               actionsPadding: EdgeInsets.only(right: 8.0),
               actions: [
                 IconButton(

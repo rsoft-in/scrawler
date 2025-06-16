@@ -11,6 +11,9 @@
     "unable_to_create_account": "Unable to create account!",
     "check_email_for_code": "Check your email for the verification code!",
     "email_verification_failed": "Unable to verify Email",
+    "welcome_message": "Hello, {name}!",
+    "notes": "Notes",
+    "settings": "Settings",
     "days_ago": {
         "zero": "less than a day ago",
         "one": "1 days ago",
@@ -28,5 +31,22 @@
     },
     "enter_valid_email": "Please enter a valid email address",
     "empty_email": "Email cannot be empty",
-    "forgot_password": "Forgot password?"
+    "forgot_password": "Forgot password?",
+    "notes_all": "All",
+    "notes_fav": "Favorites",
+    "done": "Done!",
+    "deleted": "Deleted!",
+    "no_notes": "You don't have any Notes",
+    "remove_from_fav": "Remove from Favorite",
+    "set_as_fav": "Set as Favorite",
+    "set_color": "Set Color",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "confirm_delete": "Are you sure you want to delete?",
+    "yes": "Yes",
+    "no": "No",
+    "write_something": "Write something here...",
+    "edit_title": "Edit Title",
+    "enter_title": "Enter Title",
+    "save": "Save"
 }

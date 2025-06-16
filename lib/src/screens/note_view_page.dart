@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -31,6 +32,8 @@ class _NoteViewState extends State<NoteView> {
   TextEditingController noteTextController = TextEditingController();
   TextEditingController noteTitleController = TextEditingController();
   UndoHistoryController undoHistoryController = UndoHistoryController();
+
+  FocusNode titleFocusNode = FocusNode();
 
   Future<void> getNoteText() async {
     final response = await NotesApiProvider.getNoteText(json.encode(
@@ -198,7 +201,7 @@ class _NoteViewState extends State<NoteView> {
                         expands: true,
                         textAlignVertical: TextAlignVertical.top,
                         decoration: InputDecoration(
-                          hintText: 'Write something here...',
+                          hintText: 'write_something'.tr(),
                           filled: false,
                           border: InputBorder.none,
                           focusedBorder: InputBorder.none,
@@ -239,6 +242,7 @@ class _NoteViewState extends State<NoteView> {
 
   void showTitleEditor() async {
     noteTitleController.text = note.noteTitle;
+    titleFocusNode.requestFocus();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -255,7 +259,7 @@ class _NoteViewState extends State<NoteView> {
                   Row(
                     children: [
                       Text(
-                        'Edit Title',
+                        'edit_title'.tr(),
                         style: TextStyle(
                           fontSize: 22,
                         ),
@@ -270,16 +274,20 @@ class _NoteViewState extends State<NoteView> {
                   kVSpace,
                   TextField(
                     controller: noteTitleController,
+                    focusNode: titleFocusNode,
                     maxLength: 30,
+                    onTap: () => noteTitleController.selection = TextSelection(
+                        baseOffset: 0,
+                        extentOffset: noteTitleController.value.text.length),
                     decoration: InputDecoration(
-                      hintText: 'Enter Title',
+                      hintText: 'enter_title'.tr(),
                       counterText: '',
                     ),
                   ),
                   kVSpace,
                   FilledButton(
                     onPressed: () => saveTitle(),
-                    child: Text('Save'),
+                    child: Text('save'.tr()),
                   ),
                 ],
               ),
@@ -292,8 +300,10 @@ class _NoteViewState extends State<NoteView> {
 
   void saveTitle() {
     setState(() {
-      note.noteTitle = noteTitleController.text;
-      formDirty = true;
+      if (noteTitleController.text.isNotEmpty) {
+        note.noteTitle = noteTitleController.text;
+        formDirty = true;
+      }
     });
     Navigator.pop(context);
   }
