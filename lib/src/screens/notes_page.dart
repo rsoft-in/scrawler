@@ -12,6 +12,7 @@ import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
 import '../helpers/globals.dart' as globals;
+import '../widgets/scrawl_color_picker.dart';
 import '../widgets/scrawl_snackbar.dart';
 
 class NotesPage extends StatefulWidget {
@@ -40,6 +41,19 @@ class _NotesPageState extends State<NotesPage> {
   Future<void> updateFavorite(Notes note) async {
     final response = await NotesApiProvider.updateFavorite(json.encode(
       {'id': note.noteId},
+    ));
+    if (response['status']) {
+      setState(() {});
+      if (mounted) Navigator.pop(context);
+      if (mounted) showSnackBar(context, 'done'.tr());
+    } else {
+      if (mounted) showSnackBar(context, response['error']);
+    }
+  }
+
+  Future<void> updateColor(Notes note, int colorCode) async {
+    final response = await NotesApiProvider.updateColor(json.encode(
+      {'id': note.noteId, 'color': colorCode},
     ));
     if (response['status']) {
       setState(() {});
@@ -118,7 +132,7 @@ class _NotesPageState extends State<NotesPage> {
                       itemCount: snapshot.data!.notes.length,
                       itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
-                        return NoteListItemWidget(
+                        return NoteListItem(
                           selectedIndex: 0,
                           isSelected: false,
                           note: notes[index],
@@ -188,7 +202,7 @@ class _NotesPageState extends State<NotesPage> {
               ListTile(
                 leading: Icon(Symbols.palette),
                 title: Text('set_color'.tr()),
-                onTap: () {},
+                onTap: () => openColorPicker(note),
               ),
               ListTile(
                 leading: Icon(
@@ -234,5 +248,17 @@ class _NotesPageState extends State<NotesPage> {
         ],
       ),
     );
+  }
+
+  void openColorPicker(Notes note) async {
+    final colorCode = await showDialog(
+      context: context,
+      builder: (context) {
+        return ScrawlColorPicker();
+      },
+    );
+    if (colorCode != null) {
+      updateColor(note, colorCode);
+    }
   }
 }

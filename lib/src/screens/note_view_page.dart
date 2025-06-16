@@ -10,6 +10,7 @@ import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 import '../helpers/globals.dart' as globals;
@@ -231,6 +232,21 @@ class _NoteViewState extends State<NoteView> {
                         data: note.noteText,
                         selectable: true,
                         softLineBreak: true,
+                        onTapLink: (text, href, title) => _urlLauncher(href!),
+                        styleSheet: MarkdownStyleSheet(
+                          h1: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          h2: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          h3: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -317,6 +333,12 @@ class _NoteViewState extends State<NoteView> {
     );
     if (colorCode != null) {
       updateColor(colorCode);
+    }
+  }
+
+  Future<void> _urlLauncher(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw Exception('Could not launch $url');
     }
   }
 }

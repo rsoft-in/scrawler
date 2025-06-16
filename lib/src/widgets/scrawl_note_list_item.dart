@@ -5,13 +5,13 @@ import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/models/notes.dart';
 
 // ignore: must_be_immutable
-class NoteListItemWidget extends StatefulWidget {
+class NoteListItem extends StatefulWidget {
   Notes note;
   int selectedIndex;
   bool isSelected = false;
   VoidCallback? onTap;
   VoidCallback? onLongPress;
-  NoteListItemWidget(
+  NoteListItem(
       {super.key,
       required this.note,
       required this.selectedIndex,
@@ -20,10 +20,10 @@ class NoteListItemWidget extends StatefulWidget {
       this.onLongPress});
 
   @override
-  State<NoteListItemWidget> createState() => _NoteListItemWidgetState();
+  State<NoteListItem> createState() => _NoteListItemState();
 }
 
-class _NoteListItemWidgetState extends State<NoteListItemWidget> {
+class _NoteListItemState extends State<NoteListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
