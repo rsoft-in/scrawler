@@ -53,7 +53,6 @@ class _NotesPageState extends State<NotesPage> {
     final response = await NotesApiProvider.delete(json.encode(
       {'id': noteId},
     ));
-    print(response['status']);
     if (response['status']) {
       setState(() {});
       if (mounted) Navigator.pop(context);
@@ -220,7 +219,6 @@ class _NotesPageState extends State<NotesPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
               deleteNote(note.noteId);
             },
             child: Text(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:scrawler/src/helpers/adaptive.dart';
+import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
 import 'package:scrawler/src/screens/settings_page.dart';
 
@@ -14,6 +16,7 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int selectedIndex = 0;
+  List<String> navRailTitles = ['Notes', 'Settings'];
 
   @override
   void initState() {
@@ -22,31 +25,71 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Hello ${globals.user.userName}'),
-        actionsPadding: EdgeInsets.only(right: 8.0),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Symbols.person,
-            ),
-          ),
-        ],
-      ),
-      body: [NotesPage(), SettingsPage()][selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: selectedIndex,
-        destinations: [
-          NavigationDestination(icon: Icon(Symbols.note), label: 'Notes'),
-          NavigationDestination(
-              icon: Icon(Symbols.settings), label: 'Settings'),
-        ],
-        onDestinationSelected: (value) => setState(() {
-          selectedIndex = value;
-        }),
-      ),
+    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
+    final Widget navRail = NavigationRail(
+      destinations: <NavigationRailDestination>[
+        NavigationRailDestination(
+          icon: Icon(Symbols.note),
+          label: Text('Notes'),
+        ),
+        NavigationRailDestination(
+          icon: Icon(Symbols.settings),
+          label: Text('Settings'),
+        ),
+      ],
+      selectedIndex: selectedIndex,
+      labelType: NavigationRailLabelType.all,
+      onDestinationSelected: (value) => setState(() {
+        selectedIndex = value;
+      }),
     );
+    final Widget navBar = NavigationBar(
+      selectedIndex: selectedIndex,
+      destinations: [
+        NavigationDestination(icon: Icon(Symbols.note), label: 'Notes'),
+        NavigationDestination(icon: Icon(Symbols.settings), label: 'Settings'),
+      ],
+      onDestinationSelected: (value) => setState(() {
+        selectedIndex = value;
+      }),
+    );
+    return isSmallDevice
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text('Hello ${globals.user.userName}'),
+              actionsPadding: EdgeInsets.only(right: 8.0),
+              actions: [
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Symbols.person,
+                  ),
+                ),
+              ],
+            ),
+            body: [NotesPage(), SettingsPage()][selectedIndex],
+            bottomNavigationBar: navBar,
+          )
+        : Scaffold(
+            body: Row(
+              children: [
+                navRail,
+                VerticalDivider(),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      AppBar(
+                        title: Text(navRailTitles[selectedIndex]),
+                      ),
+                      Expanded(
+                        child: [NotesPage(), SettingsPage()][selectedIndex],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }

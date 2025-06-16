@@ -22,13 +22,16 @@ class _FilterButtonState extends State<FilterButton> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: widget.onTap,
+      borderRadius: BorderRadius.circular(kBorderRadius),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+        margin: EdgeInsets.only(right: 5),
         decoration: BoxDecoration(
-            color: widget.index == widget.selectedIndex
-                ? kPrimaryColor.withAlpha(100)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(kBorderRadius)),
+          color: widget.index == widget.selectedIndex
+              ? kPrimaryColor.withAlpha(100)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(kBorderRadius),
+        ),
         child: Text(
           widget.label,
           style: TextStyle(

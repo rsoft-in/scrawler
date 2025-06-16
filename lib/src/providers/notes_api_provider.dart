@@ -106,7 +106,6 @@ class NotesApiProvider {
           Uri.parse('${globals.apiServer}/deletenote'),
           headers: {'Content-Type': 'application/json'},
           body: post);
-      print('${response.statusCode} ${response.body}');
       result = response.body;
       if (response.statusCode == 200) {
         return {'status': true, 'error': ''};
