@@ -48,5 +48,10 @@
     "write_something": "Write something here...",
     "edit_title": "Edit Title",
     "enter_title": "Enter Title",
-    "save": "Save"
+    "save": "Save",
+    "labels": "Labels",
+    "edit": "Edit",
+    "colors": "Colors",
+    "favorite": "Favorite",
+    "add": "Add"
 }

@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
+import 'package:scrawler/src/screens/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
@@ -144,43 +145,30 @@ class _NoteViewState extends State<NoteView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Text(note.noteTitle),
-              kHSpace,
-              if (editing)
-                IconButton(
-                  onPressed: () => showTitleEditor(),
-                  icon: Icon(Symbols.edit),
-                ),
-            ],
+          title: GestureDetector(
+            onTap: () => showTitleEditor(),
+            child: Text(note.noteTitle),
           ),
-          actionsPadding: EdgeInsets.only(right: 8.0),
           actions: [
-            if (!editing)
-              IconButton(
-                onPressed: () => updateFavorite(),
-                icon: Icon(
-                  note.noteFavorite ? Icons.favorite : Symbols.favorite,
-                  color: note.noteFavorite ? Colors.red : null,
-                ),
-              ),
-            if (!editing)
-              IconButton(
-                onPressed: () => openColorPicker(),
-                icon: Icon(Symbols.palette),
-              ),
             if (!editing)
               IconButton(
                 onPressed: () => setState(() {
                   editing = true;
                 }),
+                tooltip: 'edit'.tr(),
                 icon: Icon(Symbols.edit),
               ),
             if (editing)
               IconButton(
                 onPressed: () => saveNote(),
                 icon: Icon(Symbols.check),
+              ),
+            if (editing)
+              IconButton(
+                onPressed: () => setState(() {
+                  editing = false;
+                }),
+                icon: Icon(Symbols.close),
               ),
           ],
         ),
@@ -225,26 +213,29 @@ class _NoteViewState extends State<NoteView> {
                     color: NoteColor.getColor(note.noteColor, false),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: kPaddingLarge,
-                      child: Markdown(
-                        padding: EdgeInsets.zero,
-                        data: note.noteText,
-                        selectable: true,
-                        softLineBreak: true,
-                        onTapLink: (text, href, title) => _urlLauncher(href!),
-                        styleSheet: MarkdownStyleSheet(
-                          h1: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          h2: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          h3: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 600),
+                      child: Padding(
+                        padding: kPaddingLarge,
+                        child: Markdown(
+                          padding: EdgeInsets.zero,
+                          data: note.noteText,
+                          selectable: true,
+                          softLineBreak: true,
+                          onTapLink: (text, href, title) => _urlLauncher(href!),
+                          styleSheet: MarkdownStyleSheet(
+                            h1: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            h2: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            h3: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
@@ -252,6 +243,33 @@ class _NoteViewState extends State<NoteView> {
                   ),
                 ],
               ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            children: [
+              if (!editing)
+                IconButton(
+                  onPressed: () => updateFavorite(),
+                  tooltip: 'favorite'.tr(),
+                  icon: Icon(
+                    note.noteFavorite ? Icons.favorite : Symbols.favorite,
+                    color: note.noteFavorite ? Colors.red.shade200 : null,
+                  ),
+                ),
+              if (!editing)
+                IconButton(
+                  onPressed: () => openColorPicker(),
+                  tooltip: 'colors'.tr(),
+                  icon: Icon(Symbols.palette),
+                ),
+              if (!editing)
+                IconButton(
+                  onPressed: () => openLabels(),
+                  tooltip: 'labels'.tr(),
+                  icon: Icon(Symbols.label),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -334,6 +352,16 @@ class _NoteViewState extends State<NoteView> {
     if (colorCode != null) {
       updateColor(colorCode);
     }
+  }
+
+  void openLabels() async {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      builder: (context) {
+        return LabelsPage();
+      },
+    );
   }
 
   Future<void> _urlLauncher(String url) async {
