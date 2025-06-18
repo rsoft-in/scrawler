@@ -68,7 +68,10 @@ class _AppPageState extends State<AppPage> {
             body: Row(
               children: [
                 navRail,
-                VerticalDivider(),
+                VerticalDivider(
+                  thickness: 1,
+                  width: 1,
+                ),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,

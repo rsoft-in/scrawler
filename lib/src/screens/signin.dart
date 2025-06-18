@@ -16,14 +16,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/globals.dart' as globals;
 
-class WebSignIn extends StatefulWidget {
-  const WebSignIn({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<WebSignIn> createState() => _WebSignInState();
+  State<SignIn> createState() => _SignInState();
 }
 
-class _WebSignInState extends State<WebSignIn> {
+class _SignInState extends State<SignIn> {
   late SharedPreferences preferences;
   bool isSignUpMode = false;
   String userName = "";

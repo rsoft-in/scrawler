@@ -20,23 +20,26 @@ class FilterButton extends StatefulWidget {
 class _FilterButtonState extends State<FilterButton> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.onTap,
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-          color: widget.index == widget.selectedIndex
-              ? kPrimaryColor.withAlpha(100)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
-        child: Text(
-          widget.label,
-          style: TextStyle(
-            fontWeight: widget.index == widget.selectedIndex
-                ? FontWeight.bold
-                : FontWeight.normal,
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+      child: InkWell(
+        onTap: widget.onTap,
+        borderRadius: BorderRadius.circular(kBorderRadius),
+        child: Container(
+          decoration: BoxDecoration(
+              color: widget.index == widget.selectedIndex
+                  ? kPrimaryColor.withAlpha(100)
+                  : null,
+              borderRadius: BorderRadius.circular(8)),
+          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
+          alignment: Alignment.center,
+          child: Text(
+            widget.label,
+            style: TextStyle(
+              fontWeight: widget.index == widget.selectedIndex
+                  ? FontWeight.bold
+                  : FontWeight.normal,
+            ),
           ),
         ),
       ),

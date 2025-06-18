@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
           theme: theme(context, themeNotifier.selectedPrimaryColor),
           darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
           debugShowCheckedModeBanner: false,
-          home: WebSignIn(),
+          home: SignIn(),
         );
       },
     );

@@ -7,6 +7,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
+import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
@@ -82,20 +83,17 @@ class _NotesPageState extends State<NotesPage> {
       body: Column(
         children: [
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: SizedBox(
               height: 40,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  ...filterMap.map((item) => ActionChip(
-                        label: Text(item['name']),
-                        padding: EdgeInsets.all(4),
-                        backgroundColor: filterIndex == item['index']
-                            ? kPrimaryColor.withAlpha(100)
-                            : null,
-                        onPressed: () {
+                  ...filterMap.map((item) => FilterButton(
+                        selectedIndex: filterIndex,
+                        index: item['index'],
+                        label: item['name'],
+                        onTap: () {
                           setState(() {
                             filterIndex = item['index'];
                           });
