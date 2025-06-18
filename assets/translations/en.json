@@ -53,5 +53,7 @@
     "edit": "Edit",
     "colors": "Colors",
     "favorite": "Favorite",
-    "add": "Add"
+    "add": "Add",
+    "new_label": "New Label",
+    "manage_labels": "Manage Labels"
 }

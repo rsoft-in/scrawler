@@ -7,7 +7,6 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
-import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
@@ -82,28 +81,41 @@ class _NotesPageState extends State<NotesPage> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 30,
+          Container(
+            color: Colors.grey.shade100,
             child: Padding(
-              padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: filterMap
-                    .map((item) => FilterButton(
-                          label: item['name'],
-                          index: item['index'],
-                          selectedIndex: filterIndex,
-                          onTap: () {
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+              child: SizedBox(
+                height: 40,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    ...filterMap.map((item) => ActionChip(
+                          label: Text(item['name']),
+                          padding: EdgeInsets.all(4),
+                          onPressed: () {
                             setState(() {
                               filterIndex = item['index'];
                             });
                           },
-                        ))
-                    .toList(),
+                        )),
+                    VerticalDivider(),
+                    IconButton(
+                      onPressed: () {},
+                      tooltip: 'new_label'.tr(),
+                      icon: Icon(Symbols.add_circle),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      tooltip: 'manage_labels'.tr(),
+                      icon: Icon(Symbols.folder_managed),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          kVSpace,
           Expanded(
             child: FutureBuilder<NotesResult>(
               future: getNotes(),
