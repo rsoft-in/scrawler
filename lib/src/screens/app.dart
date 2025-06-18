@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/utility.dart';
+import 'package:scrawler/src/screens/account_page.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
-import 'package:scrawler/src/screens/settings_page.dart';
 
 import '../helpers/globals.dart' as globals;
 
@@ -17,7 +17,7 @@ class AppPage extends StatefulWidget {
 
 class _AppPageState extends State<AppPage> {
   int selectedIndex = 0;
-  List<String> navRailTitles = ['notes'.tr(), 'settings'.tr()];
+  List<String> navRailTitles = ['notes'.tr(), 'account'.tr()];
 
   @override
   void initState() {
@@ -34,8 +34,8 @@ class _AppPageState extends State<AppPage> {
           label: Text('notes'.tr()),
         ),
         NavigationRailDestination(
-          icon: Icon(Symbols.settings),
-          label: Text('settings'.tr()),
+          icon: Icon(Symbols.person),
+          label: Text('account'.tr()),
         ),
       ],
       selectedIndex: selectedIndex,
@@ -49,7 +49,7 @@ class _AppPageState extends State<AppPage> {
       destinations: [
         NavigationDestination(icon: Icon(Symbols.note), label: 'notes'.tr()),
         NavigationDestination(
-            icon: Icon(Symbols.settings), label: 'settings'.tr()),
+            icon: Icon(Symbols.person), label: 'account'.tr()),
       ],
       onDestinationSelected: (value) => setState(() {
         selectedIndex = value;
@@ -60,17 +60,8 @@ class _AppPageState extends State<AppPage> {
             appBar: AppBar(
               title: Text('welcome_message'
                   .tr(namedArgs: {'name': globals.user.userName})),
-              actionsPadding: EdgeInsets.only(right: 8.0),
-              actions: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    Symbols.person,
-                  ),
-                ),
-              ],
             ),
-            body: [NotesPage(), SettingsPage()][selectedIndex],
+            body: [NotesPage(), AccountPage()][selectedIndex],
             bottomNavigationBar: navBar,
           )
         : Scaffold(
@@ -86,7 +77,7 @@ class _AppPageState extends State<AppPage> {
                         title: Text(navRailTitles[selectedIndex]),
                       ),
                       Expanded(
-                        child: [NotesPage(), SettingsPage()][selectedIndex],
+                        child: [NotesPage(), AccountPage()][selectedIndex],
                       ),
                     ],
                   ),

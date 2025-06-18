@@ -81,38 +81,38 @@ class _NotesPageState extends State<NotesPage> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            color: Colors.grey.shade100,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
-              child: SizedBox(
-                height: 40,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    ...filterMap.map((item) => ActionChip(
-                          label: Text(item['name']),
-                          padding: EdgeInsets.all(4),
-                          onPressed: () {
-                            setState(() {
-                              filterIndex = item['index'];
-                            });
-                          },
-                        )),
-                    VerticalDivider(),
-                    IconButton(
-                      onPressed: () {},
-                      tooltip: 'new_label'.tr(),
-                      icon: Icon(Symbols.add_circle),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      tooltip: 'manage_labels'.tr(),
-                      icon: Icon(Symbols.folder_managed),
-                    ),
-                  ],
-                ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+            child: SizedBox(
+              height: 40,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  ...filterMap.map((item) => ActionChip(
+                        label: Text(item['name']),
+                        padding: EdgeInsets.all(4),
+                        backgroundColor: filterIndex == item['index']
+                            ? kPrimaryColor.withAlpha(100)
+                            : null,
+                        onPressed: () {
+                          setState(() {
+                            filterIndex = item['index'];
+                          });
+                        },
+                      )),
+                  VerticalDivider(),
+                  IconButton(
+                    onPressed: () {},
+                    tooltip: 'new_label'.tr(),
+                    icon: Icon(Symbols.add_circle),
+                  ),
+                  IconButton(
+                    onPressed: () {},
+                    tooltip: 'manage_labels'.tr(),
+                    icon: Icon(Symbols.folder_managed),
+                  ),
+                ],
               ),
             ),
           ),
