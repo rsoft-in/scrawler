@@ -243,29 +243,42 @@ class _WebSignInState extends State<WebSignIn> {
                     ),
                   )),
                 Expanded(
-                  child: Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 300),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            kAppName,
-                            style: TextStyle(fontSize: 28),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 300),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                kAppName,
+                                style: TextStyle(fontSize: 28),
+                              ),
+                              kVSpace,
+                              otp.isEmpty ? signInForm : otpForm,
+                            ],
                           ),
-                          kVSpace,
-                          otp.isEmpty ? signInForm : otpForm,
-                          kVSpace,
-                          Text(
-                            '© Rennovation Software 2024',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 5,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: kPaddingLarge,
+                          child: Center(
+                            child: Text(
+                              '© Rennovation Software 2024',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
