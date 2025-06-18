@@ -176,11 +176,6 @@ class _NoteViewState extends State<NoteView> {
             ? Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  MarkdownToolbar(
-                    controller: noteTextController,
-                    undoController: undoHistoryController,
-                    onChange: () {},
-                  ),
                   Expanded(
                     child: Padding(
                       padding: kPaddingLarge,
@@ -201,6 +196,14 @@ class _NoteViewState extends State<NoteView> {
                           });
                         },
                       ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MarkdownToolbar(
+                      controller: noteTextController,
+                      undoController: undoHistoryController,
+                      onChange: () {},
                     ),
                   ),
                 ],
@@ -243,33 +246,35 @@ class _NoteViewState extends State<NoteView> {
                   ),
                 ],
               ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            children: [
-              if (!editing)
-                IconButton(
-                  onPressed: () => updateFavorite(),
-                  tooltip: 'favorite'.tr(),
-                  icon: Icon(
-                    note.noteFavorite ? Icons.favorite : Symbols.favorite,
-                    color: note.noteFavorite ? Colors.red.shade200 : null,
-                  ),
+        bottomNavigationBar: editing
+            ? null
+            : BottomAppBar(
+                child: Row(
+                  children: [
+                    if (!editing)
+                      IconButton(
+                        onPressed: () => updateFavorite(),
+                        tooltip: 'favorite'.tr(),
+                        icon: Icon(
+                          note.noteFavorite ? Icons.favorite : Symbols.favorite,
+                          color: note.noteFavorite ? Colors.red.shade200 : null,
+                        ),
+                      ),
+                    if (!editing)
+                      IconButton(
+                        onPressed: () => openColorPicker(),
+                        tooltip: 'colors'.tr(),
+                        icon: Icon(Symbols.palette),
+                      ),
+                    if (!editing)
+                      IconButton(
+                        onPressed: () => openLabels(),
+                        tooltip: 'labels'.tr(),
+                        icon: Icon(Symbols.label),
+                      ),
+                  ],
                 ),
-              if (!editing)
-                IconButton(
-                  onPressed: () => openColorPicker(),
-                  tooltip: 'colors'.tr(),
-                  icon: Icon(Symbols.palette),
-                ),
-              if (!editing)
-                IconButton(
-                  onPressed: () => openLabels(),
-                  tooltip: 'labels'.tr(),
-                  icon: Icon(Symbols.label),
-                ),
-            ],
-          ),
-        ),
+              ),
       ),
     );
   }
