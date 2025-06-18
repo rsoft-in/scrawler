@@ -26,7 +26,7 @@ class WebSignIn extends StatefulWidget {
 class _WebSignInState extends State<WebSignIn> {
   late SharedPreferences preferences;
   bool isSignUpMode = false;
-  TextEditingController nameController = TextEditingController();
+  String userName = "";
   TextEditingController emailController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   List<User> users = [];
@@ -61,8 +61,7 @@ class _WebSignInState extends State<WebSignIn> {
       var response = await http.Client().post(
           Uri.parse("${globals.apiServer}/signin"),
           headers: {'Content-Type': 'application/json'},
-          body: json.encode(
-              {'email': emailController.text, 'name': nameController.text}));
+          body: json.encode({'email': emailController.text, 'name': userName}));
       if (response.statusCode == 200) {
         final parsed = json.decode(response.body);
         users = parsed.map<User>((json) => User.fromJson(json)).toList();
@@ -97,13 +96,14 @@ class _WebSignInState extends State<WebSignIn> {
   Future<void> emailVerification() async {
     setState(() {
       busyVerifying = true;
+      final emailParts = emailController.text.split("@");
+      userName = emailParts[0];
     });
     try {
       var response = await http.Client().post(
         Uri.parse('${globals.apiServer}/verifyemail'),
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(
-            {'email': emailController.text, 'name': nameController.text}),
+        body: json.encode({'email': emailController.text, 'name': userName}),
       );
       if (mounted) {
         if (response.statusCode == 200) {
@@ -145,29 +145,9 @@ class _WebSignInState extends State<WebSignIn> {
       key: _signInFormKey,
       child: Column(
         children: [
-          kVSpace,
           Text(
             'sign_in_help_text'.tr(),
             style: TextStyle(fontSize: 12),
-          ),
-          kVSpace,
-          TextFormField(
-            controller: nameController,
-            focusNode: nameFocusNode,
-            textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(
-              hintText: 'name'.tr(),
-              prefixIcon: Icon(Symbols.person),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'please_enter_name'.tr();
-              }
-              return null;
-            },
-            onEditingComplete: () {
-              emailFocusNode.requestFocus();
-            },
           ),
           kVSpace,
           TextFormField(
@@ -196,11 +176,6 @@ class _WebSignInState extends State<WebSignIn> {
                   },
             child: Text('sign_in'.tr()),
           ),
-          kVSpace,
-          TextButton(
-            onPressed: () {},
-            child: Text('forgot_password'.tr()),
-          )
         ],
       ),
     );
