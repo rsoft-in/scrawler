@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -5,8 +6,6 @@ import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/screens/account_page.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
-
-import '../helpers/globals.dart' as globals;
 
 class AppPage extends StatefulWidget {
   const AppPage({super.key});
@@ -30,7 +29,8 @@ class _AppPageState extends State<AppPage> {
     final Widget navRail = NavigationRail(
       destinations: <NavigationRailDestination>[
         NavigationRailDestination(
-          icon: Icon(Symbols.note),
+          icon: Icon(Symbols.note_stack),
+          selectedIcon: Icon(Symbols.note_stack),
           label: Text('notes'.tr()),
         ),
         NavigationRailDestination(
@@ -47,9 +47,22 @@ class _AppPageState extends State<AppPage> {
     final Widget navBar = NavigationBar(
       selectedIndex: selectedIndex,
       destinations: [
-        NavigationDestination(icon: Icon(Symbols.note), label: 'notes'.tr()),
         NavigationDestination(
-            icon: Icon(Symbols.person), label: 'account'.tr()),
+          icon: Icon(Symbols.note_stack),
+          selectedIcon: Icon(
+            Symbols.note_stack,
+            fill: 1,
+          ),
+          label: 'notes'.tr(),
+        ),
+        NavigationDestination(
+          icon: Icon(Symbols.person),
+          selectedIcon: Icon(
+            Symbols.person,
+            fill: 1,
+          ),
+          label: 'account'.tr(),
+        ),
       ],
       onDestinationSelected: (value) => setState(() {
         selectedIndex = value;
@@ -57,11 +70,27 @@ class _AppPageState extends State<AppPage> {
     );
     return isSmallDevice
         ? Scaffold(
-            appBar: AppBar(
-              title: Text('welcome_message'
-                  .tr(namedArgs: {'name': globals.user.userName})),
+            body: PageTransitionSwitcher(
+              duration: const Duration(milliseconds: 150),
+              transitionBuilder: (
+                Widget child,
+                Animation<double> primaryAnimation,
+                Animation<double> secondaryAnimation,
+              ) {
+                return FadeTransition(
+                  opacity: primaryAnimation,
+                  child: ScaleTransition(
+                    filterQuality: FilterQuality.high,
+                    scale: Tween<double>(
+                      begin: 0.99,
+                      end: 1.0,
+                    ).animate(primaryAnimation),
+                    child: child,
+                  ),
+                );
+              },
+              child: [NotesPage(), AccountPage()][selectedIndex],
             ),
-            body: [NotesPage(), AccountPage()][selectedIndex],
             bottomNavigationBar: navBar,
           )
         : Scaffold(

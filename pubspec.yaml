@@ -43,6 +43,7 @@ dependencies:
   provider: ^6.1.2
   google_fonts: ^6.2.1
   easy_localization: ^3.0.7+1
+  animations: ^2.0.11
 
 flutter_launcher_icons:
   android: false

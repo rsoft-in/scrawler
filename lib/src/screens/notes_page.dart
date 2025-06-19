@@ -80,6 +80,10 @@ class _NotesPageState extends State<NotesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+            'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
+      ),
       body: Column(
         children: [
           Padding(

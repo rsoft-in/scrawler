@@ -28,7 +28,7 @@ class _FilterButtonState extends State<FilterButton> {
         child: Container(
           decoration: BoxDecoration(
               color: widget.index == widget.selectedIndex
-                  ? kPrimaryColor.withAlpha(100)
+                  ? Theme.of(context).colorScheme.surfaceContainerHighest
                   : null,
               borderRadius: BorderRadius.circular(8)),
           padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 16.0),
