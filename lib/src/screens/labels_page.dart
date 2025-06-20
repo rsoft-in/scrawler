@@ -6,23 +6,54 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/label.dart';
 import 'package:scrawler/src/providers/labels_api_provider.dart';
-import 'package:scrawler/src/widgets/scrawl_empty.dart';
+import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 
 import '../helpers/globals.dart' as globals;
 
 class LabelsPage extends StatefulWidget {
-  const LabelsPage({super.key});
+  final String selectedLabels;
+  const LabelsPage({super.key, required this.selectedLabels});
 
   @override
   State<LabelsPage> createState() => _LabelsPageState();
 }
 
 class _LabelsPageState extends State<LabelsPage> {
-  Future<LabelsResult> getLabels() async {
+  List<String> selectedLabels = [];
+  List<Label> labels = [];
+  bool isLoading = false;
+
+  Future<void> getLabels() async {
+    setState(() {
+      isLoading = true;
+    });
     final response = await LabelsApiProvider.fecthLabels(json.encode({
       "user_id": globals.user.userId,
     }));
-    return response;
+    if (response.error.isEmpty) {
+      setState(() {
+        labels = response.labels;
+        for (var i = 0; i < labels.length; i++) {
+          if (selectedLabels
+              .where((l) => l == labels[i].labelName)
+              .isNotEmpty) {
+            labels[i].selected = true;
+          }
+        }
+      });
+    } else {
+      if (mounted) showSnackBar(context, response.error);
+    }
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedLabels = widget.selectedLabels.split(',');
+    getLabels();
   }
 
   @override
@@ -41,7 +72,7 @@ class _LabelsPageState extends State<LabelsPage> {
                 ),
                 kHSpace,
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () => showAddDialog(),
                   icon: Icon(Symbols.add),
                   label: Text('add'.tr()),
                 ),
@@ -52,59 +83,71 @@ class _LabelsPageState extends State<LabelsPage> {
               ],
             ),
             Expanded(
-              child: FutureBuilder<LabelsResult>(
-                future: getLabels(),
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    case ConnectionState.done:
-                      if (snapshot.data!.error.isNotEmpty) {
-                        return Center(
-                          child: Text('problem_loading_data'),
-                        );
-                      } else {
-                        if (snapshot.data!.labels.isEmpty) {
-                          return Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                EmptyWidget(
-                                  text: 'no_labels',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.50,
-                                ),
-                                kVSpace,
-                                FilledButton.tonal(
-                                  onPressed: () {},
-                                  child: Text(
-                                    'add'.tr(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return ListView.builder(
-                          itemCount: snapshot.data!.labels.length,
-                          itemBuilder: (context, index) => CheckboxListTile(
-                            value: false,
-                            onChanged: (value) {},
-                            title: Text(snapshot.data!.labels[index].labelName),
-                          ),
-                        );
-                      }
-                    default:
-                      return Container();
-                  }
-                },
+              child: ListView.builder(
+                itemCount: labels.length,
+                itemBuilder: (context, index) => CheckboxListTile(
+                  value: labels[index].selected,
+                  onChanged: (value) {
+                    setState(() {
+                      labels[index].selected = value!;
+                    });
+                  },
+                  title: Text(labels[index].labelName),
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void showAddDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 300),
+            child: Padding(
+              padding: kGlobalOuterPadding * 2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    maxLength: 15,
+                    decoration: InputDecoration(
+                      hintText: 'enter_label_name'.tr(),
+                      counterText: '',
+                    ),
+                  ),
+                  kVSpace,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: () {},
+                          child: Text('add'.tr()),
+                        ),
+                      ),
+                      kHSpace,
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text(
+                            'cancel'.tr(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

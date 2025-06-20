@@ -268,7 +268,7 @@ class _NoteViewState extends State<NoteView> {
                       ),
                     if (!editing)
                       IconButton(
-                        onPressed: () => openLabels(),
+                        onPressed: () => openLabels(note.noteLabel),
                         tooltip: 'labels'.tr(),
                         icon: Icon(Symbols.label),
                       ),
@@ -359,12 +359,12 @@ class _NoteViewState extends State<NoteView> {
     }
   }
 
-  void openLabels() async {
+  void openLabels(String labels) async {
     showModalBottomSheet(
       context: context,
       isDismissible: false,
       builder: (context) {
-        return LabelsPage();
+        return LabelsPage(selectedLabels: labels,);
       },
     );
   }

@@ -8,9 +8,12 @@ class LabelsApiProvider {
   static Future<LabelsResult> fecthLabels(String post) async {
     String result = "";
     try {
-      var response = await http.Client()
-          .post(Uri.parse("${globals.apiServer}/getlabels"), body: post);
+      var response = await http.Client().post(
+          Uri.parse("${globals.apiServer}/getlabels"),
+          headers: {'Content-Type': 'application/json'},
+          body: post);
       result = response.body;
+      print(result);
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
         var labels = parsed.map<Label>((json) => Label.fromJson(json)).toList();

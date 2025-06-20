@@ -59,5 +59,7 @@
     "account": "Account",
     "problem_loading_data": "Problem loading data!",
     "no_labels": "No labels yet!",
-    "select_color": "Select Color"
+    "select_color": "Select Color",
+    "enter_label_name": "Enter Label name",
+    "cancel": "Cancel"
 }
