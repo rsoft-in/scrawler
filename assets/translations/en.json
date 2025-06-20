@@ -56,5 +56,8 @@
     "add": "Add",
     "new_label": "New Label",
     "manage_labels": "Manage Labels",
-    "account": "Account"
+    "account": "Account",
+    "problem_loading_data": "Problem loading data!",
+    "no_labels": "No labels yet!",
+    "select_color": "Select Color"
 }

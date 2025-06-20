@@ -14,6 +14,9 @@ class ScrawlColorDot extends StatelessWidget {
       decoration: BoxDecoration(
         color: NoteColor.getColor(colorCode, false),
         borderRadius: BorderRadius.circular(4),
+        border: Border.all(
+          color: Colors.grey,
+        ),
       ),
     );
   }

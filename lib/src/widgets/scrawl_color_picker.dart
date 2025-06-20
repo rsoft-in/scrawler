@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:scrawler/src/widgets/color_palette_button.dart';
 
@@ -16,9 +17,9 @@ class ScrawlColorPicker extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Text('Select Color'),
+                child: Text('select_color'.tr()),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

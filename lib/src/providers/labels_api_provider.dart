@@ -5,27 +5,21 @@ import 'package:scrawler/src/helpers/globals.dart' as globals;
 import 'package:scrawler/src/models/label.dart';
 
 class LabelsApiProvider {
-  static Future<LabelsData> fecthLabels(Map post) async {
+  static Future<LabelsResult> fecthLabels(String post) async {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse("${globals.apiServer}/labels/get"), body: post);
+          .post(Uri.parse("${globals.apiServer}/getlabels"), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
-        if (parsed['error'] != null) {
-          return LabelsData([], parsed['records'], parsed['error']);
-        } else {
-          var labels = parsed['labels']
-              .map<Label>((json) => Label.fromJson(json))
-              .toList();
-          return LabelsData(labels, parsed['records'], '');
-        }
+        var labels = parsed.map<Label>((json) => Label.fromJson(json)).toList();
+        return LabelsResult(labels, 0, '');
       } else {
-        return LabelsData([], 0, 'ERROR: $result');
+        return LabelsResult([], 0, 'ERROR: $result');
       }
     } catch (e) {
-      return LabelsData([], 0, 'ERROR: $e');
+      return LabelsResult([], 0, 'ERROR: $e');
     }
   }
 

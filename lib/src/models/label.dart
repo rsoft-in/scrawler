@@ -14,10 +14,10 @@ class Label {
       {'label_id': labelId, 'label_name': labelName};
 }
 
-class LabelsData {
+class LabelsResult {
   List<Label> labels;
   int records;
   String error;
 
-  LabelsData(this.labels, this.records, this.error);
+  LabelsResult(this.labels, this.records, this.error);
 }

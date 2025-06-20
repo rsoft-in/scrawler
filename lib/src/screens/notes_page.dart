@@ -135,10 +135,19 @@ class _NotesPageState extends State<NotesPage> {
                     }
                     if (snapshot.data!.notes.isEmpty) {
                       return Center(
-                        child: EmptyWidget(
-                          text: "no_notes".tr(),
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          onTap: () => openNoteView(Notes.empty()),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            EmptyWidget(
+                              text: "no_notes".tr(),
+                              width: MediaQuery.of(context).size.width * 0.6,
+                            ),
+                            if (filterIndex == 0)
+                              FilledButton.tonal(
+                                onPressed: () => openNoteView(Notes.empty()),
+                                child: Text('add'.tr()),
+                              )
+                          ],
                         ),
                       );
                     }
