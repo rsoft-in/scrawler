@@ -173,40 +173,25 @@ class _NoteViewState extends State<NoteView> {
           ],
         ),
         body: editing
-            ? Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: kPaddingLarge,
-                      child: TextField(
-                        controller: noteTextController,
-                        maxLines: null,
-                        expands: true,
-                        textAlignVertical: TextAlignVertical.top,
-                        decoration: InputDecoration(
-                          hintText: 'write_something'.tr(),
-                          filled: false,
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            formDirty = true;
-                          });
-                        },
-                      ),
-                    ),
+            ? Padding(
+                padding: kPaddingLarge,
+                child: TextField(
+                  controller: noteTextController,
+                  maxLines: null,
+                  expands: true,
+                  textAlignVertical: TextAlignVertical.top,
+                  decoration: InputDecoration(
+                    hintText: 'write_something'.tr(),
+                    filled: false,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MarkdownToolbar(
-                      controller: noteTextController,
-                      undoController: undoHistoryController,
-                      onChange: () {},
-                    ),
-                  ),
-                ],
+                  onChanged: (value) {
+                    setState(() {
+                      formDirty = true;
+                    });
+                  },
+                ),
               )
             : Column(
                 mainAxisSize: MainAxisSize.max,
@@ -247,32 +232,49 @@ class _NoteViewState extends State<NoteView> {
                 ],
               ),
         bottomNavigationBar: editing
-            ? null
-            : BottomAppBar(
-                child: Row(
-                  children: [
-                    if (!editing)
-                      IconButton(
-                        onPressed: () => updateFavorite(),
-                        tooltip: 'favorite'.tr(),
-                        icon: Icon(
-                          note.noteFavorite ? Icons.favorite : Symbols.favorite,
-                          color: note.noteFavorite ? Colors.red.shade200 : null,
+            ? Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: BottomAppBar(
+                  padding: EdgeInsets.all(4),
+                  child: MarkdownToolbar(
+                    controller: noteTextController,
+                    undoController: undoHistoryController,
+                    onChange: () {},
+                  ),
+                ),
+              )
+            : Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: BottomAppBar(
+                  padding: EdgeInsets.all(4),
+                  child: Row(
+                    children: [
+                      if (!editing)
+                        IconButton(
+                          onPressed: () => updateFavorite(),
+                          tooltip: 'favorite'.tr(),
+                          icon: Icon(
+                            note.noteFavorite
+                                ? Icons.favorite
+                                : Symbols.favorite,
+                            color:
+                                note.noteFavorite ? Colors.red.shade200 : null,
+                          ),
                         ),
-                      ),
-                    if (!editing)
-                      IconButton(
-                        onPressed: () => openColorPicker(),
-                        tooltip: 'colors'.tr(),
-                        icon: Icon(Symbols.palette),
-                      ),
-                    if (!editing)
-                      IconButton(
-                        onPressed: () => openLabels(note.noteLabel),
-                        tooltip: 'labels'.tr(),
-                        icon: Icon(Symbols.label),
-                      ),
-                  ],
+                      if (!editing)
+                        IconButton(
+                          onPressed: () => openColorPicker(),
+                          tooltip: 'colors'.tr(),
+                          icon: Icon(Symbols.palette),
+                        ),
+                      if (!editing)
+                        IconButton(
+                          onPressed: () => openLabels(note.noteLabel),
+                          tooltip: 'labels'.tr(),
+                          icon: Icon(Symbols.label),
+                        ),
+                    ],
+                  ),
                 ),
               ),
       ),
@@ -364,7 +366,9 @@ class _NoteViewState extends State<NoteView> {
       context: context,
       isDismissible: false,
       builder: (context) {
-        return LabelsPage(selectedLabels: labels,);
+        return LabelsPage(
+          selectedLabels: labels,
+        );
       },
     );
   }
