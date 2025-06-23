@@ -44,6 +44,7 @@ dependencies:
   google_fonts: ^6.2.1
   easy_localization: ^3.0.7+1
   animations: ^2.0.11
+  encrypt: ^5.0.3
 
 flutter_launcher_icons:
   android: false
@@ -84,4 +85,5 @@ flutter:
     - images/undraw_random-thoughts_goca.svg
     - res/apikey
     - res/apiserver
+    - res/secretkey
     - assets/translations/

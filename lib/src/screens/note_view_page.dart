@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
+import 'package:scrawler/src/helpers/encryption_service.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
+import 'package:scrawler/src/widgets/scrawl_label_chip.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -64,8 +66,8 @@ class _NoteViewState extends State<NoteView> {
         'id': isNew ? uuid : note.noteId,
         'user_id': globals.user.userId,
         'date': note.noteDate,
-        'title': note.noteTitle,
-        'text': note.noteText,
+        'title': EncryptionService.encrypt(note.noteTitle),
+        'text': EncryptionService.encrypt(note.noteText),
         'label': note.noteLabel,
         'archived': note.noteArchived,
         'color': note.noteColor,
@@ -107,6 +109,20 @@ class _NoteViewState extends State<NoteView> {
     if (response['status']) {
       setState(() {
         note.noteColor = colorCode;
+        hasChanges = true;
+      });
+    } else {
+      if (mounted) showSnackBar(context, response['error']);
+    }
+  }
+
+  Future<void> updateLabel(String label) async {
+    final response = await NotesApiProvider.updateLabel(json.encode(
+      {'id': note.noteId, 'label': label},
+    ));
+    if (response['status']) {
+      setState(() {
+        note.noteLabel = label;
         hasChanges = true;
       });
     } else {
@@ -224,11 +240,18 @@ class _NoteViewState extends State<NoteView> {
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
+                            checkbox: TextStyle(
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 50,
+                    child: ScrawlLabelChip(label: note.noteLabel),
+                  )
                 ],
               ),
         bottomNavigationBar: editing
@@ -254,9 +277,8 @@ class _NoteViewState extends State<NoteView> {
                           onPressed: () => updateFavorite(),
                           tooltip: 'favorite'.tr(),
                           icon: Icon(
-                            note.noteFavorite
-                                ? Icons.favorite
-                                : Symbols.favorite,
+                            Symbols.favorite,
+                            fill: note.noteFavorite ? 1 : 0,
                             color:
                                 note.noteFavorite ? Colors.red.shade200 : null,
                           ),
@@ -362,15 +384,18 @@ class _NoteViewState extends State<NoteView> {
   }
 
   void openLabels(String labels) async {
-    showModalBottomSheet(
+    final label = await showDialog(
       context: context,
-      isDismissible: false,
       builder: (context) {
         return LabelsPage(
           selectedLabels: labels,
+          assignMode: true,
         );
       },
     );
+    if (label != null) {
+      updateLabel(label);
+    }
   }
 
   Future<void> _urlLauncher(String url) async {

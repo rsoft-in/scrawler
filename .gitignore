@@ -46,6 +46,7 @@ google-services.json
 scrawler_api_key.json
 apikey
 apiserver
+secretkey
 
 data/
 /debian/packages/

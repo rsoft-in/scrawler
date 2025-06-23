@@ -10,6 +10,7 @@ ThemeMode themeMode = ThemeMode.system;
 User user = User.empty();
 String apiKey = '';
 String apiServer = '';
+String secretKey = '';
 
 Notes selectedNote = Notes.empty();
 

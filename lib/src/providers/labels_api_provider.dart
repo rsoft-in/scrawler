@@ -13,7 +13,6 @@ class LabelsApiProvider {
           headers: {'Content-Type': 'application/json'},
           body: post);
       result = response.body;
-      print(result);
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
         var labels = parsed.map<Label>((json) => Label.fromJson(json)).toList();
@@ -26,23 +25,21 @@ class LabelsApiProvider {
     }
   }
 
-  static Future<Map<String, dynamic>> updateLabels(Map post) async {
+  static Future<Map<String, dynamic>> updateLabels(String post) async {
     String result = "";
     try {
-      var response = await http.Client()
-          .post(Uri.parse('${globals.apiServer}/labels/update'), body: post);
+      var response = await http.Client().post(
+          Uri.parse('${globals.apiServer}/updatelabel'),
+          headers: {'Content-Type': 'application/json'},
+          body: post);
       result = response.body;
       if (response.statusCode == 200) {
-        if (result.contains('SUCCESS')) {
-          return {'status': true, 'error': ''};
-        } else {
-          return {'status': false, 'error': result};
-        }
+        return {'status': true, 'error': ''};
       } else {
         return {'status': false, 'error': result};
       }
     } catch (e) {
-      return {'status': false, 'error': e.toString()};
+      return {'status': false, 'error': '$e'};
     }
   }
 
@@ -50,7 +47,7 @@ class LabelsApiProvider {
     String result = "";
     try {
       var response = await http.Client()
-          .post(Uri.parse('${globals.apiServer}/notes/delete'), body: post);
+          .post(Uri.parse('${globals.apiServer}/deletelabel'), body: post);
       result = response.body;
       if (response.statusCode == 200) {
         if (result.contains('SUCCESS')) {

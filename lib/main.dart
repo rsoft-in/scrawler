@@ -55,10 +55,27 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> getSecretKey() async {
+    try {
+      String key = await rootBundle.loadString('res/secretkey');
+      globals.secretKey = key;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$e'),
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     setAPIServer();
+    getSecretKey();
   }
 
   @override

@@ -72,23 +72,6 @@ String stripNoteOfMD(String markDown) {
   return markDown.replaceAll(RegExp(r'[^A-Za-z0-9\s]+'), '');
 }
 
-String markDownToHtml(String markDown) {
-  var html = markDown;
-  html = html.replaceAll('\n', '<br>');
-  return html;
-}
-
-bool isCheckedListItem(String listItem) {
-  return listItem.contains("~");
-}
-
-String stripTags(String listItem) {
-  String item = listItem;
-  item = item.replaceAll('~', '');
-  item = item.replaceAll('[CHECKBOX]\n', '');
-  return item;
-}
-
 String getDateString() {
   var formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
   DateTime dt = DateTime.now();

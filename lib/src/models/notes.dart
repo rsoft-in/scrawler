@@ -1,3 +1,5 @@
+import 'package:scrawler/src/helpers/encryption_service.dart';
+
 class Notes {
   String noteId;
   String noteDate;
@@ -25,8 +27,10 @@ class Notes {
   Notes.fromJson(Map<String, dynamic> json)
       : noteId = json['note_id'],
         noteDate = json['note_date'],
-        noteTitle = json['note_title'],
-        noteText = json['note_text'] ?? '',
+        noteTitle = EncryptionService.decrypt(json['note_title']),
+        noteText = (json['note_text'] ?? '').isEmpty
+            ? ''
+            : (EncryptionService.decrypt(json['note_text'] ?? '')),
         noteLabel = json['note_label'],
         noteArchived = json['note_archived'] == 1,
         noteColor = int.parse('${json['note_color']}'),
@@ -36,8 +40,8 @@ class Notes {
   Map<String, dynamic> toJson() => {
         'note_id': noteId,
         'note_date': noteDate,
-        'note_title': noteTitle,
-        'note_text': noteText,
+        'note_title': EncryptionService.encrypt(noteTitle),
+        'note_text': EncryptionService.encrypt(noteText),
         'note_label': noteLabel,
         'note_archived': noteArchived ? 1 : 0,
         'note_color': noteColor,
