@@ -13,7 +13,6 @@ class NotesApiProvider {
           headers: {'Content-Type': 'application/json'},
           body: post);
       result = response.body;
-      print(result);
       if (response.statusCode == 200) {
         var parsed = json.decode(result);
         var notes = parsed.map<Notes>((json) => Notes.fromJson(json)).toList();

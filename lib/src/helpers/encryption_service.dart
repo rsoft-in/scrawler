@@ -10,11 +10,14 @@ class EncryptionService {
 
   static String encrypt(String plainText) {
     final encrypted = _encrypter.encrypt(plainText, iv: _iv);
-    return encrypted.base64;
+    return '${_iv.base64}:${encrypted.base64}';
   }
 
   static String decrypt(String encryptedText) {
-    final decrypted = _encrypter.decrypt64(encryptedText, iv: _iv);
+    final parts = encryptedText.split(':');
+    final iv = IV.fromBase64(parts[0]);
+    final encrypted = Encrypted.fromBase64(parts[1]);
+    final decrypted = _encrypter.decrypt(encrypted, iv: iv);
     return decrypted;
   }
 }
