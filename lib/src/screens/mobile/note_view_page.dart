@@ -8,7 +8,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/encryption_service.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/labels_page.dart';
+import 'package:scrawler/src/screens/mobile/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/src/widgets/scrawl_label_chip.dart';
@@ -16,8 +16,8 @@ import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-import '../helpers/globals.dart' as globals;
-import '../models/notes.dart';
+import '../../helpers/globals.dart' as globals;
+import '../../models/notes.dart';
 
 class NoteView extends StatefulWidget {
   final Notes note;

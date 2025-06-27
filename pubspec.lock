@@ -9,14 +9,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.11"
-  appkit_ui_element_colors:
-    dependency: transitive
-    description:
-      name: appkit_ui_element_colors
-      sha256: b88a7c35d440fa3ac75222d0e2b7e3259200e531e33b5d2468e358119f3481dc
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   archive:
     dependency: transitive
     description:
@@ -193,14 +185,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.3"
-  equatable:
-    dependency: transitive
-    description:
-      name: equatable
-      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.7"
   fake_async:
     dependency: transitive
     description:
@@ -429,14 +413,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.2.1"
-  gradient_borders:
-    dependency: transitive
-    description:
-      name: gradient_borders
-      sha256: b1cd969552c83f458ff755aa68e13a0327d09f06c3f42f471b423b01427f21f8
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   html:
     dependency: transitive
     description:
@@ -533,22 +509,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
-  macos_ui:
-    dependency: "direct main"
-    description:
-      name: macos_ui
-      sha256: "0a4ed386fdf7ef3269330cd869c9ed1d97deb73c1930f21d54a300e65e5f0508"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.2.0"
-  macos_window_utils:
-    dependency: transitive
-    description:
-      name: macos_window_utils
-      sha256: "18745e56b4c0444d802dadbafca98797828b813ee2488e367dd8f84f1ec4c217"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.8.4"
   markdown:
     dependency: transitive
     description:

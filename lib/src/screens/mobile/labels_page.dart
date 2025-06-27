@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:uuid/uuid.dart';
 
-import '../helpers/constants.dart';
-import '../helpers/globals.dart' as globals;
-import '../models/label.dart';
-import '../providers/labels_api_provider.dart';
-import '../widgets/scrawl_snackbar.dart';
+import '../../helpers/constants.dart';
+import '../../helpers/globals.dart' as globals;
+import '../../models/label.dart';
+import '../../providers/labels_api_provider.dart';
+import '../../widgets/scrawl_snackbar.dart';
 
 class LabelsPage extends StatefulWidget {
   final String selectedLabels;

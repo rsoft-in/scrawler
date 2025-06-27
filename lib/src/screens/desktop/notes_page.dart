@@ -6,14 +6,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/note_view_page.dart';
+import 'package:scrawler/src/screens/desktop/note_view_page.dart';
 import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
-import '../helpers/globals.dart' as globals;
-import '../widgets/scrawl_color_picker.dart';
-import '../widgets/scrawl_snackbar.dart';
+import '../../helpers/globals.dart' as globals;
+import '../../widgets/scrawl_color_picker.dart';
+import '../../widgets/scrawl_snackbar.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -168,14 +168,10 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void openNoteView(Notes note) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NoteView(note: note),
-        ));
-    if (result) {
-      setState(() {});
-    }
+    setState(() {
+      globals.openNotes.add({"index": globals.openNotes.length, "note": note});
+      globals.currentTab = globals.openNotes.length;
+    });
   }
 
   void openNoteOption(Notes note) {

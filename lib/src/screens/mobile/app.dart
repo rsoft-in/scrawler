@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/utility.dart';
-import 'package:scrawler/src/screens/account_page.dart';
-import 'package:scrawler/src/screens/notes_page.dart';
+import 'package:scrawler/src/screens/mobile/account_page.dart';
+import 'package:scrawler/src/screens/mobile/notes_page.dart';
 
-class AppPage extends StatefulWidget {
-  const AppPage({super.key});
+class AppMobile extends StatefulWidget {
+  const AppMobile({super.key});
 
   @override
-  State<AppPage> createState() => _AppPageState();
+  State<AppMobile> createState() => _AppMobileState();
 }
 
-class _AppPageState extends State<AppPage> {
+class _AppMobileState extends State<AppMobile> {
   int selectedIndex = 0;
   List<String> navRailTitles = ['notes'.tr(), 'account'.tr()];
 

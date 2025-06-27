@@ -14,6 +14,10 @@ String secretKey = '';
 
 Notes selectedNote = Notes.empty();
 
+List<Map<String, dynamic>> openNotes = [{"index": 0, "note": null}];
+
+int currentTab = 0;
+
 Color selectedSeedColor = kPrimaryColor;
 
 List<Color> appColors = [
