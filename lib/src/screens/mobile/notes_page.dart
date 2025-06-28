@@ -182,55 +182,57 @@ class _NotesPageState extends State<NotesPage> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: kPaddingLarge,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: kPaddingLarge,
-                child: Row(
-                  children: [
-                    Text(
-                      note.noteTitle,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Spacer(),
-                    CloseButton(
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: kPaddingLarge,
+              child: Row(
+                children: [
+                  Text(
+                    note.noteTitle,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Symbols.keyboard_arrow_down),
+                  ),
+                ],
               ),
-              ListTile(
-                leading: Icon(Symbols.favorite),
-                title: Text(note.noteFavorite
-                    ? 'remove_from_fav'.tr()
-                    : 'set_as_fav'.tr()),
-                onTap: () => updateFavorite(note),
+            ),
+            ListTile(
+              leading: Icon(Symbols.favorite),
+              title: Text(note.noteFavorite
+                  ? 'remove_from_fav'.tr()
+                  : 'set_as_fav'.tr()),
+              onTap: () => updateFavorite(note),
+            ),
+            // ScrawlColorPicker(),
+            ListTile(
+              leading: Icon(Symbols.palette),
+              title: Text('set_color'.tr()),
+              onTap: () => openColorPicker(note),
+            ),
+            ListTile(
+              leading: Icon(
+                Symbols.delete,
+                color: Colors.red,
               ),
-              ListTile(
-                leading: Icon(Symbols.palette),
-                title: Text('set_color'.tr()),
-                onTap: () => openColorPicker(note),
+              title: Text(
+                'delete'.tr(),
+                style: TextStyle(color: Colors.red),
               ),
-              ListTile(
-                leading: Icon(
-                  Symbols.delete,
-                  color: Colors.red,
-                ),
-                title: Text(
-                  'delete'.tr(),
-                  style: TextStyle(color: Colors.red),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                  confirmDelete(note);
-                },
-              )
-            ],
-          ),
+              onTap: () {
+                Navigator.pop(context);
+                confirmDelete(note);
+              },
+            ),
+            SizedBox(
+              height: 24,
+            ),
+          ],
         );
       },
     );
