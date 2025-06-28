@@ -66,8 +66,12 @@ class _NoteViewState extends State<NoteView> {
         'id': isNew ? uuid : note.noteId,
         'user_id': globals.user.userId,
         'date': note.noteDate,
-        'title': EncryptionService.encrypt(note.noteTitle),
-        'text': EncryptionService.encrypt(note.noteText),
+        'title': note.noteTitle.isEmpty
+            ? ''
+            : EncryptionService.encrypt(note.noteTitle),
+        'text': note.noteText.isEmpty
+            ? ''
+            : EncryptionService.encrypt(note.noteText),
         'label': note.noteLabel,
         'archived': note.noteArchived,
         'color': note.noteColor,
@@ -148,7 +152,7 @@ class _NoteViewState extends State<NoteView> {
         if (didPop) {
           return;
         }
-        if (formDirty) {
+        if (formDirty && noteTextController.text.isNotEmpty) {
           await saveNote();
         }
         if (context.mounted) {
