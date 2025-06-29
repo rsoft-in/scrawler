@@ -24,6 +24,8 @@ class NotesPage extends StatefulWidget {
 
 class _NotesPageState extends State<NotesPage> {
   int filterIndex = 0;
+  bool isSelected = false;
+
   List<Map<String, dynamic>> filterMap = [
     {"name": "notes_all".tr(), "index": 0},
     {"name": "notes_fav".tr(), "index": 1},
@@ -145,7 +147,7 @@ class _NotesPageState extends State<NotesPage> {
                         List<Notes> notes = snapshot.data!.notes;
                         return NoteListItem(
                           selectedIndex: 0,
-                          isSelected: false,
+                          isSelected: isSelected,
                           note: notes[index],
                           onTap: () => openNoteView(notes[index]),
                           onLongPress: () => openNoteOption(notes[index]),
@@ -179,7 +181,10 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void openNoteOption(Notes note) {
-    showModalBottomSheet(
+    setState(() {
+      isSelected = !isSelected;
+    });
+    showBottomSheet(
       context: context,
       builder: (context) {
         return Column(
