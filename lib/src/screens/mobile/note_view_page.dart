@@ -178,18 +178,18 @@ class _NoteViewState extends State<NoteView> {
                 tooltip: 'edit'.tr(),
                 icon: Icon(Symbols.edit),
               ),
-            if (editing)
-              IconButton(
-                onPressed: () => saveNote(),
-                icon: Icon(Symbols.check),
-              ),
-            if (editing)
-              IconButton(
-                onPressed: () => setState(() {
-                  editing = false;
-                }),
-                icon: Icon(Symbols.close),
-              ),
+            // if (editing)
+            //   IconButton(
+            //     onPressed: () => saveNote(),
+            //     icon: Icon(Symbols.check),
+            //   ),
+            // if (editing)
+            //   IconButton(
+            //     onPressed: () => setState(() {
+            //       editing = false;
+            //     }),
+            //     icon: Icon(Symbols.close),
+            //   ),
           ],
         ),
         body: editing

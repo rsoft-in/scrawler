@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +10,13 @@ import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/models/user.dart';
-import 'package:scrawler/src/screens/desktop/app.dart';
 import 'package:scrawler/src/screens/mobile/app.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 import '../helpers/globals.dart' as globals;
+import 'desktop/app.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -48,13 +48,12 @@ class _SignInState extends State<SignIn> {
       globals.user.userEmail = preferences.getString('user_email') ?? '';
       globals.user.userEnabled = preferences.getBool('user_enabled') ?? false;
 
-      if (Platform.isAndroid || Platform.isIOS) {
+      if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const AppMobile()),
             (Route<dynamic> route) => false);
-      }
-      else {
+      } else {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(builder: (context) => const AppDesktop()),
