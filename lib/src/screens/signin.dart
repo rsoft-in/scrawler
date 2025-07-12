@@ -10,13 +10,11 @@ import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/models/user.dart';
-import 'package:scrawler/src/screens/mobile/app.dart';
+import 'package:scrawler/src/screens/app.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:universal_platform/universal_platform.dart';
 
 import '../helpers/globals.dart' as globals;
-import 'desktop/app.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -48,17 +46,10 @@ class _SignInState extends State<SignIn> {
       globals.user.userEmail = preferences.getString('user_email') ?? '';
       globals.user.userEnabled = preferences.getBool('user_enabled') ?? false;
 
-      if (UniversalPlatform.isAndroid || UniversalPlatform.isIOS) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const AppMobile()),
-            (Route<dynamic> route) => false);
-      } else {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const AppDesktop()),
-            (Route<dynamic> route) => false);
-      }
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const App()),
+          (Route<dynamic> route) => false);
     } else {
       setState(() {
         showSignIn = true;
@@ -89,7 +80,7 @@ class _SignInState extends State<SignIn> {
             });
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const AppMobile()),
+                MaterialPageRoute(builder: (context) => const App()),
                 (Route<dynamic> route) => false);
           }
         }

@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/utility.dart';
-import 'package:scrawler/src/screens/mobile/account_page.dart';
-import 'package:scrawler/src/screens/mobile/notes_page.dart';
+import 'package:scrawler/src/screens/account_page.dart';
+import 'package:scrawler/src/screens/notes_page.dart';
 
-class AppMobile extends StatefulWidget {
-  const AppMobile({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   @override
-  State<AppMobile> createState() => _AppMobileState();
+  State<App> createState() => _AppState();
 }
 
-class _AppMobileState extends State<AppMobile> {
+class _AppState extends State<App> {
   int selectedIndex = 0;
   List<String> navRailTitles = ['notes'.tr(), 'account'.tr()];
 
@@ -105,9 +105,6 @@ class _AppMobileState extends State<AppMobile> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      AppBar(
-                        title: Text(navRailTitles[selectedIndex]),
-                      ),
                       Expanded(
                         child: [NotesPage(), AccountPage()][selectedIndex],
                       ),

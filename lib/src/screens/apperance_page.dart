@@ -6,7 +6,7 @@ import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/widgets/icon_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../helpers/globals.dart' as globals;
+import '../helpers/globals.dart' as globals;
 
 class AppearancePage extends StatefulWidget {
   const AppearancePage({super.key});

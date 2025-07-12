@@ -101,7 +101,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
     );
   }
 
-  formatText(String opt) {
+  void formatText(String opt) {
     final selectedText =
         widget.controller.selection.textInside(widget.controller.text);
     final beforeText =

@@ -8,7 +8,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/encryption_service.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/mobile/labels_page.dart';
+import 'package:scrawler/src/screens/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
 import 'package:scrawler/src/widgets/scrawl_label_chip.dart';
@@ -16,8 +16,8 @@ import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../helpers/globals.dart' as globals;
-import '../../models/notes.dart';
+import '../helpers/globals.dart' as globals;
+import '../models/notes.dart';
 
 class NoteView extends StatefulWidget {
   final Notes note;
@@ -66,12 +66,12 @@ class _NoteViewState extends State<NoteView> {
         'id': isNew ? uuid : note.noteId,
         'user_id': globals.user.userId,
         'date': note.noteDate,
-        'title': note.noteTitle.isEmpty
+        'title': note.noteTitle.trim().isEmpty
             ? ''
-            : EncryptionService.encrypt(note.noteTitle),
-        'text': note.noteText.isEmpty
+            : EncryptionService.encrypt(note.noteTitle.trim()),
+        'text': note.noteText.trim().isEmpty
             ? ''
-            : EncryptionService.encrypt(note.noteText),
+            : EncryptionService.encrypt(note.noteText.trim()),
         'label': note.noteLabel,
         'archived': note.noteArchived,
         'color': note.noteColor,
@@ -121,9 +121,10 @@ class _NoteViewState extends State<NoteView> {
   }
 
   Future<void> updateLabel(String label) async {
-    final response = await NotesApiProvider.updateLabel(json.encode(
-      {'id': note.noteId, 'label': label},
-    ));
+    final post = json.encode(
+      {'id': note.noteId, 'label': label.trim()},
+    );
+    final response = await NotesApiProvider.updateLabel(post);
     if (response['status']) {
       setState(() {
         note.noteLabel = label;
@@ -178,18 +179,6 @@ class _NoteViewState extends State<NoteView> {
                 tooltip: 'edit'.tr(),
                 icon: Icon(Symbols.edit),
               ),
-            // if (editing)
-            //   IconButton(
-            //     onPressed: () => saveNote(),
-            //     icon: Icon(Symbols.check),
-            //   ),
-            // if (editing)
-            //   IconButton(
-            //     onPressed: () => setState(() {
-            //       editing = false;
-            //     }),
-            //     icon: Icon(Symbols.close),
-            //   ),
           ],
         ),
         body: editing
@@ -297,7 +286,7 @@ class _NoteViewState extends State<NoteView> {
                         IconButton(
                           onPressed: () => openLabels(note.noteLabel),
                           tooltip: 'labels'.tr(),
-                          icon: Icon(Symbols.label),
+                          icon: Icon(Symbols.folder_open),
                         ),
                     ],
                   ),

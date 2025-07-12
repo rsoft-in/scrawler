@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../helpers/constants.dart';
-import '../../helpers/globals.dart' as globals;
-import '../../models/label.dart';
-import '../../providers/labels_api_provider.dart';
-import '../../widgets/scrawl_snackbar.dart';
+import '../helpers/constants.dart';
+import '../helpers/globals.dart' as globals;
+import '../models/label.dart';
+import '../providers/labels_api_provider.dart';
+import '../widgets/scrawl_snackbar.dart';
 
 class LabelsPage extends StatefulWidget {
   final String selectedLabels;
@@ -102,55 +102,59 @@ class _LabelsPageState extends State<LabelsPage> {
         }
       },
       child: Scaffold(
-        appBar: (widget.assignMode ?? false)
-            ? null
-            : AppBar(
-                title: Text('labels'.tr()),
-              ),
+        appBar: AppBar(
+          title: Text('labels'.tr()),
+          actions: [
+            FilledButton.tonalIcon(
+              onPressed: () => showAddDialog(),
+              icon: Icon(Symbols.add),
+              label: Text('add'.tr()),
+            ),
+          ],
+          actionsPadding: EdgeInsets.only(right: 10),
+        ),
         body: Padding(
           padding: kPaddingLarge,
-          child: Column(
-            children: [
-              Row(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 450),
+              child: Column(
                 children: [
-                  Text(
-                    'labels'.tr(),
-                    style: TextStyle(fontSize: 22),
-                  ),
-                  kHSpace,
-                  TextButton.icon(
-                    onPressed: () => showAddDialog(),
-                    icon: Icon(Symbols.add),
-                    label: Text('add'.tr()),
-                  ),
-                  Spacer(),
-                  CloseButton(
-                    onPressed: () {
-                      generateLabelString();
-                      Navigator.pop(context, selectedLabels.join(','));
-                    },
+                  if (widget.assignMode ?? false)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Select the labels you want to assign'),
+                    ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: labels.length,
+                      itemBuilder: (context, index) => (widget.assignMode ??
+                              false)
+                          ? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text(labels[index].labelName)),
+                                  Checkbox(
+                                    value: labels[index].selected,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        labels[index].selected = value!;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            )
+                          : ListTile(
+                              title: Text(labels[index].labelName),
+                            ),
+                    ),
                   ),
                 ],
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: labels.length,
-                  itemBuilder: (context, index) => (widget.assignMode ?? false)
-                      ? CheckboxListTile(
-                          value: labels[index].selected,
-                          onChanged: (value) {
-                            setState(() {
-                              labels[index].selected = value!;
-                            });
-                          },
-                          title: Text(labels[index].labelName),
-                        )
-                      : ListTile(
-                          title: Text(labels[index].labelName),
-                        ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

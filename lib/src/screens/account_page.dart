@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:scrawler/src/screens/mobile/apperance_page.dart';
+import 'package:scrawler/src/screens/apperance_page.dart';
 
-import '../../helpers/globals.dart' as globals;
+import '../helpers/globals.dart' as globals;
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});

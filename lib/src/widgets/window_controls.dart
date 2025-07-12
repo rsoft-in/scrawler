@@ -4,8 +4,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class WindowControls extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final showMaxButton;
+  final bool showMaxButton;
   const WindowControls({super.key, this.showMaxButton = true});
 
   @override

@@ -6,14 +6,16 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/mobile/note_view_page.dart';
+import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
-import '../../helpers/globals.dart' as globals;
-import '../../widgets/scrawl_color_picker.dart';
-import '../../widgets/scrawl_snackbar.dart';
+import '../helpers/adaptive.dart';
+import '../helpers/globals.dart' as globals;
+import '../helpers/utility.dart';
+import '../widgets/scrawl_color_picker.dart';
+import '../widgets/scrawl_snackbar.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -24,7 +26,6 @@ class NotesPage extends StatefulWidget {
 
 class _NotesPageState extends State<NotesPage> {
   int filterIndex = 0;
-  bool isSelected = false;
 
   List<Map<String, dynamic>> filterMap = [
     {"name": "notes_all".tr(), "index": 0},
@@ -79,10 +80,19 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
     return Scaffold(
       appBar: AppBar(
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
+        actions: [
+          FilledButton.tonalIcon(
+            onPressed: () => openNoteView(Notes.empty()),
+            label: Text('add'.tr()),
+            icon: Icon(Symbols.add),
+          ),
+        ],
+        actionsPadding: EdgeInsets.only(right: 10),
       ),
       body: Column(
         children: [
@@ -107,7 +117,7 @@ class _NotesPageState extends State<NotesPage> {
                   IconButton(
                     onPressed: () {},
                     tooltip: 'new_label'.tr(),
-                    icon: Icon(Symbols.add_circle),
+                    icon: Icon(Symbols.folder_open),
                   ),
                   IconButton(
                     onPressed: () {},
@@ -147,10 +157,13 @@ class _NotesPageState extends State<NotesPage> {
                         List<Notes> notes = snapshot.data!.notes;
                         return NoteListItem(
                           selectedIndex: 0,
-                          isSelected: isSelected,
                           note: notes[index],
                           onTap: () => openNoteView(notes[index]),
                           onLongPress: () => openNoteOption(notes[index]),
+                          showOptionButton: !isSmallDevice,
+                          onOptionTap: isSmallDevice
+                              ? null
+                              : () => openNoteOption(notes[index]),
                         );
                       },
                     );
@@ -161,10 +174,6 @@ class _NotesPageState extends State<NotesPage> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => openNoteView(Notes.empty()),
-        child: Icon(Symbols.add),
       ),
     );
   }
@@ -181,11 +190,9 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void openNoteOption(Notes note) {
-    setState(() {
-      isSelected = !isSelected;
-    });
-    showBottomSheet(
+    showModalBottomSheet(
       context: context,
+      isDismissible: false,
       builder: (context) {
         return Column(
           mainAxisSize: MainAxisSize.min,
