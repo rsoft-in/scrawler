@@ -86,11 +86,12 @@ class _NotesPageState extends State<NotesPage> {
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
         actions: [
-          FilledButton.tonalIcon(
-            onPressed: () => openNoteView(Notes.empty()),
-            label: Text('add'.tr()),
-            icon: Icon(Symbols.add),
-          ),
+          if (!isSmallDevice)
+            FilledButton.tonalIcon(
+              onPressed: () => openNoteView(Notes.empty()),
+              label: Text('add'.tr()),
+              icon: Icon(Symbols.add),
+            ),
         ],
         actionsPadding: EdgeInsets.only(right: 10),
       ),
@@ -175,6 +176,12 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ],
       ),
+      floatingActionButton: isSmallDevice
+          ? FloatingActionButton.small(
+              onPressed: () => openNoteView(Notes.empty()),
+              child: Icon(Symbols.add),
+            )
+          : null,
     );
   }
 
