@@ -177,7 +177,7 @@ class _NotesPageState extends State<NotesPage> {
         ],
       ),
       floatingActionButton: isSmallDevice
-          ? FloatingActionButton.small(
+          ? FloatingActionButton(
               onPressed: () => openNoteView(Notes.empty()),
               child: Icon(Symbols.add),
             )

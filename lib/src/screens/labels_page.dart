@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:uuid/uuid.dart';
 
+import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
+import '../helpers/utility.dart';
 import '../models/label.dart';
 import '../providers/labels_api_provider.dart';
 import '../widgets/scrawl_snackbar.dart';
@@ -90,6 +92,7 @@ class _LabelsPageState extends State<LabelsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -105,31 +108,34 @@ class _LabelsPageState extends State<LabelsPage> {
         appBar: AppBar(
           title: Text('labels'.tr()),
           actions: [
-            FilledButton.tonalIcon(
-              onPressed: () => showAddDialog(),
-              icon: Icon(Symbols.add),
-              label: Text('add'.tr()),
-            ),
+            if (!isSmallDevice)
+              FilledButton.tonalIcon(
+                onPressed: () => showAddDialog(),
+                icon: Icon(Symbols.add),
+                label: Text('add'.tr()),
+              ),
           ],
           actionsPadding: EdgeInsets.only(right: 10),
         ),
         body: Padding(
           padding: kPaddingLarge,
-          child: Center(
+          child: Align(
+            alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 450),
-              child: Column(
-                children: [
-                  if (widget.assignMode ?? false)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Text('Select the labels you want to assign'),
-                    ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: labels.length,
-                      itemBuilder: (context, index) => (widget.assignMode ??
-                              false)
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (widget.assignMode ?? false)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text('select_labels'.tr()),
+                      ),
+                    ...List.generate(
+                      labels.length,
+                      (index) => (widget.assignMode ?? false)
                           ? Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
@@ -151,12 +157,18 @@ class _LabelsPageState extends State<LabelsPage> {
                               title: Text(labels[index].labelName),
                             ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
+        floatingActionButton: isSmallDevice
+            ? FloatingActionButton(
+                onPressed: () => showAddDialog(),
+                child: Icon(Symbols.add),
+              )
+            : null,
       ),
     );
   }

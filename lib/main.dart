@@ -6,6 +6,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/screens/signin.dart';
+import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/helpers/globals.dart' as globals;
@@ -45,12 +46,7 @@ class _MyAppState extends State<MyApp> {
       globals.apiServer = server;
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$e'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        showSnackBar(context, '$e');
       }
     }
   }
@@ -61,12 +57,7 @@ class _MyAppState extends State<MyApp> {
       globals.secretKey = key;
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('$e'),
-            duration: const Duration(seconds: 3),
-          ),
-        );
+        showSnackBar(context, '$e');
       }
     }
   }

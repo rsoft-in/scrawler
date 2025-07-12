@@ -61,5 +61,6 @@
     "no_labels": "No labels yet!",
     "select_color": "Select Color",
     "enter_label_name": "Enter Label name",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "select_labels": "Select the labels you want to assign"
 }

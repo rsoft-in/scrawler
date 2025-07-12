@@ -16,7 +16,9 @@ import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
+import '../helpers/adaptive.dart';
 import '../helpers/globals.dart' as globals;
+import '../helpers/utility.dart';
 import '../models/notes.dart';
 
 class NoteView extends StatefulWidget {
@@ -32,6 +34,7 @@ class _NoteViewState extends State<NoteView> {
   bool editing = false;
   bool formDirty = false;
   bool hasChanges = false;
+  bool isSmallDevice = false;
 
   TextEditingController noteTextController = TextEditingController();
   TextEditingController noteTitleController = TextEditingController();
@@ -147,6 +150,7 @@ class _NoteViewState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
+    isSmallDevice = getScreenSize(context) == ScreenSize.small;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -377,15 +381,31 @@ class _NoteViewState extends State<NoteView> {
   }
 
   void openLabels(String labels) async {
-    final label = await showDialog(
-      context: context,
-      builder: (context) {
-        return LabelsPage(
-          selectedLabels: labels,
-          assignMode: true,
-        );
-      },
-    );
+    final label = (isSmallDevice && mounted)
+        ? await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => LabelsPage(
+                      selectedLabels: labels,
+                      assignMode: true,
+                    )))
+        : (mounted
+            ? await showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return Dialog(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: LabelsPage(
+                        selectedLabels: labels,
+                        assignMode: true,
+                      ),
+                    ),
+                  );
+                })
+            : null);
+
     if (label != null) {
       updateLabel(label);
     }
