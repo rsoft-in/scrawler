@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:scrawler/src/screens/apperance_page.dart';
+import 'package:scrawler/src/screens/about_page.dart';
+import 'package:scrawler/src/screens/appearance_page.dart';
 
 import '../helpers/globals.dart' as globals;
 
@@ -15,16 +16,11 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   List menu = [
     {
-      'title': 'Appearance',
+      'title': 'appearance'.tr(),
       'page': AppearancePage(),
       'icon': Symbols.dark_mode
     },
-    // {
-    //   'title': 'Notification',
-    //   'page': 'notification',
-    //   'icon': Symbols.notifications
-    // },
-    {'title': 'About', 'page': Container(), 'icon': Symbols.info},
+    {'title': 'about'.tr(), 'page': AboutPage(), 'icon': Symbols.info},
   ];
   @override
   Widget build(BuildContext context) {
@@ -39,8 +35,7 @@ class _AccountPageState extends State<AccountPage> {
                 CircleAvatar(
                   child: Icon(Symbols.person),
                 ),
-                Text('welcome_message'
-                    .tr(namedArgs: {'name': globals.user.userName})),
+                Text(globals.user.userName),
               ],
             ),
             floating: true,

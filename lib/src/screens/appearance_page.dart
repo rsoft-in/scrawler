@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -32,13 +33,13 @@ class _AppearancePageState extends State<AppearancePage> {
           slivers: <Widget>[
             SliverAppBar(
               floating: true,
-              title: const Text('Appearance'),
+              title: Text('appearance'.tr()),
               centerTitle: true,
             ),
             SliverList(
               delegate: SliverChildListDelegate([
                 ListTile(
-                  title: Text('App Color'),
+                  title: Text('app_color'.tr()),
                 ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -82,7 +83,7 @@ class _AppearancePageState extends State<AppearancePage> {
                 ),
                 kVSpace,
                 ListTile(
-                  title: Text('Theme'),
+                  title: Text('theme'.tr()),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -113,7 +114,7 @@ class _AppearancePageState extends State<AppearancePage> {
                                 children: [
                                   Icon(Symbols.sunny),
                                   kVSpace,
-                                  Text('Light'),
+                                  Text('light'.tr()),
                                 ],
                               ),
                             ),
@@ -146,7 +147,7 @@ class _AppearancePageState extends State<AppearancePage> {
                                 children: [
                                   Icon(Symbols.bedtime),
                                   kVSpace,
-                                  Text('Dark'),
+                                  Text('dark'.tr()),
                                 ],
                               ),
                             ),
@@ -179,7 +180,7 @@ class _AppearancePageState extends State<AppearancePage> {
                                 children: [
                                   Icon(Symbols.smartphone),
                                   kVSpace,
-                                  Text('System'),
+                                  Text('system'.tr()),
                                 ],
                               ),
                             ),

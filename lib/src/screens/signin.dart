@@ -190,7 +190,7 @@ class _SignInState extends State<SignIn> {
         ),
         kVSpace,
         Text(
-          'otp_hint'.tr(),
+          'otp_hint'.tr(namedArgs: {'email': emailController.text}),
           style: TextStyle(
             color: Colors.grey,
             fontSize: 12,

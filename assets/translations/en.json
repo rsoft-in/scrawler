@@ -1,6 +1,6 @@
 {
     "submit": "Submit",
-    "otp_hint": "An OTP has been sent to your Email address. Please enter it here for verification.",
+    "otp_hint": "An OTP has been sent to {email}. Please enter it here for verification.",
     "email_verification": "E-mail Verification",
     "sign_in": "Sign-In",
     "please_enter_email": "Please enter Email",
@@ -62,5 +62,12 @@
     "select_color": "Select Color",
     "enter_label_name": "Enter Label name",
     "cancel": "Cancel",
-    "select_labels": "Select the labels you want to assign"
+    "select_labels": "Select the labels you want to assign",
+    "appearance": "Appearance",
+    "about": "About",
+    "app_color": "App Color",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
 }

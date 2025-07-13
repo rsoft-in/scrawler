@@ -240,6 +240,8 @@ class _NoteViewState extends State<NoteView> {
                             checkbox: TextStyle(
                               fontSize: 18,
                             ),
+                            horizontalRuleDecoration:
+                                BoxDecoration(border: Border.all(width: 0.1)),
                           ),
                         ),
                       ),
