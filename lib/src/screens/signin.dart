@@ -4,6 +4,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:forui/widgets/button.dart';
+import 'package:forui/widgets/progress.dart';
+import 'package:forui/widgets/scaffold.dart';
+import 'package:forui/widgets/text_field.dart';
 import 'package:http/http.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
@@ -11,7 +15,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/utility.dart';
 import 'package:scrawler/src/models/user.dart';
 import 'package:scrawler/src/screens/app.dart';
-import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
+import 'package:scrawler/src/widgets/rs_toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../helpers/globals.dart' as globals;
@@ -34,8 +38,6 @@ class _SignInState extends State<SignIn> {
   String otp = '';
   bool busyVerifying = false;
   bool showSignIn = false;
-  FocusNode nameFocusNode = FocusNode();
-  FocusNode emailFocusNode = FocusNode();
 
   void getPreferences() async {
     preferences = await SharedPreferences.getInstance();
@@ -68,7 +70,7 @@ class _SignInState extends State<SignIn> {
         users = parsed.map<User>((json) => User.fromJson(json)).toList();
         if (mounted) {
           if (users.isEmpty) {
-            showSnackBar(context, 'unable_to_create_account'.tr());
+            RSToast.show(context, message: 'unable_to_create_account'.tr());
           } else {
             setState(() {
               globals.user = users[0];
@@ -85,11 +87,11 @@ class _SignInState extends State<SignIn> {
           }
         }
       } else {
-        if (mounted) showSnackBar(context, response.body);
+        if (mounted) RSToast.show(context, message: response.body);
       }
     } on Exception catch (e) {
       if (mounted) {
-        showSnackBar(context, '$e');
+        RSToast.show(context, message: '$e');
       }
     }
   }
@@ -110,20 +112,20 @@ class _SignInState extends State<SignIn> {
         if (response.statusCode == 200) {
           final res = response.body.split('|');
           if (res.length == 2) {
-            showSnackBar(context, 'check_email_for_code'.tr());
+            RSToast.show(context, message: 'check_email_for_code'.tr());
             setState(() {
               otp = res[1];
             });
           } else {
-            showSnackBar(context, 'email_verification_failed'.tr());
+            RSToast.show(context, message: 'email_verification_failed'.tr());
           }
         } else {
-          showSnackBar(context, response.body);
+          RSToast.show(context, message: response.body);
         }
       }
     } on Exception catch (e) {
       if (mounted) {
-        showSnackBar(context, '$e');
+        RSToast.show(context, message: '$e');
       }
     } finally {
       setState(() {
@@ -136,12 +138,12 @@ class _SignInState extends State<SignIn> {
   void initState() {
     super.initState();
     getPreferences();
-    nameFocusNode.requestFocus();
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = getScreenSize(context);
+
     Widget signInForm = Form(
       key: _signInFormKey,
       child: Column(
@@ -151,13 +153,14 @@ class _SignInState extends State<SignIn> {
             style: TextStyle(fontSize: 12),
           ),
           kVSpace,
-          TextFormField(
+          FTextFormField(
             controller: emailController,
-            focusNode: emailFocusNode,
+            autofocus: true,
             keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              hintText: 'email'.tr(),
-              prefixIcon: Icon(Symbols.email),
+            hint: 'email'.tr(),
+            prefixBuilder: (context, value, child) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Symbols.email),
             ),
             validator: emailValidator,
             onEditingComplete: () {
@@ -167,8 +170,8 @@ class _SignInState extends State<SignIn> {
             },
           ),
           kVSpace,
-          FilledButton(
-            onPressed: busyVerifying
+          FButton(
+            onPress: busyVerifying
                 ? null
                 : () {
                     if (_signInFormKey.currentState!.validate()) {
@@ -198,7 +201,7 @@ class _SignInState extends State<SignIn> {
           textAlign: TextAlign.center,
         ),
         kVSpace,
-        TextFormField(
+        FTextFormField(
           controller: otpController,
           maxLength: 6,
           keyboardType: TextInputType.number,
@@ -206,9 +209,7 @@ class _SignInState extends State<SignIn> {
             FilteringTextInputFormatter.digitsOnly,
           ],
           textAlign: TextAlign.center,
-          decoration: InputDecoration(counterText: ''),
-          style: TextStyle(fontWeight: FontWeight.bold),
-          onChanged: (value) {
+          onChange: (value) {
             setState(() {});
           },
           onEditingComplete: () {
@@ -218,8 +219,8 @@ class _SignInState extends State<SignIn> {
           },
         ),
         kVSpace,
-        FilledButton(
-          onPressed: otpController.text.length < 6
+        FButton(
+          onPress: otpController.text.length < 6
               ? null
               : () {
                   if (otpController.text == otp) {
@@ -231,8 +232,8 @@ class _SignInState extends State<SignIn> {
       ],
     );
 
-    return Scaffold(
-      body: showSignIn
+    return FScaffold(
+      child: showSignIn
           ? Row(
               children: [
                 if (screenSize == ScreenSize.large)
@@ -285,7 +286,7 @@ class _SignInState extends State<SignIn> {
               ],
             )
           : Center(
-              child: CircularProgressIndicator(),
+              child: FProgress.circularIcon(),
             ),
     );
   }

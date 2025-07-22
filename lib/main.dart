@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:forui/forui.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
-import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/screens/signin.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
@@ -78,9 +78,8 @@ class _MyAppState extends State<MyApp> {
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          themeMode: themeNotifier.themeMode,
-          theme: theme(context, themeNotifier.selectedPrimaryColor),
-          darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
+          builder: (context, child) =>
+              FTheme(data: FThemes.slate.light, child: child!),
           debugShowCheckedModeBanner: false,
           home: SignIn(),
         );
