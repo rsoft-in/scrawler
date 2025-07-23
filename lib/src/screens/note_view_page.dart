@@ -370,9 +370,9 @@ class _NoteViewState extends State<NoteView> {
   }
 
   void openColorPicker() async {
-    final colorCode = await showDialog(
+    final colorCode = await showFDialog(
       context: context,
-      builder: (context) {
+      builder: (context, style, animation) {
         return ScrawlColorPicker();
       },
     );
@@ -391,11 +391,12 @@ class _NoteViewState extends State<NoteView> {
                       assignMode: true,
                     )))
         : (mounted
-            ? await showDialog(
+            ? await showFSheet(
                 context: context,
+                side: FLayout.btt,
                 barrierDismissible: false,
                 builder: (context) {
-                  return Dialog(
+                  return FSheets(
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 500),
                       child: LabelsPage(

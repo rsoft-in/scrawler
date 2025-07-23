@@ -4,7 +4,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/constants.dart';
+import 'package:scrawler/src/models/label.dart';
 import 'package:scrawler/src/models/notes.dart';
+import 'package:scrawler/src/providers/labels_api_provider.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
@@ -25,7 +27,9 @@ class NotesPage extends StatefulWidget {
 class _NotesPageState extends State<NotesPage> {
   int filterIndex = 0;
 
-  List<Map<String, dynamic>> filterMap = [
+  List<Label> labels = [];
+  List<Map<String, dynamic>> filterMap = [];
+  List<Map<String, dynamic>> defaultLabels = [
     {"name": "notes_all".tr(), "index": 0},
     {"name": "notes_fav".tr(), "index": 1},
   ];
@@ -34,9 +38,24 @@ class _NotesPageState extends State<NotesPage> {
     final response = await NotesApiProvider.getNotes(json.encode({
       'user_id': globals.user.userId,
       'fav': filterIndex == 1 ? 1 : 0,
-      'note_label': ''
+      'note_label': filterIndex == 0 ? '' : filterMap[filterIndex]['name']
     }));
     return response;
+  }
+
+  Future<void> getLabels() async {
+    final response = await LabelsApiProvider.fecthLabels(json.encode({
+      "user_id": globals.user.userId,
+    }));
+    if (response.error.isEmpty) {
+      setState(() {
+        labels = response.labels;
+        filterMap = defaultLabels;
+        for (var i = 0; i < labels.length; i++) {
+          filterMap.add({"name": labels[i].labelName, "index": i + 2});
+        }
+      });
+    }
   }
 
   Future<void> updateFavorite(Notes note) async {
@@ -74,6 +93,13 @@ class _NotesPageState extends State<NotesPage> {
     } else {
       if (mounted) RSToast.show(context, message: response['error']);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    filterMap = defaultLabels;
+    getLabels();
   }
 
   @override
