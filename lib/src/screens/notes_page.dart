@@ -3,14 +3,12 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 
-import '../helpers/adaptive.dart';
 import '../helpers/globals.dart' as globals;
 import '../helpers/note_color.dart';
 import '../helpers/utility.dart';
@@ -80,7 +78,6 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
     return FScaffold(
       header: FHeader(
         title: Text(
@@ -118,10 +115,12 @@ class _NotesPageState extends State<NotesPage> {
                 ),
               ),
               FButton.icon(
+                style: FButtonStyle.ghost(),
                 onPress: () {},
                 child: Icon(FIcons.folder),
               ),
               FButton.icon(
+                style: FButtonStyle.ghost(),
                 onPress: () {},
                 child: Icon(FIcons.folderCog),
               ),
@@ -164,16 +163,24 @@ class _NotesPageState extends State<NotesPage> {
                           ),
                           title: Text(notes[index].noteTitle),
                           subtitle: Row(
+                            spacing: 8,
                             children: [
                               Expanded(
                                 child:
                                     Text(formatDateTime(notes[index].noteDate)),
                               ),
                               Expanded(
-                                  child: Text(
-                                notes[index].noteLabel,
-                                textAlign: TextAlign.end,
-                              ))
+                                child: Text(
+                                  notes[index].noteLabel,
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              notes[index].noteFavorite && filterIndex != 1
+                                  ? Icon(
+                                      FIcons.heart,
+                                      size: 16,
+                                    )
+                                  : Container()
                             ],
                           ),
                           onPress: () => openNoteView(notes[index]),
@@ -204,84 +211,84 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void openNoteOption(Notes note) {
-    showModalBottomSheet(
-      context: context,
-      isDismissible: false,
-      builder: (context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: kPaddingLarge,
-              child: Row(
+    showFSheet(
+        context: context,
+        builder: (context) => Container(
+              decoration: BoxDecoration(
+                color: context.theme.colors.background,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 16,
                 children: [
-                  Text(
-                    note.noteTitle,
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Padding(
+                    padding: kPaddingLarge,
+                    child: Row(
+                      children: [
+                        Text(
+                          note.noteTitle,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Spacer(),
+                        FButton.icon(
+                          onPress: () => Navigator.pop(context),
+                          child: Icon(FIcons.chevronDown),
+                        ),
+                      ],
+                    ),
                   ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icon(Symbols.keyboard_arrow_down),
+                  FItem(
+                    prefix: Icon(FIcons.heart),
+                    title: Text(note.noteFavorite
+                        ? 'remove_from_fav'.tr()
+                        : 'set_as_fav'.tr()),
+                    onPress: () => updateFavorite(note),
+                  ),
+                  FItem(
+                    prefix: Icon(FIcons.palette),
+                    title: Text('set_color'.tr()),
+                    onPress: () => openColorPicker(note),
+                  ),
+                  FItem(
+                    prefix: Icon(
+                      FIcons.trash,
+                      color: Colors.red,
+                    ),
+                    title: Text(
+                      'delete'.tr(),
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPress: () {
+                      Navigator.pop(context);
+                      confirmDelete(note);
+                    },
+                  ),
+                  SizedBox(
+                    height: 24,
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(Symbols.favorite),
-              title: Text(note.noteFavorite
-                  ? 'remove_from_fav'.tr()
-                  : 'set_as_fav'.tr()),
-              onTap: () => updateFavorite(note),
-            ),
-            // ScrawlColorPicker(),
-            ListTile(
-              leading: Icon(Symbols.palette),
-              title: Text('set_color'.tr()),
-              onTap: () => openColorPicker(note),
-            ),
-            ListTile(
-              leading: Icon(
-                Symbols.delete,
-                color: Colors.red,
-              ),
-              title: Text(
-                'delete'.tr(),
-                style: TextStyle(color: Colors.red),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                confirmDelete(note);
-              },
-            ),
-            SizedBox(
-              height: 24,
-            ),
-          ],
-        );
-      },
-    );
+        side: FLayout.btt);
   }
 
   void confirmDelete(Notes note) async {
-    showDialog(
+    showFDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context, style, animation) => FDialog(
         title: Text('confirm'.tr()),
-        content: Text('confirm_delete'.tr()),
+        body: Text('confirm_delete'.tr()),
         actions: [
-          TextButton(
-            onPressed: () {
+          FButton(
+            onPress: () {
               deleteNote(note.noteId);
             },
-            child: Text(
-              'yes'.tr(),
-              style: TextStyle(color: Colors.red),
-            ),
+            child: Text('yes'.tr()),
           ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
+          FButton(
+            style: FButtonStyle.outline(),
+            onPress: () => Navigator.pop(context),
             child: Text('no'.tr()),
           ),
         ],
@@ -290,9 +297,9 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void openColorPicker(Notes note) async {
-    final colorCode = await showDialog(
+    final colorCode = await showFDialog(
       context: context,
-      builder: (context) {
+      builder: (context, style, animation) {
         return ScrawlColorPicker();
       },
     );

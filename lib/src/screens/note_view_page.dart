@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:forui/forui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/encryption_service.dart';
@@ -11,7 +12,6 @@ import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
-import 'package:scrawler/src/widgets/scrawl_label_chip.dart';
 import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -168,38 +168,79 @@ class _NoteViewState extends State<NoteView> {
           }
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
+      child: FScaffold(
+        header: FHeader.nested(
           title: GestureDetector(
             onTap: () => showTitleEditor(),
             child: Text(note.noteTitle),
           ),
-          actions: [
+          prefixes: [
+            FHeaderAction.back(onPress: () async {
+              await saveNote();
+              if(context.mounted) Navigator.pop(context, hasChanges);
+            }),
+          ],
+          suffixes: [
             if (!editing)
-              IconButton(
-                onPressed: () => setState(() {
+              FButton.icon(
+                style: FButtonStyle.ghost(),
+                onPress: () => setState(() {
                   editing = true;
                 }),
-                tooltip: 'edit'.tr(),
-                icon: Icon(Symbols.edit),
+                child: Icon(Symbols.edit),
               ),
           ],
         ),
-        body: editing
+        footer: editing
+            ? Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: MarkdownToolbar(
+                  controller: noteTextController,
+                  undoController: undoHistoryController,
+                  onChange: () {},
+                ),
+              )
+            : Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 8, bottom: 20, left: 16, right: 16),
+                  child: Row(
+                    spacing: 16,
+                    children: [
+                      FButton.icon(
+                        style: FButtonStyle.ghost(),
+                        onPress: () => updateFavorite(),
+                        child: Icon(
+                          FIcons.heart,
+                          fill: note.noteFavorite ? 1 : 0,
+                          color: note.noteFavorite ? Colors.red.shade200 : null,
+                        ),
+                      ),
+                      FButton.icon(
+                        style: FButtonStyle.ghost(),
+                        onPress: () => openColorPicker(),
+                        child: Icon(FIcons.palette),
+                      ),
+                      FButton.icon(
+                        style: FButtonStyle.ghost(),
+                        onPress: () => openLabels(note.noteLabel),
+                        child: Icon(FIcons.folderOpen),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+        child: editing
             ? Padding(
                 padding: kPaddingLarge,
-                child: TextField(
+                child: FTextField(
                   controller: noteTextController,
                   maxLines: null,
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
-                  decoration: InputDecoration(
-                    hintText: 'write_something'.tr(),
-                    filled: false,
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                  ),
-                  onChanged: (value) {
+                  hint: 'write_something'.tr(),
+                  onChange: (value) {
                     setState(() {
                       formDirty = true;
                     });
@@ -247,56 +288,14 @@ class _NoteViewState extends State<NoteView> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 50,
-                    child: ScrawlLabelChip(label: note.noteLabel),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FBadge(
+                      style: FBadgeStyle.secondary(),
+                      child: Text(note.noteLabel),
+                    ),
                   )
                 ],
-              ),
-        bottomNavigationBar: editing
-            ? Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: BottomAppBar(
-                  padding: EdgeInsets.all(4),
-                  child: MarkdownToolbar(
-                    controller: noteTextController,
-                    undoController: undoHistoryController,
-                    onChange: () {},
-                  ),
-                ),
-              )
-            : Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: BottomAppBar(
-                  padding: EdgeInsets.all(4),
-                  child: Row(
-                    children: [
-                      if (!editing)
-                        IconButton(
-                          onPressed: () => updateFavorite(),
-                          tooltip: 'favorite'.tr(),
-                          icon: Icon(
-                            Symbols.favorite,
-                            fill: note.noteFavorite ? 1 : 0,
-                            color:
-                                note.noteFavorite ? Colors.red.shade200 : null,
-                          ),
-                        ),
-                      if (!editing)
-                        IconButton(
-                          onPressed: () => openColorPicker(),
-                          tooltip: 'colors'.tr(),
-                          icon: Icon(Symbols.palette),
-                        ),
-                      if (!editing)
-                        IconButton(
-                          onPressed: () => openLabels(note.noteLabel),
-                          tooltip: 'labels'.tr(),
-                          icon: Icon(Symbols.folder_open),
-                        ),
-                    ],
-                  ),
-                ),
               ),
       ),
     );
