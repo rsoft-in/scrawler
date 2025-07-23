@@ -102,109 +102,100 @@ class _LabelsPageState extends State<LabelsPage> {
         }
       },
       child: FScaffold(
-        header: FHeader.nested(
-          title: Text('labels'.tr()),
-          prefixes: [
-            FHeaderAction.back(
-              onPress: () async {
-                generateLabelString();
-                Navigator.pop(context, selectedLabels.join(','));
-              },
-            ),
-          ],
-          suffixes: [
-            FHeaderAction(
-              onPress: () => showAddDialog(),
-              icon: Icon(FIcons.plus),
-            ),
-          ],
+        header: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: FHeader.nested(
+            title: Text('labels'.tr()),
+            prefixes: [
+              FHeaderAction.back(
+                onPress: () async {
+                  generateLabelString();
+                  Navigator.pop(context, selectedLabels.join(','));
+                },
+              ),
+            ],
+            suffixes: [
+              FHeaderAction(
+                onPress: () => showAddDialog(),
+                icon: Icon(FIcons.plus),
+              ),
+            ],
+          ),
         ),
-        child: Padding(
-          padding: kPaddingLarge,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 450),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    if (widget.assignMode ?? false)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Text('select_labels'.tr()),
-                      ),
-                    ...List.generate(
-                      labels.length,
-                      (index) => (widget.assignMode ?? false)
-                          ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              child: FCheckbox(
-                                value: labels[index].selected,
-                                label: Text(labels[index].labelName),
-                                onChange: (value) {
-                                  setState(() {
-                                    labels[index].selected = value;
-                                  });
-                                },
-                              ),
-                            )
-                          : FItem(
-                              title: Text(labels[index].labelName),
-                            ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 400),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  if (widget.assignMode ?? false)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text('select_labels'.tr()),
                     ),
-                  ],
-                ),
+                  ...List.generate(
+                    labels.length,
+                    (index) => (widget.assignMode ?? false)
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: FCheckbox(
+                              value: labels[index].selected,
+                              label: Text(labels[index].labelName),
+                              onChange: (value) {
+                                setState(() {
+                                  labels[index].selected = value;
+                                });
+                              },
+                            ),
+                          )
+                        : FItem(
+                            title: Text(labels[index].labelName),
+                          ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        // floatingActionButton: isSmallDevice
-        //     ? FloatingActionButton(
-        //         onPressed: () => showAddDialog(),
-        //         child: Icon(Symbols.add),
-        //       )
-        //     : null,
       ),
     );
   }
 
   void showAddDialog() {
     labelNameController.clear();
-    showDialog(
+    showFDialog(
       context: context,
-      builder: (context) {
-        return Dialog(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 300),
-            child: Padding(
+      builder: (context, style, animation) {
+        return FDialog.raw(
+          builder: (p0, p1) {
+            return Padding(
               padding: kGlobalOuterPadding * 2,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
                 children: [
-                  TextField(
+                  FTextField(
                     controller: labelNameController,
                     maxLength: 15,
-                    decoration: InputDecoration(
-                      hintText: 'enter_label_name'.tr(),
-                      counterText: '',
-                    ),
+                    hint: 'enter_label_name'.tr(),
                   ),
-                  kVSpace,
                   Row(
+                    spacing: 8,
                     children: [
                       Expanded(
-                        child: FilledButton(
-                          onPressed: () => saveLabel(),
+                        child: FButton(
+                          onPress: () => saveLabel(),
                           child: Text('add'.tr()),
                         ),
                       ),
-                      kHSpace,
                       Expanded(
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
+                        child: FButton(
+                          style: FButtonStyle.outline(),
+                          onPress: () => Navigator.pop(context),
                           child: Text(
                             'cancel'.tr(),
                           ),
@@ -214,8 +205,8 @@ class _LabelsPageState extends State<LabelsPage> {
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );

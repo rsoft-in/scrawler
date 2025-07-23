@@ -169,26 +169,29 @@ class _NoteViewState extends State<NoteView> {
         }
       },
       child: FScaffold(
-        header: FHeader.nested(
-          title: GestureDetector(
-            onTap: () => showTitleEditor(),
-            child: Text(note.noteTitle),
+        header: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: FHeader.nested(
+            title: GestureDetector(
+              onTap: () => showTitleEditor(),
+              child: Text(note.noteTitle),
+            ),
+            prefixes: [
+              FHeaderAction.back(onPress: () async {
+                if (formDirty) await saveNote();
+                if (context.mounted) Navigator.pop(context, hasChanges);
+              }),
+            ],
+            suffixes: [
+              if (!editing)
+                FHeaderAction(
+                  onPress: () => setState(() {
+                    editing = true;
+                  }),
+                  icon: Icon(Symbols.edit),
+                ),
+            ],
           ),
-          prefixes: [
-            FHeaderAction.back(onPress: () async {
-              if (formDirty) await saveNote();
-              if (context.mounted) Navigator.pop(context, hasChanges);
-            }),
-          ],
-          suffixes: [
-            if (!editing)
-              FHeaderAction(
-                onPress: () => setState(() {
-                  editing = true;
-                }),
-                icon: Icon(Symbols.edit),
-              ),
-          ],
         ),
         footer: editing
             ? Padding(
@@ -306,18 +309,18 @@ class _NoteViewState extends State<NoteView> {
   void showTitleEditor() async {
     noteTitleController.text = note.noteTitle;
     titleFocusNode.requestFocus();
-    showDialog(
+    showFDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return Dialog(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 350),
-            child: Padding(
+      builder: (context, style, animation) {
+        return FDialog.raw(
+          builder: (p0, p1) {
+            return Padding(
               padding: kGlobalOuterPadding * 2,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 16,
                 children: [
                   Row(
                     children: [
@@ -328,34 +331,29 @@ class _NoteViewState extends State<NoteView> {
                         ),
                       ),
                       Spacer(),
-                      IconButton(
-                        onPressed: () => Navigator.pop(context),
-                        icon: Icon(Symbols.close),
+                      FButton.icon(
+                        onPress: () => Navigator.pop(context),
+                        child: Icon(FIcons.x),
                       ),
                     ],
                   ),
-                  kVSpace,
-                  TextField(
+                  FTextField(
                     controller: noteTitleController,
                     focusNode: titleFocusNode,
                     maxLength: 30,
                     onTap: () => noteTitleController.selection = TextSelection(
                         baseOffset: 0,
                         extentOffset: noteTitleController.value.text.length),
-                    decoration: InputDecoration(
-                      hintText: 'enter_title'.tr(),
-                      counterText: '',
-                    ),
+                    hint: 'enter_title'.tr(),
                   ),
-                  kVSpace,
-                  FilledButton(
-                    onPressed: () => saveTitle(),
+                  FButton(
+                    onPress: () => saveTitle(),
                     child: Text('save'.tr()),
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
