@@ -182,12 +182,11 @@ class _NoteViewState extends State<NoteView> {
           ],
           suffixes: [
             if (!editing)
-              FButton.icon(
-                style: FButtonStyle.ghost(),
+              FHeaderAction(
                 onPress: () => setState(() {
                   editing = true;
                 }),
-                child: Icon(Symbols.edit),
+                icon: Icon(Symbols.edit),
               ),
           ],
         ),

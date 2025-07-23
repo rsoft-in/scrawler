@@ -113,10 +113,9 @@ class _LabelsPageState extends State<LabelsPage> {
             ),
           ],
           suffixes: [
-            FButton.icon(
-              // style: FButtonStyle.ghost(),
+            FHeaderAction(
               onPress: () => showAddDialog(),
-              child: Icon(FIcons.plus),
+              icon: Icon(FIcons.plus),
             ),
           ],
         ),
