@@ -11,8 +11,8 @@ import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/labels_page.dart';
 import 'package:scrawler/src/widgets/markdown_toolbar.dart';
+import 'package:scrawler/src/widgets/rs_toast.dart';
 import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
-import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
@@ -52,7 +52,7 @@ class _NoteViewState extends State<NoteView> {
         noteTextController.text = note.noteText;
       });
     } else {
-      if (mounted) showSnackBar(context, response.error);
+      if (mounted) RSToast.show(context, message: response.error);
     }
   }
 
@@ -91,7 +91,7 @@ class _NoteViewState extends State<NoteView> {
         if (isNew) note.noteId = uuid;
       });
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -105,7 +105,7 @@ class _NoteViewState extends State<NoteView> {
         hasChanges = true;
       });
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -119,7 +119,7 @@ class _NoteViewState extends State<NoteView> {
         hasChanges = true;
       });
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -134,7 +134,7 @@ class _NoteViewState extends State<NoteView> {
         hasChanges = true;
       });
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 

@@ -12,8 +12,8 @@ import 'package:scrawler/src/widgets/scrawl_empty.dart';
 import '../helpers/globals.dart' as globals;
 import '../helpers/note_color.dart';
 import '../helpers/utility.dart';
+import '../widgets/rs_toast.dart';
 import '../widgets/scrawl_color_picker.dart';
-import '../widgets/scrawl_snackbar.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -47,7 +47,7 @@ class _NotesPageState extends State<NotesPage> {
       setState(() {});
       if (mounted) Navigator.pop(context);
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -59,7 +59,7 @@ class _NotesPageState extends State<NotesPage> {
       setState(() {});
       if (mounted) Navigator.pop(context);
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -70,9 +70,9 @@ class _NotesPageState extends State<NotesPage> {
     if (response['status']) {
       setState(() {});
       if (mounted) Navigator.pop(context);
-      if (mounted) showSnackBar(context, 'deleted'.tr());
+      if (mounted) RSToast.show(context, message: 'deleted'.tr());
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
@@ -133,7 +133,7 @@ class _NotesPageState extends State<NotesPage> {
                 switch (snapshot.connectionState) {
                   case ConnectionState.waiting:
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: FProgress.circularIcon(),
                     );
                   case ConnectionState.done:
                     if (snapshot.data!.error.isNotEmpty) {

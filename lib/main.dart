@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/screens/signin.dart';
-import 'package:scrawler/src/widgets/scrawl_snackbar.dart';
+import 'package:scrawler/src/widgets/rs_toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'src/helpers/globals.dart' as globals;
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
       globals.apiServer = server;
     } catch (e) {
       if (mounted) {
-        showSnackBar(context, '$e');
+        RSToast.show(context, message: '$e');
       }
     }
   }
@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
       globals.secretKey = key;
     } catch (e) {
       if (mounted) {
-        showSnackBar(context, '$e');
+        RSToast.show(context, message: '$e');
       }
     }
   }

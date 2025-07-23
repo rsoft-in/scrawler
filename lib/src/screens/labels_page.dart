@@ -9,7 +9,7 @@ import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
 import '../models/label.dart';
 import '../providers/labels_api_provider.dart';
-import '../widgets/scrawl_snackbar.dart';
+import '../widgets/rs_toast.dart';
 
 class LabelsPage extends StatefulWidget {
   final String selectedLabels;
@@ -46,7 +46,7 @@ class _LabelsPageState extends State<LabelsPage> {
         }
       });
     } else {
-      if (mounted) showSnackBar(context, response.error);
+      if (mounted) RSToast.show(context, message: response.error);
     }
     setState(() {
       isLoading = false;
@@ -67,7 +67,7 @@ class _LabelsPageState extends State<LabelsPage> {
       if (mounted) Navigator.pop(context);
       getLabels();
     } else {
-      if (mounted) showSnackBar(context, response['error']);
+      if (mounted) RSToast.show(context, message: response['error']);
     }
   }
 
