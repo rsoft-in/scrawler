@@ -176,8 +176,8 @@ class _NoteViewState extends State<NoteView> {
           ),
           prefixes: [
             FHeaderAction.back(onPress: () async {
-              await saveNote();
-              if(context.mounted) Navigator.pop(context, hasChanges);
+              if (formDirty) await saveNote();
+              if (context.mounted) Navigator.pop(context, hasChanges);
             }),
           ],
           suffixes: [
@@ -193,7 +193,8 @@ class _NoteViewState extends State<NoteView> {
         ),
         footer: editing
             ? Padding(
-                padding: MediaQuery.of(context).viewInsets,
+                padding: const EdgeInsets.only(
+                    top: 8, bottom: 20, left: 16, right: 16),
                 child: MarkdownToolbar(
                   controller: noteTextController,
                   undoController: undoHistoryController,
@@ -201,46 +202,48 @@ class _NoteViewState extends State<NoteView> {
                 ),
               )
             : Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 8, bottom: 20, left: 16, right: 16),
-                  child: Row(
-                    spacing: 16,
-                    children: [
-                      FButton.icon(
-                        style: FButtonStyle.ghost(),
-                        onPress: () => updateFavorite(),
-                        child: Icon(
-                          FIcons.heart,
-                          fill: note.noteFavorite ? 1 : 0,
-                          color: note.noteFavorite ? Colors.red.shade200 : null,
-                        ),
+                padding: const EdgeInsets.only(
+                    top: 8, bottom: 20, left: 16, right: 16),
+                child: Row(
+                  spacing: 16,
+                  children: [
+                    FButton.icon(
+                      style: FButtonStyle.ghost(),
+                      onPress: () => updateFavorite(),
+                      child: Icon(
+                        FIcons.heart,
+                        fill: note.noteFavorite ? 1 : 0,
+                        color: note.noteFavorite ? Colors.red.shade200 : null,
                       ),
-                      FButton.icon(
-                        style: FButtonStyle.ghost(),
-                        onPress: () => openColorPicker(),
-                        child: Icon(FIcons.palette),
-                      ),
-                      FButton.icon(
-                        style: FButtonStyle.ghost(),
-                        onPress: () => openLabels(note.noteLabel),
-                        child: Icon(FIcons.folderOpen),
-                      ),
-                    ],
-                  ),
+                    ),
+                    FButton.icon(
+                      style: FButtonStyle.ghost(),
+                      onPress: () => openColorPicker(),
+                      child: Icon(FIcons.palette),
+                    ),
+                    FButton.icon(
+                      style: FButtonStyle.ghost(),
+                      onPress: () => openLabels(note.noteLabel),
+                      child: Icon(FIcons.folderOpen),
+                    ),
+                  ],
                 ),
               ),
         child: editing
-            ? Padding(
-                padding: kPaddingLarge,
-                child: FTextField(
+            ? Material(
+                color: Colors.transparent,
+                child: TextField(
                   controller: noteTextController,
                   maxLines: null,
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
-                  hint: 'write_something'.tr(),
-                  onChange: (value) {
+                  decoration: InputDecoration(
+                    hintText: 'write_something'.tr(),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onChanged: (value) {
                     setState(() {
                       formDirty = true;
                     });

@@ -2,13 +2,11 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+import 'package:forui/forui.dart';
 import 'package:uuid/uuid.dart';
 
-import '../helpers/adaptive.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
-import '../helpers/utility.dart';
 import '../models/label.dart';
 import '../providers/labels_api_provider.dart';
 import '../widgets/scrawl_snackbar.dart';
@@ -92,7 +90,6 @@ class _LabelsPageState extends State<LabelsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -104,20 +101,26 @@ class _LabelsPageState extends State<LabelsPage> {
           Navigator.pop(context, selectedLabels.join(','));
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
+      child: FScaffold(
+        header: FHeader.nested(
           title: Text('labels'.tr()),
-          actions: [
-            if (!isSmallDevice)
-              FilledButton.tonalIcon(
-                onPressed: () => showAddDialog(),
-                icon: Icon(Symbols.add),
-                label: Text('add'.tr()),
-              ),
+          prefixes: [
+            FHeaderAction.back(
+              onPress: () async {
+                generateLabelString();
+                Navigator.pop(context, selectedLabels.join(','));
+              },
+            ),
           ],
-          actionsPadding: EdgeInsets.only(right: 10),
+          suffixes: [
+            FButton.icon(
+              // style: FButtonStyle.ghost(),
+              onPress: () => showAddDialog(),
+              child: Icon(FIcons.plus),
+            ),
+          ],
         ),
-        body: Padding(
+        child: Padding(
           padding: kPaddingLarge,
           child: Align(
             alignment: Alignment.topCenter,
@@ -137,23 +140,18 @@ class _LabelsPageState extends State<LabelsPage> {
                       labels.length,
                       (index) => (widget.assignMode ?? false)
                           ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 4),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                      child: Text(labels[index].labelName)),
-                                  Checkbox(
-                                    value: labels[index].selected,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        labels[index].selected = value!;
-                                      });
-                                    },
-                                  ),
-                                ],
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: FCheckbox(
+                                value: labels[index].selected,
+                                label: Text(labels[index].labelName),
+                                onChange: (value) {
+                                  setState(() {
+                                    labels[index].selected = value;
+                                  });
+                                },
                               ),
                             )
-                          : ListTile(
+                          : FItem(
                               title: Text(labels[index].labelName),
                             ),
                     ),
@@ -163,12 +161,12 @@ class _LabelsPageState extends State<LabelsPage> {
             ),
           ),
         ),
-        floatingActionButton: isSmallDevice
-            ? FloatingActionButton(
-                onPressed: () => showAddDialog(),
-                child: Icon(Symbols.add),
-              )
-            : null,
+        // floatingActionButton: isSmallDevice
+        //     ? FloatingActionButton(
+        //         onPressed: () => showAddDialog(),
+        //         child: Icon(Symbols.add),
+        //       )
+        //     : null,
       ),
     );
   }
