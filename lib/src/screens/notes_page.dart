@@ -2,17 +2,17 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
-import 'package:scrawler/src/widgets/filter_button.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
-import 'package:scrawler/src/widgets/scrawl_note_list_item.dart';
 
 import '../helpers/adaptive.dart';
 import '../helpers/globals.dart' as globals;
+import '../helpers/note_color.dart';
 import '../helpers/utility.dart';
 import '../widgets/scrawl_color_picker.dart';
 import '../widgets/scrawl_snackbar.dart';
@@ -81,53 +81,51 @@ class _NotesPageState extends State<NotesPage> {
   @override
   Widget build(BuildContext context) {
     final isSmallDevice = getScreenSize(context) == ScreenSize.small;
-    return Scaffold(
-      appBar: AppBar(
+    return FScaffold(
+      header: FHeader(
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
-        actions: [
-          if (!isSmallDevice)
-            FilledButton.tonalIcon(
-              onPressed: () => openNoteView(Notes.empty()),
-              label: Text('add'.tr()),
-              icon: Icon(Symbols.add),
-            ),
+        suffixes: [
+          FButton(
+            style: FButtonStyle.secondary(),
+            onPress: () => openNoteView(Notes.empty()),
+            child: Text('add'.tr()),
+          ),
         ],
-        actionsPadding: EdgeInsets.only(right: 10),
       ),
-      body: Column(
+      child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: SizedBox(
-              height: 40,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ...filterMap.map((item) => FilterButton(
-                        selectedIndex: filterIndex,
-                        index: item['index'],
-                        label: item['name'],
-                        onTap: () {
-                          setState(() {
-                            filterIndex = item['index'];
-                          });
-                        },
-                      )),
-                  VerticalDivider(),
-                  IconButton(
-                    onPressed: () {},
-                    tooltip: 'new_label'.tr(),
-                    icon: Icon(Symbols.folder_open),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    tooltip: 'manage_labels'.tr(),
-                    icon: Icon(Symbols.folder_managed),
-                  ),
-                ],
+          Row(
+            spacing: 8,
+            children: [
+              Expanded(
+                child: FSelectMenuTile(
+                  initialValue: filterIndex,
+                  title: Text('select'.tr()),
+                  menu: filterMap.map((item) {
+                    return FSelectTile(
+                      value: item['index'],
+                      title: Text(item['name']),
+                    );
+                  }).toList(),
+                  detailsBuilder: (context, value, child) =>
+                      Text(filterMap[filterIndex]['name']),
+                  onChange: (value) {
+                    setState(() {
+                      filterIndex = value.first;
+                    });
+                  },
+                ),
               ),
-            ),
+              FButton.icon(
+                onPress: () {},
+                child: Icon(FIcons.folder),
+              ),
+              FButton.icon(
+                onPress: () {},
+                child: Icon(FIcons.folderCog),
+              ),
+            ],
           ),
           Expanded(
             child: FutureBuilder<NotesResult>(
@@ -152,19 +150,34 @@ class _NotesPageState extends State<NotesPage> {
                         ),
                       );
                     }
-                    return ListView.builder(
-                      itemCount: snapshot.data!.notes.length,
+                    return FItemGroup.builder(
+                      count: snapshot.data!.notes.length,
                       itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
-                        return NoteListItem(
-                          selectedIndex: 0,
-                          note: notes[index],
-                          onTap: () => openNoteView(notes[index]),
+                        return FItem(
+                          prefix: Container(
+                            width: 5,
+                            height: 30,
+                            decoration: BoxDecoration(
+                                color: NoteColor.getColor(
+                                    notes[index].noteColor, false)),
+                          ),
+                          title: Text(notes[index].noteTitle),
+                          subtitle: Row(
+                            children: [
+                              Expanded(
+                                child:
+                                    Text(formatDateTime(notes[index].noteDate)),
+                              ),
+                              Expanded(
+                                  child: Text(
+                                notes[index].noteLabel,
+                                textAlign: TextAlign.end,
+                              ))
+                            ],
+                          ),
+                          onPress: () => openNoteView(notes[index]),
                           onLongPress: () => openNoteOption(notes[index]),
-                          showOptionButton: !isSmallDevice,
-                          onOptionTap: isSmallDevice
-                              ? null
-                              : () => openNoteOption(notes[index]),
                         );
                       },
                     );
@@ -176,12 +189,6 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ],
       ),
-      floatingActionButton: isSmallDevice
-          ? FloatingActionButton(
-              onPressed: () => openNoteView(Notes.empty()),
-              child: Icon(Symbols.add),
-            )
-          : null,
     );
   }
 
