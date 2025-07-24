@@ -105,6 +105,7 @@ class _NotesPageState extends State<NotesPage> {
   @override
   Widget build(BuildContext context) {
     return FScaffold(
+      childPad: false,
       header: FHeader(
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),

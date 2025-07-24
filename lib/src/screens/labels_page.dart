@@ -102,6 +102,7 @@ class _LabelsPageState extends State<LabelsPage> {
         }
       },
       child: FScaffold(
+        childPad: false,
         header: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: FHeader.nested(

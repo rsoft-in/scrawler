@@ -169,6 +169,7 @@ class _NoteViewState extends State<NoteView> {
         }
       },
       child: FScaffold(
+        childPad: false,
         header: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: FHeader.nested(
@@ -254,10 +255,22 @@ class _NoteViewState extends State<NoteView> {
               )
             : Column(
                 mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Container(
-                    height: 5,
-                    color: NoteColor.getColor(note.noteColor, false),
+                    padding: const EdgeInsets.all(8.0),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: NoteColor.getColor(note.noteColor, false),
+                        borderRadius:
+                            BorderRadius.circular(kBorderRadiusSmall)),
+                    child: Text(
+                      note.noteLabel,
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
                   ),
                   Expanded(
                     child: ConstrainedBox(
@@ -293,13 +306,6 @@ class _NoteViewState extends State<NoteView> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FBadge(
-                      style: FBadgeStyle.secondary(),
-                      child: Text(note.noteLabel),
-                    ),
-                  )
                 ],
               ),
       ),
