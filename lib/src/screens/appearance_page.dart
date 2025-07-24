@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+import 'package:forui/forui.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
@@ -72,7 +72,7 @@ class _AppearancePageState extends State<AppearancePage> {
                               child: isSelectedColor
                                   ? IconColorBasedOnBackground(
                                       backgroundColor: color,
-                                      iconData: Symbols.check_circle)
+                                      iconData: FIcons.circleCheckBig)
                                   : null,
                             ),
                           );
@@ -112,7 +112,7 @@ class _AppearancePageState extends State<AppearancePage> {
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               child: Column(
                                 children: [
-                                  Icon(Symbols.sunny),
+                                  Icon(FIcons.sun),
                                   kVSpace,
                                   Text('light'.tr()),
                                 ],
@@ -145,7 +145,7 @@ class _AppearancePageState extends State<AppearancePage> {
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               child: Column(
                                 children: [
-                                  Icon(Symbols.bedtime),
+                                  Icon(FIcons.moon),
                                   kVSpace,
                                   Text('dark'.tr()),
                                 ],
@@ -178,7 +178,7 @@ class _AppearancePageState extends State<AppearancePage> {
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               child: Column(
                                 children: [
-                                  Icon(Symbols.smartphone),
+                                  Icon(FIcons.monitorSmartphone),
                                   kVSpace,
                                   Text('system'.tr()),
                                 ],

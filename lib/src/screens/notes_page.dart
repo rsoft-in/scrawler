@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
+import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/models/label.dart';
 import 'package:scrawler/src/models/notes.dart';
@@ -104,6 +105,8 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
+
     return FScaffold(
       childPad: false,
       header: FHeader(
@@ -118,6 +121,7 @@ class _NotesPageState extends State<NotesPage> {
         ],
       ),
       child: Column(
+        spacing: 8,
         children: [
           Row(
             spacing: 8,
@@ -176,9 +180,10 @@ class _NotesPageState extends State<NotesPage> {
                         ),
                       );
                     }
-                    return FItemGroup.builder(
+                    return FTileGroup.builder(
                       count: snapshot.data!.notes.length,
-                      itemBuilder: (context, index) {
+                      divider: FItemDivider.none,
+                      tileBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
                         return FItem(
                           prefix: Container(
@@ -210,8 +215,17 @@ class _NotesPageState extends State<NotesPage> {
                                   : Container()
                             ],
                           ),
+                          suffix: isSmallDevice
+                              ? null
+                              : FButton.icon(
+                                  style: FButtonStyle.ghost(),
+                                  onPress: () => openNoteOption(notes[index]),
+                                  child: Icon(FIcons.ellipsis),
+                                ),
                           onPress: () => openNoteView(notes[index]),
-                          onLongPress: () => openNoteOption(notes[index]),
+                          onLongPress: isSmallDevice
+                              ? () => openNoteOption(notes[index])
+                              : null,
                         );
                       },
                     );
@@ -220,6 +234,9 @@ class _NotesPageState extends State<NotesPage> {
                 }
               },
             ),
+          ),
+          SizedBox(
+            height: 8,
           ),
         ],
       ),
@@ -241,13 +258,14 @@ class _NotesPageState extends State<NotesPage> {
     showFSheet(
         context: context,
         builder: (context) => Container(
+              width: double.infinity,
               decoration: BoxDecoration(
                 color: context.theme.colors.background,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 16,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 12,
                 children: [
                   Padding(
                     padding: kPaddingLarge,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 
 class MarkdownToolbar extends StatefulWidget {
@@ -39,7 +39,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
               builder: (context, value, child) {
                 return IconButton(
                   onPressed: () => widget.undoController.undo(),
-                  icon: const Icon(Symbols.undo),
+                  icon: const Icon(FIcons.undo),
                   tooltip: 'Undo',
                 );
               }),
@@ -48,29 +48,29 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
               builder: (context, value, child) {
                 return IconButton(
                   onPressed: () => widget.undoController.redo(),
-                  icon: const Icon(Symbols.redo),
+                  icon: const Icon(FIcons.redo),
                   tooltip: 'Redo',
                 );
               }),
           const VerticalDivider(),
           IconButton(
             onPressed: () => formatText('bold'),
-            icon: const Icon(Symbols.format_bold),
+            icon: const Icon(FIcons.bold),
             tooltip: 'Bold',
           ),
           IconButton(
             onPressed: () => formatText('italic'),
-            icon: const Icon(Symbols.format_italic),
+            icon: const Icon(FIcons.italic),
             tooltip: 'Italic',
           ),
           IconButton(
             onPressed: () => formatText('ul'),
-            icon: const Icon(Symbols.format_list_bulleted),
+            icon: const Icon(FIcons.list),
             tooltip: 'Bulleted List',
           ),
           IconButton(
             onPressed: () => formatText('ol'),
-            icon: const Icon(Symbols.format_list_numbered),
+            icon: const Icon(FIcons.listOrdered),
             tooltip: 'Numbered List',
           ),
           PopupMenuButton<String>(
@@ -88,12 +88,12 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
           ),
           // IconButton(
           //   onPressed: () => pickImage(),
-          //   icon: const Icon(Symbols.image),
+          //   icon: const Icon(FIcons.image),
           //   tooltip: 'Insert Image',
           // ),
           IconButton(
             onPressed: () => showLinkSheet(),
-            icon: const Icon(Symbols.link),
+            icon: const Icon(FIcons.link),
             tooltip: 'Insert Link',
           ),
         ],

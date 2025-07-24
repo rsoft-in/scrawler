@@ -4,7 +4,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:forui/forui.dart';
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/encryption_service.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
@@ -189,7 +188,7 @@ class _NoteViewState extends State<NoteView> {
                   onPress: () => setState(() {
                     editing = true;
                   }),
-                  icon: Icon(Symbols.edit),
+                  icon: Icon(FIcons.pencil),
                 ),
             ],
           ),

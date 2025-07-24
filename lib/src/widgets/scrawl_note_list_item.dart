@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/note_color.dart';
 import 'package:scrawler/src/helpers/utility.dart';
@@ -85,7 +85,7 @@ class _NoteListItemState extends State<NoteListItem> {
               if (widget.showOptionButton)
                 IconButton(
                   onPressed: widget.onOptionTap,
-                  icon: Icon(Symbols.more_vert),
+                  icon: Icon(FIcons.ellipsis),
                 ),
             ],
           ),

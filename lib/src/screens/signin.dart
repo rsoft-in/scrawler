@@ -4,12 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:forui/widgets/button.dart';
-import 'package:forui/widgets/progress.dart';
-import 'package:forui/widgets/scaffold.dart';
-import 'package:forui/widgets/text_field.dart';
+import 'package:forui/forui.dart';
 import 'package:http/http.dart' as http;
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/utility.dart';
@@ -160,7 +156,7 @@ class _SignInState extends State<SignIn> {
             hint: 'email'.tr(),
             prefixBuilder: (context, value, child) => Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Icon(Symbols.email),
+              child: Icon(FIcons.mail),
             ),
             validator: emailValidator,
             onEditingComplete: () {
