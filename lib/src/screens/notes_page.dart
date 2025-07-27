@@ -113,10 +113,9 @@ class _NotesPageState extends State<NotesPage> {
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
         suffixes: [
-          FButton(
-            style: FButtonStyle.secondary(),
+          FHeaderAction(
+            icon: Icon(FIcons.plus),
             onPress: () => openNoteView(Notes.empty()),
-            child: Text('add'.tr()),
           ),
         ],
       ),
@@ -180,10 +179,10 @@ class _NotesPageState extends State<NotesPage> {
                         ),
                       );
                     }
-                    return FTileGroup.builder(
+                    return FItemGroup.builder(
                       count: snapshot.data!.notes.length,
                       divider: FItemDivider.none,
-                      tileBuilder: (context, index) {
+                      itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
                         return FItem(
                           prefix: Container(

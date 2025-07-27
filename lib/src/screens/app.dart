@@ -54,7 +54,7 @@ class _AppState extends State<App> {
                   label: const Text('Notes'),
                 ),
                 FBottomNavigationBarItem(
-                  icon: Icon(FIcons.layoutGrid),
+                  icon: Icon(FIcons.user),
                   label: const Text('Account'),
                 ),
               ],
