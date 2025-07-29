@@ -27,175 +27,168 @@ class _AppearancePageState extends State<AppearancePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(
-      builder: (context, themeProvider, child) => Scaffold(
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              floating: true,
+    return Consumer<ThemeNotifier>(builder: (context, themeProvider, child) {
+      return FScaffold(
+          header: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: FHeader.nested(
+              prefixes: [
+                FHeaderAction.back(
+                  onPress: () => Navigator.pop(context),
+                ),
+              ],
               title: Text('appearance'.tr()),
-              centerTitle: true,
             ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                ListTile(
-                  title: Text('app_color'.tr()),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      // List.generate(globals.appColors.length, (color) {
-                      //   return Container();
-                      // }),
-                      ...globals.appColors.map(
-                        (color) {
-                          bool isSelectedColor =
-                              color == themeProvider.selectedPrimaryColor;
-                          return InkWell(
-                            onTap: isSelectedColor
-                                ? null
-                                : () {
-                                    themeProvider
-                                        .setSelectedPrimaryColor(color);
-                                    // setPrefs(color);
-                                  },
-                            child: Container(
-                              width: 50,
-                              height: 50,
-                              margin: EdgeInsets.symmetric(horizontal: 4),
-                              decoration: BoxDecoration(
-                                color: color,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              // Add this later
-                              child: isSelectedColor
-                                  ? IconColorBasedOnBackground(
-                                      backgroundColor: color,
-                                      iconData: FIcons.circleCheckBig)
-                                  : null,
+          ),
+          child: Column(
+            spacing: 16,
+            children: [
+              Text('app_color'.tr()),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    // List.generate(globals.appColors.length, (color) {
+                    //   return Container();
+                    // }),
+                    ...globals.appColors.map(
+                      (color) {
+                        bool isSelectedColor =
+                            color == themeProvider.selectedPrimaryColor;
+                        return GestureDetector(
+                          onTap: isSelectedColor
+                              ? null
+                              : () {
+                                  themeProvider.setSelectedPrimaryColor(color);
+                                  // setPrefs(color);
+                                },
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            margin: EdgeInsets.symmetric(horizontal: 4),
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(50),
                             ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                            // Add this later
+                            child: isSelectedColor
+                                ? IconColorBasedOnBackground(
+                                    backgroundColor: color,
+                                    iconData: FIcons.circleCheckBig)
+                                : null,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-                kVSpace,
-                ListTile(
-                  title: Text('theme'.tr()),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Material(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant),
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius)),
-                          child: InkWell(
-                            onTap: () {
-                              ThemeNotifier themeNotifier =
-                                  Provider.of<ThemeNotifier>(context,
-                                      listen: false);
-                              if (themeNotifier.themeMode == ThemeMode.dark ||
-                                  themeNotifier.themeMode == ThemeMode.system) {
-                                themeNotifier.setTheme(ThemeMode.light);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Column(
-                                children: [
-                                  Icon(FIcons.sun),
-                                  kVSpace,
-                                  Text('light'.tr()),
-                                ],
-                              ),
+              ),
+              Text('theme'.tr()),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant),
+                            borderRadius: BorderRadius.circular(kBorderRadius)),
+                        child: InkWell(
+                          onTap: () {
+                            ThemeNotifier themeNotifier =
+                                Provider.of<ThemeNotifier>(context,
+                                    listen: false);
+                            if (themeNotifier.themeMode == ThemeMode.dark ||
+                                themeNotifier.themeMode == ThemeMode.system) {
+                              themeNotifier.setTheme(ThemeMode.light);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                Icon(FIcons.sun),
+                                kVSpace,
+                                Text('light'.tr()),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                      kHSpace,
-                      Expanded(
-                        child: Material(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant),
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius)),
-                          child: InkWell(
-                            onTap: () {
-                              ThemeNotifier themeNotifier =
-                                  Provider.of<ThemeNotifier>(context,
-                                      listen: false);
-                              if (themeNotifier.themeMode == ThemeMode.light ||
-                                  themeNotifier.themeMode == ThemeMode.system) {
-                                themeNotifier.setTheme(ThemeMode.dark);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Column(
-                                children: [
-                                  Icon(FIcons.moon),
-                                  kVSpace,
-                                  Text('dark'.tr()),
-                                ],
-                              ),
+                    ),
+                    kHSpace,
+                    Expanded(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant),
+                            borderRadius: BorderRadius.circular(kBorderRadius)),
+                        child: InkWell(
+                          onTap: () {
+                            ThemeNotifier themeNotifier =
+                                Provider.of<ThemeNotifier>(context,
+                                    listen: false);
+                            if (themeNotifier.themeMode == ThemeMode.light ||
+                                themeNotifier.themeMode == ThemeMode.system) {
+                              themeNotifier.setTheme(ThemeMode.dark);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                Icon(FIcons.moon),
+                                kVSpace,
+                                Text('dark'.tr()),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                      kHSpace,
-                      Expanded(
-                        child: Material(
-                          shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant),
-                              borderRadius:
-                                  BorderRadius.circular(kBorderRadius)),
-                          child: InkWell(
-                            onTap: () {
-                              ThemeNotifier themeNotifier =
-                                  Provider.of<ThemeNotifier>(context,
-                                      listen: false);
-                              if (themeNotifier.themeMode == ThemeMode.light ||
-                                  themeNotifier.themeMode == ThemeMode.dark) {
-                                themeNotifier.setTheme(ThemeMode.system);
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20),
-                              child: Column(
-                                children: [
-                                  Icon(FIcons.monitorSmartphone),
-                                  kVSpace,
-                                  Text('system'.tr()),
-                                ],
-                              ),
+                    ),
+                    kHSpace,
+                    Expanded(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .outlineVariant),
+                            borderRadius: BorderRadius.circular(kBorderRadius)),
+                        child: InkWell(
+                          onTap: () {
+                            ThemeNotifier themeNotifier =
+                                Provider.of<ThemeNotifier>(context,
+                                    listen: false);
+                            if (themeNotifier.themeMode == ThemeMode.light ||
+                                themeNotifier.themeMode == ThemeMode.dark) {
+                              themeNotifier.setTheme(ThemeMode.system);
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                Icon(FIcons.monitorSmartphone),
+                                kVSpace,
+                                Text('system'.tr()),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ]),
-            ),
-          ],
-        ),
-      ),
-    );
+              ),
+            ],
+          ));
+    });
   }
 
   Future<void> setPrefs(Color seedColor) async {

@@ -187,6 +187,12 @@ class _NotesPageState extends State<NotesPage> {
                           subtitle: Row(
                             spacing: 8,
                             children: [
+                              if (notes[index].noteFavorite && filterIndex != 1)
+                                Icon(
+                                  FIcons.heart,
+                                  size: 14,
+                                  color: Colors.red,
+                                ),
                               Expanded(
                                 child:
                                     Text(formatDateTime(notes[index].noteDate)),
@@ -197,12 +203,6 @@ class _NotesPageState extends State<NotesPage> {
                                   textAlign: TextAlign.end,
                                 ),
                               ),
-                              notes[index].noteFavorite && filterIndex != 1
-                                  ? Icon(
-                                      FIcons.heart,
-                                      size: 16,
-                                    )
-                                  : Container()
                             ],
                           ),
                           suffix: isSmallDevice

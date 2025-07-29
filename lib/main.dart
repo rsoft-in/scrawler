@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           builder: (context, child) =>
-              FTheme(data: FThemes.slate.light, child: child!),
+              FTheme(data: FThemes.zinc.light, child: child!),
           debugShowCheckedModeBanner: false,
           home: SignIn(),
         );
