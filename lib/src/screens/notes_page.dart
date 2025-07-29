@@ -112,12 +112,6 @@ class _NotesPageState extends State<NotesPage> {
       header: FHeader(
         title: Text(
             'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
-        suffixes: [
-          FHeaderAction(
-            icon: Icon(FIcons.plus),
-            onPress: () => openNoteView(Notes.empty()),
-          ),
-        ],
       ),
       child: Column(
         spacing: 8,
@@ -147,12 +141,11 @@ class _NotesPageState extends State<NotesPage> {
               FButton.icon(
                 style: FButtonStyle.ghost(),
                 onPress: () {},
-                child: Icon(FIcons.folder),
-              ),
-              FButton.icon(
-                style: FButtonStyle.ghost(),
-                onPress: () {},
                 child: Icon(FIcons.folderCog),
+              ),
+              FButton(
+                onPress: () => openNoteView(Notes.empty()),
+                child: Text('Add'),
               ),
             ],
           ),
@@ -185,12 +178,10 @@ class _NotesPageState extends State<NotesPage> {
                       itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
                         return FItem(
-                          prefix: Container(
-                            width: 5,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                color: NoteColor.getColor(
-                                    notes[index].noteColor, false)),
+                          prefix: CircleAvatar(
+                            backgroundColor: NoteColor.getColor(
+                                notes[index].noteColor, false),
+                            child: Text(getInitials(notes[index].noteTitle)),
                           ),
                           title: Text(notes[index].noteTitle),
                           subtitle: Row(
