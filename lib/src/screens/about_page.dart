@@ -2,14 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 
-class AboutPage extends StatefulWidget {
-  const AboutPage({super.key});
+class SecurityPage extends StatefulWidget {
+  const SecurityPage({super.key});
 
   @override
-  State<AboutPage> createState() => _AboutPageState();
+  State<SecurityPage> createState() => _SecurityPageState();
 }
 
-class _AboutPageState extends State<AboutPage> {
+class _SecurityPageState extends State<SecurityPage> {
   @override
   Widget build(BuildContext context) {
     return FScaffold(
@@ -19,7 +19,7 @@ class _AboutPageState extends State<AboutPage> {
           prefixes: [
             FHeaderAction.back(onPress: () => Navigator.pop(context)),
           ],
-          title: Text('about'.tr()),
+          title: Text('security'.tr()),
         ),
       ),
       child: SingleChildScrollView(

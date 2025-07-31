@@ -70,5 +70,7 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System",
-    "select": "Select"
+    "select": "Select",
+    "security": "Security",
+    "app_lock": "App Lock"
 }

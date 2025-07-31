@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/helpers/utility.dart';
-import 'package:scrawler/src/screens/account_page.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
+import 'package:scrawler/src/screens/settings_page.dart';
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -16,7 +16,6 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int selectedIndex = 0;
-  List<String> navRailTitles = ['notes'.tr(), 'account'.tr()];
 
   @override
   void initState() {
@@ -34,12 +33,12 @@ class _AppState extends State<App> {
               children: [
                 FSidebarItem(
                   icon: Icon(FIcons.notepadText),
-                  label: Text('Notes'),
+                  label: Text('notes'.tr()),
                   onPress: () => setState(() => selectedIndex = 0),
                 ),
                 FSidebarItem(
-                  icon: Icon(FIcons.user),
-                  label: Text('Account'),
+                  icon: Icon(FIcons.settings),
+                  label: Text('settings'.tr()),
                   onPress: () => setState(() => selectedIndex = 1),
                 ),
               ],
@@ -51,11 +50,11 @@ class _AppState extends State<App> {
               children: [
                 FBottomNavigationBarItem(
                   icon: Icon(FIcons.notepadText),
-                  label: const Text('Notes'),
+                  label: Text('notes'.tr()),
                 ),
                 FBottomNavigationBarItem(
-                  icon: Icon(FIcons.user),
-                  label: const Text('Account'),
+                  icon: Icon(FIcons.settings),
+                  label: Text('settings'.tr()),
                 ),
               ],
             )
@@ -79,7 +78,7 @@ class _AppState extends State<App> {
             ),
           );
         },
-        child: [NotesPage(), AccountPage()][selectedIndex],
+        child: [NotesPage(), SettingsPage()][selectedIndex],
       ),
     );
   }

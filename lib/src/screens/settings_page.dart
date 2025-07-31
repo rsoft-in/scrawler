@@ -6,17 +6,17 @@ import 'package:scrawler/src/screens/appearance_page.dart';
 
 import '../helpers/globals.dart' as globals;
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _SettingsPageState extends State<SettingsPage> {
   List menu = [
     {'title': 'appearance'.tr(), 'page': AppearancePage(), 'icon': FIcons.moon},
-    {'title': 'about'.tr(), 'page': AboutPage(), 'icon': FIcons.info},
+    {'title': 'security'.tr(), 'page': SecurityPage(), 'icon': FIcons.lock},
   ];
   @override
   Widget build(BuildContext context) {

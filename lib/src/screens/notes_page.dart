@@ -10,6 +10,7 @@ import 'package:scrawler/src/models/notes.dart';
 import 'package:scrawler/src/providers/labels_api_provider.dart';
 import 'package:scrawler/src/providers/notes_api_provider.dart';
 import 'package:scrawler/src/screens/note_view_page.dart';
+import 'package:scrawler/src/widgets/rs_avatar.dart';
 import 'package:scrawler/src/widgets/scrawl_empty.dart';
 
 import '../helpers/globals.dart' as globals;
@@ -109,9 +110,12 @@ class _NotesPageState extends State<NotesPage> {
 
     return FScaffold(
       childPad: false,
-      header: FHeader(
-        title: Text(
-            'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
+      header: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: FHeader(
+          title: Text(
+              'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
+        ),
       ),
       child: Column(
         spacing: 8,
@@ -178,11 +182,10 @@ class _NotesPageState extends State<NotesPage> {
                       itemBuilder: (context, index) {
                         List<Notes> notes = snapshot.data!.notes;
                         return FItem(
-                          prefix: CircleAvatar(
-                            backgroundColor: NoteColor.getColor(
-                                notes[index].noteColor, false),
-                            child: Text(getInitials(notes[index].noteTitle)),
-                          ),
+                          prefix: RSTextAvatar(
+                              color: NoteColor.getColor(
+                                  notes[index].noteColor, false),
+                              text: getInitials(notes[index].noteTitle)),
                           title: Text(notes[index].noteTitle),
                           subtitle: Row(
                             spacing: 8,
