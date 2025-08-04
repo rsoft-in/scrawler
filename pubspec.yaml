@@ -1,5 +1,5 @@
 name: scrawler
-description: Note taking application
+description: Simple Note Taking App
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
