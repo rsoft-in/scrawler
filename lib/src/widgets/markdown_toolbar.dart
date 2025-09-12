@@ -26,6 +26,13 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
   String imgUrl = "";
   TextEditingController linkNameController = TextEditingController();
   TextEditingController linkUrlController = TextEditingController();
+  List<Map<String, String>> headingList = [
+    {'id': 'h1', 'name': 'Heading 1'},
+    {'id': 'h2', 'name': 'Heading 2'},
+    {'id': 'h3', 'name': 'Heading 3'},
+    {'id': 'h4', 'name': 'Heading 4'},
+    {'id': 'h5', 'name': 'Heading 5'},
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,64 +44,75 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return IconButton(
-                  onPressed: () => widget.undoController.undo(),
-                  icon: const Icon(FIcons.undo),
-                  tooltip: 'Undo',
+                return FButton.icon(
+                  onPress: () => widget.undoController.undo(),
+                  style: FButtonStyle.ghost(),
+                  child: const Icon(FIcons.undo),
                 );
               }),
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return IconButton(
-                  onPressed: () => widget.undoController.redo(),
-                  icon: const Icon(FIcons.redo),
-                  tooltip: 'Redo',
+                return FButton.icon(
+                  onPress: () => widget.undoController.redo(),
+                  style: FButtonStyle.ghost(),
+                  child: const Icon(FIcons.redo),
                 );
               }),
-          const VerticalDivider(),
-          IconButton(
-            onPressed: () => formatText('bold'),
-            icon: const Icon(FIcons.bold),
-            tooltip: 'Bold',
+          const FDivider(
+            axis: Axis.vertical,
           ),
-          IconButton(
-            onPressed: () => formatText('italic'),
-            icon: const Icon(FIcons.italic),
-            tooltip: 'Italic',
+          FButton.icon(
+            onPress: () => formatText('bold'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.bold),
           ),
-          IconButton(
-            onPressed: () => formatText('ul'),
-            icon: const Icon(FIcons.list),
-            tooltip: 'Bulleted List',
+          FButton.icon(
+            onPress: () => formatText('italic'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.italic),
           ),
-          IconButton(
-            onPressed: () => formatText('ol'),
-            icon: const Icon(FIcons.listOrdered),
-            tooltip: 'Numbered List',
+          FButton.icon(
+            onPress: () => formatText('ul'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.list),
           ),
-          PopupMenuButton<String>(
-            icon: const Text('H', style: TextStyle(fontSize: 16)),
-            tooltip: 'Headings',
-            itemBuilder: (context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem(value: 'h1', child: Text('Heading 1')),
-              const PopupMenuItem(value: 'h2', child: Text('Heading 2')),
-              const PopupMenuItem(value: 'h3', child: Text('Heading 3')),
-              const PopupMenuItem(value: 'h4', child: Text('Heading 4')),
-              const PopupMenuItem(value: 'h5', child: Text('Heading 5')),
-              const PopupMenuItem(value: 'h6', child: Text('Heading 6')),
-            ],
-            onSelected: (value) => formatText(value),
+          FButton.icon(
+            onPress: () => formatText('ol'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.listOrdered),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: FPopoverMenu(
+              menuAnchor: Alignment.topRight,
+              childAnchor: Alignment.bottomRight,
+              menu: [
+                FItemGroup(
+                  children: headingList
+                      .map((h) => FItem(
+                            title: Text(h['name'] ?? ''),
+                            onPress: () => formatText(h['id'] ?? 'h1'),
+                          ))
+                      .toList(),
+                ),
+              ],
+              builder: (context, controller, child) => FButton.icon(
+                onPress: controller.toggle,
+                style: FButtonStyle.ghost(),
+                child: Icon(FIcons.heading),
+              ),
+            ),
           ),
           // IconButton(
           //   onPressed: () => pickImage(),
           //   icon: const Icon(FIcons.image),
           //   tooltip: 'Insert Image',
           // ),
-          IconButton(
-            onPressed: () => showLinkSheet(),
-            icon: const Icon(FIcons.link),
-            tooltip: 'Insert Link',
+          FButton.icon(
+            onPress: () => showLinkSheet(),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.link),
           ),
         ],
       ),
