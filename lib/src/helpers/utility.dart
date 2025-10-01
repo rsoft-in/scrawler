@@ -4,9 +4,9 @@ String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return 'email_empty'.tr();
   }
-  final bool emailValid =
-      RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-          .hasMatch(value);
+  final bool emailValid = RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(value);
 
   if (!emailValid) {
     return 'enter_valid_email'.tr();
@@ -15,17 +15,18 @@ String? emailValidator(String? value) {
 }
 
 String getInitials(String text) {
-  var aText = text.trim().split(" ");
+  // Split on whitespace, remove empty parts
+  final words = text.trim().split(RegExp(r'\s+')).where((w) => w.isNotEmpty);
   String initials = "";
-  for (var i = 0; i < aText.length; i++) {
-    if (i > 1) break;
-    try {
-      initials += aText[i].substring(0, 1);
-    } on Exception {
-      initials += "00";
+  for (var word in words) {
+    // Find first alphanumeric character in this word
+    final match = RegExp(r'[A-Za-z0-9]').firstMatch(word);
+    if (match != null) {
+      initials += match.group(0)!;
     }
+    if (initials.length >= 2) break; // Stop at 2
   }
-  return initials;
+  return initials.toUpperCase(); // force uppercase
 }
 
 String formatDateTime(String dateTime) {

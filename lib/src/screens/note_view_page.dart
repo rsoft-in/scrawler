@@ -232,32 +232,46 @@ class _NoteViewState extends State<NoteView> {
                 ),
               ),
         child: editing
-            ? Material(
-                color: Colors.transparent,
-                child: TextField(
-                  controller: noteTextController,
-                  maxLines: null,
-                  expands: true,
-                  textAlignVertical: TextAlignVertical.top,
-                  decoration: InputDecoration(
-                    hintText: 'write_something'.tr(),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
+            ? ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600),
+              child: Container(
+                margin: EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                          border: isSmallDevice ? null: Border.all(
+                            width: 1.0,
+                            color: context.theme.colors.border,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0)),
+                child: Material(
+                    color: Colors.transparent,
+                    child: TextField(
+                      controller: noteTextController,
+                      maxLines: null,
+                      expands: true,
+                      textAlignVertical: TextAlignVertical.top,
+                      decoration: InputDecoration(
+                        hintText: 'write_something'.tr(),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          formDirty = true;
+                        });
+                      },
                     ),
                   ),
-                  onChanged: (value) {
-                    setState(() {
-                      formDirty = true;
-                    });
-                  },
-                ),
-              )
+              ),
+            )
             : Column(
                 mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 8,
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     margin: EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                         color: NoteColor.getColor(note.noteColor, false),
@@ -272,10 +286,16 @@ class _NoteViewState extends State<NoteView> {
                     ),
                   ),
                   Expanded(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 600),
-                      child: Padding(
-                        padding: kPaddingLarge,
+                    child: Container(
+                      padding: kPaddingLarge,
+                      decoration: BoxDecoration(
+                          border: isSmallDevice ? null : Border.all(
+                            width: 1.0,
+                            color: context.theme.colors.border,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0)),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 600),
                         child: Markdown(
                           padding: EdgeInsets.zero,
                           data: note.noteText,
@@ -305,6 +325,7 @@ class _NoteViewState extends State<NoteView> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 4),
                 ],
               ),
       ),
