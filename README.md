@@ -20,11 +20,6 @@ A Simple Nextcloud Notes Client App. You can connect to your Nextcloud account a
 
 ---
 
-## Downloads
-### [scrawler.net](http://scrawler.net/#/downloads)
-
----
-
 ## Platform
  - [x] Android
  - [ ] iOS ```coming soon```
