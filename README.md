@@ -6,18 +6,17 @@
 
 <img src="images/scrawler-banner.png" alt="scrawler banner"/>
 
+## About
+
+A Simple Nextcloud Notes Client App. You can connect to your Nextcloud account and manage the notes.
 
 ## Features
 - Supports Markdown
-- Supports Windows/macOS/Linux (Android & iOS coming soon)
+- Supports Android & iOS (Windows/macOS/Linux coming soon)
 - Search notes
-- Labels for notes (coming soon)
-- Color tags (coming soon)
-- Tasks (coming soon)
-- Local user (Optional)
-- 'scrawler' cloud sync
+- Note Categories
 - Smooth UI
-- Web portal
+- Allow Insecure Connection for debug mode and also for self hosted Nextcloud on local server.
 
 ---
 
@@ -27,12 +26,11 @@
 ---
 
 ## Platform
- - [ ] Android ```coming soon```
+ - [x] Android
  - [ ] iOS ```coming soon```
- - [x] Windows
- - [x] macOS
- - [x] Linux (Ubuntu/Debian)
- - [x] Web
+ - [ ] Windows ```coming soon```
+ - [ ] macOS ```coming soon```
+ - [ ] Linux (Ubuntu/Debian) ```coming soon```
 
 ---
 
