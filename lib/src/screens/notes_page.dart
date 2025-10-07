@@ -4,6 +4,8 @@ import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
+import 'package:scrawler/src/helpers/avatar_color.dart';
+import 'package:scrawler/src/widgets/rs_avatar.dart';
 
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
@@ -127,6 +129,8 @@ class _NotesPageState extends State<NotesPage> {
     }
   }
 
+  Future<void> _refreshNotes() async => _getNotes();
+
   @override
   void initState() {
     super.initState();
@@ -144,6 +148,13 @@ class _NotesPageState extends State<NotesPage> {
           child: Text('welcome_message'
               .tr(namedArgs: {'name': globals.userDetails!.displayName})),
         ),
+        suffixes: [
+          FButton.icon(
+            onPress: () => _getNotes(),
+            style: FButtonStyle.ghost(),
+            child: Icon(FIcons.refreshCcw),
+          ),
+        ],
       ),
       footer: Padding(
         padding: kGlobalOuterPadding,
@@ -170,28 +181,34 @@ class _NotesPageState extends State<NotesPage> {
               ? Center(
                   child: Text('No Notes'),
                 )
-              : FItemGroup.builder(
-                  count: notes.length,
-                  itemBuilder: (context, index) {
-                    final note = notes[index];
-                    final modifiedDate = DateTime.fromMillisecondsSinceEpoch(
-                        note.modified * 1000);
-                    return FItem(
-                      title: Text(note.title),
-                      subtitle: Text(
-                        '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
-                      ),
-                      prefix: note.favorite
-                          ? FAvatar.raw(
-                              child: Icon(
-                              FIcons.star,
-                              color: Colors.amber,
-                            ))
-                          : FAvatar.raw(child: Text(getInitials(note.title))),
-                      onPress: () => openNoteView(note),
-                      onLongPress: () => openNoteOption(note),
-                    );
-                  },
+              : RefreshIndicator(
+                  onRefresh: _refreshNotes,
+                  child: FItemGroup.builder(
+                    count: notes.length,
+                    itemBuilder: (context, index) {
+                      final note = notes[index];
+                      final modifiedDate = DateTime.fromMillisecondsSinceEpoch(
+                          note.modified * 1000);
+                      return FItem(
+                        title: Text(note.title),
+                        subtitle: Text(
+                          '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
+                        ),
+                        prefix: note.favorite
+                            ? FAvatar.raw(
+                                child: Icon(
+                                FIcons.star,
+                                color: Colors.amber,
+                              ))
+                            : RSTextAvatar(
+                                text: getInitials(note.title),
+                                color: AvatarColor.getColor(note.title),
+                              ),
+                        onPress: () => openNoteView(note),
+                        onLongPress: () => openNoteOption(note),
+                      );
+                    },
+                  ),
                 )),
     );
   }
