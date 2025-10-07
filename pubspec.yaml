@@ -42,6 +42,7 @@ dependencies:
   animations: ^2.0.11
   encrypt: ^5.0.3
   forui: ^0.14.1
+  nextcloud: ^8.1.0
 
 flutter_launcher_icons:
   android: false

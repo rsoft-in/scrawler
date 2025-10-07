@@ -1,253 +1,202 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
-import 'package:scrawler/src/helpers/adaptive.dart';
-import 'package:scrawler/src/helpers/constants.dart';
-import 'package:scrawler/src/models/label.dart';
-import 'package:scrawler/src/models/notes.dart';
-import 'package:scrawler/src/providers/labels_api_provider.dart';
-import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/note_view_page.dart';
-import 'package:scrawler/src/widgets/rs_avatar.dart';
-import 'package:scrawler/src/widgets/scrawl_empty.dart';
+import 'package:http/io_client.dart' as http;
+import 'package:nextcloud/nextcloud.dart';
+import 'package:nextcloud/notes.dart';
 
+import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
-import '../helpers/note_color.dart';
 import '../helpers/utility.dart';
 import '../widgets/rs_toast.dart';
-import '../widgets/scrawl_color_picker.dart';
+import 'note_view_page.dart';
 
 class NotesPage extends StatefulWidget {
-  const NotesPage({super.key});
+  final String server;
+  final String username;
+  final String password;
+  final http.IOClient? client;
+  const NotesPage(
+      {super.key,
+      required this.server,
+      required this.username,
+      required this.password,
+      required this.client});
 
   @override
   State<NotesPage> createState() => _NotesPageState();
 }
 
 class _NotesPageState extends State<NotesPage> {
-  int filterIndex = 0;
+  late NextcloudClient ncClient;
+  List<String> categories = [];
+  List<Note> notes = [];
+  bool isLoading = false;
+  TextEditingController newCategoryController = TextEditingController();
 
-  List<Label> labels = [];
-  List<Map<String, dynamic>> filterMap = [];
-  List<Map<String, dynamic>> defaultLabels = [
-    {"name": "notes_all".tr(), "index": 0},
-    {"name": "notes_fav".tr(), "index": 1},
-  ];
-
-  Future<NotesResult> getNotes() async {
-    final response = await NotesApiProvider.getNotes(json.encode({
-      'user_id': globals.user.userId,
-      'fav': filterIndex == 1 ? 1 : 0,
-      'note_label': filterIndex == 0 ? '' : filterMap[filterIndex]['name']
-    }));
-    return response;
-  }
-
-  Future<void> getLabels() async {
-    final response = await LabelsApiProvider.fecthLabels(json.encode({
-      "user_id": globals.user.userId,
-    }));
-    if (response.error.isEmpty) {
+  Future<void> _getNotes() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      ncClient = NextcloudClient(
+        Uri.parse(widget.server),
+        loginName: widget.username,
+        password: widget.password,
+        httpClient: widget.client,
+      );
+      final notesList = await ncClient.notes.getNotes();
+      notes = notesList.body.toList();
+      getCategories(notes);
+      setState(() {});
+    } catch (e) {
+      if (mounted) {
+        RSToast.show(context, message: '$e');
+      }
+    } finally {
       setState(() {
-        labels = response.labels;
-        filterMap = defaultLabels;
-        for (var i = 0; i < labels.length; i++) {
-          filterMap.add({"name": labels[i].labelName, "index": i + 2});
-        }
+        isLoading = false;
       });
     }
   }
 
-  Future<void> updateFavorite(Notes note) async {
-    final response = await NotesApiProvider.updateFavorite(json.encode(
-      {'id': note.noteId},
-    ));
-    if (response['status']) {
-      setState(() {});
-      if (mounted) Navigator.pop(context);
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
+  void getCategories(List<Note> notes) {
+    categories.clear();
+    categories = notes
+        .map((n) => n.category.trim())
+        .where((cat) => cat.isNotEmpty)
+        .toSet()
+        .toList();
+    categories.add('');
+  }
+
+  Future<void> _updateFavorite(Note note, bool value) async {
+    try {
+      ncClient = NextcloudClient(
+        Uri.parse(widget.server),
+        loginName: widget.username,
+        password: widget.password,
+        httpClient: widget.client,
+      );
+      await ncClient.notes.updateNote(
+          id: note.id,
+          favorite: value ? 1 : 0,
+          modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+      _getNotes();
+    } catch (e) {
+      if (mounted) {
+        RSToast.show(context, message: '$e');
+      }
     }
   }
 
-  Future<void> updateColor(Notes note, int colorCode) async {
-    final response = await NotesApiProvider.updateColor(json.encode(
-      {'id': note.noteId, 'color': colorCode},
-    ));
-    if (response['status']) {
-      setState(() {});
-      if (mounted) Navigator.pop(context);
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
+  Future<void> _updateCategory(Note note, String value) async {
+    try {
+      ncClient = NextcloudClient(
+        Uri.parse(widget.server),
+        loginName: widget.username,
+        password: widget.password,
+        httpClient: widget.client,
+      );
+      await ncClient.notes.updateNote(
+          id: note.id,
+          category: value,
+          modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+      _getNotes();
+    } catch (e) {
+      if (mounted) {
+        RSToast.show(context, message: '$e');
+      }
     }
   }
 
-  Future<void> deleteNote(String noteId) async {
-    final response = await NotesApiProvider.delete(json.encode(
-      {'id': noteId},
-    ));
-    if (response['status']) {
-      setState(() {});
-      if (mounted) Navigator.pop(context);
-      if (mounted) RSToast.show(context, message: 'deleted'.tr());
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
+  Future<void> _deleteNote(Note note) async {
+    try {
+      ncClient = NextcloudClient(
+        Uri.parse(widget.server),
+        loginName: widget.username,
+        password: widget.password,
+        httpClient: widget.client,
+      );
+      await ncClient.notes.deleteNote(id: note.id);
+      _getNotes();
+    } catch (e) {
+      if (mounted) {
+        RSToast.show(context, message: '$e');
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    filterMap = defaultLabels;
-    getLabels();
+    _getNotes();
   }
 
   @override
   Widget build(BuildContext context) {
-    final isSmallDevice = getScreenSize(context) == ScreenSize.small;
-
     return FScaffold(
       childPad: false,
-      header: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: FHeader(
-          title: Text(
-              'welcome_message'.tr(namedArgs: {'name': globals.user.userName})),
+      header: FHeader.nested(
+        titleAlignment: Alignment.centerLeft,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Text('welcome_message'
+              .tr(namedArgs: {'name': globals.userDetails!.displayName})),
         ),
       ),
-      child: Column(
-        spacing: 8,
-        children: [
-          Row(
-            spacing: 8,
-            children: [
-              Expanded(
-                child: FSelectMenuTile(
-                  initialValue: filterIndex,
-                  title: Text('select'.tr()),
-                  menu: filterMap.map((item) {
-                    return FSelectTile(
-                      value: item['index'],
-                      title: Text(item['name']),
-                    );
-                  }).toList(),
-                  detailsBuilder: (context, value, child) =>
-                      Text(filterMap[filterIndex]['name']),
-                  onChange: (value) {
-                    setState(() {
-                      filterIndex = value.first;
-                    });
-                  },
-                ),
+      footer: Padding(
+        padding: kGlobalOuterPadding,
+        child: Row(
+          children: [
+            Expanded(
+              child: FButton(
+                onPress: () => openNoteView(null),
+                style: FButtonStyle.primary(),
+                child: Text('add'.tr()),
               ),
-              FButton.icon(
-                style: FButtonStyle.ghost(),
-                onPress: () {},
-                child: Icon(FIcons.folderCog),
-              ),
-              FButton(
-                onPress: () => openNoteView(Notes.empty()),
-                child: Text('Add'),
-              ),
-            ],
-          ),
-          Expanded(
-            child: FutureBuilder<NotesResult>(
-              future: getNotes(),
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return Center(
-                      child: FProgress.circularIcon(),
-                    );
-                  case ConnectionState.done:
-                    if (snapshot.data!.error.isNotEmpty) {
-                      return Center(
-                        child: Text(snapshot.data!.error),
-                      );
-                    }
-                    if (snapshot.data!.notes.isEmpty) {
-                      return Center(
-                        child: EmptyWidget(
-                          text: "no_notes".tr(),
-                          width: MediaQuery.of(context).size.width * 0.6,
-                        ),
-                      );
-                    }
-                    return FItemGroup.builder(
-                      count: snapshot.data!.notes.length,
-                      divider: FItemDivider.none,
-                      itemBuilder: (context, index) {
-                        List<Notes> notes = snapshot.data!.notes;
-                        return FItem(
-                          prefix: RSTextAvatar(
-                              color: NoteColor.getColor(
-                                  notes[index].noteColor, false),
-                              text: getInitials(notes[index].noteTitle)),
-                          title: Text(notes[index].noteTitle),
-                          subtitle: Row(
-                            spacing: 8,
-                            children: [
-                              if (notes[index].noteFavorite && filterIndex != 1)
-                                Icon(
-                                  FIcons.heart,
-                                  size: 14,
-                                  color: Colors.red,
-                                ),
-                              Expanded(
-                                child:
-                                    Text(formatDateTime(notes[index].noteDate)),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  notes[index].noteLabel,
-                                  textAlign: TextAlign.end,
-                                ),
-                              ),
-                            ],
-                          ),
-                          suffix: isSmallDevice
-                              ? null
-                              : FButton.icon(
-                                  style: FButtonStyle.ghost(),
-                                  onPress: () => openNoteOption(notes[index]),
-                                  child: Icon(FIcons.ellipsis),
-                                ),
-                          onPress: () => openNoteView(notes[index]),
-                          onLongPress: isSmallDevice
-                              ? () => openNoteOption(notes[index])
-                              : null,
-                        );
-                      },
-                    );
-                  default:
-                    return Container();
-                }
-              },
             ),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-        ],
+          ],
+        ),
       ),
+      child: isLoading
+          ? Center(
+              child: SizedBox(
+                width: 100,
+                child: FProgress(),
+              ),
+            )
+          : (notes.isEmpty
+              ? Center(
+                  child: Text('No Notes'),
+                )
+              : FItemGroup.builder(
+                  count: notes.length,
+                  itemBuilder: (context, index) {
+                    final note = notes[index];
+                    final modifiedDate = DateTime.fromMillisecondsSinceEpoch(
+                        note.modified * 1000);
+                    return FItem(
+                      title: Text(note.title),
+                      subtitle: Text(
+                        '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
+                      ),
+                      prefix: note.favorite
+                          ? FAvatar.raw(
+                              child: Icon(
+                              FIcons.star,
+                              color: Colors.amber,
+                            ))
+                          : FAvatar.raw(child: Text(getInitials(note.title))),
+                      onPress: () => openNoteView(note),
+                      onLongPress: () => openNoteOption(note),
+                    );
+                  },
+                )),
     );
   }
 
-  void openNoteView(Notes note) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => NoteView(note: note),
-        ));
-    if (result) {
-      setState(() {});
-    }
-  }
-
-  void openNoteOption(Notes note) {
+  void openNoteOption(Note note) {
     showFSheet(
         context: context,
         builder: (context) => Container(
@@ -258,14 +207,14 @@ class _NotesPageState extends State<NotesPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 12,
+                spacing: 8,
                 children: [
                   Padding(
                     padding: kPaddingLarge,
                     child: Row(
                       children: [
                         Text(
-                          note.noteTitle,
+                          note.title,
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         Spacer(),
@@ -277,16 +226,25 @@ class _NotesPageState extends State<NotesPage> {
                     ),
                   ),
                   FItem(
-                    prefix: Icon(FIcons.heart),
-                    title: Text(note.noteFavorite
-                        ? 'remove_from_fav'.tr()
-                        : 'set_as_fav'.tr()),
-                    onPress: () => updateFavorite(note),
+                    prefix: Icon(FIcons.folder),
+                    title: Text('Set Category'),
+                    onPress: () {
+                      Navigator.pop(context);
+                      openCategories(note);
+                    },
                   ),
                   FItem(
-                    prefix: Icon(FIcons.palette),
-                    title: Text('set_color'.tr()),
-                    onPress: () => openColorPicker(note),
+                    prefix: Icon(
+                      FIcons.star,
+                      color: Colors.amber,
+                    ),
+                    title: Text(note.favorite
+                        ? 'remove_from_fav'.tr()
+                        : 'set_as_fav'.tr()),
+                    onPress: () {
+                      Navigator.pop(context);
+                      _updateFavorite(note, !note.favorite);
+                    },
                   ),
                   FItem(
                     prefix: Icon(
@@ -311,7 +269,54 @@ class _NotesPageState extends State<NotesPage> {
         side: FLayout.btt);
   }
 
-  void confirmDelete(Notes note) async {
+  void openCategories(Note note) {
+    newCategoryController.clear();
+    showFDialog(
+      context: context,
+      builder: (context, style, animation) => FDialog.raw(
+        builder: (context, style) => Padding(
+          padding: kGlobalOuterPadding,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 8,
+              children: [
+                Text(
+                  'Select',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                FTileGroup(
+                  children: categories
+                      .map((cat) => FTile(
+                            title: Text(cat.isEmpty ? 'Uncategorized' : cat),
+                            onPress: () {
+                              Navigator.pop(context);
+                              _updateCategory(note, cat);
+                            },
+                          ))
+                      .toList(),
+                ),
+                FTextField(
+                  controller: newCategoryController,
+                  hint: 'Enter new category',
+                  maxLength: 20,
+                ),
+                FButton(
+                  onPress: () {
+                    Navigator.pop(context);
+                    _updateCategory(note, newCategoryController.text.trim());
+                  },
+                  child: Text('Add Category'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void confirmDelete(Note note) async {
     showFDialog(
       context: context,
       builder: (context, style, animation) => FDialog(
@@ -320,7 +325,8 @@ class _NotesPageState extends State<NotesPage> {
         actions: [
           FButton(
             onPress: () {
-              deleteNote(note.noteId);
+              Navigator.pop(context);
+              _deleteNote(note);
             },
             child: Text('yes'.tr()),
           ),
@@ -334,15 +340,21 @@ class _NotesPageState extends State<NotesPage> {
     );
   }
 
-  void openColorPicker(Notes note) async {
-    final colorCode = await showFDialog(
-      context: context,
-      builder: (context, style, animation) {
-        return ScrawlColorPicker();
-      },
+  Future<void> openNoteView(Note? note) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NoteView(
+          server: widget.server,
+          username: widget.username,
+          password: widget.password,
+          client: widget.client,
+          note: note,
+        ),
+      ),
     );
-    if (colorCode != null) {
-      updateColor(note, colorCode);
+    if (result) {
+      _getNotes();
     }
   }
 }

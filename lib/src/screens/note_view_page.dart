@@ -1,150 +1,109 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:forui/forui.dart';
-import 'package:scrawler/src/helpers/constants.dart';
-import 'package:scrawler/src/helpers/encryption_service.dart';
-import 'package:scrawler/src/helpers/note_color.dart';
-import 'package:scrawler/src/providers/notes_api_provider.dart';
-import 'package:scrawler/src/screens/labels_page.dart';
-import 'package:scrawler/src/widgets/markdown_toolbar.dart';
-import 'package:scrawler/src/widgets/rs_toast.dart';
-import 'package:scrawler/src/widgets/scrawl_color_picker.dart';
+import 'package:http/io_client.dart' as http;
+import 'package:nextcloud/nextcloud.dart';
+import 'package:nextcloud/notes.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:uuid/uuid.dart';
 
 import '../helpers/adaptive.dart';
-import '../helpers/globals.dart' as globals;
+import '../helpers/constants.dart';
 import '../helpers/utility.dart';
-import '../models/notes.dart';
+import '../widgets/markdown_toolbar.dart';
+import '../widgets/rs_toast.dart';
 
 class NoteView extends StatefulWidget {
-  final Notes note;
-  const NoteView({super.key, required this.note});
+  final String server;
+  final String username;
+  final String password;
+  final http.IOClient? client;
+  final Note? note;
+  const NoteView(
+      {super.key,
+      required this.server,
+      required this.username,
+      required this.password,
+      required this.client,
+      this.note});
 
   @override
   State<NoteView> createState() => _NoteViewState();
 }
 
 class _NoteViewState extends State<NoteView> {
-  Notes note = Notes.empty();
   bool editing = false;
   bool formDirty = false;
   bool hasChanges = false;
   bool isSmallDevice = false;
 
+  String noteTitle = "";
+  String noteContent = "";
   TextEditingController noteTextController = TextEditingController();
   TextEditingController noteTitleController = TextEditingController();
   UndoHistoryController undoHistoryController = UndoHistoryController();
 
   FocusNode titleFocusNode = FocusNode();
 
-  Future<void> getNoteText() async {
-    final response = await NotesApiProvider.getNoteText(json.encode(
-      {'user_id': globals.user.userId, 'note_id': widget.note.noteId},
-    ));
-    if (response.error.isEmpty && response.notes.isNotEmpty) {
-      setState(() {
-        note.noteText = response.notes[0].noteText;
-        noteTextController.text = note.noteText;
-      });
-    } else {
-      if (mounted) RSToast.show(context, message: response.error);
-    }
+  late NextcloudClient ncClient;
+
+  void _initNextcloud() async {
+    ncClient = NextcloudClient(
+      Uri.parse(widget.server),
+      loginName: widget.username,
+      password: widget.password,
+      httpClient: widget.client,
+    );
   }
 
   Future<void> saveNote() async {
-    final uuid = Uuid().v1();
-    final isNew = note.noteId.isEmpty;
-    setState(() {
-      note.noteText = noteTextController.text;
-      note.noteDate = DateTime.now().toIso8601String();
-    });
-    final response = await NotesApiProvider.update(json.encode(
-      {
-        'is_new': isNew,
-        'id': isNew ? uuid : note.noteId,
-        'user_id': globals.user.userId,
-        'date': note.noteDate,
-        'title': note.noteTitle.trim().isEmpty
-            ? ''
-            : EncryptionService.encrypt(note.noteTitle.trim()),
-        'text': note.noteText.trim().isEmpty
-            ? ''
-            : EncryptionService.encrypt(note.noteText.trim()),
-        'label': note.noteLabel,
-        'archived': note.noteArchived,
-        'color': note.noteColor,
-        'image': note.noteImage,
-        'audio_file': '',
-        'favorite': note.noteFavorite
-      },
-    ));
-    if (response['status']) {
+    if (noteTitleController.text.trim().isEmpty) return;
+    RSToast.show(context, message: 'Updating...');
+    try {
+      if (widget.note == null) {
+        await ncClient.notes.createNote(
+            category: '',
+            title: noteTitleController.text.trim(),
+            content: noteTextController.text.trim(),
+            favorite: 0,
+            modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+      } else {
+        await ncClient.notes.updateNote(
+            id: widget.note!.id,
+            category: widget.note!.category,
+            title: noteTitleController.text.trim(),
+            content: noteTextController.text.trim(),
+            favorite: (widget.note!.favorite) ? 1 : 0,
+            modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+      }
       setState(() {
         hasChanges = true;
         formDirty = false;
         editing = false;
-        if (isNew) note.noteId = uuid;
       });
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
-    }
-  }
-
-  Future<void> updateFavorite() async {
-    final response = await NotesApiProvider.updateFavorite(json.encode(
-      {'id': note.noteId},
-    ));
-    if (response['status']) {
-      setState(() {
-        note.noteFavorite = !note.noteFavorite;
-        hasChanges = true;
-      });
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
-    }
-  }
-
-  Future<void> updateColor(int colorCode) async {
-    final response = await NotesApiProvider.updateColor(json.encode(
-      {'id': note.noteId, 'color': colorCode},
-    ));
-    if (response['status']) {
-      setState(() {
-        note.noteColor = colorCode;
-        hasChanges = true;
-      });
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
-    }
-  }
-
-  Future<void> updateLabel(String label) async {
-    final post = json.encode(
-      {'id': note.noteId, 'label': label.trim()},
-    );
-    final response = await NotesApiProvider.updateLabel(post);
-    if (response['status']) {
-      setState(() {
-        note.noteLabel = label;
-        hasChanges = true;
-      });
-    } else {
-      if (mounted) RSToast.show(context, message: response['error']);
+    } catch (e) {
+      if (mounted) {
+        RSToast.show(context, message: 'Failed to update note: $e');
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
+    _initNextcloud();
     setState(() {
-      note = widget.note;
-      editing = widget.note.noteId.isEmpty;
+      if (widget.note == null) {
+        editing = true;
+        noteTitle = 'Untitled';
+      }
+      if (widget.note != null) {
+        noteTextController.text = widget.note!.content;
+        noteTitleController.text = widget.note!.title;
+        noteTitle = widget.note!.title;
+        noteContent = widget.note!.content;
+      }
     });
-    if (note.noteId.isNotEmpty) getNoteText();
   }
 
   @override
@@ -174,7 +133,7 @@ class _NoteViewState extends State<NoteView> {
           child: FHeader.nested(
             title: GestureDetector(
               onTap: () => showTitleEditor(),
-              child: Text(note.noteTitle),
+              child: Text(noteTitle),
             ),
             prefixes: [
               FHeaderAction.back(onPress: () async {
@@ -203,46 +162,21 @@ class _NoteViewState extends State<NoteView> {
                   onChange: () {},
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.only(
-                    top: 8, bottom: 20, left: 16, right: 16),
-                child: Row(
-                  spacing: 16,
-                  children: [
-                    FButton.icon(
-                      style: FButtonStyle.ghost(),
-                      onPress: () => updateFavorite(),
-                      child: Icon(
-                        FIcons.heart,
-                        fill: note.noteFavorite ? 1 : 0,
-                        color: note.noteFavorite ? Colors.red.shade200 : null,
-                      ),
-                    ),
-                    FButton.icon(
-                      style: FButtonStyle.ghost(),
-                      onPress: () => openColorPicker(),
-                      child: Icon(FIcons.palette),
-                    ),
-                    FButton.icon(
-                      style: FButtonStyle.ghost(),
-                      onPress: () => openLabels(note.noteLabel),
-                      child: Icon(FIcons.folderOpen),
-                    ),
-                  ],
-                ),
-              ),
+            : null,
         child: editing
             ? ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 600),
-              child: Container(
-                margin: EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                          border: isSmallDevice ? null: Border.all(
-                            width: 1.0,
-                            color: context.theme.colors.border,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0)),
-                child: Material(
+                constraints: BoxConstraints(maxWidth: 600),
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                      border: isSmallDevice
+                          ? null
+                          : Border.all(
+                              width: 1.0,
+                              color: context.theme.colors.border,
+                            ),
+                      borderRadius: BorderRadius.circular(8.0)),
+                  child: Material(
                     color: Colors.transparent,
                     child: TextField(
                       controller: noteTextController,
@@ -262,43 +196,29 @@ class _NoteViewState extends State<NoteView> {
                       },
                     ),
                   ),
-              ),
-            )
+                ),
+              )
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 spacing: 8,
                 children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                        color: NoteColor.getColor(note.noteColor, false),
-                        borderRadius:
-                            BorderRadius.circular(kBorderRadiusSmall)),
-                    child: Text(
-                      note.noteLabel,
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black),
-                    ),
-                  ),
                   Expanded(
                     child: Container(
                       padding: kPaddingLarge,
                       decoration: BoxDecoration(
-                          border: isSmallDevice ? null : Border.all(
-                            width: 1.0,
-                            color: context.theme.colors.border,
-                          ),
+                          border: isSmallDevice
+                              ? null
+                              : Border.all(
+                                  width: 1.0,
+                                  color: context.theme.colors.border,
+                                ),
                           borderRadius: BorderRadius.circular(8.0)),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 600),
                         child: Markdown(
                           padding: EdgeInsets.zero,
-                          data: note.noteText,
+                          data: noteContent,
                           selectable: true,
                           softLineBreak: true,
                           onTapLink: (text, href, title) => _urlLauncher(href!),
@@ -333,7 +253,7 @@ class _NoteViewState extends State<NoteView> {
   }
 
   void showTitleEditor() async {
-    noteTitleController.text = note.noteTitle;
+    noteTitleController.text = noteTitle;
     titleFocusNode.requestFocus();
     showFDialog(
       context: context,
@@ -387,56 +307,12 @@ class _NoteViewState extends State<NoteView> {
 
   void saveTitle() {
     setState(() {
-      if (noteTitleController.text.isNotEmpty) {
-        note.noteTitle = noteTitleController.text;
+      if (noteTitleController.text.trim().isNotEmpty) {
         formDirty = true;
+        noteTitle = noteTitleController.text.trim();
       }
     });
     Navigator.pop(context);
-  }
-
-  void openColorPicker() async {
-    final colorCode = await showFDialog(
-      context: context,
-      builder: (context, style, animation) {
-        return ScrawlColorPicker();
-      },
-    );
-    if (colorCode != null) {
-      updateColor(colorCode);
-    }
-  }
-
-  void openLabels(String labels) async {
-    final label = (isSmallDevice && mounted)
-        ? await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => LabelsPage(
-                      selectedLabels: labels,
-                      assignMode: true,
-                    )))
-        : (mounted
-            ? await showFSheet(
-                context: context,
-                side: FLayout.btt,
-                barrierDismissible: false,
-                builder: (context) {
-                  return FSheets(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 500),
-                      child: LabelsPage(
-                        selectedLabels: labels,
-                        assignMode: true,
-                      ),
-                    ),
-                  );
-                })
-            : null);
-
-    if (label != null) {
-      updateLabel(label);
-    }
   }
 
   Future<void> _urlLauncher(String url) async {
