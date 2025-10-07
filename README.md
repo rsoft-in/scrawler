@@ -2,7 +2,7 @@
 
 <img src="images/scrawler-desktop.png" alt="scrawler logo" width="80"/>
 
-# scrawler - A Simple Note Taking App
+# scrawler - A Simple Nextcloud Note Client App
 
 <img src="images/scrawler-banner.png" alt="scrawler banner"/>
 
