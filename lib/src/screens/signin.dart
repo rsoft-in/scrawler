@@ -6,7 +6,6 @@ import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/provisioning_api.dart';
-import 'package:scrawler/src/helpers/adaptive.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
 import 'package:scrawler/src/widgets/rs_toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,14 +115,11 @@ class _SignInState extends State<SignIn> {
   @override
   void initState() {
     super.initState();
-    // getPreferences();
     _checkStoredLogin();
   }
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = getScreenSize(context);
-
     return FScaffold(
       child: Center(
         child: ConstrainedBox(
