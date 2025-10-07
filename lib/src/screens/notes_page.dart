@@ -35,6 +35,7 @@ class _NotesPageState extends State<NotesPage> {
   List<Note> notes = [];
   bool isLoading = false;
   TextEditingController newCategoryController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   Future<void> _getNotes() async {
     setState(() {
@@ -159,13 +160,19 @@ class _NotesPageState extends State<NotesPage> {
       footer: Padding(
         padding: kGlobalOuterPadding,
         child: Row(
+          spacing: 8,
           children: [
             Expanded(
-              child: FButton(
-                onPress: () => openNoteView(null),
-                style: FButtonStyle.primary(),
-                child: Text('add'.tr()),
+              child: FTextField(
+                controller: searchController,
+                hint: 'search'.tr(),
+                onEditingComplete: () {},
               ),
+            ),
+            FButton.icon(
+              onPress: () => openNoteView(null),
+              style: FButtonStyle.primary(),
+              child: Icon(FIcons.plus),
             ),
           ],
         ),

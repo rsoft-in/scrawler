@@ -128,29 +128,30 @@ class _NoteViewState extends State<NoteView> {
       },
       child: FScaffold(
         childPad: false,
-        header: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: FHeader.nested(
-            title: GestureDetector(
-              onTap: () => showTitleEditor(),
+        header: FHeader.nested(
+          title: GestureDetector(
+            onTap: () => showTitleEditor(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Text(noteTitle),
             ),
-            prefixes: [
-              FHeaderAction.back(onPress: () async {
-                if (formDirty) await saveNote();
-                if (context.mounted) Navigator.pop(context, hasChanges);
-              }),
-            ],
-            suffixes: [
-              if (!editing)
-                FHeaderAction(
-                  onPress: () => setState(() {
-                    editing = true;
-                  }),
-                  icon: Icon(FIcons.pencil),
-                ),
-            ],
           ),
+          prefixes: [
+            FHeaderAction.back(onPress: () async {
+              if (formDirty) await saveNote();
+              if (context.mounted) Navigator.pop(context, hasChanges);
+            }),
+          ],
+          suffixes: [
+            if (!editing)
+              FButton.icon(
+                onPress: () => setState(() {
+                  editing = true;
+                }),
+                style: FButtonStyle.outline(),
+                child: Icon(FIcons.pencil),
+              ),
+          ],
         ),
         footer: editing
             ? Padding(

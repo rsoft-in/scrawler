@@ -72,5 +72,6 @@
     "system": "System",
     "select": "Select",
     "security": "Security",
-    "app_lock": "App Lock"
+    "app_lock": "App Lock",
+    "search": "Search"
 }
