@@ -74,5 +74,7 @@
     "security": "Security",
     "app_lock": "App Lock",
     "search": "Search",
-    "sign_out": "Sign Out"
+    "sign_out": "Sign Out",
+    "select_category": "Select Category",
+    "category": "Category"
 }

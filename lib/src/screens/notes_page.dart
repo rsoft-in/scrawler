@@ -37,6 +37,8 @@ class _NotesPageState extends State<NotesPage> {
   bool isLoading = false;
   TextEditingController newCategoryController = TextEditingController();
   TextEditingController searchController = TextEditingController();
+  String selectedCategory = 'all';
+  String currentSortOn = 'modified';
 
   Future<void> _getNotes() async {
     setState(() {
@@ -49,9 +51,10 @@ class _NotesPageState extends State<NotesPage> {
         password: widget.password,
         httpClient: widget.client,
       );
-      final notesList = await ncClient.notes.getNotes();
+      final notesList = await ncClient.notes.getNotes(
+          category: selectedCategory == "all" ? null : selectedCategory);
       notes = notesList.body.toList();
-      getCategories(notes);
+      if (selectedCategory == "all") getCategories(notes);
       setState(() {});
     } catch (e) {
       if (mounted) {
@@ -158,14 +161,47 @@ class _NotesPageState extends State<NotesPage> {
         spacing: 8,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: 'search'.tr(),
-                prefixIcon: Icon(Symbols.search),
-              ),
-              onEditingComplete: () {},
+            padding:
+                const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 4),
+            child: Row(
+              spacing: 8.0,
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    hint: Text('select_category'.tr()),
+                    borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+                    items: [
+                      DropdownMenuItem(value: 'all', child: Text('All')),
+                      ...categories.map((cat) => DropdownMenuItem(
+                          value: cat,
+                          child: Text(cat.isEmpty ? 'Uncategoried' : cat))),
+                    ],
+                    onChanged: (value) => setState(() {
+                      selectedCategory = value!;
+                      _getNotes();
+                    }),
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  initialValue: currentSortOn,
+                  itemBuilder: (context) => <PopupMenuEntry<String>>[
+                    PopupMenuItem(
+                      value: 'title',
+                      child: Text('Title'),
+                    ),
+                    PopupMenuItem(
+                      value: 'modified',
+                      child: Text('Latest'),
+                    ),
+                  ],
+                  icon: Icon(Symbols.sort),
+                  onSelected: (value) {
+                    setState(() {
+                      currentSortOn = value;
+                    });
+                  },
+                ),
+              ],
             ),
           ),
           Expanded(
