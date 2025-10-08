@@ -163,18 +163,11 @@ class _NoteViewState extends State<NoteView> {
               )
             : null,
         body: editing
-            ? ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 600),
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 8),
-                  decoration: BoxDecoration(
-                      border: isSmallDevice
-                          ? null
-                          : Border.all(
-                              width: 1.0,
-                              color: Colors.grey,
-                            ),
-                      borderRadius: BorderRadius.circular(8.0)),
+            ? Container(
+                margin: EdgeInsets.only(bottom: 8),
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 600),
                   child: Material(
                     color: Colors.transparent,
                     child: TextField(
@@ -187,6 +180,10 @@ class _NoteViewState extends State<NoteView> {
                         border: OutlineInputBorder(
                           borderSide: BorderSide.none,
                         ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                        ),
+                        // filled: false,
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -204,41 +201,41 @@ class _NoteViewState extends State<NoteView> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: kPaddingLarge,
-                      decoration: BoxDecoration(
-                          border: isSmallDevice
-                              ? null
-                              : Border.all(
-                                  width: 1.0,
-                                  color: Colors.grey,
-                                ),
-                          borderRadius: BorderRadius.circular(8.0)),
+                      alignment: Alignment.topCenter,
                       child: ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 600),
-                        child: Markdown(
-                          padding: EdgeInsets.zero,
-                          data: noteContent,
-                          selectable: true,
-                          softLineBreak: true,
-                          onTapLink: (text, href, title) => _urlLauncher(href!),
-                          styleSheet: MarkdownStyleSheet(
-                            h1: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          padding: kPaddingLarge,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: 600),
+                            child: Markdown(
+                              padding: EdgeInsets.zero,
+                              data: noteContent,
+                              selectable: true,
+                              softLineBreak: true,
+                              onTapLink: (text, href, title) =>
+                                  _urlLauncher(href!),
+                              styleSheet: MarkdownStyleSheet(
+                                h1: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                h2: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                h3: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                checkbox: TextStyle(
+                                  fontSize: 18,
+                                ),
+                                horizontalRuleDecoration: BoxDecoration(
+                                    border: Border.all(width: 0.1)),
+                              ),
                             ),
-                            h2: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            h3: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            checkbox: TextStyle(
-                              fontSize: 18,
-                            ),
-                            horizontalRuleDecoration:
-                                BoxDecoration(border: Border.all(width: 0.1)),
                           ),
                         ),
                       ),

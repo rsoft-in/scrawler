@@ -73,5 +73,6 @@
     "select": "Select",
     "security": "Security",
     "app_lock": "App Lock",
-    "search": "Search"
+    "search": "Search",
+    "sign_out": "Sign Out"
 }

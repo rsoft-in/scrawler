@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
 import 'package:scrawler/src/helpers/avatar_color.dart';
+import 'package:scrawler/src/screens/settings_page.dart';
 import 'package:scrawler/src/widgets/rs_empty_placeholder.dart';
 
 import '../helpers/constants.dart';
@@ -146,9 +147,11 @@ class _NotesPageState extends State<NotesPage> {
             .tr(namedArgs: {'name': globals.userDetails!.displayName})),
         actions: [
           IconButton.filledTonal(
-            onPressed: () {},
+            onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => SettingsPage())),
             icon: Icon(Symbols.person),
           ),
+          SizedBox(width: 8),
         ],
       ),
       body: Column(
@@ -199,7 +202,8 @@ class _NotesPageState extends State<NotesPage> {
                                       foregroundColor:
                                           AvatarColor.getColor(note.title),
                                       backgroundColor:
-                                          AvatarColor.getColor(note.title).withAlpha(100),
+                                          AvatarColor.getColor(note.title)
+                                              .withAlpha(100),
                                       child: Text(getInitials(note.title)),
                                     ),
                               onTap: () => openNoteView(note),
