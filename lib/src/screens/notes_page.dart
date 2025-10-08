@@ -171,10 +171,10 @@ class _NotesPageState extends State<NotesPage> {
                     hint: Text('select_category'.tr()),
                     borderRadius: BorderRadius.circular(kGlobalBorderRadius),
                     items: [
-                      DropdownMenuItem(value: 'all', child: Text('All')),
+                      DropdownMenuItem(value: 'all', child: Text('all'.tr())),
                       ...categories.map((cat) => DropdownMenuItem(
                           value: cat,
-                          child: Text(cat.isEmpty ? 'Uncategoried' : cat))),
+                          child: Text(cat.isEmpty ? 'uncategorized'.tr() : cat))),
                     ],
                     onChanged: (value) => setState(() {
                       selectedCategory = value!;
@@ -187,11 +187,11 @@ class _NotesPageState extends State<NotesPage> {
                   itemBuilder: (context) => <PopupMenuEntry<String>>[
                     PopupMenuItem(
                       value: 'title',
-                      child: Text('Title'),
+                      child: Text('title'.tr()),
                     ),
                     PopupMenuItem(
                       value: 'modified',
-                      child: Text('Latest'),
+                      child: Text('latest'.tr()),
                     ),
                   ],
                   icon: Icon(Symbols.sort),
@@ -214,7 +214,7 @@ class _NotesPageState extends State<NotesPage> {
                   )
                 : (notes.isEmpty
                     ? Center(
-                        child: EmptyWidget(text: 'No Notes', width: 200),
+                        child: EmptyWidget(text: 'no_notes'.tr(), width: 280),
                       )
                     : RefreshIndicator(
                         onRefresh: _refreshNotes,
@@ -284,7 +284,7 @@ class _NotesPageState extends State<NotesPage> {
             ),
             ListTile(
               leading: Icon(Symbols.folder),
-              title: Text('Set Category'),
+              title: Text('set_category'.tr()),
               onTap: () {
                 Navigator.pop(context);
                 openCategories(note);
@@ -335,14 +335,14 @@ class _NotesPageState extends State<NotesPage> {
               spacing: 8,
               children: [
                 Text(
-                  'Select',
+                  'select'.tr(),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 ListView.builder(
                   itemCount: categories.length,
                   itemBuilder: (context, index) => ListTile(
                     title: Text(categories[index].isEmpty
-                        ? 'Uncategorized'
+                        ? 'uncategorized'.tr()
                         : categories[index]),
                     onTap: () {
                       Navigator.pop(context);
@@ -353,7 +353,7 @@ class _NotesPageState extends State<NotesPage> {
                 TextField(
                   controller: newCategoryController,
                   decoration: InputDecoration(
-                    hintText: 'Enter new category',
+                    hintText: 'enter_new_category'.tr(),
                     counterText: '',
                   ),
                   maxLength: 20,
@@ -363,7 +363,7 @@ class _NotesPageState extends State<NotesPage> {
                     Navigator.pop(context);
                     _updateCategory(note, newCategoryController.text.trim());
                   },
-                  child: Text('Add Category'),
+                  child: Text('add_category'.tr()),
                 ),
               ],
             ),

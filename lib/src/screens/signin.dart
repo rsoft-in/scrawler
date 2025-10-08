@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:http/io_client.dart' as http;
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/provisioning_api.dart';
+import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/screens/notes_page.dart';
 import 'package:scrawler/src/widgets/rs_toast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +26,8 @@ class _SignInState extends State<SignIn> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool allowInsecure = false;
+  FocusNode usernameFocusNode = FocusNode();
+  FocusNode passwordFocusNode = FocusNode();
 
   bool _loading = false;
 
@@ -126,15 +131,27 @@ class _SignInState extends State<SignIn> {
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              spacing: 16.0,
+              spacing: 8.0,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Center(
+                  child: Text(
+                    kAppName,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 TextFormField(
                   controller: serverController,
+                  autofocus: true,
                   decoration: InputDecoration(
-                    hintText: 'Server Address',
+                    hintText: 'server_address'.tr(),
+                    prefixIcon: Icon(Symbols.link),
                   ),
+                  onEditingComplete: () => usernameFocusNode.requestFocus(),
                 ),
                 Row(
                   spacing: 8,
@@ -144,28 +161,34 @@ class _SignInState extends State<SignIn> {
                       onChanged: (value) =>
                           setState(() => allowInsecure = value!),
                     ),
-                    Expanded(child: Text('Allow Insecure Server')),
+                    Expanded(child: Text('allow_insecure_connection'.tr())),
                   ],
                 ),
                 TextFormField(
                   controller: usernameController,
+                  focusNode: usernameFocusNode,
                   decoration: InputDecoration(
-                    hintText: 'Username',
+                    hintText: 'username'.tr(),
+                    prefixIcon: Icon(Symbols.person),
                   ),
+                  onEditingComplete: () => passwordFocusNode.requestFocus(),
                 ),
                 TextFormField(
                   controller: passwordController,
+                  focusNode: passwordFocusNode,
                   obscureText: true,
                   decoration: InputDecoration(
-                    hintText: 'Password',
+                    hintText: 'password'.tr(),
+                    prefixIcon: Icon(Symbols.password),
                   ),
+                  onEditingComplete: connectNextCloud,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
                 _loading
                     ? const LinearProgressIndicator()
                     : FilledButton(
                         onPressed: _loading ? null : connectNextCloud,
-                        child: const Text('Connect'),
+                        child: Text('connect'.tr()),
                       ),
               ],
             ),

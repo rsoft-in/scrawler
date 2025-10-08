@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -27,11 +28,11 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
   TextEditingController linkNameController = TextEditingController();
   TextEditingController linkUrlController = TextEditingController();
   List<Map<String, String>> headingList = [
-    {'id': 'h1', 'name': 'Heading 1'},
-    {'id': 'h2', 'name': 'Heading 2'},
-    {'id': 'h3', 'name': 'Heading 3'},
-    {'id': 'h4', 'name': 'Heading 4'},
-    {'id': 'h5', 'name': 'Heading 5'},
+    {'id': 'h1', 'name': '${'heading'.tr()} 1'},
+    {'id': 'h2', 'name': '${'heading'.tr()} 2'},
+    {'id': 'h3', 'name': '${'heading'.tr()} 3'},
+    {'id': 'h4', 'name': '${'heading'.tr()} 4'},
+    {'id': 'h5', 'name': '${'heading'.tr()} 5'},
   ];
 
   @override

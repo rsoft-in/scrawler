@@ -76,5 +76,18 @@
     "search": "Search",
     "sign_out": "Sign Out",
     "select_category": "Select Category",
-    "category": "Category"
+    "category": "Category",
+    "server_address": "Server Address",
+    "username": "Username",
+    "password": "Password",
+    "connect": "Connect",
+    "allow_insecure_connection": "Allow insecure connection",
+    "all": "All",
+    "title": "Title",
+    "latest": "Latest",
+    "uncategorized": "Uncategorized",
+    "set_category": "Set Category",
+    "enter_new_category": "Enter new category",
+    "add_category": "Add Category",
+    "heading": "Heading"
 }
