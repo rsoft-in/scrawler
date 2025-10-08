@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:universal_platform/universal_platform.dart';
 
@@ -9,7 +8,6 @@ ThemeData theme(BuildContext context, Color appColor) {
       seedColor: appColor,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
-    textTheme: GoogleFonts.interTextTheme(),
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),
@@ -31,8 +29,6 @@ ThemeData themeDark(BuildContext context, Color appColor) {
       brightness: Brightness.dark,
       dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
-    textTheme: GoogleFonts.interTextTheme(
-        ThemeData(brightness: Brightness.dark).textTheme),
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),

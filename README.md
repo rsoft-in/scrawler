@@ -11,12 +11,12 @@
 A Simple Nextcloud Notes Client App. You can connect to your Nextcloud account and manage the notes.
 
 ## Features
-- Supports Markdown
-- Supports Android & iOS (Windows/macOS/Linux coming soon)
-- Search notes
-- Note Categories
-- Smooth UI
-- Allow Insecure Connection for debug mode and also for self hosted Nextcloud on local server.
+- [x] Supports Markdown
+- [ ] Supports Android & iOS (Windows/macOS/Linux coming soon)
+- [ ] Search notes
+- [x] Note Categories
+- [x] Smooth UI
+- [x] Allow Insecure Connection for debug mode and also for self hosted Nextcloud on local server.
 
 ---
 
