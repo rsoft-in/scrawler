@@ -1,11 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
 import 'package:scrawler/src/helpers/avatar_color.dart';
-import 'package:scrawler/src/widgets/rs_avatar.dart';
+import 'package:scrawler/src/widgets/rs_empty_placeholder.dart';
 
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
@@ -140,165 +140,154 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FScaffold(
-      childPad: false,
-      header: FHeader.nested(
-        titleAlignment: Alignment.centerLeft,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text('welcome_message'
-              .tr(namedArgs: {'name': globals.userDetails!.displayName})),
-        ),
-        suffixes: [
-          FButton.icon(
-            onPress: () => _getNotes(),
-            style: FButtonStyle.ghost(),
-            child: Icon(FIcons.refreshCcw),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('welcome_message'
+            .tr(namedArgs: {'name': globals.userDetails!.displayName})),
+        actions: [
+          IconButton.filledTonal(
+            onPressed: () {},
+            icon: Icon(Symbols.person),
           ),
         ],
       ),
-      footer: Padding(
-        padding: kGlobalOuterPadding,
-        child: Row(
-          spacing: 8,
-          children: [
-            Expanded(
-              child: FTextField(
-                controller: searchController,
-                hint: 'search'.tr(),
-                onEditingComplete: () {},
+      body: Column(
+        spacing: 8,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: TextField(
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: 'search'.tr(),
+                prefixIcon: Icon(Symbols.search),
               ),
+              onEditingComplete: () {},
             ),
-            FButton.icon(
-              onPress: () => openNoteView(null),
-              style: FButtonStyle.primary(),
-              child: Icon(FIcons.plus),
-            ),
-          ],
-        ),
-      ),
-      child: isLoading
-          ? Center(
-              child: SizedBox(
-                width: 100,
-                child: FProgress(),
-              ),
-            )
-          : (notes.isEmpty
-              ? Center(
-                  child: Text('No Notes'),
-                )
-              : RefreshIndicator(
-                  onRefresh: _refreshNotes,
-                  child: FItemGroup.builder(
-                    count: notes.length,
-                    itemBuilder: (context, index) {
-                      final note = notes[index];
-                      final modifiedDate = DateTime.fromMillisecondsSinceEpoch(
-                          note.modified * 1000);
-                      return FItem(
-                        title: Text(note.title),
-                        subtitle: Text(
-                          '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
-                        ),
-                        prefix: note.favorite
-                            ? FAvatar.raw(
-                                child: Icon(
-                                FIcons.star,
-                                color: Colors.amber,
-                              ))
-                            : RSTextAvatar(
-                                text: getInitials(note.title),
-                                color: AvatarColor.getColor(note.title),
+          ),
+          Expanded(
+            child: isLoading
+                ? Center(
+                    child: SizedBox(
+                      width: 100,
+                      child: LinearProgressIndicator(),
+                    ),
+                  )
+                : (notes.isEmpty
+                    ? Center(
+                        child: EmptyWidget(text: 'No Notes', width: 200),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: _refreshNotes,
+                        child: ListView.builder(
+                          itemCount: notes.length,
+                          itemBuilder: (context, index) {
+                            final note = notes[index];
+                            final modifiedDate =
+                                DateTime.fromMillisecondsSinceEpoch(
+                                    note.modified * 1000);
+                            return ListTile(
+                              title: Text(note.title),
+                              subtitle: Text(
+                                '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
                               ),
-                        onPress: () => openNoteView(note),
-                        onLongPress: () => openNoteOption(note),
-                      );
-                    },
-                  ),
-                )),
+                              leading: note.favorite
+                                  ? CircleAvatar(
+                                      child: Icon(Symbols.star),
+                                    )
+                                  : CircleAvatar(
+                                      foregroundColor:
+                                          AvatarColor.getColor(note.title),
+                                      backgroundColor:
+                                          AvatarColor.getColor(note.title).withAlpha(100),
+                                      child: Text(getInitials(note.title)),
+                                    ),
+                              onTap: () => openNoteView(note),
+                              onLongPress: () => openNoteOption(note),
+                            );
+                          },
+                        ),
+                      )),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => openNoteView(null),
+        child: Icon(Symbols.add),
+      ),
     );
   }
 
   void openNoteOption(Note note) {
-    showFSheet(
-        context: context,
-        builder: (context) => Container(
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: context.theme.colors.background,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 8,
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        padding: kGlobalOuterPadding,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: kPaddingLarge,
+              child: Row(
                 children: [
-                  Padding(
-                    padding: kPaddingLarge,
-                    child: Row(
-                      children: [
-                        Text(
-                          note.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Spacer(),
-                        FButton.icon(
-                          onPress: () => Navigator.pop(context),
-                          child: Icon(FIcons.chevronDown),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    note.title,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  FItem(
-                    prefix: Icon(FIcons.folder),
-                    title: Text('Set Category'),
-                    onPress: () {
-                      Navigator.pop(context);
-                      openCategories(note);
-                    },
-                  ),
-                  FItem(
-                    prefix: Icon(
-                      FIcons.star,
-                      color: Colors.amber,
-                    ),
-                    title: Text(note.favorite
-                        ? 'remove_from_fav'.tr()
-                        : 'set_as_fav'.tr()),
-                    onPress: () {
-                      Navigator.pop(context);
-                      _updateFavorite(note, !note.favorite);
-                    },
-                  ),
-                  FItem(
-                    prefix: Icon(
-                      FIcons.trash,
-                      color: Colors.red,
-                    ),
-                    title: Text(
-                      'delete'.tr(),
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onPress: () {
-                      Navigator.pop(context);
-                      confirmDelete(note);
-                    },
-                  ),
-                  SizedBox(
-                    height: 24,
+                  Spacer(),
+                  CloseButton(
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
             ),
-        side: FLayout.btt);
+            ListTile(
+              leading: Icon(Symbols.folder),
+              title: Text('Set Category'),
+              onTap: () {
+                Navigator.pop(context);
+                openCategories(note);
+              },
+            ),
+            ListTile(
+              leading: Icon(Symbols.star),
+              title: Text(
+                  note.favorite ? 'remove_from_fav'.tr() : 'set_as_fav'.tr()),
+              onTap: () {
+                Navigator.pop(context);
+                _updateFavorite(note, !note.favorite);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Symbols.delete,
+                color: Colors.red,
+              ),
+              title: Text(
+                'delete'.tr(),
+                style: TextStyle(color: Colors.red),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                confirmDelete(note);
+              },
+            ),
+            SizedBox(
+              height: 24,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void openCategories(Note note) {
     newCategoryController.clear();
-    showFDialog(
+    showDialog(
       context: context,
-      builder: (context, style, animation) => FDialog.raw(
-        builder: (context, style) => Padding(
+      builder: (context) => Dialog(
+        child: Padding(
           padding: kGlobalOuterPadding,
           child: SingleChildScrollView(
             child: Column(
@@ -309,24 +298,28 @@ class _NotesPageState extends State<NotesPage> {
                   'Select',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                FTileGroup(
-                  children: categories
-                      .map((cat) => FTile(
-                            title: Text(cat.isEmpty ? 'Uncategorized' : cat),
-                            onPress: () {
-                              Navigator.pop(context);
-                              _updateCategory(note, cat);
-                            },
-                          ))
-                      .toList(),
+                ListView.builder(
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: Text(categories[index].isEmpty
+                        ? 'Uncategorized'
+                        : categories[index]),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _updateCategory(note, categories[index]);
+                    },
+                  ),
                 ),
-                FTextField(
+                TextField(
                   controller: newCategoryController,
-                  hint: 'Enter new category',
+                  decoration: InputDecoration(
+                    hintText: 'Enter new category',
+                    counterText: '',
+                  ),
                   maxLength: 20,
                 ),
-                FButton(
-                  onPress: () {
+                FilledButton(
+                  onPressed: () {
                     Navigator.pop(context);
                     _updateCategory(note, newCategoryController.text.trim());
                   },
@@ -341,22 +334,21 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void confirmDelete(Note note) async {
-    showFDialog(
+    showDialog(
       context: context,
-      builder: (context, style, animation) => FDialog(
+      builder: (context) => AlertDialog(
         title: Text('confirm'.tr()),
-        body: Text('confirm_delete'.tr()),
+        content: Text('confirm_delete'.tr()),
         actions: [
-          FButton(
-            onPress: () {
+          FilledButton(
+            onPressed: () {
               Navigator.pop(context);
               _deleteNote(note);
             },
             child: Text('yes'.tr()),
           ),
-          FButton(
-            style: FButtonStyle.outline(),
-            onPress: () => Navigator.pop(context),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context),
             child: Text('no'.tr()),
           ),
         ],

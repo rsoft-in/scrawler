@@ -5,7 +5,7 @@ const kAppVersion = '2.0';
 const kWebsiteUrl = 'https://scrawler.net';
 const kGithubUrl = 'https://github.com/rsoft-in/scrawler';
 
-const kPrimaryColor = Color(0xFF80CAC4);
+const kPrimaryColor = Color(0xFFA1C7FC);
 const kAlertColor = Color(0xFFD12A4C);
 
 const kBorderRadius = 8.0;

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/provisioning_api.dart';
@@ -120,8 +119,8 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return FScaffold(
-      child: Center(
+    return Scaffold(
+      body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 350),
           child: Padding(
@@ -131,29 +130,41 @@ class _SignInState extends State<SignIn> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                FTextFormField(
+                TextFormField(
                   controller: serverController,
-                  hint: 'Server Address',
+                  decoration: InputDecoration(
+                    hintText: 'Server Address',
+                  ),
                 ),
-                FCheckbox(
-                  value: allowInsecure,
-                  label: Text('Allow Insecure Server'),
-                  onChange: (value) => setState(() => allowInsecure = value),
+                Row(
+                  spacing: 8,
+                  children: [
+                    Checkbox(
+                      value: allowInsecure,
+                      onChanged: (value) =>
+                          setState(() => allowInsecure = value!),
+                    ),
+                    Expanded(child: Text('Allow Insecure Server')),
+                  ],
                 ),
-                FTextFormField(
+                TextFormField(
                   controller: usernameController,
-                  hint: 'Username',
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                  ),
                 ),
-                FTextFormField(
+                TextFormField(
                   controller: passwordController,
                   obscureText: true,
-                  hint: 'Password',
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                  ),
                 ),
                 const SizedBox(height: 16),
                 _loading
-                    ? const FProgress()
-                    : FButton(
-                        onPress: _loading ? null : connectNextCloud,
+                    ? const LinearProgressIndicator()
+                    : FilledButton(
+                        onPressed: _loading ? null : connectNextCloud,
                         child: const Text('Connect'),
                       ),
               ],

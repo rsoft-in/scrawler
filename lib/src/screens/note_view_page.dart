@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -126,9 +126,8 @@ class _NoteViewState extends State<NoteView> {
           }
         }
       },
-      child: FScaffold(
-        childPad: false,
-        header: FHeader.nested(
+      child: Scaffold(
+        appBar: AppBar(
           title: GestureDetector(
             onTap: () => showTitleEditor(),
             child: Padding(
@@ -136,24 +135,23 @@ class _NoteViewState extends State<NoteView> {
               child: Text(noteTitle),
             ),
           ),
-          prefixes: [
-            FHeaderAction.back(onPress: () async {
-              if (formDirty) await saveNote();
-              if (context.mounted) Navigator.pop(context, hasChanges);
-            }),
-          ],
-          suffixes: [
+          // prefixes: [
+          //   FHeaderAction.back(onPress: () async {
+          //     if (formDirty) await saveNote();
+          //     if (context.mounted) Navigator.pop(context, hasChanges);
+          //   }),
+          // ],
+          actions: [
             if (!editing)
-              FButton.icon(
-                onPress: () => setState(() {
+              IconButton(
+                onPressed: () => setState(() {
                   editing = true;
                 }),
-                style: FButtonStyle.outline(),
-                child: Icon(FIcons.pencil),
+                icon: Icon(Symbols.edit),
               ),
           ],
         ),
-        footer: editing
+        bottomNavigationBar: editing
             ? Padding(
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 20, left: 16, right: 16),
@@ -164,7 +162,7 @@ class _NoteViewState extends State<NoteView> {
                 ),
               )
             : null,
-        child: editing
+        body: editing
             ? ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 600),
                 child: Container(
@@ -174,7 +172,7 @@ class _NoteViewState extends State<NoteView> {
                           ? null
                           : Border.all(
                               width: 1.0,
-                              color: context.theme.colors.border,
+                              color: Colors.grey,
                             ),
                       borderRadius: BorderRadius.circular(8.0)),
                   child: Material(
@@ -212,7 +210,7 @@ class _NoteViewState extends State<NoteView> {
                               ? null
                               : Border.all(
                                   width: 1.0,
-                                  color: context.theme.colors.border,
+                                  color: Colors.grey,
                                 ),
                           borderRadius: BorderRadius.circular(8.0)),
                       child: ConstrainedBox(
@@ -256,51 +254,50 @@ class _NoteViewState extends State<NoteView> {
   void showTitleEditor() async {
     noteTitleController.text = noteTitle;
     titleFocusNode.requestFocus();
-    showFDialog(
+    showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context, style, animation) {
-        return FDialog.raw(
-          builder: (p0, p1) {
-            return Padding(
-              padding: kGlobalOuterPadding * 2,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 16,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        'edit_title'.tr(),
-                        style: TextStyle(
-                          fontSize: 22,
-                        ),
+      builder: (context) {
+        return Dialog(
+          child: Padding(
+            padding: kGlobalOuterPadding * 2,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 16,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'edit_title'.tr(),
+                      style: TextStyle(
+                        fontSize: 22,
                       ),
-                      Spacer(),
-                      FButton.icon(
-                        onPress: () => Navigator.pop(context),
-                        child: Icon(FIcons.x),
-                      ),
-                    ],
+                    ),
+                    Spacer(),
+                    CloseButton(
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: noteTitleController,
+                  focusNode: titleFocusNode,
+                  maxLength: 30,
+                  onTap: () => noteTitleController.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: noteTitleController.value.text.length),
+                  decoration: InputDecoration(
+                    hintText: 'enter_title'.tr(),
                   ),
-                  FTextField(
-                    controller: noteTitleController,
-                    focusNode: titleFocusNode,
-                    maxLength: 30,
-                    onTap: () => noteTitleController.selection = TextSelection(
-                        baseOffset: 0,
-                        extentOffset: noteTitleController.value.text.length),
-                    hint: 'enter_title'.tr(),
-                  ),
-                  FButton(
-                    onPress: () => saveTitle(),
-                    child: Text('save'.tr()),
-                  ),
-                ],
-              ),
-            );
-          },
+                ),
+                FilledButton(
+                  onPressed: () => saveTitle(),
+                  child: Text('save'.tr()),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

@@ -25,7 +25,7 @@ class AvatarColor {
   static Color getColor(String text) {
     if (text.length > 1) {
       final int color = (text.hashCode % AvatarColor.allColors.length);
-      return AvatarColor.allColors.elementAt(color).withAlpha(120);
+      return AvatarColor.allColors.elementAt(color);
     } else {
       return const Color(0xFFEEEEEE);
     }
