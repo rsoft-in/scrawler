@@ -54,6 +54,15 @@ class _NotesPageState extends State<NotesPage> {
       final notesList = await ncClient.notes.getNotes(
           category: selectedCategory == "all" ? null : selectedCategory);
       notes = notesList.body.toList();
+      notes.sort((a, b) {
+        if (a.favorite && !b.favorite) return -1;
+        if (!a.favorite && b.favorite) return 1;
+        if (currentSortOn == "modified") {
+          return b.modified.compareTo(a.modified);
+        } else {
+          return a.title.compareTo(b.title);
+        }
+      });
       if (selectedCategory == "all") getCategories(notes);
       setState(() {});
     } catch (e) {
@@ -174,7 +183,8 @@ class _NotesPageState extends State<NotesPage> {
                       DropdownMenuItem(value: 'all', child: Text('all'.tr())),
                       ...categories.map((cat) => DropdownMenuItem(
                           value: cat,
-                          child: Text(cat.isEmpty ? 'uncategorized'.tr() : cat))),
+                          child:
+                              Text(cat.isEmpty ? 'uncategorized'.tr() : cat))),
                     ],
                     onChanged: (value) => setState(() {
                       selectedCategory = value!;
@@ -198,6 +208,7 @@ class _NotesPageState extends State<NotesPage> {
                   onSelected: (value) {
                     setState(() {
                       currentSortOn = value;
+                      _getNotes();
                     });
                   },
                 ),
