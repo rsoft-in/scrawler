@@ -27,14 +27,12 @@ dependencies:
   window_manager: ^0.5.0
 
   flutter_svg: ^2.0.10+1
-  flutter_svg_provider: ^1.0.7
   material_symbols_icons: ^4.2784.0
   provider: ^6.1.2
   easy_localization: ^3.0.7+1
-  animations: ^2.0.11
-  encrypt: ^5.0.3
   nextcloud: ^8.1.0
   file_picker: ^10.3.3
+  forui: ^0.16.0
 
 flutter_launcher_icons:
   android: false
@@ -73,7 +71,4 @@ flutter:
     - images/google.png
     - images/undraw_friends_xscy.svg
     - images/undraw_random-thoughts_goca.svg
-    - res/apikey
-    - res/apiserver
-    - res/secretkey
     - assets/translations/

@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
-import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
 import 'package:scrawler/src/screens/signin.dart';
 
@@ -45,8 +45,8 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           debugShowCheckedModeBanner: false,
-          theme: theme(context, kPrimaryColor),
-          darkTheme: themeDark(context, kPrimaryColor),
+          builder: (context, child) =>
+              FTheme(data: FThemes.zinc.light, child: child!),
           home: SignIn(),
         );
       },

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:material_symbols_icons/symbols.dart';
+import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 
 class MarkdownToolbar extends StatefulWidget {
@@ -45,57 +45,65 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return IconButton(
-                  onPressed: () => widget.undoController.undo(),
-                  icon: const Icon(Symbols.undo),
+                return FButton.icon(
+                  onPress: () => widget.undoController.undo(),
+                  style: FButtonStyle.ghost(),
+                  child: const Icon(FIcons.undo2),
                 );
               }),
           ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return IconButton(
-                  onPressed: () => widget.undoController.redo(),
-                  icon: const Icon(Symbols.redo),
+                return FButton.icon(
+                  onPress: () => widget.undoController.redo(),
+                  style: FButtonStyle.ghost(),
+                  child: const Icon(FIcons.redo2),
                 );
               }),
           const VerticalDivider(),
-          IconButton(
-            onPressed: () => formatText('bold'),
-            icon: const Icon(Symbols.format_bold),
+          FButton.icon(
+            onPress: () => formatText('bold'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.bold),
           ),
-          IconButton(
-            onPressed: () => formatText('italic'),
-            icon: const Icon(Symbols.format_italic),
+          FButton.icon(
+            onPress: () => formatText('italic'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.italic),
           ),
-          IconButton(
-            onPressed: () => formatText('ul'),
-            icon: const Icon(Symbols.format_list_bulleted),
+          FButton.icon(
+            onPress: () => formatText('ul'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.list),
           ),
-          IconButton(
-            onPressed: () => formatText('ol'),
-            icon: const Icon(Symbols.format_list_numbered),
+          FButton.icon(
+            onPress: () => formatText('ol'),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.listOrdered),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            child: PopupMenuButton<String>(
-              icon: Icon(Symbols.text_format),
-              itemBuilder: (context) => headingList
-                  .map((h) => PopupMenuItem(
-                        value: h['id'] ?? 'h1',
-                        child: Text(h['name'] ?? ''),
-                      ))
-                  .toList(),
-              onSelected: (value) => formatText(value),
+          FPopoverMenu(
+            menuAnchor: Alignment.topRight,
+            childAnchor: Alignment.bottomRight,
+            menu: [
+              FItemGroup(
+                children: headingList
+                    .map((h) => FItem(
+                          title: Text(h['name'] ?? ''),
+                          onPress: () => formatText(h['id'] ?? 'h1'),
+                        ))
+                    .toList(),
+              )
+            ],
+            builder: (context, controller, child) => FButton.icon(
+              onPress: controller.toggle,
+              style: FButtonStyle.ghost(),
+              child: Icon(FIcons.heading),
             ),
           ),
-          // IconButton(
-          //   onPressed: () => pickImage(),
-          //   icon: const Icon(FIcons.image),
-          //   tooltip: 'Insert Image',
-          // ),
-          IconButton(
-            onPressed: () => showLinkSheet(),
-            icon: const Icon(Symbols.link),
+          FButton.icon(
+            onPress: () => showLinkSheet(),
+            style: FButtonStyle.ghost(),
+            child: const Icon(FIcons.link),
           ),
         ],
       ),
@@ -180,16 +188,17 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
       });
     }
 
-    showModalBottomSheet(
+    showFSheet(
         context: context,
-        isDismissible: false,
-        isScrollControlled: true,
         useSafeArea: true,
+        side: FLayout.btt,
         builder: (context) {
-          return Padding(
+          return Container(
             padding: kGlobalOuterPadding * 2,
+            color: context.theme.colors.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -198,40 +207,34 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                       'Insert Link',
                       style: TextStyle(fontSize: 18),
                     ),
-                    CloseButton(
-                      onPressed: () => Navigator.pop(context),
+                    FButton.icon(
+                      onPress: () => Navigator.pop(context),
+                      style: FButtonStyle.outline(),
+                      child: Icon(FIcons.x),
                     ),
                   ],
                 ),
                 kVSpace,
-                TextField(
+                FTextField(
                   autofocus: true,
                   controller: linkNameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Enter Link Name'),
+                  label: Text('Enter Link Name'),
                 ),
                 kVSpace,
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: linkUrlController,
-                        decoration: const InputDecoration(
-                          labelText: 'Enter URL Address',
-                          hintText: 'http://',
-                        ),
-                      ),
-                    ),
-                  ],
+                FTextField(
+                  controller: linkUrlController,
+                  hint: 'https://',
+                  label: Text('Enter URL Address'),
                 ),
                 kVSpace,
-                FilledButton.tonal(
-                  onPressed: () {
+                FButton(
+                  onPress: () {
                     formatText('link');
                     Navigator.pop(context);
                   },
                   child: const Text('Add'),
                 ),
+                kVSpace,
               ],
             ),
           );

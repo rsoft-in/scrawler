@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
@@ -126,8 +127,9 @@ class _NoteViewState extends State<NoteView> {
           }
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
+      child: FScaffold(
+        childPad: false,
+        header: FHeader.nested(
           title: GestureDetector(
             onTap: () => showTitleEditor(),
             child: Padding(
@@ -135,23 +137,24 @@ class _NoteViewState extends State<NoteView> {
               child: Text(noteTitle),
             ),
           ),
-          // prefixes: [
-          //   FHeaderAction.back(onPress: () async {
-          //     if (formDirty) await saveNote();
-          //     if (context.mounted) Navigator.pop(context, hasChanges);
-          //   }),
-          // ],
-          actions: [
+          prefixes: [
+            FHeaderAction.back(onPress: () async {
+              if (formDirty) await saveNote();
+              if (context.mounted) Navigator.pop(context, hasChanges);
+            }),
+          ],
+          titleAlignment: Alignment.centerLeft,
+          suffixes: [
             if (!editing)
-              IconButton(
-                onPressed: () => setState(() {
+              FButton.icon(
+                onPress: () => setState(() {
                   editing = true;
                 }),
-                icon: Icon(Symbols.edit),
+                child: Icon(Symbols.edit),
               ),
           ],
         ),
-        bottomNavigationBar: editing
+        footer: editing
             ? Padding(
                 padding: const EdgeInsets.only(
                     top: 8, bottom: 20, left: 16, right: 16),
@@ -162,7 +165,7 @@ class _NoteViewState extends State<NoteView> {
                 ),
               )
             : null,
-        body: editing
+        child: editing
             ? Container(
                 margin: EdgeInsets.only(bottom: 8),
                 alignment: Alignment.topCenter,
@@ -197,7 +200,6 @@ class _NoteViewState extends State<NoteView> {
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 8,
                 children: [
                   Expanded(
                     child: Container(
@@ -206,7 +208,7 @@ class _NoteViewState extends State<NoteView> {
                         constraints: BoxConstraints(maxWidth: 600),
                         child: Container(
                           alignment: Alignment.topCenter,
-                          padding: kPaddingLarge,
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
                           child: ConstrainedBox(
                             constraints: BoxConstraints(maxWidth: 600),
                             child: Markdown(
@@ -251,49 +253,39 @@ class _NoteViewState extends State<NoteView> {
   void showTitleEditor() async {
     noteTitleController.text = noteTitle;
     titleFocusNode.requestFocus();
-    showDialog(
+    showFDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) {
-        return Dialog(
-          child: Padding(
-            padding: kGlobalOuterPadding * 2,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 16,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'edit_title'.tr(),
-                      style: TextStyle(
-                        fontSize: 22,
-                      ),
-                    ),
-                    Spacer(),
-                    CloseButton(
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-                TextField(
-                  controller: noteTitleController,
-                  focusNode: titleFocusNode,
-                  maxLength: 30,
-                  onTap: () => noteTitleController.selection = TextSelection(
-                      baseOffset: 0,
-                      extentOffset: noteTitleController.value.text.length),
-                  decoration: InputDecoration(
-                    hintText: 'enter_title'.tr(),
-                  ),
-                ),
-                FilledButton(
-                  onPressed: () => saveTitle(),
-                  child: Text('save'.tr()),
-                ),
-              ],
+      builder: (context, style, animation) {
+        return FDialog.adaptive(
+          actions: [
+            FButton(
+              onPress: () => saveTitle(),
+              child: Text('save'.tr()),
             ),
+            FButton(
+              onPress: () => Navigator.pop(context),
+              style: FButtonStyle.outline(),
+              child: Text('cancel'.tr()),
+            ),
+          ],
+          title: Text('edit_title'.tr()),
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              kVSpace,
+              FTextField(
+                controller: noteTitleController,
+                focusNode: titleFocusNode,
+                maxLength: 30,
+                onTap: () => noteTitleController.selection = TextSelection(
+                    baseOffset: 0,
+                    extentOffset: noteTitleController.value.text.length),
+                hint: 'enter_title'.tr(),
+              ),
+              kVSpace,
+            ],
           ),
         );
       },

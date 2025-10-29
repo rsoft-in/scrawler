@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
-import 'package:scrawler/src/helpers/avatar_color.dart';
 import 'package:scrawler/src/screens/settings_page.dart';
 import 'package:scrawler/src/widgets/rs_empty_placeholder.dart';
 
+import '../helpers/avatar_color.dart';
 import '../helpers/constants.dart';
 import '../helpers/globals.dart' as globals;
 import '../helpers/utility.dart';
@@ -52,7 +53,9 @@ class _NotesPageState extends State<NotesPage> {
         httpClient: widget.client,
       );
       final notesList = await ncClient.notes.getNotes(
-          category: selectedCategory == "all" ? null : selectedCategory);
+          category: selectedCategory.toLowerCase() == "all"
+              ? null
+              : selectedCategory);
       notes = notesList.body.toList();
       notes.sort((a, b) {
         if (a.favorite && !b.favorite) return -1;
@@ -78,11 +81,12 @@ class _NotesPageState extends State<NotesPage> {
 
   void getCategories(List<Note> notes) {
     categories.clear();
-    categories = notes
+    categories.add('all'.tr());
+    categories.addAll(notes
         .map((n) => n.category.trim())
         .where((cat) => cat.isNotEmpty)
         .toSet()
-        .toList();
+        .toList());
     categories.add('');
   }
 
@@ -153,64 +157,95 @@ class _NotesPageState extends State<NotesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return FScaffold(
+      childPad: false,
+      header: FHeader.nested(
+        titleAlignment: Alignment.centerLeft,
         title: Text('welcome_message'
             .tr(namedArgs: {'name': globals.userDetails!.displayName})),
-        actions: [
-          IconButton.filledTonal(
-            onPressed: () => Navigator.push(context,
+        suffixes: [
+          FButton.icon(
+            onPress: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SettingsPage())),
-            icon: Icon(Symbols.person),
+            style: FButtonStyle.ghost(),
+            child: Icon(FIcons.user),
           ),
           SizedBox(width: 8),
         ],
       ),
-      body: Column(
+      footer: Padding(
+        padding: kGlobalOuterPadding,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FButton(
+              onPress: () => openNoteView(null),
+              child: Text('add'.tr()),
+            ),
+          ],
+        ),
+      ),
+      child: Column(
         spacing: 8,
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(top: 8.0, left: 8, right: 8, bottom: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               spacing: 8.0,
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<String>(
-                    hint: Text('select_category'.tr()),
-                    borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-                    items: [
-                      DropdownMenuItem(value: 'all', child: Text('all'.tr())),
-                      ...categories.map((cat) => DropdownMenuItem(
-                          value: cat,
-                          child:
-                              Text(cat.isEmpty ? 'uncategorized'.tr() : cat))),
-                    ],
-                    onChanged: (value) => setState(() {
-                      selectedCategory = value!;
+                  child: FSelectMenuTile(
+                    initialValue: selectedCategory,
+                    title: Text('select_category'.tr()),
+                    menu: categories
+                        .map((cat) => FSelectTile(
+                            title:
+                                Text(cat.isEmpty ? 'uncategorized'.tr() : cat),
+                            value: cat))
+                        .toList(),
+                    detailsBuilder: (context, value, child) => categories
+                            .isEmpty
+                        ? Text('all'.tr())
+                        : Text(value.first.isEmpty
+                            ? 'uncategorized'.tr()
+                            : categories.firstWhere((c) =>
+                                c.toLowerCase() == value.first.toLowerCase())),
+                    onChange: (value) => setState(() {
+                      selectedCategory = value.first;
                       _getNotes();
                     }),
                   ),
                 ),
-                PopupMenuButton<String>(
-                  initialValue: currentSortOn,
-                  itemBuilder: (context) => <PopupMenuEntry<String>>[
-                    PopupMenuItem(
-                      value: 'title',
-                      child: Text('title'.tr()),
-                    ),
-                    PopupMenuItem(
-                      value: 'modified',
-                      child: Text('latest'.tr()),
-                    ),
+                FPopoverMenu(
+                  menuAnchor: Alignment.topRight,
+                  childAnchor: Alignment.bottomRight,
+                  menu: [
+                    FItemGroup(children: [
+                      FItem(
+                        title: Text('title'.tr()),
+                        onPress: () => setState(() {
+                          currentSortOn = 'title';
+                          _getNotes();
+                        }),
+                        suffix: currentSortOn == 'title'
+                            ? Icon(FIcons.check)
+                            : null,
+                      ),
+                      FItem(
+                        title: Text('latest'.tr()),
+                        onPress: () => setState(() {
+                          currentSortOn = 'modified';
+                          _getNotes();
+                        }),
+                        suffix: currentSortOn == 'modified'
+                            ? Icon(FIcons.check)
+                            : null,
+                      )
+                    ]),
                   ],
-                  icon: Icon(Symbols.sort),
-                  onSelected: (value) {
-                    setState(() {
-                      currentSortOn = value;
-                      _getNotes();
-                    });
-                  },
+                  builder: (context, controller, child) => FButton.icon(
+                      onPress: controller.toggle,
+                      child: Icon(FIcons.listFilter)),
                 ),
               ],
             ),
@@ -220,7 +255,7 @@ class _NotesPageState extends State<NotesPage> {
                 ? Center(
                     child: SizedBox(
                       width: 100,
-                      child: LinearProgressIndicator(),
+                      child: FProgress(),
                     ),
                   )
                 : (notes.isEmpty
@@ -229,31 +264,34 @@ class _NotesPageState extends State<NotesPage> {
                       )
                     : RefreshIndicator(
                         onRefresh: _refreshNotes,
-                        child: ListView.builder(
-                          itemCount: notes.length,
+                        child: FItemGroup.builder(
+                          count: notes.length,
                           itemBuilder: (context, index) {
                             final note = notes[index];
                             final modifiedDate =
                                 DateTime.fromMillisecondsSinceEpoch(
                                     note.modified * 1000);
-                            return ListTile(
+                            return FItem(
                               title: Text(note.title),
                               subtitle: Text(
                                 '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
                               ),
-                              leading: note.favorite
-                                  ? CircleAvatar(
+                              prefix: note.favorite
+                                  ? FAvatar.raw(
                                       child: Icon(Symbols.star),
                                     )
-                                  : CircleAvatar(
-                                      foregroundColor:
-                                          AvatarColor.getColor(note.title),
-                                      backgroundColor:
-                                          AvatarColor.getColor(note.title)
-                                              .withAlpha(100),
+                                  : FAvatar.raw(
+                                      style: (style) => style.copyWith(
+                                          textStyle: TextStyle(
+                                            color: AvatarColor.getColor(
+                                                note.title),
+                                          ),
+                                          backgroundColor:
+                                              AvatarColor.getColor(note.title)
+                                                  .withAlpha(100)),
                                       child: Text(getInitials(note.title)),
                                     ),
-                              onTap: () => openNoteView(note),
+                              onPress: () => openNoteView(note),
                               onLongPress: () => openNoteOption(note),
                             );
                           },
@@ -262,122 +300,125 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => openNoteView(null),
-        child: Icon(Symbols.add),
-      ),
     );
   }
 
   void openNoteOption(Note note) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        padding: kGlobalOuterPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: kPaddingLarge,
-              child: Row(
+    showFSheet(
+        context: context,
+        builder: (context) => Container(
+              padding: kGlobalOuterPadding,
+              color: context.theme.colors.background,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    note.title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                  Padding(
+                    padding: kPaddingLarge,
+                    child: Row(
+                      children: [
+                        Text(
+                          note.title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Spacer(),
+                        FButton.icon(
+                          onPress: () => Navigator.pop(context),
+                          child: Icon(FIcons.x),
+                        ),
+                      ],
+                    ),
                   ),
-                  Spacer(),
-                  CloseButton(
-                    onPressed: () => Navigator.pop(context),
+                  FItemGroup(children: [
+                    FItem(
+                      prefix: Icon(Symbols.folder),
+                      title: Text('set_category'.tr()),
+                      onPress: () {
+                        Navigator.pop(context);
+                        openCategories(note);
+                      },
+                    )
+                  ]),
+                  FItemGroup(children: [
+                    FItem(
+                      prefix: Icon(Symbols.star),
+                      title: Text(note.favorite
+                          ? 'remove_from_fav'.tr()
+                          : 'set_as_fav'.tr()),
+                      onPress: () {
+                        Navigator.pop(context);
+                        _updateFavorite(note, !note.favorite);
+                      },
+                    )
+                  ]),
+                  FItemGroup(children: [
+                    FItem(
+                      prefix: Icon(
+                        Symbols.delete,
+                        color: Colors.red,
+                      ),
+                      title: Text(
+                        'delete'.tr(),
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPress: () {
+                        Navigator.pop(context);
+                        confirmDelete(note);
+                      },
+                    )
+                  ]),
+                  SizedBox(
+                    height: 24,
                   ),
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(Symbols.folder),
-              title: Text('set_category'.tr()),
-              onTap: () {
-                Navigator.pop(context);
-                openCategories(note);
-              },
-            ),
-            ListTile(
-              leading: Icon(Symbols.star),
-              title: Text(
-                  note.favorite ? 'remove_from_fav'.tr() : 'set_as_fav'.tr()),
-              onTap: () {
-                Navigator.pop(context);
-                _updateFavorite(note, !note.favorite);
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Symbols.delete,
-                color: Colors.red,
-              ),
-              title: Text(
-                'delete'.tr(),
-                style: TextStyle(color: Colors.red),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-                confirmDelete(note);
-              },
-            ),
-            SizedBox(
-              height: 24,
-            ),
-          ],
-        ),
-      ),
-    );
+        side: FLayout.btt);
   }
 
   void openCategories(Note note) {
     newCategoryController.clear();
-    showDialog(
+    showFDialog(
       context: context,
-      builder: (context) => Dialog(
-        child: Padding(
+      builder: (context, style, animation) => FDialog.raw(
+        builder: (context, style) => Padding(
           padding: kGlobalOuterPadding,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 8,
-              children: [
-                Text(
-                  'select'.tr(),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                ListView.builder(
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) => ListTile(
-                    title: Text(categories[index].isEmpty
-                        ? 'uncategorized'.tr()
-                        : categories[index]),
-                    onTap: () {
-                      Navigator.pop(context);
-                      _updateCategory(note, categories[index]);
-                    },
-                  ),
-                ),
-                TextField(
-                  controller: newCategoryController,
-                  decoration: InputDecoration(
-                    hintText: 'enter_new_category'.tr(),
-                    counterText: '',
-                  ),
-                  maxLength: 20,
-                ),
-                FilledButton(
-                  onPressed: () {
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 8,
+            children: [
+              Text(
+                'select_category'.tr(),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              FItemGroup.builder(
+                count: categories.length,
+                itemBuilder: (context, index) => FItem(
+                  title: Text(categories[index].isEmpty
+                      ? 'uncategorized'.tr()
+                      : categories[index]),
+                  onPress: () {
                     Navigator.pop(context);
-                    _updateCategory(note, newCategoryController.text.trim());
+                    _updateCategory(note, categories[index]);
                   },
-                  child: Text('add_category'.tr()),
+                  suffix: note.category == categories[index]
+                      ? Icon(FIcons.check)
+                      : null,
                 ),
-              ],
-            ),
+              ),
+              FTextField(
+                controller: newCategoryController,
+                hint: 'enter_new_category'.tr(),
+                maxLength: 20,
+              ),
+              FButton(
+                onPress: () {
+                  Navigator.pop(context);
+                  _updateCategory(note, newCategoryController.text.trim());
+                },
+                child: Text('add_category'.tr()),
+              ),
+            ],
           ),
         ),
       ),
@@ -385,21 +426,25 @@ class _NotesPageState extends State<NotesPage> {
   }
 
   void confirmDelete(Note note) async {
-    showDialog(
+    showFDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context, style, animation) => FDialog.adaptive(
         title: Text('confirm'.tr()),
-        content: Text('confirm_delete'.tr()),
+        body: Padding(
+          padding: kGlobalOuterPadding,
+          child: Text('confirm_delete'.tr()),
+        ),
         actions: [
-          FilledButton(
-            onPressed: () {
+          FButton(
+            onPress: () {
               Navigator.pop(context);
               _deleteNote(note);
             },
             child: Text('yes'.tr()),
           ),
-          OutlinedButton(
-            onPressed: () => Navigator.pop(context),
+          FButton(
+            onPress: () => Navigator.pop(context),
+            style: FButtonStyle.outline(),
             child: Text('no'.tr()),
           ),
         ],

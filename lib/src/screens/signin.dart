@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
@@ -124,14 +125,14 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return FScaffold(
+      child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 350),
+          constraints: const BoxConstraints(maxWidth: 320),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              spacing: 8.0,
+              spacing: 16.0,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -144,50 +145,47 @@ class _SignInState extends State<SignIn> {
                     ),
                   ),
                 ),
-                TextFormField(
+                FTextFormField(
                   controller: serverController,
                   autofocus: true,
-                  decoration: InputDecoration(
-                    hintText: 'server_address'.tr(),
-                    prefixIcon: Icon(Symbols.link),
+                  hint: 'server_address'.tr(),
+                  prefixBuilder: (context, style, states) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Symbols.link),
                   ),
                   onEditingComplete: () => usernameFocusNode.requestFocus(),
                 ),
-                Row(
-                  spacing: 8,
-                  children: [
-                    Checkbox(
-                      value: allowInsecure,
-                      onChanged: (value) =>
-                          setState(() => allowInsecure = value!),
-                    ),
-                    Expanded(child: Text('allow_insecure_connection'.tr())),
-                  ],
+                FCheckbox(
+                  value: allowInsecure,
+                  label: Text('allow_insecure_connection'.tr()),
+                  onChange: (value) => setState(() => allowInsecure = value),
                 ),
-                TextFormField(
+                FTextFormField(
                   controller: usernameController,
                   focusNode: usernameFocusNode,
-                  decoration: InputDecoration(
-                    hintText: 'username'.tr(),
-                    prefixIcon: Icon(Symbols.person),
+                  hint: 'username'.tr(),
+                  prefixBuilder: (context, style, states) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Symbols.person),
                   ),
                   onEditingComplete: () => passwordFocusNode.requestFocus(),
                 ),
-                TextFormField(
+                FTextFormField(
                   controller: passwordController,
                   focusNode: passwordFocusNode,
                   obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'password'.tr(),
-                    prefixIcon: Icon(Symbols.password),
+                  hint: 'password'.tr(),
+                  prefixBuilder: (context, style, states) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Symbols.password),
                   ),
                   onEditingComplete: connectNextCloud,
                 ),
                 const SizedBox(height: 8),
                 _loading
-                    ? const LinearProgressIndicator()
-                    : FilledButton(
-                        onPressed: _loading ? null : connectNextCloud,
+                    ? const FProgress()
+                    : FButton(
+                        onPress: _loading ? null : connectNextCloud,
                         child: Text('connect'.tr()),
                       ),
               ],

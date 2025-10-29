@@ -5,11 +5,6 @@ import 'package:nextcloud/provisioning_api.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 
 ThemeMode themeMode = ThemeMode.system;
-String secretKey = '';
-
-List<Map<String, dynamic>> openNotes = [{"index": 0, "note": null}];
-
-int currentTab = 0;
 
 Color selectedSeedColor = kPrimaryColor;
 
