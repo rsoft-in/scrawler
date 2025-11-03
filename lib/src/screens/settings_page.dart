@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:scrawler/src/screens/signin.dart';
@@ -42,16 +43,16 @@ class _SettingsPageState extends State<SettingsPage> {
       child: SingleChildScrollView(
         child: FItemGroup(children: [
           FItem(
-            prefix: Icon(FIcons.user),
+            prefix: Icon(CupertinoIcons.person),
             title: Text(globals.userDetails!.displayName),
             subtitle: Text(globals.userDetails!.email!),
           ),
           FItem(
-            prefix: Icon(FIcons.palette),
+            prefix: Icon(CupertinoIcons.color_filter),
             title: Text('appearance'.tr()),
           ),
           FItem(
-            prefix: Icon(FIcons.logOut),
+            prefix: Icon(CupertinoIcons.square_arrow_right),
             title: Text('sign_out'.tr()),
             onPress: () => signOut(),
           ),

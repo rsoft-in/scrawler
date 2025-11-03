@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -150,7 +150,7 @@ class _NoteViewState extends State<NoteView> {
                 onPress: () => setState(() {
                   editing = true;
                 }),
-                child: Icon(Symbols.edit),
+                child: Icon(CupertinoIcons.pencil_outline),
               ),
           ],
         ),

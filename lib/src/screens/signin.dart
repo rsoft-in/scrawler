@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/provisioning_api.dart';
 import 'package:scrawler/src/helpers/constants.dart';
@@ -151,7 +151,7 @@ class _SignInState extends State<SignIn> {
                   hint: 'server_address'.tr(),
                   prefixBuilder: (context, style, states) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(Symbols.link),
+                    child: Icon(CupertinoIcons.link),
                   ),
                   onEditingComplete: () => usernameFocusNode.requestFocus(),
                 ),
@@ -166,7 +166,7 @@ class _SignInState extends State<SignIn> {
                   hint: 'username'.tr(),
                   prefixBuilder: (context, style, states) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(Symbols.person),
+                    child: Icon(CupertinoIcons.person),
                   ),
                   onEditingComplete: () => passwordFocusNode.requestFocus(),
                 ),
@@ -177,7 +177,7 @@ class _SignInState extends State<SignIn> {
                   hint: 'password'.tr(),
                   prefixBuilder: (context, style, states) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Icon(Symbols.password),
+                    child: Icon(CupertinoIcons.lock_open),
                   ),
                   onEditingComplete: connectNextCloud,
                 ),

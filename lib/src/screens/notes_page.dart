@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:http/io_client.dart' as http;
-import 'package:material_symbols_icons/symbols.dart';
 import 'package:nextcloud/nextcloud.dart';
 import 'package:nextcloud/notes.dart';
 import 'package:scrawler/src/screens/settings_page.dart';
@@ -168,7 +168,7 @@ class _NotesPageState extends State<NotesPage> {
             onPress: () => Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SettingsPage())),
             style: FButtonStyle.ghost(),
-            child: Icon(FIcons.user),
+            child: Icon(CupertinoIcons.person),
           ),
           SizedBox(width: 8),
         ],
@@ -228,7 +228,7 @@ class _NotesPageState extends State<NotesPage> {
                           _getNotes();
                         }),
                         suffix: currentSortOn == 'title'
-                            ? Icon(FIcons.check)
+                            ? Icon(CupertinoIcons.check_mark)
                             : null,
                       ),
                       FItem(
@@ -238,14 +238,14 @@ class _NotesPageState extends State<NotesPage> {
                           _getNotes();
                         }),
                         suffix: currentSortOn == 'modified'
-                            ? Icon(FIcons.check)
+                            ? Icon(CupertinoIcons.check_mark)
                             : null,
                       )
                     ]),
                   ],
                   builder: (context, controller, child) => FButton.icon(
                       onPress: controller.toggle,
-                      child: Icon(FIcons.listFilter)),
+                      child: Icon(CupertinoIcons.sort_down)),
                 ),
               ],
             ),
@@ -278,7 +278,7 @@ class _NotesPageState extends State<NotesPage> {
                               ),
                               prefix: note.favorite
                                   ? FAvatar.raw(
-                                      child: Icon(Symbols.star),
+                                      child: Icon(CupertinoIcons.star),
                                     )
                                   : FAvatar.raw(
                                       style: (style) => style.copyWith(
@@ -324,14 +324,14 @@ class _NotesPageState extends State<NotesPage> {
                         Spacer(),
                         FButton.icon(
                           onPress: () => Navigator.pop(context),
-                          child: Icon(FIcons.x),
+                          child: Icon(CupertinoIcons.xmark),
                         ),
                       ],
                     ),
                   ),
                   FItemGroup(children: [
                     FItem(
-                      prefix: Icon(Symbols.folder),
+                      prefix: Icon(CupertinoIcons.folder),
                       title: Text('set_category'.tr()),
                       onPress: () {
                         Navigator.pop(context);
@@ -341,7 +341,7 @@ class _NotesPageState extends State<NotesPage> {
                   ]),
                   FItemGroup(children: [
                     FItem(
-                      prefix: Icon(Symbols.star),
+                      prefix: Icon(CupertinoIcons.star),
                       title: Text(note.favorite
                           ? 'remove_from_fav'.tr()
                           : 'set_as_fav'.tr()),
@@ -354,7 +354,7 @@ class _NotesPageState extends State<NotesPage> {
                   FItemGroup(children: [
                     FItem(
                       prefix: Icon(
-                        Symbols.delete,
+                        CupertinoIcons.delete,
                         color: Colors.red,
                       ),
                       title: Text(
@@ -402,7 +402,7 @@ class _NotesPageState extends State<NotesPage> {
                     _updateCategory(note, categories[index]);
                   },
                   suffix: note.category == categories[index]
-                      ? Icon(FIcons.check)
+                      ? Icon(CupertinoIcons.check_mark)
                       : null,
                 ),
               ),

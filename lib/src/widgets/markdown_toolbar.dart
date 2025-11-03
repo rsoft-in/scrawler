@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:forui/forui.dart';
 import 'package:scrawler/src/helpers/constants.dart';
@@ -48,7 +49,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                 return FButton.icon(
                   onPress: () => widget.undoController.undo(),
                   style: FButtonStyle.ghost(),
-                  child: const Icon(FIcons.undo2),
+                  child: const Icon(CupertinoIcons.gobackward),
                 );
               }),
           ValueListenableBuilder<UndoHistoryValue>(
@@ -57,29 +58,29 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                 return FButton.icon(
                   onPress: () => widget.undoController.redo(),
                   style: FButtonStyle.ghost(),
-                  child: const Icon(FIcons.redo2),
+                  child: const Icon(CupertinoIcons.goforward),
                 );
               }),
           const VerticalDivider(),
           FButton.icon(
             onPress: () => formatText('bold'),
             style: FButtonStyle.ghost(),
-            child: const Icon(FIcons.bold),
+            child: const Icon(CupertinoIcons.bold),
           ),
           FButton.icon(
             onPress: () => formatText('italic'),
             style: FButtonStyle.ghost(),
-            child: const Icon(FIcons.italic),
+            child: const Icon(CupertinoIcons.italic),
           ),
           FButton.icon(
             onPress: () => formatText('ul'),
             style: FButtonStyle.ghost(),
-            child: const Icon(FIcons.list),
+            child: const Icon(CupertinoIcons.list_bullet),
           ),
           FButton.icon(
             onPress: () => formatText('ol'),
             style: FButtonStyle.ghost(),
-            child: const Icon(FIcons.listOrdered),
+            child: const Icon(CupertinoIcons.list_number),
           ),
           FPopoverMenu(
             menuAnchor: Alignment.topRight,
@@ -97,13 +98,13 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
             builder: (context, controller, child) => FButton.icon(
               onPress: controller.toggle,
               style: FButtonStyle.ghost(),
-              child: Icon(FIcons.heading),
+              child: Icon(CupertinoIcons.textformat),
             ),
           ),
           FButton.icon(
             onPress: () => showLinkSheet(),
             style: FButtonStyle.ghost(),
-            child: const Icon(FIcons.link),
+            child: const Icon(CupertinoIcons.link),
           ),
         ],
       ),
@@ -210,7 +211,7 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                     FButton.icon(
                       onPress: () => Navigator.pop(context),
                       style: FButtonStyle.outline(),
-                      child: Icon(FIcons.x),
+                      child: Icon(CupertinoIcons.xmark),
                     ),
                   ],
                 ),
