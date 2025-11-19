@@ -150,7 +150,7 @@ class _NoteViewState extends State<NoteView> {
                 onPress: () => setState(() {
                   editing = true;
                 }),
-                child: Icon(CupertinoIcons.pencil_outline),
+                child: Icon(CupertinoIcons.pencil),
               ),
           ],
         ),
