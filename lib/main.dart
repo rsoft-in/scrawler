@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
+import 'package:scrawler/src/providers/backup_service.dart';
 import 'package:scrawler/src/providers/notes_provider.dart';
 import 'package:scrawler/src/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en')],

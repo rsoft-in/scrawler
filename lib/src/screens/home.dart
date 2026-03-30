@@ -8,6 +8,7 @@ import 'package:scrawler/src/helpers/constants.dart';
 import 'package:scrawler/src/model/note.dart';
 import 'package:scrawler/src/providers/notes_provider.dart';
 import 'package:scrawler/src/screens/note_edit.dart';
+import 'package:scrawler/src/screens/settings_page.dart';
 import 'package:scrawler/src/widgets/rs_badge.dart';
 import 'package:scrawler/src/widgets/rs_empty_placeholder.dart';
 
@@ -22,7 +23,15 @@ class HomePage extends StatelessWidget {
           kAppName,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Symbols.settings))],
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            ),
+            icon: Icon(Symbols.settings),
+          ),
+        ],
       ),
       body: Consumer<NoteProvider>(
         builder: (context, provider, child) {

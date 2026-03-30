@@ -20,5 +20,8 @@
     "insert_link": "Insert Link",
     "enter_url": "Enter URL Address",
     "enter_link_name": "Enter Link Name",
-    "add": "Add"
+    "add": "Add",
+    "backup_restore": "Backup and Restore",
+    "appearance": "Appearance",
+    "failed_to_upload": "Failed to upload"
 }
