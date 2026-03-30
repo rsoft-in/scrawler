@@ -265,7 +265,7 @@ class _NoteViewState extends State<NoteView> {
             ),
             FButton(
               onPress: () => Navigator.pop(context),
-              style: FButtonStyle.outline(),
+              variant: FButtonVariant.outline,
               child: Text('cancel'.tr()),
             ),
           ],
@@ -276,7 +276,7 @@ class _NoteViewState extends State<NoteView> {
             children: [
               kVSpace,
               FTextField(
-                controller: noteTitleController,
+                control: FTextFieldControl.managed(controller: noteTitleController,),
                 focusNode: titleFocusNode,
                 maxLength: 30,
                 onTap: () => noteTitleController.selection = TextSelection(

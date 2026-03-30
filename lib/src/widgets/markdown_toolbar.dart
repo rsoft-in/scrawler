@@ -2,20 +2,20 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:forui/forui.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:scrawler/src/helpers/constants.dart';
 
 class MarkdownToolbar extends StatefulWidget {
   final TextEditingController controller;
   final UndoHistoryController undoController;
   final VoidCallback onChange;
-  const MarkdownToolbar(
-      {super.key,
-      required this.controller,
-      required this.undoController,
-      required this.onChange});
+  const MarkdownToolbar({
+    super.key,
+    required this.controller,
+    required this.undoController,
+    required this.onChange,
+  });
 
   @override
   State<MarkdownToolbar> createState() => _MarkdownToolbarState();
@@ -40,84 +40,78 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 40,
-      child: ListView(
+      child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        children: [
-          ValueListenableBuilder<UndoHistoryValue>(
+        child: Row(
+          children: [
+            ValueListenableBuilder<UndoHistoryValue>(
               valueListenable: widget.undoController,
               builder: (context, value, child) {
-                return FButton.icon(
-                  onPress: () => widget.undoController.undo(),
-                  style: FButtonStyle.ghost(),
-                  child: const Icon(CupertinoIcons.gobackward),
+                return IconButton(
+                  onPressed: () => widget.undoController.undo(),
+                  // variant: FButtonVariant.ghost,
+                  icon: const Icon(Symbols.undo),
                 );
-              }),
-          ValueListenableBuilder<UndoHistoryValue>(
-              valueListenable: widget.undoController,
-              builder: (context, value, child) {
-                return FButton.icon(
-                  onPress: () => widget.undoController.redo(),
-                  style: FButtonStyle.ghost(),
-                  child: const Icon(CupertinoIcons.goforward),
-                );
-              }),
-          const VerticalDivider(),
-          FButton.icon(
-            onPress: () => formatText('bold'),
-            style: FButtonStyle.ghost(),
-            child: const Icon(CupertinoIcons.bold),
-          ),
-          FButton.icon(
-            onPress: () => formatText('italic'),
-            style: FButtonStyle.ghost(),
-            child: const Icon(CupertinoIcons.italic),
-          ),
-          FButton.icon(
-            onPress: () => formatText('ul'),
-            style: FButtonStyle.ghost(),
-            child: const Icon(CupertinoIcons.list_bullet),
-          ),
-          FButton.icon(
-            onPress: () => formatText('ol'),
-            style: FButtonStyle.ghost(),
-            child: const Icon(CupertinoIcons.list_number),
-          ),
-          FPopoverMenu(
-            menuAnchor: Alignment.topRight,
-            childAnchor: Alignment.bottomRight,
-            menu: [
-              FItemGroup(
-                children: headingList
-                    .map((h) => FItem(
-                          title: Text(h['name'] ?? ''),
-                          onPress: () => formatText(h['id'] ?? 'h1'),
-                        ))
-                    .toList(),
-              )
-            ],
-            builder: (context, controller, child) => FButton.icon(
-              onPress: controller.toggle,
-              style: FButtonStyle.ghost(),
-              child: Icon(CupertinoIcons.textformat),
+              },
             ),
-          ),
-          FButton.icon(
-            onPress: () => showLinkSheet(),
-            style: FButtonStyle.ghost(),
-            child: const Icon(CupertinoIcons.link),
-          ),
-        ],
+            ValueListenableBuilder<UndoHistoryValue>(
+              valueListenable: widget.undoController,
+              builder: (context, value, child) {
+                return IconButton(
+                  onPressed: () => widget.undoController.redo(),
+                  icon: const Icon(Symbols.redo),
+                );
+              },
+            ),
+            const VerticalDivider(color: Colors.grey),
+            IconButton(
+              onPressed: () => formatText('bold'),
+              icon: const Icon(Symbols.format_bold),
+            ),
+            IconButton(
+              onPressed: () => formatText('italic'),
+              icon: const Icon(Symbols.format_italic),
+            ),
+            IconButton(
+              onPressed: () => formatText('ul'),
+              icon: const Icon(Symbols.format_list_bulleted),
+            ),
+            IconButton(
+              onPressed: () => formatText('ol'),
+              icon: const Icon(Symbols.format_list_numbered),
+            ),
+            PopupMenuButton(
+              itemBuilder: (context) => headingList
+                  .map(
+                    (h) => PopupMenuItem(
+                      child: Text(h['name'] ?? ''),
+                      onTap: () => formatText(h['id'] ?? 'h1'),
+                    ),
+                  )
+                  .toList(),
+
+              icon: Icon(Symbols.text_format),
+            ),
+            IconButton(
+              onPressed: () => showLinkSheet(),
+              icon: const Icon(Symbols.link),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   void formatText(String opt) {
-    final selectedText =
-        widget.controller.selection.textInside(widget.controller.text);
-    final beforeText =
-        widget.controller.selection.textBefore(widget.controller.text);
-    final afterText =
-        widget.controller.selection.textAfter(widget.controller.text);
+    final selectedText = widget.controller.selection.textInside(
+      widget.controller.text,
+    );
+    final beforeText = widget.controller.selection.textBefore(
+      widget.controller.text,
+    );
+    final afterText = widget.controller.selection.textAfter(
+      widget.controller.text,
+    );
     setState(() {
       if (selectedText.isNotEmpty || imgUrl.isNotEmpty) {
         switch (opt) {
@@ -182,21 +176,20 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
 
   void showLinkSheet() {
     if (widget.controller.selection.isValid) {
-      final selectedText =
-          widget.controller.selection.textInside(widget.controller.text);
+      final selectedText = widget.controller.selection.textInside(
+        widget.controller.text,
+      );
       setState(() {
         linkNameController.text = selectedText;
       });
     }
 
-    showFSheet(
-        context: context,
-        useSafeArea: true,
-        side: FLayout.btt,
-        builder: (context) {
-          return Container(
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
             padding: kGlobalOuterPadding * 2,
-            color: context.theme.colors.background,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisSize: MainAxisSize.min,
@@ -204,41 +197,45 @@ class _MarkdownToolbarState extends State<MarkdownToolbar> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Insert Link',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    FButton.icon(
-                      onPress: () => Navigator.pop(context),
-                      style: FButtonStyle.outline(),
-                      child: Icon(CupertinoIcons.xmark),
+                    Text('insert_link'.tr(), style: TextStyle(fontSize: 18)),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: Icon(Symbols.close),
                     ),
                   ],
                 ),
                 kVSpace,
-                FTextField(
+                TextField(
                   autofocus: true,
                   controller: linkNameController,
-                  label: Text('Enter Link Name'),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text('enter_link_name'.tr()),
+                  ),
                 ),
                 kVSpace,
-                FTextField(
+                TextField(
                   controller: linkUrlController,
-                  hint: 'https://',
-                  label: Text('Enter URL Address'),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hint: Text('https://'),
+                    label: Text('enter_url'.tr()),
+                  ),
                 ),
                 kVSpace,
-                FButton(
-                  onPress: () {
+                FilledButton(
+                  onPressed: () {
                     formatText('link');
                     Navigator.pop(context);
                   },
-                  child: const Text('Add'),
+                  child: Text('add'.tr()),
                 ),
                 kVSpace,
               ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

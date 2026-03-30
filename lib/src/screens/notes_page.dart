@@ -20,12 +20,13 @@ class NotesPage extends StatefulWidget {
   final String username;
   final String password;
   final http.IOClient? client;
-  const NotesPage(
-      {super.key,
-      required this.server,
-      required this.username,
-      required this.password,
-      required this.client});
+  const NotesPage({
+    super.key,
+    required this.server,
+    required this.username,
+    required this.password,
+    required this.client,
+  });
 
   @override
   State<NotesPage> createState() => _NotesPageState();
@@ -53,9 +54,10 @@ class _NotesPageState extends State<NotesPage> {
         httpClient: widget.client,
       );
       final notesList = await ncClient.notes.getNotes(
-          category: selectedCategory.toLowerCase() == "all"
-              ? null
-              : selectedCategory);
+        category: selectedCategory.toLowerCase() == "all"
+            ? null
+            : selectedCategory,
+      );
       notes = notesList.body.toList();
       notes.sort((a, b) {
         if (a.favorite && !b.favorite) return -1;
@@ -82,11 +84,13 @@ class _NotesPageState extends State<NotesPage> {
   void getCategories(List<Note> notes) {
     categories.clear();
     categories.add('all'.tr());
-    categories.addAll(notes
-        .map((n) => n.category.trim())
-        .where((cat) => cat.isNotEmpty)
-        .toSet()
-        .toList());
+    categories.addAll(
+      notes
+          .map((n) => n.category.trim())
+          .where((cat) => cat.isNotEmpty)
+          .toSet()
+          .toList(),
+    );
     categories.add('');
   }
 
@@ -99,9 +103,10 @@ class _NotesPageState extends State<NotesPage> {
         httpClient: widget.client,
       );
       await ncClient.notes.updateNote(
-          id: note.id,
-          favorite: value ? 1 : 0,
-          modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+        id: note.id,
+        favorite: value ? 1 : 0,
+        modified: (DateTime.now().millisecondsSinceEpoch / 1000).round(),
+      );
       _getNotes();
     } catch (e) {
       if (mounted) {
@@ -119,9 +124,10 @@ class _NotesPageState extends State<NotesPage> {
         httpClient: widget.client,
       );
       await ncClient.notes.updateNote(
-          id: note.id,
-          category: value,
-          modified: (DateTime.now().millisecondsSinceEpoch / 1000).round());
+        id: note.id,
+        category: value,
+        modified: (DateTime.now().millisecondsSinceEpoch / 1000).round(),
+      );
       _getNotes();
     } catch (e) {
       if (mounted) {
@@ -161,13 +167,18 @@ class _NotesPageState extends State<NotesPage> {
       childPad: false,
       header: FHeader.nested(
         titleAlignment: Alignment.centerLeft,
-        title: Text('welcome_message'
-            .tr(namedArgs: {'name': globals.userDetails!.displayName})),
+        title: Text(
+          'welcome_message'.tr(
+            namedArgs: {'name': globals.userDetails!.displayName},
+          ),
+        ),
         suffixes: [
           FButton.icon(
-            onPress: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SettingsPage())),
-            style: FButtonStyle.ghost(),
+            onPress: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SettingsPage()),
+            ),
+            variant: FButtonVariant.ghost,
             child: Icon(CupertinoIcons.person),
           ),
           SizedBox(width: 8),
@@ -178,10 +189,7 @@ class _NotesPageState extends State<NotesPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FButton(
-              onPress: () => openNoteView(null),
-              child: Text('add'.tr()),
-            ),
+            FButton(onPress: () => openNoteView(null), child: Text('add'.tr())),
           ],
         ),
       ),
@@ -195,108 +203,110 @@ class _NotesPageState extends State<NotesPage> {
               children: [
                 Expanded(
                   child: FSelectMenuTile(
-                    initialValue: selectedCategory,
+                    // initialValue: selectedCategory,
+                    selectControl: FMultiValueControl.managed(
+                      onChange: (value) => setState(() {
+                        selectedCategory = value!.first.toString();
+                        _getNotes();
+                      }),
+                    ),
                     title: Text('select_category'.tr()),
                     menu: categories
-                        .map((cat) => FSelectTile(
-                            title:
-                                Text(cat.isEmpty ? 'uncategorized'.tr() : cat),
-                            value: cat))
+                        .map(
+                          (cat) => FSelectTile(
+                            title: Text(
+                              cat.isEmpty ? 'uncategorized'.tr() : cat,
+                            ),
+                            value: cat,
+                          ),
+                        )
                         .toList(),
-                    detailsBuilder: (context, value, child) => categories
-                            .isEmpty
+                    detailsBuilder: (context, value, child) =>
+                        categories.isEmpty
                         ? Text('all'.tr())
-                        : Text(value.first.isEmpty
-                            ? 'uncategorized'.tr()
-                            : categories.firstWhere((c) =>
-                                c.toLowerCase() == value.first.toLowerCase())),
-                    onChange: (value) => setState(() {
-                      selectedCategory = value.first;
-                      _getNotes();
-                    }),
+                        : Text(
+                            value.first.toString().isEmpty
+                                ? 'uncategorized'.tr()
+                                : categories.firstWhere(
+                                    (c) =>
+                                        c.toLowerCase() ==
+                                        value.first.toString().toLowerCase(),
+                                  ),
+                          ),
                   ),
                 ),
                 FPopoverMenu(
                   menuAnchor: Alignment.topRight,
                   childAnchor: Alignment.bottomRight,
                   menu: [
-                    FItemGroup(children: [
-                      FItem(
-                        title: Text('title'.tr()),
-                        onPress: () => setState(() {
-                          currentSortOn = 'title';
-                          _getNotes();
-                        }),
-                        suffix: currentSortOn == 'title'
-                            ? Icon(CupertinoIcons.check_mark)
-                            : null,
-                      ),
-                      FItem(
-                        title: Text('latest'.tr()),
-                        onPress: () => setState(() {
-                          currentSortOn = 'modified';
-                          _getNotes();
-                        }),
-                        suffix: currentSortOn == 'modified'
-                            ? Icon(CupertinoIcons.check_mark)
-                            : null,
-                      )
-                    ]),
+                    FItemGroup(
+                      children: [
+                        FItem(
+                          title: Text('title'.tr()),
+                          onPress: () => setState(() {
+                            currentSortOn = 'title';
+                            _getNotes();
+                          }),
+                          suffix: currentSortOn == 'title'
+                              ? Icon(CupertinoIcons.check_mark)
+                              : null,
+                        ),
+                        FItem(
+                          title: Text('latest'.tr()),
+                          onPress: () => setState(() {
+                            currentSortOn = 'modified';
+                            _getNotes();
+                          }),
+                          suffix: currentSortOn == 'modified'
+                              ? Icon(CupertinoIcons.check_mark)
+                              : null,
+                        ),
+                      ],
+                    ),
                   ],
                   builder: (context, controller, child) => FButton.icon(
-                      onPress: controller.toggle,
-                      child: Icon(CupertinoIcons.sort_down)),
+                    onPress: controller.toggle,
+                    child: Icon(CupertinoIcons.sort_down),
+                  ),
                 ),
               ],
             ),
           ),
           Expanded(
             child: isLoading
-                ? Center(
-                    child: SizedBox(
-                      width: 100,
-                      child: FProgress(),
-                    ),
-                  )
+                ? Center(child: SizedBox(width: 100, child: FProgress()))
                 : (notes.isEmpty
-                    ? Center(
-                        child: EmptyWidget(text: 'no_notes'.tr(), width: 280),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: _refreshNotes,
-                        child: FItemGroup.builder(
-                          count: notes.length,
-                          itemBuilder: (context, index) {
-                            final note = notes[index];
-                            final modifiedDate =
-                                DateTime.fromMillisecondsSinceEpoch(
-                                    note.modified * 1000);
-                            return FItem(
-                              title: Text(note.title),
-                              subtitle: Text(
-                                '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
-                              ),
-                              prefix: note.favorite
-                                  ? FAvatar.raw(
-                                      child: Icon(CupertinoIcons.star),
-                                    )
-                                  : FAvatar.raw(
-                                      style: (style) => style.copyWith(
-                                          textStyle: TextStyle(
-                                            color: AvatarColor.getColor(
-                                                note.title),
-                                          ),
-                                          backgroundColor:
-                                              AvatarColor.getColor(note.title)
-                                                  .withAlpha(100)),
-                                      child: Text(getInitials(note.title)),
-                                    ),
-                              onPress: () => openNoteView(note),
-                              onLongPress: () => openNoteOption(note),
-                            );
-                          },
-                        ),
-                      )),
+                      ? Center(
+                          child: EmptyWidget(text: 'no_notes'.tr(), width: 280),
+                        )
+                      : RefreshIndicator(
+                          onRefresh: _refreshNotes,
+                          child: FItemGroup.builder(
+                            count: notes.length,
+                            itemBuilder: (context, index) {
+                              final note = notes[index];
+                              final modifiedDate =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                    note.modified * 1000,
+                                  );
+                              return FItem(
+                                title: Text(note.title),
+                                subtitle: Text(
+                                  '${formatDateTime('$modifiedDate')}${note.category.isNotEmpty ? ' | ${note.category}' : ''}',
+                                ),
+                                prefix: note.favorite
+                                    ? FAvatar.raw(
+                                        child: Icon(CupertinoIcons.star),
+                                      )
+                                    : FAvatar.raw(
+                                        child: Text(getInitials(note.title)),
+                                      ),
+                                onPress: () => openNoteView(note),
+                                onLongPress: () => openNoteOption(note),
+                              );
+                            },
+                          ),
+                        )),
           ),
         ],
       ),
@@ -305,75 +315,77 @@ class _NotesPageState extends State<NotesPage> {
 
   void openNoteOption(Note note) {
     showFSheet(
-        context: context,
-        builder: (context) => Container(
-              padding: kGlobalOuterPadding,
-              color: context.theme.colors.background,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+      context: context,
+      builder: (context) => Container(
+        padding: kGlobalOuterPadding,
+        color: context.theme.colors.background,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: kPaddingLarge,
+              child: Row(
                 children: [
-                  Padding(
-                    padding: kPaddingLarge,
-                    child: Row(
-                      children: [
-                        Text(
-                          note.title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Spacer(),
-                        FButton.icon(
-                          onPress: () => Navigator.pop(context),
-                          child: Icon(CupertinoIcons.xmark),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    note.title,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
-                  FItemGroup(children: [
-                    FItem(
-                      prefix: Icon(CupertinoIcons.folder),
-                      title: Text('set_category'.tr()),
-                      onPress: () {
-                        Navigator.pop(context);
-                        openCategories(note);
-                      },
-                    )
-                  ]),
-                  FItemGroup(children: [
-                    FItem(
-                      prefix: Icon(CupertinoIcons.star),
-                      title: Text(note.favorite
-                          ? 'remove_from_fav'.tr()
-                          : 'set_as_fav'.tr()),
-                      onPress: () {
-                        Navigator.pop(context);
-                        _updateFavorite(note, !note.favorite);
-                      },
-                    )
-                  ]),
-                  FItemGroup(children: [
-                    FItem(
-                      prefix: Icon(
-                        CupertinoIcons.delete,
-                        color: Colors.red,
-                      ),
-                      title: Text(
-                        'delete'.tr(),
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      onPress: () {
-                        Navigator.pop(context);
-                        confirmDelete(note);
-                      },
-                    )
-                  ]),
-                  SizedBox(
-                    height: 24,
+                  Spacer(),
+                  FButton.icon(
+                    onPress: () => Navigator.pop(context),
+                    child: Icon(CupertinoIcons.xmark),
                   ),
                 ],
               ),
             ),
-        side: FLayout.btt);
+            FItemGroup(
+              children: [
+                FItem(
+                  prefix: Icon(CupertinoIcons.folder),
+                  title: Text('set_category'.tr()),
+                  onPress: () {
+                    Navigator.pop(context);
+                    openCategories(note);
+                  },
+                ),
+              ],
+            ),
+            FItemGroup(
+              children: [
+                FItem(
+                  prefix: Icon(CupertinoIcons.star),
+                  title: Text(
+                    note.favorite ? 'remove_from_fav'.tr() : 'set_as_fav'.tr(),
+                  ),
+                  onPress: () {
+                    Navigator.pop(context);
+                    _updateFavorite(note, !note.favorite);
+                  },
+                ),
+              ],
+            ),
+            FItemGroup(
+              children: [
+                FItem(
+                  prefix: Icon(CupertinoIcons.delete, color: Colors.red),
+                  title: Text(
+                    'delete'.tr(),
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onPress: () {
+                    Navigator.pop(context);
+                    confirmDelete(note);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 24),
+          ],
+        ),
+      ),
+      side: FLayout.btt,
+    );
   }
 
   void openCategories(Note note) {
@@ -394,9 +406,11 @@ class _NotesPageState extends State<NotesPage> {
               FItemGroup.builder(
                 count: categories.length,
                 itemBuilder: (context, index) => FItem(
-                  title: Text(categories[index].isEmpty
-                      ? 'uncategorized'.tr()
-                      : categories[index]),
+                  title: Text(
+                    categories[index].isEmpty
+                        ? 'uncategorized'.tr()
+                        : categories[index],
+                  ),
                   onPress: () {
                     Navigator.pop(context);
                     _updateCategory(note, categories[index]);
@@ -407,7 +421,7 @@ class _NotesPageState extends State<NotesPage> {
                 ),
               ),
               FTextField(
-                controller: newCategoryController,
+                control: FTextFieldControl.managed(controller: newCategoryController,),
                 hint: 'enter_new_category'.tr(),
                 maxLength: 20,
               ),
@@ -444,7 +458,7 @@ class _NotesPageState extends State<NotesPage> {
           ),
           FButton(
             onPress: () => Navigator.pop(context),
-            style: FButtonStyle.outline(),
+            variant: FButtonVariant.outline,
             child: Text('no'.tr()),
           ),
         ],

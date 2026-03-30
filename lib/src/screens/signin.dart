@@ -84,7 +84,9 @@ class _SignInState extends State<SignIn> {
         await prefs.setString('password', password);
         await prefs.setBool('insecure', allowInsecure);
         await prefs.setString(
-            'user_data', jsonEncode(response.body.ocs.data.toJson()));
+          'user_data',
+          jsonEncode(response.body.ocs.data.toJson()),
+        );
         globals.userDetails = response.body.ocs.data;
 
         _navigateToNotes(serverAddress, username, password, allowInsecure);
@@ -103,7 +105,11 @@ class _SignInState extends State<SignIn> {
   }
 
   void _navigateToNotes(
-      String server, String username, String password, bool insecure) {
+    String server,
+    String username,
+    String password,
+    bool insecure,
+  ) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -139,14 +145,13 @@ class _SignInState extends State<SignIn> {
                 Center(
                   child: Text(
                     kAppName,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
                 FTextFormField(
-                  controller: serverController,
+                  control: FTextFieldControl.managed(
+                    controller: serverController,
+                  ),
                   autofocus: true,
                   hint: 'server_address'.tr(),
                   prefixBuilder: (context, style, states) => Padding(
@@ -161,7 +166,9 @@ class _SignInState extends State<SignIn> {
                   onChange: (value) => setState(() => allowInsecure = value),
                 ),
                 FTextFormField(
-                  controller: usernameController,
+                  control: FTextFieldControl.managed(
+                    controller: usernameController,
+                  ),
                   focusNode: usernameFocusNode,
                   hint: 'username'.tr(),
                   prefixBuilder: (context, style, states) => Padding(
@@ -171,7 +178,9 @@ class _SignInState extends State<SignIn> {
                   onEditingComplete: () => passwordFocusNode.requestFocus(),
                 ),
                 FTextFormField(
-                  controller: passwordController,
+                  control: FTextFieldControl.managed(
+                    controller: passwordController,
+                  ),
                   focusNode: passwordFocusNode,
                   obscureText: true,
                   hint: 'password'.tr(),

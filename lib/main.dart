@@ -1,23 +1,28 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:forui/forui.dart';
 import 'package:provider/provider.dart';
 import 'package:scrawler/src/helpers/constants.dart';
+import 'package:scrawler/src/helpers/theme.dart';
 import 'package:scrawler/src/helpers/theme_notifier.dart';
-import 'package:scrawler/src/screens/signin.dart';
+import 'package:scrawler/src/providers/notes_provider.dart';
+import 'package:scrawler/src/screens/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('en'),
-      ],
+      supportedLocales: const [Locale('en')],
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
-      child: ChangeNotifierProvider(
-          create: (_) => ThemeNotifier(), child: MyApp()),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+          // Initialize NoteProvider and immediately fetch data from SQLite
+          ChangeNotifierProvider(create: (_) => NoteProvider()..fetchNotes()),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -45,9 +50,10 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: context.supportedLocales,
           locale: context.locale,
           debugShowCheckedModeBanner: false,
-          builder: (context, child) =>
-              FTheme(data: FThemes.zinc.light, child: child!),
-          home: SignIn(),
+          themeMode: themeNotifier.themeMode,
+          theme: theme(context, themeNotifier.selectedPrimaryColor),
+          darkTheme: themeDark(context, themeNotifier.selectedPrimaryColor),
+          home: HomePage(),
         );
       },
     );

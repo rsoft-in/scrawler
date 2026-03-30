@@ -4,10 +4,7 @@ import 'package:universal_platform/universal_platform.dart';
 
 ThemeData theme(BuildContext context, Color appColor) {
   return ThemeData(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: appColor,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
-    ),
+    colorScheme: ColorScheme.fromSeed(seedColor: appColor),
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
     filledButtonTheme: filledButtonThemeData(),
@@ -27,7 +24,6 @@ ThemeData themeDark(BuildContext context, Color appColor) {
     colorScheme: ColorScheme.fromSeed(
       seedColor: appColor,
       brightness: Brightness.dark,
-      dynamicSchemeVariant: DynamicSchemeVariant.content,
     ),
     listTileTheme: listTileThemeData(),
     elevatedButtonTheme: elevatedButtonThemeData(),
@@ -47,6 +43,9 @@ ThemeData themeDark(BuildContext context, Color appColor) {
 ListTileThemeData listTileThemeData() {
   return ListTileThemeData(
     dense: UniversalPlatform.isDesktopOrWeb ? true : false,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadiusGeometry.circular(16),
+    ),
   );
 }
 
@@ -77,9 +76,9 @@ OutlinedButtonThemeData outlinedButtonThemeData(BuildContext context) {
   return OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-          side:
-              BorderSide(color: Theme.of(context).colorScheme.outlineVariant)),
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+        side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant),
+      ),
     ),
   );
 }
@@ -99,7 +98,8 @@ TextButtonThemeData textButtonThemeData() {
 DialogThemeData dialogThemeData() {
   return DialogThemeData(
     shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(kGlobalBorderRadius)),
+      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+    ),
   );
 }
 
@@ -129,14 +129,9 @@ PopupMenuThemeData popupMenuThemeData() {
 
 InputDecorationTheme inputDecorationTheme() {
   return InputDecorationTheme(
-    filled: true,
     isDense: true,
     border: OutlineInputBorder(
       borderSide: BorderSide.none,
-      borderRadius: BorderRadius.circular(kGlobalBorderRadius),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(width: 2),
       borderRadius: BorderRadius.circular(kGlobalBorderRadius),
     ),
   );
@@ -150,7 +145,8 @@ SearchBarThemeData _searchBarThemeData(BuildContext context) {
     constraints: const BoxConstraints(maxHeight: 50, minHeight: 40),
     shape: WidgetStatePropertyAll(
       RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kGlobalBorderRadius)),
+        borderRadius: BorderRadius.circular(kGlobalBorderRadius),
+      ),
     ),
     elevation: const WidgetStatePropertyAll(0),
     // side: WidgetStatePropertyAll(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-const kAppName = 'scrawler';
+const kAppName = 'Scrawler';
 const kAppVersion = '2.0';
-const kWebsiteUrl = 'https://scrawler.net';
 const kGithubUrl = 'https://github.com/rsoft-in/scrawler';
 
 const kPrimaryColor = Color(0xFFA1C7FC);
